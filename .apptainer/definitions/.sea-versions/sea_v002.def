@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: silex/emacs:27.2
+
+%files
+    ~/.emacs.d/lisp/self-evolving-agent /opt/sea
+
+%environment
+    export HOME=/home/sea
+    export EMACS_USER=sea
+
+%post
+    # Install required packages first
+    apt-get update && apt-get install -y \
+        sudo \
+        passwd \
+        adduser \
+        python3-pip \
+        git
+
+    # Then create user
+    adduser --disabled-password --gecos "" sea
+    
+    # Setup directories
+    mkdir -p /home/sea/.emacs.d/lisp
+    cp -r /opt/sea /home/sea/.emacs.d/lisp/
+    chown -R sea:sea /home/sea
+
+%runscript
+    exec /usr/bin/emacs "$@"
+
+%startscript
+    exec /opt/sea/src/sea_server.sh start
+
+# + adduser --disabled-password --gecos  sea
+# /.post.script: 10: adduser: not found
+# FATAL:   While performing build: while running engine: while running %post section: exit status 127
+# (wsl) self-evolving-agent $ 

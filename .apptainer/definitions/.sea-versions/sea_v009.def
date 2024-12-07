@@ -1,0 +1,1390 @@
+Bootstrap: docker
+From: debian:bullseye-slim
+
+
+%files
+    ./src/sea-*.el /home/sea/.sea/workspace/self-evolving-agent/src/
+    ./src/sea_*.sh /home/sea/.sea/workspace/self-evolving-agent/src/
+    ./src/.emacs.d /home/sea/.emacs.d    
+
+%post -c /bin/bash
+    apt-get update && apt-get install -y sudo
+
+
+    # Configure system-wide environment variables
+    cat > /etc/profile.d/sea.sh << 'EOL'
+#!/bin/bash
+
+# SEA System Configuration
+export SEA_USER=sea
+export SEA_UID=9999
+export SEA_HOME=/home/$SEA_USER
+export SEA_ROOT=/home/$SEA_USER/.sea
+export SEA_WORKSPACE=/home/$SEA_USER/.sea/workspace
+export SEA_SOURCE=/home/$SEA_USER/.sea/workspace/self-evolving-agent/src
+export SEA_LOGS=/home/$SEA_USER/.sea/logs
+export SEA_CONFIG=/home/$SEA_USER/.sea/config
+export SEA_REQUESTS=/home/$SEA_USER/.sea/requests
+export SEA_BACKUPS=/home/$SEA_USER/.sea/backups
+
+# Emacs Configuration
+export SEA_EMACS_BIN=/usr/bin/emacs
+export SEA_EMACS_CLIENT=/usr/bin/emacsclient
+export SEA_SERVER_SOCKET=/tmp/emacs$SEA_UID/server
+
+# Server Configuration
+export SEA_SERVER_CHECK_INTERVAL=1
+export SEA_MAX_RETRIES=5
+export SEA_API_TIMEOUT=30
+
+# LLM Configuration
+export ANTHROPIC_API_KEY=""
+export ANTHROPIC_ENGINE="claude-2"
+
+# Python Configuration
+export VIRTUAL_ENV=/home/$SEA_USER/.sea/workspace/.env
+export PATH=$VIRTUAL_ENV/bin:$PATH
+export PYTHONPATH=/home/$SEA_USER/.local/lib/python3/site-packages
+EOL
+
+    chmod 644 /etc/profile.d/sea.sh
+    source /etc/profile.d/sea.sh
+
+    # Basic development tools
+    apt-get install -y \
+        build-essential \
+        git \
+        wget \
+        curl \
+        passwd \
+        adduser \
+        w3m \
+        openssh-client \
+        gnupg \
+        sqlite3
+
+    # Create sea user with specific UID to avoid conflicts
+    sudo userdel $SEA_USER
+    sudo rm $SEA_HOME -rf
+    sudo adduser --disabled-password --gecos "" --uid $SEA_UID --shell /bin/bash --home $SEA_HOME $SEA_USER
+    sudo usermod -aG sudo $SEA_USER
+    echo "$SEA_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/sea
+    chmod 0440 /etc/sudoers.d/sea
+
+    # Create workspace directories
+    sudo -u $SEA_USER mkdir -p $SEA_WORKSPACE
+    sudo -u $SEA_USER mkdir -p $SEA_BACKUPS $SEA_LOGS $SEA_REQUESTS $SEA_CONFIG
+    sudo -u $SEA_USER chmod 700 $SEA_ROOT
+
+    # Install Emacs and related packages
+    apt-get install -y \
+        emacs \
+        emacs-common \
+        emacs-bin-common
+
+    # Install required Emacs packages
+    sudo -u $SEA_USER bash -c "cd $SEA_HOME && emacs --batch --eval \
+        '(progn \
+           (require \"package\") \
+           (add-to-list \"package-archives\" \"(\"melpa\" . \"https://melpa.org/packages/\") t) \
+           (package-initialize) \
+           (package-refresh-contents) \
+           (package-install \"markdown-mode\") \
+           (package-install \"request\") \
+           (package-install \"async\") \
+           (package-install \"w3m\"))'"
+
+    # # Install Python and pip
+    # apt-get install -y \
+    #     python3 \
+    #     python3-pip \
+    #     python3-venv
+
+    # # Set up Python virtual environment
+    # sudo -u $SEA_USER bash -c "cd $SEA_WORKSPACE && python3 -m venv .env"
+    # sudo -u $SEA_USER bash -c "echo 'source $VIRTUAL_ENV/bin/activate' >> $SEA_HOME/.bashrc"
+
+    # # Install Python packages
+    # sudo -u $SEA_USER bash -c "source $VIRTUAL_ENV/bin/activate && pip install --upgrade pip"
+    # sudo -u $SEA_USER bash -c "source $VIRTUAL_ENV/bin/activate && pip install requests openai anthropic"
+
+    # Configure environment for sea user
+    sudo -u $SEA_USER bash -c "echo 'export PATH=\$PATH:/usr/local/bin' >> $SEA_HOME/.bashrc"
+    sudo -u $SEA_USER bash -c "echo 'export PYTHONPATH=$PYTHONPATH' >> $SEA_HOME/.bashrc"
+
+    # Configure Git for sea user
+    sudo -u $SEA_USER git config --global user.name "sea-bot"
+    sudo -u $SEA_USER git config --global user.email "sea-bot@example.com"
+    sudo -u $SEA_USER git config --global core.editor "$SEA_EMACS_BIN"
+    sudo -u $SEA_USER git config --global init.defaultBranch "main"
+
+
+%startscript
+    source /etc/profile.d/sea.sh
+    sudo -u $SEA_USER $SEA_EMACS_BIN --daemon
+    cd $SEA_HOME
+    exec sudo -i -u $SEA_USER bash --login
+
+%runscript
+    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+        . /etc/profile.d/sea.sh
+        HOME=$SEA_HOME        
+        su $SEA_USER        
+        HOME=SEA_HOME $SEA_EMACS_BIN --daemon
+        $SEA_EMACS_CLIENT -c -n
+    else
+        exec "$@"
+    fi
+
+# %runscript
+#     if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+#         . /etc/profile.d/sea.sh
+#         exec sudo -i -u $SEA_USER bash -c "HOME=$SEA_HOME $SEA_EMACS_BIN --daemon && $SEA_EMACS_CLIENT -c -n"
+#     else
+#         exec "$@"
+#     fi
+
+
+################################################################################
+# Now, this is a development stage, using sandbox.
+# This container aims to prepare reprodusable, safer, and more reliable environment
+# for the SEA project.
+#
+# ~/.dotfiles/.emacs.d/lisp/self-evolving-agent/src/sea-config.el
+# ~/.dotfiles/.emacs.d/lisp/self-evolving-agent/src/sea-install.el
+# ~/.dotfiles/.emacs.d/lisp/self-evolving-agent/src/sea-server.el
+# ~/.dotfiles/.emacs.d/lisp/self-evolving-agent/src/sea_server.sh
+# ~/.dotfiles/.emacs.d/lisp/self-evolving-agent/src/sea_sudo.sh
+#
+# apptainer build --fakeroot --sandbox ./apptainer/sea.sandbox ./apptainer/sea.def
+#
+# apptainer shell --writable --fakeroot --cleanenv ./apptainer/sea.sandbox
+# apptainer run --bind /home/sea/.emacs.d:/home/sea/.emacs.d ./apptainer/sea.sandbox
+# apptainer run ./apptainer/sea.sandbox emacs
+################################################################################
+
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; Base directories for the user; defined in sea-config.el and thus commented-out here
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; ;; User installation paths
+# ;; (defvar sea-user-root-dir (file-name-directory (directory-file-name
+# ;;                                               (file-name-directory
+# ;;                                                (or load-file-name buffer-file-name))))
+# ;;   "User's SEA installation root directory.")
+
+# ;; (defvar sea-user-source-dir (expand-file-name "src" sea-user-root-dir)
+# ;;   "User's SEA source directory.")
+
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; Server
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defcustom sea-emacs-bin "/usr/bin/emacs"
+#   "Path to Emacs binary."
+#   :type 'file
+#   :group 'sea)
+
+# (defcustom sea-emacs-cli "/usr/bin/emacsclient"
+#   "Path to emacsclient binary."
+#   :type 'file
+#   :group 'sea)
+
+# (defcustom sea-server-script-path
+#   (expand-file-name "sea_server.sh" sea-user-source-dir)
+#   "Path to SEA server control script."
+#   :type 'string
+#   :group 'sea)
+# ;; "/home/ywatanabe/.emacs.d/lisp/self-evolving-agent/src/sea_server.sh"
+
+# (defvar sea-server-script-output nil
+#   "Store output from server script calls.")
+# ;; sea-server-script-output’s value is
+# ;; "[sudo] password for ywatanabe: Server is running
+# ;; "
+
+# (defvar sea-log-file (expand-file-name "sea.log" sea-logs-dir)
+#   "Store output from server script calls.")
+
+# (defcustom sea-server-socket-dir (format "/tmp/emacs%d" sea-uid)
+#   "Directory for SEA Emacs server socket.")
+# ;; Its value is "/tmp/emacs999"
+
+# (defcustom sea-server-socket-file (format "/tmp/emacs%d/server" sea-uid)
+#   "File path for SEA Emacs server socket.")
+# ;; Its value is "/tmp/emacs999/server"
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; GitHub
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defcustom sea-github-token-file (expand-file-name "github-token" sea-config-dir)
+#   "Path to GitHub token file. Requires 600 permissions."
+#   :type 'file
+#   :group 'sea)
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; User Interaction
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defcustom sea-prompts-dir (expand-file-name "prompts" sea-user-source-dir)
+#   "File for user's improvement requests."
+#   :type 'file
+#   :group 'sea)
+
+# (defcustom sea-user-request-file (expand-file-name "user-request.md" sea-requests-dir)
+#   "File for user's improvement requests."
+#   :type 'file
+#   :group 'sea)
+
+# (defcustom sea-request-file (expand-file-name "sea-request.md" sea-requests-dir)
+#   "File for SEA's improvement suggestions."
+#   :type 'file
+#   :group 'sea)
+
+# (defcustom sea-history-file (expand-file-name "history.log" sea-logs-dir)
+#   "File to store agent history."
+#   :type 'file
+#   :group 'sea)
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; Operation modes
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defcustom sea-readonly-mode t
+#   "When non-nil, prevent modifications to core agent files."
+#   :type 'boolean
+#   :group 'sea)
+
+# (defcustom sea-require-approval t
+#   "When non-nil, require user approval for critical operations."
+#   :type 'boolean
+#   :group 'sea)
+
+# (defcustom sea-api-timeout 30
+#   "Timeout in seconds for API calls."
+#   :type 'integer
+#   :group 'sea)
+
+# (defvar sea-debug nil
+#   "Enable debug logging when non-nil.")
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; LLM
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defvar sea-anthropic-key (getenv "ANTHROPIC_API_KEY")
+#   "API key for Anthropic Claude.")
+
+# (defvar sea-anthropic-engine (getenv "ANTHROPIC_ENGINE")
+#   "Model for Anthropic Claude.")
+
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# ;; Logging
+# ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+# (defvar sea-backup-limit 10
+#   "Maximum number of backups to keep.")
+
+# (defvar sea--installation-log-file (expand-file-name "installation.log" sea-logs-dir)
+#   "Log file for SEA installation.")
+
+# (provide 'sea-config)
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; sea-install.el
+# ;;; -*- lexical-binding: t -*-
+# ;;; Author: 2024-12-04 08:10:06
+# ;;; Time-stamp: <2024-12-04 08:10:06 (ywatanabe)>
+# ;;; File: ./self-evolving-agent/src/sea-install.el
+
+
+# (require 'sea-config)
+# (require 'cl-lib)
+# (require 'auth-source)
+# (require 'sea-verify-installation)
+# (require 'sea-logging)
+
+
+# (defun sea-setup-sudo ()
+#   "Setup sudo configuration for SEA."
+#   (interactive)
+#   (let ((sudo-file "/etc/sudoers.d/sea-emacs")
+#         (temp-file (make-temp-file "sea-sudo"))
+#         (content (format "%s ALL=(%s) NOPASSWD: %s\n"
+#                         (user-login-name)
+#                         sea-user
+#                         sea-emacs-cli)))
+#     (write-region content nil temp-file)
+#     (call-process "sudo" nil nil nil
+#                  "cp" temp-file sudo-file)
+#     (call-process "sudo" nil nil nil
+#                  "chown" "root:root" sudo-file)
+#     (call-process "sudo" nil nil nil
+#                  "chmod" "440" sudo-file)
+#     (delete-file temp-file)))
+
+# ;; (sea-setup-sudo)
+
+# ;; # /etc/sudoers.d/sea-emacs
+# ;; ywatanabe ALL=(sea) NOPASSWD: /usr/bin/emacsclient
+
+
+# (defun sea--check-dependencies ()
+#   "Check if required system dependencies are available."
+#   (let ((required-commands '("git" "sudo" "python3"))
+#         (missing-commands '()))
+
+#     (dolist (cmd required-commands)
+#       (unless (executable-find cmd)
+#         (push cmd missing-commands)))
+
+#     (when missing-commands
+#       (error "Missing required commands: %s"
+#              (string-join missing-commands ", ")))))
+
+# ;; (defun sea--create-user (username)
+# ;;   "Create a new system user for SEA."
+# ;;   (unless (zerop (shell-command
+# ;;                   (format "id %s >/dev/null 2>&1" username)))
+# ;;     (shell-command
+# ;;      (format "sudo useradd -m -s /bin/bash %s" username))
+# ;;     (shell-command
+# ;;      (format "sudo usermod -aG sudo %s" username))))
+
+# (defun sea--setup-workspace ()
+#   "Initialize SEA workspace with symbolic links."
+#   (interactive)
+#   (let* ((user-name (user-login-name))
+#          (source-dir (directory-file-name sea-user-root-dir))
+#          (workspace-dir (directory-file-name sea-workspace-dir))
+#          (target-link (expand-file-name "self-evolving-agent" workspace-dir)))
+
+#     ;; Verify user is in sea group
+#     (unless (member "sea" (split-string (shell-command-to-string
+#                                        (format "groups %s" user-name))))
+#       (error "Current user must be in 'sea' group. Run install.sh first"))
+
+#     ;; Create base directories
+#     (dolist (dir (list sea-work-dir
+#                       sea-workspace-dir
+#                       sea-backups-dir
+#                       sea-logs-dir
+#                       sea-requests-dir
+#                       sea-config-dir))
+#       (unless (file-exists-p dir)
+#         (make-directory dir t)
+#         (set-file-modes dir #o700)))
+
+#     ;; Touch request files
+#     (dolist (file (list sea-user-request-file
+#                        sea-request-file))
+#       (unless (file-exists-p file)
+#         (write-region "" nil file)))
+
+#     ;; Create symbolic link
+#     (when (file-exists-p target-link)
+#       (delete-file target-link))
+#     (make-symbolic-link source-dir target-link)))
+
+# (defun sea--user-exists-p (username)
+#   "Check if USERNAME exists in the system."
+#   (zerop (shell-command
+#           (format "id %s >/dev/null 2>&1" username))))
+
+# (defun sea--setup-user (main-user)
+#   "Set up SEA user and configure permissions for MAIN-USER."
+#   (unless (sea--user-exists-p main-user)
+#     (error "User %s does not exist" main-user))
+
+#   (unless (sea--user-exists-p "sea")
+#     (sea--log-message "Creating sea user...")
+#     (unless (zerop (shell-command "sudo useradd -r -m -d /home/sea sea"))
+#       (error "Failed to create sea user"))
+#     (shell-command "sudo chmod 755 /home/sea"))
+
+#   (sea--log-message "Configuring groups...")
+#   (shell-command (format "sudo usermod -aG sea %s" main-user))
+#   (shell-command (format "sudo usermod -aG %s sea" main-user))
+#   )
+
+# (defun sea--setup-git-config ()
+#   "Configure git settings for SEA user."
+#   (sea--log-message "Setting up git configuration for sea user...")
+
+#   (let ((git-commands
+#          '("git config --global user.name \"sea-bot\""
+#            "git config --global user.email \"sea-bot@example.com\""
+#            "git config --global core.editor \"gedit\""
+#            "git config --global init.defaultBranch \"main\"")))
+#     (dolist (cmd git-commands)
+#       (shell-command (format "sudo -u sea %s" cmd))))
+
+#   (let ((gitignore (expand-file-name ".gitignore_global" sea-config-dir)))
+#     (with-temp-file gitignore
+#       (insert "*~\n.DS_Store\n.env\n*.log\n"))
+#     (shell-command (format "sudo -u sea git config --global core.excludesfile %s" gitignore))
+#     (shell-command (format "sudo chmod 600 %s" gitignore))
+#     (sea--log-message "Git configuration completed")))
+
+# ;; (defun sea--setup-github-token ()
+# ;;   "Set up GitHub token interactively."
+# ;;   (sea--log-message "Setting up GitHub token...")
+
+# ;;   (when (file-exists-p sea-github-token-file)
+# ;;     (let* ((default-token (with-temp-buffer
+# ;;                            (insert-file-contents sea-github-token-file)
+# ;;                            (buffer-string)))
+# ;;            (masked-token (concat (substring default-token 0 4)
+# ;;                                "..."
+# ;;                                (substring default-token -4))))
+# ;;       (let ((input (read-string
+# ;;                    (format "Enter GitHub Token (Enter for %s, s to skip): "
+# ;;                           masked-token))))
+# ;;         (cond ((string-empty-p input)
+# ;;                (sea--log-message "Keeping existing token")
+# ;;                (cl-return-from sea--setup-github-token t))
+# ;;               ((string= input "s")
+# ;;                (sea--log-message "Skipping token setup")
+# ;;                (cl-return-from sea--setup-github-token t))))))
+
+# ;;   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
+# ;;     (when (string= token "s")
+# ;;       (sea--log-message "Skipping token setup")
+# ;;       (cl-return-from sea--setup-github-token t))
+
+# ;;     (when (< (length token) 40)
+# ;;       (sea--log-message "Error: Invalid token length")
+# ;;       (cl-return-from sea--setup-github-token nil))
+
+# ;;     (with-temp-file sea-github-token-file
+# ;;       (insert token))
+# ;;     (shell-command (format "sudo chmod 600 %s" sea-github-token-file))
+# ;;     (sea--log-message "GitHub token saved")))
+
+# (cl-defun sea--setup-github-token ()
+#   "Set up GitHub token interactively."
+#   (sea--log-message "Setting up GitHub token...")
+
+#   (when (file-exists-p sea-github-token-file)
+#     (let* ((default-token (with-temp-buffer
+#                            (insert-file-contents sea-github-token-file)
+#                            (buffer-string)))
+#            (masked-token (concat (substring default-token 0 4)
+#                                "..."
+#                                (substring default-token -4))))
+#       (let ((input (read-string
+#                    (format "Enter GitHub Token (Enter for %s, s to skip): "
+#                           masked-token))))
+#         (cond ((string-empty-p input)
+#                (sea--log-message "Keeping existing token")
+#                (cl-return-from sea--setup-github-token t))
+#               ((string= input "s")
+#                (sea--log-message "Skipping token setup")
+#                (cl-return-from sea--setup-github-token t))))))
+
+#   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
+#     (when (string= token "s")
+#       (sea--log-message "Skipping token setup")
+#       (cl-return-from sea--setup-github-token t))
+
+#     (when (< (length token) 40)
+#       (sea--log-message "Error: Invalid token length")
+#       (cl-return-from sea--setup-github-token nil))
+
+#     (with-temp-file sea-github-token-file
+#       (insert token))
+#     (shell-command (format "sudo chmod 600 %s" sea-github-token-file))
+#     (sea--log-message "GitHub token saved")))
+
+
+
+# (defun sea--install-dependencies ()
+#   "Install required system packages and Emacs packages."
+#   (sea--log-message "Installing dependencies...")
+
+#   ;; System packages
+#   (let ((packages '("python3" "curl" "wget")))
+#     (dolist (pkg packages)
+#       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
+#         (sea--log-message (format "Installing %s..." pkg))
+#         (let ((result (shell-command (format "sudo apt-get install -y %s" pkg))))
+#           (unless (zerop result)
+#             (display-warning 'sea (format "Failed to install %s" pkg) :error))))))
+
+#   ;; Python packages
+#   (let* ((default-directory sea-workspace-dir)
+#          (venv-dir (expand-file-name ".env" sea-workspace-dir)))
+#     ;; Create and activate virtual environment
+#     (unless (file-exists-p venv-dir)
+#       (shell-command "python3 -m venv .env"))
+
+#     (let ((commands
+#            `(,(format "bash -c 'source %s/bin/activate && pip install --upgrade pip'" venv-dir)
+#              ,(format "bash -c 'source %s/bin/activate && pip install -r %s/requirements.txt'"
+#                      venv-dir sea-user-root-dir))))
+#       (dolist (cmd commands)
+#         (let ((result (shell-command cmd)))
+#           (unless (zerop result)
+#             (display-warning 'sea
+#                            (format "Failed to execute command: %s" cmd)
+#                            :error))))))
+
+#   ;; Emacs packages
+#   (condition-case err
+#       (progn
+#         (require 'package)
+#         (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+#         (package-initialize)
+#         (package-refresh-contents)
+
+#         (dolist (pkg '(markdown-mode request async))
+#           (unless (package-installed-p pkg)
+#             (condition-case nil
+#                 (package-install pkg)
+#               (error
+#                (display-warning 'sea
+#                               (format "Failed to install package: %s" pkg)
+#                               :error))))))
+#     (error
+#      (display-warning 'sea
+#                      (format "Error during Emacs package setup: %s" (error-message-string err))
+#                      :error))))
+
+# ;; (defun sea--install-dependencies ()
+# ;;   "Install required system packages and Emacs packages."
+# ;;   (sea--log-message "Installing dependencies...")
+
+# ;;   ;; System packages
+# ;;   (let ((packages '("python3" "curl" "wget")))
+# ;;     (dolist (pkg packages)
+# ;;       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
+# ;;         (sea--log-message (format "Installing %s..." pkg))
+# ;;         (shell-command (format "sudo apt-get install -y %s" pkg)))))
+
+# ;;   ;; Python packages
+# ;;   (shell-command "cd sea-workspace-dir")
+# ;;   (shell-command "python -m pip install -U pip")
+# ;;   (shell-command "python -m venv .env")
+# ;;   (shell-command "source .env/bin/activate")
+# ;;   (shell-command "python -m pip install -U pip")
+# ;;   (shell-command (concat "python -m pip install -r " sea-user-root-dir "requirements.txt"))
+
+# ;;   ;; Emacs packages
+# ;;   (require 'package)
+# ;;   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+# ;;   (package-initialize)
+# ;;   (package-refresh-contents)
+
+# ;;   (dolist (pkg '(markdown-mode request async))
+# ;;     (unless (package-installed-p pkg)
+# ;;       (package-install pkg))))
+
+# (defun sea--setup-permissions ()
+#   "Set correct permissions for SEA directories and files."
+#   (sea--log-message "Setting up permissions...")
+
+#   ;; Directory permissions
+#   (mapc (lambda (dir)
+#           (set-file-modes dir #o755)
+#           (shell-command (format "sudo chown -R sea:sea %s" dir)))
+#         (list sea-work-dir
+#               sea-workspace-dir
+#               sea-source-dir
+#               sea-backups-dir
+#               sea-logs-dir
+#               sea-requests-dir
+#               sea-config-dir))
+
+#   ;; Special file permissions
+#   (when (file-exists-p sea-github-token-file)
+#     (set-file-modes sea-github-token-file #o600))
+
+#   (dolist (file (directory-files-recursively sea-logs-dir ".*\\.log$"))
+#     (set-file-modes file #o644)))
+
+# (defun sea--backup-existing-files ()
+#   "Backup existing SEA files if they exist."
+#   (when (file-exists-p sea-work-dir)
+#     (let ((backup-dir (format "%s/sea-backup-%s"
+#                              temporary-file-directory
+#                              (format-time-string "%Y%m%d-%H%M%S"))))
+#       (make-directory backup-dir t)
+#       (copy-directory sea-work-dir backup-dir t t t)
+#       (sea--log-message
+#        (format "Existing files backed up to %s" backup-dir)))))
+
+# ;; (defun sea--create-directories ()
+# ;;   "Create all necessary directories for SEA."
+# ;;   (mapc (lambda (dir)
+# ;;           (unless (file-exists-p dir)
+# ;;             (make-directory dir t)))
+# ;;         (list sea-work-dir
+# ;;               sea-workspace-dir
+# ;;               sea-source-dir
+# ;;               sea-backups-dir
+# ;;               sea-logs-dir
+# ;;               sea-requests-dir
+# ;;               sea-config-dir)))
+
+# (defun sea--create-initial-files ()
+#   "Create initial files and templates."
+#   (sea--log-message "Creating initial files...")
+
+#   ;; Create user request template
+#   (with-temp-file sea-user-request-file
+#     (insert "# Improvement Request\n\n"
+#             "## Description\n\n"
+#             "## Expected Outcome\n\n"
+#             "## Additional Notes\n"))
+
+#   ;; Create SEA request template
+#   (with-temp-file sea-request-file
+#     (insert "# Self-Improvement Proposal\n\n"
+#             "## Current Limitation\n\n"
+#             "## Proposed Changes\n\n"
+#             "## Implementation Plan\n\n"
+#             "## Testing Strategy\n"))
+
+#   ;; Initialize history log
+#   (unless (file-exists-p sea-history-file)
+#     (with-temp-file sea-history-file
+#       (insert (format-time-string "# SEA History Log\nInitialized on %Y-%m-%d %H:%M:%S\n\n")))))
+
+# ;; (defun sea--verify-installation ()
+# ;;   "Verify that all components are properly installed and configured."
+# ;;   (sea--log-message "Verifying installation...")
+
+# ;;   (let ((checks
+# ;;          `((,sea-work-dir "Main working directory")
+# ;;            (,sea-workspace-dir "Workspace directory")
+# ;;            (,sea-source-dir "Source directory")
+# ;;            (,sea-logs-dir "Logs directory")
+# ;;            (,sea-config-dir "Config directory")
+# ;;            (,sea-github-token-file "GitHub token file")
+# ;;            (,sea-user-request-file "User request template")
+# ;;            (,sea-request-file "SEA request template")
+# ;;            (,sea-history-file "History log"))))
+
+# ;;     (cl-loop for (path desc) in checks
+# ;;              do (unless (file-exists-p path)
+# ;;                   (error "Missing %s at %s" desc path))))
+
+# ;;   (sea--log-message "Installation verified successfully"))
+
+# (defun sea--setup-environment ()
+#   "Set up SEA environment variables and shell configuration."
+#   (sea--log-message "Setting up environment...")
+
+#   (let ((env-file (expand-file-name ".env" sea-config-dir)))
+#     (with-temp-file env-file
+#       (insert (format "SEA_ROOT=%s\n" sea-work-dir)
+#               (format "SEA_WORKSPACE=%s\n" sea-workspace-dir)
+#               (format "SEA_SOURCE=%s\n" sea-source-dir)
+#               (format "SEA_LOGS=%s\n" sea-logs-dir)
+#               (format "SEA_CONFIG=%s\n" sea-config-dir)))
+#     (shell-command (format "sudo chmod 644 %s" env-file))))
+
+# (defun sea-install (&optional main-user)
+#   "Install SEA system with MAIN-USER as primary user.
+# If MAIN-USER is nil, use current user."
+#   (interactive)
+
+#   (let ((main-user (or main-user (user-login-name))))
+#     (condition-case err
+#         (progn
+#           (sea--log-message "Starting SEA installation...")
+
+#           ;; Core setup
+#           (sea--setup-user main-user)
+#           ;; Directories and files
+#           (sea--setup-workspace)
+
+#           ;; Pre-installation checks
+#           (sea--check-dependencies)
+
+#           ;; Git/GitHub
+#           (sea--setup-git-config)
+#           (sea--setup-github-token)
+
+#           ;; Repository and dependencies
+#           (sea--install-dependencies)
+
+#           ;; Configuration and files
+#           (sea--setup-permissions)
+#           (sea--create-initial-files)
+#           (sea--setup-environment)
+
+#           ;; Final verification
+#           (sea-verify-installation)
+
+#           (sea-setup-sudo)
+
+#           (sea--log-message "SEA installation completed successfully!")
+#           t)
+
+#       (error
+#        (sea--log-message (format "Installation failed: %s" (error-message-string err)))
+#        nil))))
+
+# (provide 'sea-install)
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; (require 'sea)
+
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; sea-logging.el
+# ;;; -*- lexical-binding: t -*-
+# ;;; Author: 2024-12-04 08:53:46
+# ;;; Time-stamp: <2024-12-04 08:53:46 (ywatanabe)>
+# ;;; File: ./self-evolving-agent/src/sea-logging.el
+
+
+# (require 'sea-config)
+
+# (defun sea--log-message (message)
+#   "Log MESSAGE to the log file and console."
+#   (let ((log-file (expand-file-name "history.log" sea-logs-dir))
+#         (timestamp (format-time-string "%Y-%m-%d %H:%M:%S")))
+#     (with-temp-buffer
+#       (when (file-exists-p log-file)
+#         (insert-file-contents log-file))
+#       (goto-char (point-min))
+#       (insert (format "[%s] %s\n" timestamp message))
+#       (write-region (point-min) (point-max) log-file nil 'quiet))))
+
+# (defun sea--log-success (_message)
+#   "Log success MESSAGE."
+#   (interactive)
+#   (sea--log-message (concat "[SUCCESS] " (message "%s" _message))))
+
+# (defun sea--log-warning (_message)
+#   "Log warning MESSAGE."
+#   (interactive)
+#   (sea--log-message (concat "[WARNING] " (message "%s" _message))))
+
+# (defun sea--log-error (_message)
+#   "Log error MESSAGE."
+#   (interactive)
+#   (sea--log-message (concat "[ERROR] " (message "%s" _message))))
+
+# (defun sea--log-note (_message)
+#   "Note MESSAGE to the SEA."
+#   (interactive)
+#   (sea--log-message (concat "[NOTE] " (message "%s" _message))))
+
+
+# (defun sea--get-log (&optional n_tail)
+#   "Read last N_TAIL lines from agent log file using tail command. Default is 32 lines."
+#   (interactive)
+#   (when (and sea-log-file (file-exists-p sea-log-file))
+#     (condition-case err
+#         (let ((output (shell-command-to-string
+#                       (format "tail -%d %s" (or n_tail 32) sea-log-file))))
+#           (when output
+#             (concat "## Recent Logs\n\n" output)))
+#       (error
+#        (sea--log-message (format "Error reading log: %s" err))
+#        nil))))
+
+# ;; (sea--get-log)
+
+# ;; (defun sea--get-log (&optional n_tail)
+# ;;   "Read last N_TAIL lines from agent log file. Default is 32 lines."
+# ;;   (interactive)
+# ;;   (when (and sea-log-file (file-exists-p sea-log-file))
+# ;;     (condition-case err
+# ;;         (with-temp-buffer
+# ;;           (insert-file-contents sea-log-file)
+# ;;           (goto-char (point-max))
+# ;;           (forward-line (- (or n_tail 32)))
+# ;;           (when (< (point) (point-min))
+# ;;             (goto-char (point-min)))
+# ;;           (concat "## Recent Logs\n\n"
+# ;;                  (buffer-substring-no-properties (point) (point-max))))
+# ;;       (error
+# ;;        (sea--log-message (format "Error reading log: %s" err))
+# ;;        nil))))
+
+# ;; (defun sea--get-log (&optional n_tail)
+# ;;   "Read last N_TAIL lines from agent log file. Default is 32 lines."
+# ;;   (interactive)
+# ;;   (when (and sea-log-file (file-exists-p sea-log-file))
+# ;;     (condition-case err
+# ;;         (with-temp-buffer
+# ;;           (insert-file-contents sea-log-file)
+# ;;           (goto-char (point-max))
+# ;;           (forward-line (- (or n_tail 32)))
+# ;;           (when (< (point) (point-min))
+# ;;             (goto-char (point-min)))
+# ;;           (buffer-substring-no-properties (point) (point-max)))
+# ;;       (error
+# ;;        (sea--log-message (format "Error reading log: %s" err))
+# ;;        nil))))
+
+# ;; (defun sea--get-log (n_tail)
+# ;;   "Read agent log from file."
+# ;;   (interactive)
+# ;;   (when (and sea-log-file (file-exists-p sea-log-file))
+# ;;     (condition-case err
+# ;;         (with-temp-buffer
+# ;;           (insert-file-contents sea-log-file)
+# ;;           (buffer-string))
+# ;;       (error (sea--log-error (format "Error reading log: %s" err))
+# ;;              nil))))
+
+# ;; (defun sea--log-change (file backup changes)
+# ;;   "Log changes to FILE with BACKUP and CHANGES description."
+# ;;   (when (and file backup changes)
+# ;;     (condition-case err
+# ;;         (with-temp-buffer
+# ;;           (insert (format "\n=== %s ===\nFile: %s\nBackup: %s\nChanges:\n%s\n"
+# ;;                          (format-time-string "%Y-%m-%d %H:%M:%S")
+# ;;                          file backup changes))
+# ;;           (append-to-file (point-min) (point-max) sea-log-file))
+# ;;       (error (message "Failed to log changes: %s" err)))))
+
+# (defun sea--log-change (file backup changes)
+#   "Log changes to FILE with BACKUP and CHANGES in standard format."
+#   (when (and file backup changes)
+#     (condition-case err
+#         (with-temp-buffer
+#           (insert (format "[%s] === Change Log ===\n"
+#                          (format-time-string "%Y-%m-%d %H:%M:%S"))
+#                  (format "File: %s\n" file)
+#                  (format "Backup: %s\n" backup)
+#                  (format "Changes:\n%s\n" changes))
+#           (append-to-file (point-min) (point-max) sea-log-file))
+#       (error
+#        (sea--log-error
+#         (format "Failed to log changes: %s" (error-message-string err)))))))
+
+# (defun sea-show-log ()
+#   "Show agent log using tail -f."
+#   (interactive)
+#   (when (and sea-log-file (file-exists-p sea-log-file))
+#     (async-shell-command
+#      (format "tail -f %s" (shell-quote-argument sea-log-file))
+#      "*Sea Log*")))
+
+# (defun sea-stop-log-updates ()
+#   "Stop log updates."
+#   (interactive)
+#   (when-let ((proc (get-buffer-process "*Sea Log*")))
+#     (kill-process proc)))
+
+
+
+# ;; (defun sea--get-log ()
+# ;;   "Read agent log from file."
+# ;;   (when (and sea-log-file (file-exists-p sea-log-file))
+# ;;     (condition-case err
+# ;;         (with-temp-buffer
+# ;;           (insert-file-contents sea-log-file)
+# ;;           (buffer-string))
+# ;;       (error (message "Error reading log: %s" err) nil))))
+
+# (defun sea-init-log ()
+#   "Initialize the log file if it doesn't exist."
+#   (interactive)
+#   (unless (file-exists-p sea-logs-dir)
+#     (make-directory sea-logs-dir t))
+#   (unless (file-exists-p sea-log-file)
+#     (with-temp-file sea-log-file
+#       (insert (format "=== SEA Log Log Created: %s ===\n\n"
+#                      (format-time-string "%Y-%m-%d %H:%M:%S"))))))
+
+# (defun sea-backup-log ()
+#   "Create a backup of the log file and clear the original."
+#   (interactive)
+#   (condition-case err
+#       (progn
+#         (sea-init-log)
+#         (let* ((timestamp (format-time-string "%Y%m%d-%H%M%S"))
+#                (backup-dir (expand-file-name "backups" sea-logs-dir))
+#                (backup-file (expand-file-name
+#                            (format "log-%s.log" timestamp)
+#                            backup-dir)))
+#           (unless (file-exists-p backup-dir)
+#             (make-directory backup-dir t))
+#           (when (file-exists-p sea-log-file)
+#             (copy-file sea-log-file backup-file t)
+#             (with-temp-file sea-log-file
+#               (erase-buffer)
+#               (insert (format "=== SEA Log Log Reset: %s ===\n\n"
+#                             (format-time-string "%Y-%m-%d %H:%M:%S"))))
+#             (sea--log-message
+#              (format "Log backed up to %s and cleared" backup-file)))))
+#     (error
+#      (sea--log-message (format "Failed to backup/clear log: %S" err))
+#      (message "Failed to backup/clear log: %s" err))))
+
+
+# (provide 'sea-logging)
+
+# ;
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; sea-server.el
+# ;;; -*- lexical-binding: t -*-
+# ;;; Author: 2024-12-04 18:51:37
+# ;;; Time-stamp: <2024-12-04 18:51:37 (ywatanabe)>
+# ;;; File: ./self-evolving-agent/src/sea-server.el
+
+
+# (require 'cl-lib)
+# (require 'sea-config)
+# (require 'sea-sudo)
+
+# (defcustom sea-server-check-interval 1
+#   "Interval in seconds to check server status."
+#   :type 'integer
+#   :group 'sea-server)
+
+# (defun sea-server-running-p ()
+#   "Check if SEA server is running."
+#   (interactive)
+#   (sea--run-sudo-command "status"))
+# ;; (sea-server-running-p)
+
+# (defun sea-kill-server ()
+#   "Stop SEA server."
+#   (interactive)
+#   (sea--run-sudo-command "stop"))
+# ;; (sea-kill-server)
+
+# (defun sea-init-server ()
+#   "Start SEA server."
+#   (interactive)
+#   (sea--run-sudo-command "start"))
+
+# (defun sea-restart-server ()
+#   "Restart SEA server."
+#   (interactive)
+#   (sea--run-sudo-command "restart"))
+
+# (defun sea-ensure-server ()
+#   "Ensure SEA server is running."
+#   (interactive)
+#   (let ((was-started nil))
+#     (unless (sea-server-running-p)
+#       (sea-init-server)
+#       (let ((attempts 0))
+#         (while (and (not (sea-server-running-p))
+#                     (< attempts 5))
+#           (message "Waiting for server... (%s)" sea-server-script-output)
+#           (sleep-for sea-server-check-interval)
+#           (cl-incf attempts))
+#         (setq was-started t)))
+#     was-started))
+
+# (defun sea-init-or-connect ()
+#   "Initialize server if not running, then connect."
+#   (interactive)
+#   (let ((result (sea-ensure-server)))
+#     (when (or result (sea-server-running-p))
+#       t)))
+
+# ;; (defun sea-exec-escaped-elisp-code (escaped-elisp-code)
+# ;;   "Execute elisp code in the SEA server process."
+# ;;   (interactive)
+# ;;   (sea-init-or-connect)
+# ;;   (let ((cmd (format "echo %s | sudo -S %s execute %s"
+# ;;                     (shell-quote-argument (sea--sudo-get-password))
+# ;;                     (shell-quote-argument sea-server-script-path)
+# ;;                     escaped-elisp-code)))
+# ;;     (shell-command cmd)))
+# ;; ;; (sea-exec-escaped-elisp-code "'\(message \"Hello SEA!!!\"\)'")
+# ;; ;; (sea-exec-escaped-elisp-code
+# ;; ;;  "'\(progn
+# ;; ;;     (find-file \"/tmp/test.txt\")
+# ;; ;;     (insert \"This is a test script.\")
+# ;; ;;   \)'")
+
+# ;; ;; (defun sea-exec-escaped-elisp-code (escaped-elisp-code)
+# ;; ;;   "Execute elisp code in the SEA server process.
+# ;; ;; Examples:
+# ;; ;;   (sea-exec-escaped-elisp-code \"'\\(message \\\"Hello SEA!!!!!\\\"\\)'\")
+
+# ;; ;;   (sea-exec-escaped-elisp-code
+# ;; ;;    \"'\\(progn
+# ;; ;;       (find-file \\\"/tmp/test.txt\\\")
+# ;; ;;       (insert \\\"This is a test script.\\\")
+# ;; ;;     \\)'\")"
+# ;; ;;   (interactive)
+# ;; ;;   (sea-init-or-connect)
+# ;; ;;   (shell-command
+# ;; ;;    (concat
+# ;; ;;     (format "echo %s | sudo -S %s execute %s"
+# ;; ;;            (sea--sudo-get-password)
+# ;; ;;            sea-server-script-path
+# ;; ;;            escaped-elisp-code))))
+
+# ;; ;; (defun sea-escape-elisp-code (code)
+# ;; ;;   "Escape elisp CODE for shell execution."
+# ;; ;;   (shell-quote-argument (prin1-to-string code)))
+
+# ;; (defun sea-escape-elisp-code (code)
+# ;;   "Prepare elisp CODE for sea-exec-elisp-code by adding proper escaping."
+# ;;   (format "'%s'" (prin1-to-string code)))
+
+# ;; (defun sea-exec-elisp-code (escaped-elisp-code)
+# ;;   (interactive)
+# ;;   (sea-init-or-connect)
+# ;;   (shell-command
+# ;;    (concat
+# ;;     (format "echo %s | sudo -S %s execute %s"
+# ;;            (sea--sudo-get-password)
+# ;;            sea-server-script-path
+# ;;            escaped-elisp-code))))
+
+# (defun sea-escape-elisp-code (code)
+#   "Escape elisp CODE for shell execution."
+#   (shell-quote-argument (prin1-to-string code)))
+
+# (defun sea-exec-elisp-code (elisp-code)
+#   "Execute ELISP-CODE in SEA server process."
+#   (interactive "xLisp expression: ")
+#   (let ((code (if (stringp elisp-code)
+#                   (read elisp-code)
+#                 elisp-code)))
+#     (sea-exec-escaped-elisp-code (sea-escape-elisp-code code))))
+
+# (defun sea-exec-escaped-elisp-code (escaped-elisp-code)
+#   "Execute elisp code in the SEA server process."
+#   (interactive)
+#   (sea-init-or-connect)
+#   (let ((cmd (format "echo %s | sudo -S %s execute %s"
+#                     (shell-quote-argument (sea--sudo-get-password))
+#                     (shell-quote-argument sea-server-script-path)
+#                     escaped-elisp-code)))
+#     (shell-command cmd)))
+
+# ;; ;; Not Working
+# ;; (sea-exec-elisp-code '(message "hi"))
+# ;; (sea-exec-elisp-code '(message "hello!!!!!"))
+# ;; (sea-exec-elisp-code '(progn (message "Hello! I'm your self-evolving agent. How can I help you today?")))
+
+
+
+# (provide 'sea-server)
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; (sea-kill-server)
+# ;; (sea-server-running-p) ; nil
+# ;; (sea-init-server)
+# ;; (sea-server-running-p) ; t
+# ;; (sea-kill-server)
+# ;; (sea-server-running-p) ; nil
+# ;; (sea-restart-server)
+# ;; (sea-server-running-p) ; t
+# ;; (sea-ensure-server)
+# ;; (sea-init-or-connect)
+# ;; (sea-exec-elisp-code "'\(message \"Hello SEA!!!\"\)'")
+
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; sea_server.sh
+# #!/bin/bash
+# # Time-stamp: "2024-12-04 03:19:14 (ywatanabe)"
+# # File: ./self-evolving-agent/src/sea_server.sh
+
+# SEA_USER="${SEA_USER:-sea}"
+# SEA_UID=$(id -u "$SEA_USER")
+# SEA_EMACS_SERVER_DIR=/tmp/emacs"$SEA_UID"
+# SEA_SOCKET_FILE="$SEA_EMACS_SERVER_DIR/server"
+
+# # Help message
+# show_help() {
+#     cat << EOF
+# SEA Server Control Script
+
+# Usage:
+#     $0 [command] [options]
+#     $0 execute "ELISP_CODE"    Execute elisp code in the server
+#                               Example: $0 execute '(message "hello")'
+
+# Commands:
+#     start       Start or connect to SEA server (default)
+#     stop        Stop the SEA server
+#     restart     Restart the SEA server
+#     status      Check server status
+#     execute     Execute elisp command
+#     help        Show this help message
+
+# Options:
+#     -u USER     SEA user (default: $SEA_USER)
+#     -s SOCKET   Socket name (default: $SEA_SOCKET_NAME)
+#     -h          Show this help message
+# EOF
+#     exit 0
+# }
+
+# # Argument parser
+# while getopts "u:s:h" opt; do
+#     case $opt in
+#         u) SEA_USER="$OPTARG" ;;
+#         s) SEA_SOCKET_NAME="$OPTARG" ;;
+#         h) show_help ;;
+#         ?) show_help ;;
+#     esac
+# done
+
+# shift $((OPTIND-1))
+# COMMAND="${1:-start}"
+
+# SEA_UID=$(id -u "$SEA_USER")
+# SEA_EMACS_SERVER_DIR=/tmp/emacs"$SEA_UID"
+
+# sea_kill_server() {
+#     if _sea_is_server_running; then
+#         sudo -u "$SEA_USER" emacsclient -s "$SEA_SOCKET_FILE" -e '(kill-emacs)' && sleep 1
+#         if _sea_is_server_running; then
+#             sudo pkill -u "$SEA_USER" && sleep 1
+#         fi
+#     fi
+# }
+
+# _sea_is_server_running() {
+#     pgrep -u "$SEA_USER" emacs >/dev/null
+#     return $?
+# }
+
+# _sea_setup_server_dir() {
+#     sudo rm -rf "$SEA_EMACS_SERVER_DIR"
+#     sudo -u "$SEA_USER" mkdir -p "$SEA_EMACS_SERVER_DIR"
+#     sudo chmod 700 "$SEA_EMACS_SERVER_DIR"
+#     sudo chown "$SEA_USER":"$SEA_USER" "$SEA_EMACS_SERVER_DIR"
+# }
+
+# sea_init_server() {
+#     # echo "DEBUG: Initializing server"
+#     sea_kill_server
+#     _sea_setup_server_dir
+#     # echo "DEBUG: Starting Emacs daemon with socket: $SEA_SOCKET_FILE"
+#     sudo -u "$SEA_USER" emacs --daemon
+# }
+
+# _sea_connect_server() {
+#     # echo "DEBUG: Connecting to server with socket: $SEA_SOCKET_FILE"
+#     sudo -u "$SEA_USER" emacsclient -s "$SEA_SOCKET_FILE" -c
+# }
+
+# sea_init_or_connect() {
+#     if ! _sea_is_server_running; then
+#         sea_init_server
+#         while ! _sea_is_server_running; do
+#             sleep 1
+#             echo "waiting for server..."
+#         done
+#         sleep 1
+#     fi
+#     _sea_connect_server
+# }
+
+# case "$COMMAND" in
+#     start)   sea_init_or_connect ;;
+#     stop)    sea_kill_server ;;
+#     restart) sea_kill_server && sea_init_or_connect ;;
+#     status)  _sea_is_server_running && echo "Server is running" || echo "Server is not running" ;;
+#     execute)
+#         if _sea_is_server_running; then
+#             sudo -u "$SEA_USER" emacsclient -s "$SEA_SOCKET_FILE" -e "$2"
+#         else
+#             echo "Server is not running"
+#             exit 1
+#         fi
+#         ;;
+#     help)    show_help ;;
+#     *)       show_help ;;
+# esac
+
+
+# # EOF
+
+# ;; sea-sudo.el
+# ;;; -*- lexical-binding: t -*-
+# ;;; Author: 2024-12-04 04:03:43
+# ;;; Time-stamp: <2024-12-04 04:03:43 (ywatanabe)>
+# ;;; File: ./self-evolving-agent/src/sea-sudo.el
+
+
+# (require 'sea-config)
+
+# (defun sea--sudo-get-password ()
+#   "Get sudo password once and store it."
+#   (unless sea--sudo-password
+#     (setq sea--sudo-password (read-passwd "Sudo password: ")))
+#   sea--sudo-password)
+
+# (defun sea--run-sudo-command (command)
+#   "Run server command with sudo."
+#   (with-temp-buffer
+#     (let ((proc (start-process "sea-sudo" (current-buffer)
+#                               "sudo" "-S" sea-server-script-path command)))
+#       (process-send-string proc (concat (sea--sudo-get-password) "\n"))
+#       (while (process-live-p proc)
+#         (sleep-for 0.1))
+#       (setq sea-server-script-output (buffer-string))
+#       (process-exit-status proc))))
+
+
+# ;; (defun sea--run-sudo-command (command)
+# ;;   "Run server command with sudo."
+# ;;   (with-temp-buffer
+# ;;     (let* ((process-environment
+# ;;             (append
+# ;;              (list
+# ;;               (format "SEA_USER=%s" sea-user)
+# ;;               (format "SEA_SOCKET_NAME=sea"))
+# ;;              process-environment))
+# ;;            (passwd (sea--sudo-get-password)))
+# ;;       (insert passwd "\n")
+# ;;       (let ((exit-code (call-process-region (point-min) (point-max)
+# ;;                                           "sudo" t t nil
+# ;;                                           "-S" sea-server-script-path command)))
+# ;;         (setq sea-server-script-output (buffer-string))
+# ;;         (if (string-match-p "Server is running" sea-server-script-output)
+# ;;             t
+# ;;           nil)))))
+
+# (provide 'sea-sudo)
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
+
+# ;; sea-verify-installation.el
+# ;;; -*- lexical-binding: t -*-
+# ;;; Author: 2024-12-02 06:44:15
+# ;;; Time-stamp: <2024-12-02 06:44:15 (ywatanabe)>
+# ;;; File: ./self-evolving-agent/src/sea-verify-installation.el
+
+
+# (require 'sea-config)
+# (require 'ert)
+
+# (ert-deftest test-sea-check-dependencies ()
+#   "Test dependency checking functionality."
+#   (should (progn (sea-check-dependencies) t))
+#   (let ((executable-find (lambda (_) nil)))
+#     (should-error (sea-check-dependencies))))
+
+# (ert-deftest test-sea-create-directories ()
+#   "Test directory creation."
+#   (let ((sea-work-dir (make-temp-file "sea-test-" t))
+#         (sea-workspace-dir (make-temp-file "sea-workspace-" t))
+#         (sea-source-dir (make-temp-file "sea-source-" t)))
+#     (unwind-protect
+#         (progn
+#           (sea-create-directories)
+#           (should (file-directory-p sea-work-dir))
+#           (should (file-directory-p sea-workspace-dir))
+#           (should (file-directory-p sea-source-dir)))
+#       (delete-directory sea-work-dir t)
+#       (delete-directory sea-workspace-dir t)
+#       (delete-directory sea-source-dir t))))
+
+# (ert-deftest test-sea-create-initial-files ()
+#   "Test creation of initial files."
+#   (let* ((temp-dir (make-temp-file "sea-test-" t))
+#          (sea-user-request-file (expand-file-name "user-request.md" temp-dir))
+#          (sea-request-file (expand-file-name "request.md" temp-dir))
+#          (sea-history-file (expand-file-name "history.log" temp-dir)))
+#     (unwind-protect
+#         (progn
+#           (sea-create-initial-files)
+#           (should (file-exists-p sea-user-request-file))
+#           (should (file-exists-p sea-request-file))
+#           (should (file-exists-p sea-history-file)))
+#       (delete-directory temp-dir t))))
+
+# (ert-deftest test-sea-setup-environment ()
+#   "Test environment setup."
+#   (let* ((temp-dir (make-temp-file "sea-test-" t))
+#          (sea-config-dir temp-dir)
+#          (env-file (expand-file-name ".env" temp-dir)))
+#     (unwind-protect
+#         (progn
+#           (sea-setup-environment)
+#           (should (file-exists-p env-file))
+#           (should (string-match-p "SEA_ROOT="
+#                                 (with-temp-buffer
+#                                   (insert-file-contents env-file)
+#                                   (buffer-string)))))
+#       (delete-directory temp-dir t))))
+
+# (ert-deftest test-sea-verify-installation ()
+#   "Test installation verification."
+#   (let* ((temp-dir (make-temp-file "sea-test-" t))
+#          (sea-work-dir temp-dir)
+#          (sea-workspace-dir (expand-file-name "workspace" temp-dir))
+#          (sea-source-dir (expand-file-name "source" temp-dir))
+#          (sea-logs-dir (expand-file-name "logs" temp-dir))
+#          (sea-config-dir (expand-file-name "config" temp-dir))
+#          (sea-github-token-file (expand-file-name "token" temp-dir))
+#          (sea-user-request-file (expand-file-name "user-request.md" temp-dir))
+#          (sea-request-file (expand-file-name "request.md" temp-dir))
+#          (sea-history-file (expand-file-name "history.log" temp-dir)))
+#     (unwind-protect
+#         (progn
+#           (mapc (lambda (dir) (make-directory dir t))
+#                 (list sea-workspace-dir sea-source-dir sea-logs-dir sea-config-dir))
+#           (mapc (lambda (file) (with-temp-file file (insert "test")))
+#                 (list sea-github-token-file sea-user-request-file sea-request-file sea-history-file))
+#           (should (progn (sea-verify-installation) t)))
+#       (delete-directory temp-dir t))))
+
+# (ert-deftest test-sea-setup-github-token ()
+#   "Test GitHub token setup."
+#   (let* ((temp-dir (make-temp-file "sea-test-" t))
+#          (sea-github-token-file (expand-file-name "github-token" temp-dir))
+#          (test-token "ghp_test1234567890"))
+#     (unwind-protect
+#         (progn
+#           (cl-letf (((symbol-function 'read-string)
+#                      (lambda (&rest _) test-token)))
+#             (sea-setup-github-token)
+#             (should (file-exists-p sea-github-token-file))
+#             (should (string= (with-temp-buffer
+#                              (insert-file-contents sea-github-token-file)
+#                              (string-trim (buffer-string)))
+#                            test-token))))
+#       (delete-directory temp-dir t))))
+
+# (ert-deftest test-sea-full-installation-process ()
+#   "Integration test for the full installation process."
+#   (let* ((temp-root (make-temp-file "sea-test-root-" t))
+#          (sea-work-dir (expand-file-name "sea" temp-root))
+#          (sea-workspace-dir (expand-file-name "workspace" sea-work-dir))
+#          (sea-source-dir (expand-file-name "source" sea-work-dir))
+#          (sea-config-dir (expand-file-name "config" sea-work-dir))
+#          (test-token "ghp_testtoken12345"))
+#     (unwind-protect
+#         (cl-letf (((symbol-function 'read-string)
+#                    (lambda (&rest _) test-token))
+#                   ((symbol-function 'y-or-n-p)
+#                    (lambda (&rest _) t)))
+#           (sea-install)
+#           (should (file-directory-p sea-work-dir))
+#           (should (file-directory-p sea-workspace-dir))
+#           (should (file-directory-p sea-source-dir))
+#           (should (file-directory-p sea-config-dir))
+#           (should (file-exists-p (expand-file-name ".env" sea-config-dir)))
+#           (should (file-exists-p (expand-file-name "github-token" sea-config-dir)))
+#           (should (sea-verify-installation)))
+#       (delete-directory temp-root t))))
+
+# ;; Main verification function
+# (defun sea-verify-installation ()
+#   "Verify that all SEA components are properly installed."
+#   (and (file-exists-p sea-work-dir)
+#        (file-exists-p sea-workspace-dir)
+#        (file-exists-p sea-source-dir)
+#        (file-exists-p sea-logs-dir)
+#        (file-exists-p sea-config-dir)
+#        (file-exists-p sea-github-token-file)))
+
+# (provide 'sea-verify-installation)
+
+# (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

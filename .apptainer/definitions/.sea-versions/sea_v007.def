@@ -1,0 +1,34 @@
+Bootstrap: docker
+From: silex/emacs:27.2
+
+%files
+    ~/.emacs.d/lisp/self-evolving-agent /opt/sea
+
+%environment
+    export HOME=/home/sea
+    export EMACS_USER=sea
+
+%post
+    # Install required packages first
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        sudo \
+        passwd \
+        git \
+        python3-pip \
+        adduser \
+        login \
+        shadow
+
+    # Create user
+    useradd -m -s /bin/bash sea
+    
+    # Setup directories
+    mkdir -p /home/sea/.emacs.d/lisp
+    cp -r /opt/sea /home/sea/.emacs.d/lisp/
+    chown -R sea:sea /home/sea
+
+%runscript
+    exec /usr/bin/emacs "$@"
+
+%startscript
+    exec /opt/sea/src/sea_server.sh start
