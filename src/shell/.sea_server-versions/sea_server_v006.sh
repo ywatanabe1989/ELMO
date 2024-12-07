@@ -62,10 +62,10 @@ semacs_init_server() {
 
     # Start daemon
     sudo -u "$SEMACS_USER" \
-         HOME="$SEMACS_EMACS_HOME" \
+         HOME="$SEMACS_DOT_EMACS" \
          emacs \
          --daemon="$SEMACS_SOCKET_FILE" \
-         --init-directory="$SEMACS_EMACS_HOME" &
+         --init-directory="$SEMACS_DOT_EMACS" &
 
     sudo -u "$SEMACS_USER" ls "$SEMACS_SOCKET_FILE"
 }
@@ -83,7 +83,7 @@ semacs_init_or_connect() {
 
 semacs_eval_elisp() {
     if _semacs_is_server_running; then
-        sudo -u "$SEMACS_USER" HOME="$SEMACS_EMACS_HOME" emacsclient -s "$SEMACS_SOCKET_FILE" -e "$1"
+        sudo -u "$SEMACS_USER" HOME="$SEMACS_DOT_EMACS" emacsclient -s "$SEMACS_SOCKET_FILE" -e "$1"
     else
         echo "Server is not running"
         exit 1
@@ -98,7 +98,7 @@ _semacs_is_server_running() {
 
     # Check server is accepting connections
     if ! sudo -u "$SEMACS_USER" \
-         HOME="$SEMACS_EMACS_HOME" \
+         HOME="$SEMACS_DOT_EMACS" \
          emacsclient -s \
          "$SEMACS_SOCKET_FILE" \
          -e '(version)' \
@@ -124,7 +124,7 @@ _semacs_setup_server_dir() {
 # }
 
 _semacs_connect_server() {
-    sudo -u "$SEMACS_USER" HOME="$SEMACS_EMACS_HOME" emacsclient -s "$SEMACS_SOCKET_FILE" -c &
+    sudo -u "$SEMACS_USER" HOME="$SEMACS_DOT_EMACS" emacsclient -s "$SEMACS_SOCKET_FILE" -c &
 }
 
 case "$COMMAND" in

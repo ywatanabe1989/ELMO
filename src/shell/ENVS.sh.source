@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-08 03:44:12 (ywatanabe)"
+# Time-stamp: "2024-12-08 07:45:41 (ywatanabe)"
 # File: ./Semacs/src/shell/ENVS.sh.source
 
 # Seamacs user
@@ -7,22 +7,28 @@ export SEMACS_USER=semacs
 export SEMACS_UID=9999
 export SEMACS_GROUP=emacs-users
 export SEMACS_HOME=/home/$SEMACS_USER
-export SEMACS_EMACS_HOME=$SEMACS_HOME/.emacs.d
+export SEMACS_DOT_EMACS=$SEMACS_HOME/.emacs.d
+
+# Seamacs project
+export SEMACS_OPT_DIR=/opt/$SEMACS_USER
 
 # Seamacs workspaces
-export SEMACS_OPT_DIR=/opt/$SEMACS_USER
-export SEMACS_WORKSPACE=$SEMACS_OPT_DIR/workspace
-export SEMACS_SRC=$SEMACS_OPT_DIR/src
-export SEMACS_LOGS=$SEMACS_OPT_DIR/logs
-export SEMACS_CONFIG=$SEMACS_OPT_DIR/config
-export SEMACS_REQUESTS=$SEMACS_OPT_DIR/requests
-export SEMACS_BACKUPS=$SEMACS_OPT_DIR/backups
+export SEMACS_WORKSPACES=/
+export SEMACS_WORKSPACE=$SEMACS_WORKSPACES/workspace
+export SEMACS_SRC=$SEMACS_WORKSPACES/src
+export SEMACS_LOGS=$SEMACS_WORKSPACES/logs
+export SEMACS_CONFIG=$SEMACS_WORKSPACES/config
+export SEMACS_REQUESTS=$SEMACS_WORKSPACES/requests
+export SEMACS_BACKUPS=$SEMACS_WORKSPACES/backups
 
 # Emacs Configuration
 export SEMACS_EMACS_BIN=/usr/bin/emacs
 export SEMACS_EMACS_CLIENT=/usr/bin/emacsclient
-export SEMACS_SERVER_SOCKET_DIR=$SEMACS_EMACS_HOME
-export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/$SEMACS_UID-server
+# export SEMACS_SERVER_SOCKET_DIR=$SEMACS_DOT_EMACS
+# export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/$SEMACS_UID-server
+# FIXME
+export SEMACS_SERVER_SOCKET_DIR=/home/ywatanabe/.emacs.d  # Point to host user's directory
+export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/server  # Standard Emacs server socket name
 export SEMACS_SERVER_CHECK_INTERVAL=1
 
 # Feedback Loop

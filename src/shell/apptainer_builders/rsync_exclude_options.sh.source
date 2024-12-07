@@ -1,0 +1,10 @@
+RSYNC_EXCLUDE_EXPRESSIOSN="
+    --exclude='*.git' \
+    --exclude='*.sandbox' \
+    --exclude='*.sif' \
+    --exclude='var/run' \
+    --exclude='postgresql' \
+    --exclude='containerd' \
+    --exclude='.old' \
+    --exclude='__pycache__' \
+    --exclude='docker"

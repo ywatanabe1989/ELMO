@@ -1,0 +1,61 @@
+;;; -*- coding: utf-8; mode: lisp-data -*-
+(("/var/lib/emacs-agent/workspace/dmd_ecog.py" . 7330)
+ ("/var/lib/emacs-agent/workspace/"
+  (dired-filename . "/var/lib/emacs-agent/workspace/oscillations.jpg"))
+ ("/var/lib/emacs-agent/workspace/ai_system.el" . 1216)
+ ("/var/lib/emacs-agent/workspace/ai_agent/agent.py" . 918)
+ ("/var/lib/emacs-agent/workspace/ai_agent/requirements.txt" . 36)
+ ("/var/lib/emacs-agent/workspace/ai_system/evaluator.el" . 414)
+ ("/var/lib/emacs-agent/workspace/ai_system/recorder.el" . 423)
+ ("/var/lib/emacs-agent/workspace/ai_system/coordinator.el" . 534)
+ ("/var/lib/emacs-agent/workspace/ai_system/system.el" . 196)
+ ("/var/lib/emacs-agent/workspace/plot_script.py" . 410)
+ ("/var/lib/emacs-agent/workspace/spiral.py" . 266)
+ ("/var/lib/emacs-agent/workspace/fractal.py" . 1864)
+ ("/var/lib/emacs-agent/workspace/fibonacci.py" . 390)
+ ("/home/emacs-agent/.emacs.d/inits/100-editing/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/100-editing/010-header-footer.el"))
+ ("/home/emacs-agent/.emacs.d/inits/400-programming/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/400-programming/300-python"))
+ ("/home/emacs-agent/.emacs.d/inits/400-programming/300-python/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/400-programming/300-python/300-python-templates.el"))
+ ("/home/emacs-agent/.emacs.d/inits/400-programming/300-python/300-python-templates.el" . 8363)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/021-display-zenburn.el" . 488)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/.."))
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/200-interface/.."))
+ ("/home/emacs-agent/.emacs.d/inits/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/100-editing"))
+ ("/home/emacs-agent/.emacs.d/inits/001-basic/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/001-basic/001-cheat.el"))
+ ("/home/emacs-agent/.emacs.d/inits/000-core/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/000-core/.."))
+ ("/home/emacs-agent/.emacs.d/inits/000-loader.el" . 235)
+ ("/home/emacs-agent/.emacs.d/init.el" . 201)
+ ("/home/emacs-agent/.emacs.d/inits/400-programming/330-markdown.el" . 297)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/040-dired.el" . 172)
+ ("/home/emacs-agent/.emacs.d/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits"))
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/001-buffer.el" . 303)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/001-color.el" . 370)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/001-windows-contents.el" . 549)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/002-open-in-windows.el" . 167)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/005-parentheses.el" . 315)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance.el" . 315)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/020-display-icon/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/020-display-icon/000-icon_all.el"))
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/020-display-icon/000-icon_all.el" . 592)
+ ("/home/emacs-agent/.emacs.d/inits/400-programming/test.py" . 849)
+ ("/home/emacs-agent/.dotfiles/"
+  (dired-filename . "/home/emacs-agent/.dotfiles/.bash.d"))
+ ("/home/emacs-agent/"
+  (dired-filename . "/home/emacs-agent/.config"))
+ ("/home/emacs-agent/.bashrc" . 488)
+ ("/home/emacs-agent/.emacs.d/inits/000-core/099-basic-base.el" . 1495)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/020-display-general.el" . 1498)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/020-display-indent.el" . 1047)
+ ("/home/emacs-agent/.emacs.d/inits/200-interface/020-appearance/021-display-doom-modeline.el" . 3850)
+ ("/home/emacs-agent/.emacs.d/inits/000-core/000-package-setup.el" . 609)
+ ("/home/emacs-agent/.emacs.d/inits/000-core/002-path/"
+  (dired-filename . "/home/emacs-agent/.emacs.d/inits/000-core/002-path/00-loadpath.el")))
