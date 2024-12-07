@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Semacs/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-08 03:10:44
+!-- date: 2024-12-08 03:12:12
 !-- --- -->
 
 
@@ -39,7 +39,6 @@ Semacs, written in Elisp, offers unique advantages:
 Here, we revive Emacs - born in MIT's AI Lab in the 1970s - as a modern platform for AI agents.
 
 
-==========================================
 NOW, THIS REPOSITORY IS UNDER DEVELOPMENT
 ==========================================
 
