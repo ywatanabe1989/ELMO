@@ -1,0 +1,162 @@
+Bootstrap: docker
+From: debian:bullseye-slim
+
+
+%setup
+    mkdir -p ${SINGULARITY_ROOTFS}/opt/self-evolving-agent
+    rsync -a \
+    --exclude='*.git' \
+    --exclude='*.sandbox' \
+    --exclude='*.sif' \
+    --exclude='var/run' \
+    --exclude='postgresql' \
+    --exclude='containerd' \
+    --exclude='.old' \
+    --exclude='__pycache__' \
+    --exclude='docker' \
+    . ${SINGULARITY_ROOTFS}/opt/self-evolving-agent/
+
+%files
+    # ../docs ${SINGULARITY_ROOTFS}/opt/self-evolving-agent/docs
+    # ../README.md ${SINGULARITY_ROOTFS}/opt/self-evolving-agent/README.md
+    # ../requirements.txt ${SINGULARITY_ROOTFS}/opt/self-evolving-agent/requirements.txt
+    # ../src ${SINGULARITY_ROOTFS}/opt/self-evolving-agent/src
+    ../../self-evolving-agent
+
+%labels
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE \"`date`\"
+    DEFINITION_FILE_NAME \"`basename "$0"`\"
+
+%post -c /bin/bash
+    ls /opt
+    apt-get update && apt-get install -y sudo
+
+    # ########################################
+    # # sudo permissions
+    # ########################################
+    # chown root:root /usr/bin/sudo
+    # chmod 4755 /usr/bin/sudo
+    # chown root:root /etc/sudo.conf
+    # chmod 644 /etc/sudo.conf
+
+    ########################################
+    # Permissions
+    ########################################
+    chmod 774 /opt
+    chmod 774 -R /opt/self-evolving-agent
+    chown $SEA_USER:$SEA_USER -R /opt/self-evolving-agent
+
+    ########################################
+    # Envs
+    ########################################
+    . /opt/self-evolving-agent/apptainer/envs.sh.source
+    echo -e "\n[SOURCED] SEA_USER: $SEA_USER"
+
+    ########################################
+    # Basic development tools
+    ########################################
+    apt-get install -y \
+        build-essential \
+        git \
+        wget \
+        curl \
+        passwd \
+        adduser \
+        w3m \
+        openssh-client \
+        gnupg \
+        sqlite3
+
+    ########################################
+    # sea user
+    ########################################
+    sudo userdel $SEA_USER
+    sudo rm -rf $SEA_HOME
+    sudo adduser --disabled-password --gecos "" --uid $SEA_UID --shell /bin/bash --home $SEA_HOME $SEA_USER
+    sudo usermod -aG sudo $SEA_USER
+    echo "$SEA_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/sea
+    chmod 0440 /etc/sudoers.d/sea
+
+    ########################################
+    # Workspace directories
+    ########################################
+    sudo -u $SEA_USER mkdir -p $SEA_WORKSPACE
+    sudo -u $SEA_USER mkdir -p $SEA_BACKUPS $SEA_LOGS $SEA_REQUESTS $SEA_CONFIG
+    sudo -u $SEA_USER chmod 700 $SEA_ROOT
+
+    ########################################
+    # Emacs
+    ########################################
+    apt-get install -y \
+        emacs \
+        emacs-common \
+        emacs-bin-common
+
+    sudo -u $SEA_USER bash -c "rm -rf /home/$SEA_USER/.emacs.d"
+    sudo -u $SEA_USER bash -c "ln -s /opt/self-evolving-agent/src/.emacs.d /home/$SEA_USER/"
+    sudo -u $SEA_USER bash -c "ln -s /opt/self-evolving-agent/src/start.sh /home/$SEA_USER/"
+
+    ########################################
+    # Python
+    ########################################
+    # apt-get install -y \
+    #     python3 \
+    #     python3-pip \
+    #     python3-venv
+
+    # # Set up Python virtual environment
+    # sudo -u $SEA_USER bash -c "cd $SEA_WORKSPACE && python3 -m venv .env"
+    # sudo -u $SEA_USER bash -c "echo '. $VIRTUAL_ENV/bin/activate' >> $SEA_HOME/.bashrc"
+
+    # # Install Python packages
+    # sudo -u $SEA_USER bash -c ". $VIRTUAL_ENV/bin/activate && pip install --upgrade pip"
+    # sudo -u $SEA_USER bash -c ". $VIRTUAL_ENV/bin/activate && pip install requests openai anthropic"
+
+    # Configure environment for sea user
+    sudo -u $SEA_USER bash -c "echo 'export PATH=\$PATH:/usr/local/bin' >> $SEA_HOME/.bashrc"
+    sudo -u $SEA_USER bash -c "echo 'export PYTHONPATH=$PYTHONPATH' >> $SEA_HOME/.bashrc"
+
+    ########################################
+    # Git
+    ########################################
+    sudo -u $SEA_USER git config --global user.name "sea-bot"
+    sudo -u $SEA_USER git config --global user.email "sea-bot@example.com"
+    sudo -u $SEA_USER git config --global core.editor "$SEA_EMACS_BIN"
+    sudo -u $SEA_USER git config --global init.defaultBranch "main"
+
+
+%startscript
+    . /opt/self-evolving-agent/apptainer/envs.sh.source
+    export HOME=$SEA_HOME && cd $HOME
+    exec sudo -u $SEA_USER /opt/self-evolving-agent/src/start_emacs.sh
+
+%runscript
+    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+        . /opt/self-evolving-agent/apptainer/envs.sh.source
+        export HOME=$SEA_HOME && cd $HOME
+        exec sudo -u $SEA_USER /opt/self-evolving-agent/src/start_emacs.sh
+    else
+        exec "$@"
+    fi
+
+
+################################################################################
+# Now, this is a development stage, using sandbox.
+# This container aims to prepare reprodusable, safer, and more reliable environment
+# for the SEA project.
+#
+# apptainer build --fakeroot --sandbox ./apptainer/sea.sandbox ./apptainer/sea.def
+#
+# apptainer shell --writable --fakeroot --cleanenv ./apptainer/sea.sandbox
+# apptainer run --fakeroot ./apptainer/sea.sandbox
+################################################################################
+
+# su sea
+# cd
+# ln -s
+# ./start.sh
+# . /opt/self-evolving-agent/apptainer/envs.sh.source
+# ln -s /opt/self-evolving-agent/src/.emacs.d /home/$SEA_USER/.emacs.d
+# (find-file ~/.emacs.d/init.el)

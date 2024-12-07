@@ -1,0 +1,34 @@
+#!/bin/bash
+# Time-stamp: "2024-12-05 08:19:54 (ywatanabe)"
+# File: ./self-evolving-agent/apptainer/envs.sh.source
+
+# SEA System Configuration
+export SEA_USER=sea
+export SEA_UID=9999
+export SEA_HOME=/home/$SEA_USER
+export SEA_ROOT=/home/$SEA_USER/.sea
+export SEA_WORKSPACE=/home/$SEA_USER/.sea/workspace
+export SEA_SOURCE=/home/$SEA_USER/.sea/workspace/self-evolving-agent/src
+export SEA_LOGS=/home/$SEA_USER/.sea/logs
+export SEA_CONFIG=/home/$SEA_USER/.sea/config
+export SEA_REQUESTS=/home/$SEA_USER/.sea/requests
+export SEA_BACKUPS=/home/$SEA_USER/.sea/backups
+
+# Emacs Configuration
+export SEA_EMACS_BIN=/usr/bin/emacs
+export SEA_EMACS_CLIENT=/usr/bin/emacsclient
+export SEA_SERVER_SOCKET=/tmp/emacs$SEA_UID/server
+
+# Server Configuration
+export SEA_SERVER_CHECK_INTERVAL=1
+export SEA_MAX_RETRIES=5
+export SEA_API_TIMEOUT=30
+
+# LLM Configuration
+export ANTHROPIC_API_KEY=""
+export ANTHROPIC_ENGINE="claude-2"
+
+# Python Configuration
+export VIRTUAL_ENV=/home/$SEA_USER/.sea/workspace/.env
+export PATH=$VIRTUAL_ENV/bin:$PATH
+export PYTHONPATH=/home/$SEA_USER/.local/lib/python3/site-packages
