@@ -21,7 +21,7 @@ THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
 
 ## Introduction
 Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
-- Full CUI operations with rich rendering functionalities 
+- Full CUI operations with rich GUI
 - Interfaces for hacking tools seasoned by history
 - Self-evolving potentials derived from Emacs and Elisp
 
