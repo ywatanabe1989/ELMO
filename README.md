@@ -5,7 +5,7 @@
 !-- --- -->
 
 
-# SEMACS — Self-Evolving AI agent on Emacs
+# Semacs:— Self-Evolving AI agent on Emacs
 
 ``` plaintext
 ███████╗███████╗███╗   ███╗ █████╗  ██████╗███████╗
@@ -19,11 +19,12 @@ Version 0.1.0
 ```
 
 ## Introduction
-Semacs is written in Elisp, run on Emacs, powered by LLMs, and containerized by Apptainer. The choice of Emacs is well-founded because of:
+Semacs is written in Elisp, run on Emacs, powered by LLMs, and containerized by Apptainer. The choice of Emacs is well-founded because of its:
 - Full control via CUI — seamless connection between users and agents
 - Built-in GUI functionality
-- Mature programming interfaces
+- Mature interfaces (programming execution, text editing, file managing, image rendering, web browsing and more)
 - Extensive ecosystems
+- Optimized key bindings
 
 Here, we revive Emacs — born in MIT's AI Lab in the 1970s — as an ideal platform for AI agents.
 
@@ -39,17 +40,11 @@ git clone https://github.com/ywatanabe1989/apptainer-utils.git ~/.bash.d/apptain
 ```
 
 ## Apptainer
-abuild_def2sand ./.apptainer/semacs/semacs.def
+Semacs uses Apptainer for permission control
+
+``` bash
+apptainer_build_def2sand ./.apptainer/semacs/semacs.def
+```
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
-
-
-
-<!-- - Full CUI environment with GUI support (= backend + frontend)
- !-- - Seamless user interaction
- !-- - Emacs extensive ecosystem:
- !--   - Built-in commands
- !--   - Extensive customization with the users
- !--   - Any computer language, Text editing, Filer, Image viewer, Web viewer, Email server, and more
- !-- - Permission control via Apptainer -->
