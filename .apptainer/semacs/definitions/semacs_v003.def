@@ -1,0 +1,120 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE \"`date`\"
+    DEFINITION_FILE_NAME \"`basename "$0"`\"
+
+%setup
+    echo "========================================"
+    echo "Setup Section"
+    echo "========================================"
+
+    ########################################
+    # Environmental Variables
+    ########################################
+    . ./src/shell/apptainer_builders/ENVS.sh.src
+    . ./src/shell/apptainer_builders/rsync_exclude_options.sh.src
+
+    OPT_DIR=${APPTAINER_ROOTFS}$SEMACS_OPT_DIR
+    mkdir -p $OPT_DIR
+
+    echo "----------------------------------------"
+    echo "RSYNC_EXCLUDE_EXPRESSIONS"
+    echo "$RSYNC_EXCLUDE_EXPRESSIONS"
+    echo "----------------------------------------"
+    
+    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS --safe-links --max-depth=7 . $OPT_DIR/Semacs/
+
+    echo "----------------------------------------"
+    tree $OPT_DIR -L 3
+    echo "----------------------------------------"
+
+%post -c /bin/bash
+    echo "========================================"
+    echo "Post Section"
+    echo "========================================"
+
+    ########################################
+    # Environmental Variables
+    ########################################
+    . /opt/Semacs/src/shell/apptainer_builders/ENVS.sh.src
+
+    ########################################
+    # Basic Setup
+    ########################################
+    $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_basic_apt_packages.sh
+    $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_emacs.sh
+    $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_python.sh
+    # /opt//Semacs/src/shell/apptainer_builders/install_basic_apt_packages.sh: line 5: apt: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_basic_apt_packages.sh: line 7: apt: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_emacs.sh: line 6: id: command not found
+    # This script (/opt//Semacs/src/shell/apptainer_builders/install_emacs.sh) must be run as root
+    # /opt//Semacs/src/shell/apptainer_builders/install_python.sh: line 5: dirname: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_python.sh: line 7: apt: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_python.sh: line 14: sudo: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_python.sh: line 17: sudo: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/install_python.sh: line 18: sudo: command not found
+    # /opt//Semacs/src/shell/apptainer_builders/create_semacs_user.sh: line 6: id: command not found
+    # This script (/opt//Semacs/src/shell/apptainer_builders/create_semacs_user.sh) must be run as root
+    # /opt//Semacs/src/shell/apptainer_builders/correct_permissions.sh: line 6: id: command not found
+    # This script (/opt//Semacs/src/shell/apptainer_builders/correct_permissions.sh) must be run as root
+    # /opt//Semacs/src/shell/apptainer_builders/make_directories.sh: line 6: id: command not found
+    # This script (/opt//Semacs/src/shell/apptainer_builders/make_directories.sh) must be run as root
+    # /opt//Semacs/src/shell/apptainer_builders/create_bashrc.sh: line 6: id: command not found
+    # This script (/opt//Semacs/src/shell/apptainer_builders/create_bashrc.sh) must be run as root
+    # FATAL:   While performing build: while running engine: while running %post section: exit status 1
+    
+
+    ########################################
+    # Semacs User
+    ########################################
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_semacs_user.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/correct_permissions.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/make_directories.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_bashrc.sh
+
+
+%startscript
+    echo "========================================"
+    echo "Startscript Section"
+    echo "========================================"
+
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.src
+    export HOME=$SEMACS_HOME && cd $HOME
+    exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
+
+%runscript
+    echo "========================================"
+    echo "Runscript Section"
+    echo "========================================"
+
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.src
+    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+        export HOME=$SEMACS_HOME && cd $HOME
+        exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
+    else
+        exec "$@"
+    fi
+
+
+################################################################################
+# Now, this is a development stage, using sandbox.
+# This container aims to prepare reprodusable, safer, and more reliable environment
+# for the SEA project.
+#
+# apptainer build --fakeroot --sandbox ./apptainer/sea.sandbox ./apptainer/sea.def
+#
+# apptainer shell --writable --fakeroot --cleanenv ./apptainer/sea.sandbox
+# apptainer run --fakeroot ./apptainer/sea.sandbox
+################################################################################
+
+# su sea
+# cd
+# ln -s
+# ./start.sh
+# . /opt/self-evolving-agent/apptainer/envs.sh.source
+# ln -s /opt/self-evolving-agent/Semacs/src/.emacs.d /home/$SEMACS_USER/.emacs.d
+# (find-file ~/.emacs.d/init.el)

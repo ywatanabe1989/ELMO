@@ -13,13 +13,18 @@ From: debian:bullseye-slim
     . ../src/shell/apptainer_builders/ENVS.sh.source
     . ../src/shell/apptainer_builders/rsync_exclude_options.sh.source
 
-    echo $SEMACS_OPT_DIR
-    TGT_DIR=$APPTAINER_ROOTFS/$SEMACS_OPT_DIR
-    mkdir -p $TGT_DIR
-    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS ../../Semacs $TGT_DIR/Semacs
+    OPT_DIR=${APPTAINER_ROOTFS}$SEMACS_OPT_DIR
+    mkdir -p $OPT_DIR
+    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS ../../Semacs/ $OPT_DIR/Semacs/
 
-%files
-    ../../Semacs $APPTAINER_ROOTFS/$SEMACS_OPT_DIR
+    echo "========================================"    
+    ls $OPT_DIR
+    echo "========================================"    
+    tree $OPT_DIR -L 3
+    echo "========================================"    
+
+# %files
+#     ../../Semacs/[!.]* ${APPTAINER_ROOTFS}opt/Semacs/
 
 %labels
     MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
@@ -35,22 +40,25 @@ From: debian:bullseye-slim
     ########################################
     # Environmental Variables
     ########################################
-    . $SEMACS_OPT_DIR/src/shell/apptainer_builders/ENVS.sh.source
+    # . ../src/shell/apptainer_builders/ENVS.sh.source    
+    # . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    . /opt/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    mv ${APPTAINER_ROOTFS}opt/Semacs $SEMACS_OPT_DIR/
 
     ########################################
     # Basic Setup
     ########################################
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/install_basic_apt_packages.sh
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/install_emacs.sh
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/install_python.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_basic_apt_packages.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_emacs.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_python.sh
 
     ########################################
     # Semacs User
     ########################################
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/create_semacs_user.sh
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/correct_permissions.sh
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/make_directories.sh
-    bash $SEMACS_OPT_DIR/src/shell/apptainer_builders/create_bashrc.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_semacs_user.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/correct_permissions.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/make_directories.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_bashrc.sh
 
 
 %startscript
@@ -58,19 +66,19 @@ From: debian:bullseye-slim
     echo "Startscript Section"
     echo "========================================"
 
-    . $SEMACS_OPT_DIR/src/shell/apptainer_builders/ENVS.sh.source
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
     export HOME=$SEMACS_HOME && cd $HOME
-    exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/src/apptainer_builders/start_emacs.sh
+    exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
 
 %runscript
     echo "========================================"
     echo "Runscript Section"
     echo "========================================"
 
-    . $SEMACS_OPT_DIR/src/shell/apptainer_builders/ENVS.sh.source
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
     if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
         export HOME=$SEMACS_HOME && cd $HOME
-        exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/src/apptainer_builders/start_emacs.sh
+        exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
     else
         exec "$@"
     fi
@@ -92,5 +100,5 @@ From: debian:bullseye-slim
 # ln -s
 # ./start.sh
 # . /opt/self-evolving-agent/apptainer/envs.sh.source
-# ln -s /opt/self-evolving-agent/src/.emacs.d /home/$SEMACS_USER/.emacs.d
+# ln -s /opt/self-evolving-agent/Semacs/src/.emacs.d /home/$SEMACS_USER/.emacs.d
 # (find-file ~/.emacs.d/init.el)
