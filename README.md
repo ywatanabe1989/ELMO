@@ -5,7 +5,7 @@
 !-- --- -->
 
 
-# SEMACS: Self-Evolving AI agent on Emacs
+# SEMACS — Self-Evolving AI agent on Emacs
 
 ``` plaintext
 ███████╗███████╗███╗   ███╗ █████╗  ██████╗███████╗
@@ -19,24 +19,13 @@ Version 0.1.0
 ```
 
 ## Introduction
-Semacs, written in Elisp, offers unique advantages:
+Semacs is written in Elisp, run on Emacs, powered by LLMs, and containerized by Apptainer. The choice of Emacs is well-founded bacause of:
+- Built-in CUI/GUI functionality (= backend + frontend)
+- Full control via CUI, and thus naturally connected with LLMs
+- Extensive ecosystems: developers and tools
+- Mature programming interfaces
 
-- Purely text-based system
-- Native Emacs accessibility, just like hackers
-- Direct integration/customization of Emacs ecosystem
-- Seamless user interaction
-- Central hub for computing operations
-  - Elisp commands
-  - Text processing
-  - Shell operations
-  - Development tools
-  - File management
-  - Web access
-  - Email services
-  - ... and more
-- Secure permission control using Apptainer
-
-Here, we revive Emacs - born in MIT's AI Lab in the 1970s - as a modern platform for AI agents.
+Here, we revive Emacs — born in MIT's AI Lab in the 1970s — as an ideal platform for AI agents.
 
 
 NOW, THIS REPOSITORY IS UNDER DEVELOPMENT
@@ -46,64 +35,21 @@ NOW, THIS REPOSITORY IS UNDER DEVELOPMENT
 
 ```bash
 git clone https://github.com/ywatanabe1989/seamacs.git ~/.emacs.d/lisp/seamacs
+git clone https://github.com/ywatanabe1989/apptainer-utils.git ~/.bash.d/apptainer-utils
 ```
 
-## Configuration
-```elisp
-(add-to-list 'load-path "~/.emacs.d/lisp/self-evolving-agent/src")
-(require 'sea)
-(semacs-install)
-```
-
-## Launch an Emacs Window by the SEA user
-``` bash
-sudo echo aaa && sudo ./src/sea_server.sh start
-sudo ./src/sea_server.sh kill
-sudo ./src/sea_server.sh init
-
-(semacs-init-server)
-```
-
-## Reload source of self-evolving-agent on the SEA emacs
-``` bash
-<!-- (message (format "%s" default-directory)) -> /home/ywatanabe/.emacs.d/lisp/self-evolving-agent/ -->
-sudo chmod 774 -R /home/ywatanabe/.emacs.d/lisp/self-evolving-agent/
-sudo chown ywatanabe:sea -R /home/ywatanabe/.emacs.d/lisp/self-evolving-agent/
-sudo chmod 770 /home/sea/.emacs.d/server/server
-(semacs-exec-elisp-code '(load-file "/home/sea/.emacs.d/init.el"))
-```
-
-## Edit on the SEA EMACS
-
-``` bash
-sudo usermod -a -G sea ywatanabe
-```
-
-## Working from your own Emacs session
-
-``` elisp
-(semacs--sudo-get-password)
-(semacs-run "show welcome message")
-(semacs-run "open google")
-(semacs-run "write python code which calculates DMD from EEG demo signal and visualize results.")
-(semacs-run "using the internet, perform literature review regarding epilepsy seizure prediction from bio signals")
-
-
-sudo chmod 775 /home/ywatanabe/.dotfiles/.emacs.d/lisp/self-evolving-agent/
-```
-
-
-
-
-
+## Apptainer
+abuild_def2sand ./.apptainer/semacs/semacs.def
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
 
 
 
-
-# EOF
-
-
-
+<!-- - Full CUI environment with GUI support (= backend + frontend)
+ !-- - Seamless user interaction
+ !-- - Emacs extensive ecosystem:
+ !--   - Built-in commands
+ !--   - Extensive customization with the users
+ !--   - Any computer language, Text editing, Filer, Image viewer, Web viewer, Email server, and more
+ !-- - Permission control via Apptainer -->

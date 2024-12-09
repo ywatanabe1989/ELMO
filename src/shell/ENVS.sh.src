@@ -1,0 +1,45 @@
+#!/bin/bash
+# Time-stamp: "2024-12-09 10:28:49 (ywatanabe)"
+# File: ./Semacs/src/shell/apptainer_builders/ENVS.sh.source
+
+# Seamacs user
+export SEMACS_USER=semacs
+export SEMACS_UID=9999
+export SEMACS_GROUP=emacs-users
+export SEMACS_HOME=/home/$SEMACS_USER
+export SEMACS_DOT_EMACS=$SEMACS_HOME/.emacs.d
+
+# Seamacs project
+export SEMACS_OPT_DIR=/opt
+
+# Seamacs workspaces
+export SEMACS_WORKSPACES=""
+export SEMACS_WORKSPACE=$SEMACS_WORKSPACES/workspace
+export SEMACS_SRC=$SEMACS_WORKSPACES/src
+export SEMACS_LOGS=$SEMACS_WORKSPACES/logs
+export SEMACS_CONFIG=$SEMACS_WORKSPACES/config
+export SEMACS_REQUESTS=$SEMACS_WORKSPACES/requests
+export SEMACS_BACKUPS=$SEMACS_WORKSPACES/backups
+
+# Emacs Configuration
+export SEMACS_EMACS_BIN=/usr/bin/emacs
+export SEMACS_EMACS_CLIENT=/usr/bin/emacsclient
+# export SEMACS_SERVER_SOCKET_DIR=$SEMACS_DOT_EMACS
+# export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/$SEMACS_UID-server
+# FIXME
+export SEMACS_SERVER_SOCKET_DIR=/home/ywatanabe/.emacs.d  # Point to host user's directory
+export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/server  # Standard Emacs server socket name
+export SEMACS_SERVER_CHECK_INTERVAL=1
+
+# Feedback Loop
+export SEMACS_MAX_RETRIES=5
+export SEMACS_API_TIMEOUT=30
+
+# LLM Configuration
+export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY  # Claude API key from Anthropic
+export ANTHROPIC_ENGINE=$ANTHROPIC_ENGINE    # Using Claude 2 model
+
+# Python Configuration
+export PYTHON_VIRTUAL_ENV=$SEMACS_WORKSPACE/.env
+# export PATH=$VIRTUAL_ENV/bin:$PATH
+# export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH

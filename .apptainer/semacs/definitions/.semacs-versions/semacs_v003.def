@@ -1,0 +1,104 @@
+Bootstrap: docker
+From: debian:bullseye-slim
+
+
+%setup
+    echo "========================================"
+    echo "Setup Section"
+    echo "========================================"
+
+    ########################################
+    # Environmental Variables
+    ########################################
+    . ../src/shell/apptainer_builders/ENVS.sh.source
+    . ../src/shell/apptainer_builders/rsync_exclude_options.sh.source
+
+    OPT_DIR=${APPTAINER_ROOTFS}$SEMACS_OPT_DIR
+    mkdir -p $OPT_DIR
+    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS ../../Semacs/ $OPT_DIR/Semacs/
+
+    echo "========================================"    
+    ls $OPT_DIR
+    echo "========================================"    
+    tree $OPT_DIR -L 3
+    echo "========================================"    
+
+# %files
+#     ../../Semacs/[!.]* ${APPTAINER_ROOTFS}opt/Semacs/
+
+%labels
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE \"`date`\"
+    DEFINITION_FILE_NAME \"`basename "$0"`\"
+
+%post -c /bin/bash
+    echo "========================================"
+    echo "Post Section"
+    echo "========================================"
+
+    ########################################
+    # Environmental Variables
+    ########################################
+    # . ../src/shell/apptainer_builders/ENVS.sh.source    
+    # . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    . /opt/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    mv ${APPTAINER_ROOTFS}opt/Semacs $SEMACS_OPT_DIR/
+
+    ########################################
+    # Basic Setup
+    ########################################
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_basic_apt_packages.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_emacs.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/install_python.sh
+
+    ########################################
+    # Semacs User
+    ########################################
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_semacs_user.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/correct_permissions.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/make_directories.sh
+    bash $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/create_bashrc.sh
+
+
+%startscript
+    echo "========================================"
+    echo "Startscript Section"
+    echo "========================================"
+
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    export HOME=$SEMACS_HOME && cd $HOME
+    exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
+
+%runscript
+    echo "========================================"
+    echo "Runscript Section"
+    echo "========================================"
+
+    . $SEMACS_OPT_DIR/Semacs/src/shell/apptainer_builders/ENVS.sh.source
+    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+        export HOME=$SEMACS_HOME && cd $HOME
+        exec sudo -u $SEMACS_USER sh -c bash $SEMACS_OPT_DIR/Semacs/src/apptainer_builders/start_emacs.sh
+    else
+        exec "$@"
+    fi
+
+
+################################################################################
+# Now, this is a development stage, using sandbox.
+# This container aims to prepare reprodusable, safer, and more reliable environment
+# for the SEA project.
+#
+# apptainer build --fakeroot --sandbox ./apptainer/sea.sandbox ./apptainer/sea.def
+#
+# apptainer shell --writable --fakeroot --cleanenv ./apptainer/sea.sandbox
+# apptainer run --fakeroot ./apptainer/sea.sandbox
+################################################################################
+
+# su sea
+# cd
+# ln -s
+# ./start.sh
+# . /opt/self-evolving-agent/apptainer/envs.sh.source
+# ln -s /opt/self-evolving-agent/Semacs/src/.emacs.d /home/$SEMACS_USER/.emacs.d
+# (find-file ~/.emacs.d/init.el)

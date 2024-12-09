@@ -1,9 +1,15 @@
 <!-- ---
-!-- title: ./self-evolving-agent/docs/TODO.md
+!-- title: ./Semacs/docs/TODO.md
 !-- author: ywatanabe
-!-- date: 2024-12-02 00:31:04
+!-- date: 2024-12-08 06:38:21
 !-- --- -->
 
 
-- [ ] Loop
-- [ ] Containalization
+- [ ] Apptainer
+- [ ] Working on the same Emacs server with the host user
+- [ ] Logging (SQL)
+- [ ] Feedback Loop
+- [ ] SSH
+- [ ] Web
+- [ ] Generate Agents
+
