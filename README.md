@@ -7,26 +7,26 @@
 # Ninja — Neural Information Network of Joint Agents
 <p align="center">
   <img src="./docs/logo.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>
-  <img src="./docs/logos/logo_01.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_02.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_03.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_04.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_05.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_06.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_07.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_08.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_09.jpg" width="250px" alt="./docs/logo.jpg">
-  <br><br>  
-  <img src="./docs/logos/logo_10.jpg" width="250px" alt="./docs/logo.jpg"> 
+  <!-- <br><br>
+   !-- <img src="./docs/logos/logo_01.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_02.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_03.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_04.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_05.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_06.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_07.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_08.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_09.jpg" width="250px" alt="./docs/logo.jpg">
+   !-- <br><br>  
+   !-- <img src="./docs/logos/logo_10.jpg" width="250px" alt="./docs/logo.jpg">  -->
 </p>
 
 
