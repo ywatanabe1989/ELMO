@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-04 08:58:01
 ;;; Time-stamp: <2024-12-04 08:58:01 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-version-control.el
+;;; File: ./self-evolving-agent/src/ninja-version-control.el
 
 
 ;;; Commentary:
@@ -9,32 +9,32 @@
 
 ;;; Code:
 
-(require 'semacs-utils)
-(require 'semacs-prompts)
+(require 'ninja-utils)
+(require 'ninja-prompts)
 
-(defgroup semacs-git nil
+(defgroup ninja-git nil
   "Git configuration for Self-Evolving Agent."
-  :group 'semacs)
+  :group 'ninja)
 
-(defcustom semacs-git-user-name "semacs"
-  "Git user name for SEMACS commits."
+(defcustom ninja-git-user-name "ninja"
+  "Git user name for NINJA commits."
   :type 'string
-  :group 'semacs-git)
+  :group 'ninja-git)
 
-(defcustom semacs-git-user-email "semacs@example.com"
-  "Git email for SEMACS commits."
+(defcustom ninja-git-user-email "ninja@example.com"
+  "Git email for NINJA commits."
   :type 'string
-  :group 'semacs-git)
+  :group 'ninja-git)
 
-(defcustom semacs-github-token-file "~/.config/semacs/github-token"
+(defcustom ninja-github-token-file "~/.config/ninja/github-token"
   "Path to file containing GitHub token."
   :type 'string
-  :group 'semacs-git)
+  :group 'ninja-git)
 
-(defvar semacs--github-token-cache nil
+(defvar ninja--github-token-cache nil
   "Cached GitHub token to avoid frequent file reads.")
 
-;; (defun semacs--validate-github-token (token)
+;; (defun ninja--validate-github-token (token)
 ;;   "Validate TOKEN format and basic structure."
 ;;   (when (or (null token)
 ;;             (not (stringp token))
@@ -42,19 +42,19 @@
 ;;             (< (length token) 40))
 ;;     (error "Invalid GitHub token format")))
 
-(defun semacs--validate-github-token (token)
+(defun ninja--validate-github-token (token)
   "Validate TOKEN format and basic structure."
   (when (or (null token)
             (not (stringp token))
             (string-empty-p token)
             (< (length token) 40))
-    (semacs--log-message "Invalid GitHub token format")
+    (ninja--log-message "Invalid GitHub token format")
     (error "Invalid GitHub token format")))
 
-;; (defun semacs--load-github-token ()
+;; (defun ninja--load-github-token ()
 ;;   "Load GitHub token from file with validation and error handling."
 ;;   (condition-case err
-;;       (let* ((token-file (expand-file-name semacs-github-token-file))
+;;       (let* ((token-file (expand-file-name ninja-github-token-file))
 ;;              (real-file (file-truename token-file)))
 ;;         (unless (file-exists-p real-file)
 ;;           (error "GitHub token file not found: %s" real-file))
@@ -63,105 +63,105 @@
 ;;         (let ((token (with-temp-buffer
 ;;                       (insert-file-contents real-file)
 ;;                       (string-trim (buffer-string)))))
-;;           (semacs--validate-github-token token)
+;;           (ninja--validate-github-token token)
 ;;           token))
 ;;     (error
 ;;      (message "Failed to load GitHub token: %s" (error-message-string err))
 ;;      nil)))
 
-(defun semacs--load-github-token ()
+(defun ninja--load-github-token ()
   "Load GitHub token from file with validation and error handling."
   (condition-case err
-      (let* ((token-file (expand-file-name semacs-github-token-file))
+      (let* ((token-file (expand-file-name ninja-github-token-file))
              (real-file (file-truename token-file)))
         (unless (file-exists-p real-file)
-          (semacs--log-message (format "GitHub token file not found: %s" real-file))
+          (ninja--log-message (format "GitHub token file not found: %s" real-file))
           (error "GitHub token file not found: %s" real-file))
         (unless (file-readable-p real-file)
-          (semacs--log-message (format "GitHub token file not readable: %s" real-file))
+          (ninja--log-message (format "GitHub token file not readable: %s" real-file))
           (error "GitHub token file not readable: %s" real-file))
         (let ((token (with-temp-buffer
                       (insert-file-contents real-file)
                       (string-trim (buffer-string)))))
-          (semacs--validate-github-token token)
+          (ninja--validate-github-token token)
           token))
     (error
-     (semacs--log-message (format "Failed to load GitHub token: %s" err))
+     (ninja--log-message (format "Failed to load GitHub token: %s" err))
      nil)))
 
-(defun semacs--get-github-token ()
+(defun ninja--get-github-token ()
   "Get GitHub token, using cache if available."
-  (or semacs--github-token-cache
-      (setq semacs--github-token-cache (semacs--load-github-token))))
+  (or ninja--github-token-cache
+      (setq ninja--github-token-cache (ninja--load-github-token))))
 
 ;; Replace existing initialization with:
-(semacs--get-github-token)
+(ninja--get-github-token)
 
-;; (defun semacs--ensure-not-main ()
+;; (defun ninja--ensure-not-main ()
 ;;   "Ensure we're not on main branch."
 ;;   (let ((current-branch
 ;;          (string-trim
 ;;           (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
 ;;     (when (string= current-branch "main")
 ;;       (error "Cannot modify main branch directly"))))
-(defun semacs--ensure-not-main ()
+(defun ninja--ensure-not-main ()
   "Ensure we're not on main branch."
   (let ((current-branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
     (when (string= current-branch "main")
-      (semacs--log-message "Cannot modify main branch directly")
+      (ninja--log-message "Cannot modify main branch directly")
       (error "Cannot modify main branch directly"))))
 
-;; (defun semacs-commit-changes (file msg)
+;; (defun ninja-commit-changes (file msg)
 ;;   "Commit changes to FILE with commit MSG."
-;;   (semacs--ensure-not-main)
+;;   (ninja--ensure-not-main)
 ;;   (let ((default-directory (file-name-directory file)))
-;;     (semacs--shell-command
+;;     (ninja--shell-command
 ;;      (format "git -c user.name='%s' -c user.email='%s' add %s && git -c user.name='%s' -c user.email='%s' commit -m '%s'"
-;;              semacs-git-user-name
-;;              semacs-git-user-email
+;;              ninja-git-user-name
+;;              ninja-git-user-email
 ;;              (file-name-nondirectory file)
-;;              semacs-git-user-name
-;;              semacs-git-user-email
+;;              ninja-git-user-name
+;;              ninja-git-user-email
 ;;              msg))))
-(defun semacs-commit-changes (file msg)
+(defun ninja-commit-changes (file msg)
   "Commit changes to FILE with commit MSG."
   (condition-case err
       (progn
-        (semacs--ensure-not-main)
+        (ninja--ensure-not-main)
         (let ((default-directory (file-name-directory file)))
-          (semacs--shell-command
+          (ninja--shell-command
            (format "git -c user.name='%s' -c user.email='%s' add %s && git -c user.name='%s' -c user.email='%s' commit -m '%s'"
-                   semacs-git-user-name semacs-git-user-email
+                   ninja-git-user-name ninja-git-user-email
                    (file-name-nondirectory file)
-                   semacs-git-user-name semacs-git-user-email msg))
-          (semacs--log-message (format "Committed changes to %s" file))))
+                   ninja-git-user-name ninja-git-user-email msg))
+          (ninja--log-message (format "Committed changes to %s" file))))
     (error
-     (semacs--log-message (format "Failed to commit changes: %s" err))
+     (ninja--log-message (format "Failed to commit changes: %s" err))
      nil)))
 
-;; (defun semacs-push-changes ()
-;;   "Push changes to semacs-develop branch."
-;;   (semacs--ensure-not-main)
-;;   (semacs--shell-command
+;; (defun ninja-push-changes ()
+;;   "Push changes to ninja-develop branch."
+;;   (ninja--ensure-not-main)
+;;   (ninja--shell-command
 ;;    (concat
-;;     "git checkout -b semacs-develop 2>/dev/null || git checkout semacs-develop && "
-;;     "git push -u origin semacs-develop")))
-(defun semacs-push-changes ()
-  "Push changes to semacs-develop branch."
+;;     "git checkout -b ninja-develop 2>/dev/null || git checkout ninja-develop && "
+;;     "git push -u origin ninja-develop")))
+(defun ninja-push-changes ()
+  "Push changes to ninja-develop branch."
   (condition-case err
       (progn
-        (semacs--ensure-not-main)
-        (semacs--shell-command
-         (concat "git checkout -b semacs-develop 2>/dev/null || git checkout semacs-develop && "
-                "git push -u origin semacs-develop"))
-        (semacs--log-message "Pushed changes to semacs-develop branch"))
+        (ninja--ensure-not-main)
+        (ninja--shell-command
+         (concat "git checkout -b ninja-develop 2>/dev/null || git checkout ninja-develop && "
+                "git push -u origin ninja-develop"))
+        (ninja--log-message "Pushed changes to ninja-develop branch"))
     (error
-     (semacs--log-message (format "Failed to push changes: %s" err))
+     (ninja--log-message (format "Failed to push changes: %s" err))
      nil)))
 
-;; (defun semacs-create-pr (title body)
-;;   "Create pull request with TITLE and BODY from semacs-develop to main."
-;;   (let ((token (semacs--get-github-token)))
+;; (defun ninja-create-pr (title body)
+;;   "Create pull request with TITLE and BODY from ninja-develop to main."
+;;   (let ((token (ninja--get-github-token)))
 ;;     (unless token
 ;;       (error "GitHub token not available"))
 ;;     (let ((url "https://api.github.com/repos/owner/repo/pulls")
@@ -170,7 +170,7 @@
 ;;           (data (json-encode
 ;;                  `((title . ,title)
 ;;                    (body . ,body)
-;;                    (head . "semacs-develop")
+;;                    (head . "ninja-develop")
 ;;                    (base . "main")))))
 ;;       (condition-case err
 ;;           (request url
@@ -181,15 +181,15 @@
 ;;                    :error (lambda (&rest args)
 ;;                            (error "PR creation failed: %S" args)))
 ;;         (error
-;;          (setq semacs--github-token-cache nil)
+;;          (setq ninja--github-token-cache nil)
 ;;          (error "Failed to create PR: %s" (error-message-string err)))))))
 
-(defun semacs-create-pr (title body)
-  "Create pull request with TITLE and BODY from semacs-develop to main."
+(defun ninja-create-pr (title body)
+  "Create pull request with TITLE and BODY from ninja-develop to main."
   (condition-case err
-      (let ((token (semacs--get-github-token)))
+      (let ((token (ninja--get-github-token)))
         (unless token
-          (semacs--log-message "GitHub token not available")
+          (ninja--log-message "GitHub token not available")
           (error "GitHub token not available"))
         (request "https://api.github.com/repos/owner/repo/pulls"
                  :type "POST"
@@ -198,19 +198,19 @@
                  :data (json-encode
                        `((title . ,title)
                          (body . ,body)
-                         (head . "semacs-develop")
+                         (head . "ninja-develop")
                          (base . "main")))
                  :parser 'json-read
                  :success (lambda (&rest _)
-                           (semacs--log-message "Pull request created successfully"))
+                           (ninja--log-message "Pull request created successfully"))
                  :error (lambda (&rest args)
-                         (semacs--log-message (format "PR creation failed: %S" args))
+                         (ninja--log-message (format "PR creation failed: %S" args))
                          (error "PR creation failed: %S" args))))
     (error
-     (semacs--log-message (format "Failed to create PR: %s" err))
-     (setq semacs--github-token-cache nil)
+     (ninja--log-message (format "Failed to create PR: %s" err))
+     (setq ninja--github-token-cache nil)
      nil)))
 
-(provide 'semacs-version-control)
+(provide 'ninja-version-control)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

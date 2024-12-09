@@ -1,48 +1,48 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-04 08:56:43
 ;;; Time-stamp: <2024-12-04 08:56:43 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-self-evolve.el
+;;; File: ./self-evolving-agent/src/ninja-self-evolve.el
 
 
-(require 'semacs-config)
-(require 'semacs-utils)
-(require 'semacs-run)
+(require 'ninja-config)
+(require 'ninja-utils)
+(require 'ninja-run)
 
 
-;; (defun semacs-self-evolve (&optional file)
+;; (defun ninja-self-evolve (&optional file)
 ;;   "Update FILE with improvements suggested by LLM.
-;; If FILE is nil, use semacs source directory."
+;; If FILE is nil, use ninja source directory."
 ;;   (interactive)
 ;;   (message "Starting self-evolution...")
-;;   (semacs--init-workspace)
-;;   (let* ((github-token (semacs--get-github-token))
-;;          (file (or file (expand-file-name "semacs.el" semacs-source-dir)))
-;;          (request-file semacs-user-request-file)
+;;   (ninja--init-workspace)
+;;   (let* ((github-token (ninja--get-github-token))
+;;          (file (or file (expand-file-name "ninja.el" ninja-source-dir)))
+;;          (request-file ninja-user-request-file)
 ;;          (aspects (if (file-exists-p request-file)
 ;;                      (with-temp-buffer
 ;;                        (insert-file-contents request-file)
 ;;                        (buffer-string))
 ;;                    (read-string "Aspects to improve (empty for general review): ")))
-;;          (workspace-dir semacs-workspace-dir)
-;;          (semacs-load-path (file-name-directory (locate-library "semacs"))))
+;;          (workspace-dir ninja-workspace-dir)
+;;          (ninja-load-path (file-name-directory (locate-library "ninja"))))
 
 ;;     (unless github-token
-;;       (error "GitHub token not available. Check %s" semacs-github-token-file))
+;;       (error "GitHub token not available. Check %s" ninja-github-token-file))
 
 ;;     (unless (file-exists-p file)
 ;;       (error "Source file not found: %s" file))
 
 ;;     (let* ((work-file (expand-file-name (file-name-nondirectory file) workspace-dir))
-;;            (backup-file (semacs--create-backup work-file)))
+;;            (backup-file (ninja--create-backup work-file)))
 
 ;;       (copy-file file work-file t)
 
 ;;       (async-start
 ;;        `(lambda ()
-;;           (add-to-list 'load-path ,semacs-load-path)
-;;           (require 'semacs)
+;;           (add-to-list 'load-path ,ninja-load-path)
+;;           (require 'ninja)
 ;;           (let ((default-directory ,default-directory))
-;;             (semacs-run
+;;             (ninja-run
 ;;              (format "Review and improve %s\nFocus on these aspects:\n%s"
 ;;                      ,work-file
 ;;                      ,(if (string-empty-p aspects)
@@ -50,42 +50,42 @@
 ;;                         aspects)))))
 ;;        `(lambda (_)
 ;;           (with-current-buffer (find-file-noselect ,work-file)
-;;             (semacs--update-timestamp)
+;;             (ninja--update-timestamp)
 ;;             (save-buffer))
 
 ;;           (when (file-exists-p ,backup-file)
-;;             (let ((changes (semacs--diff-files ,backup-file ,work-file)))
-;;               (semacs--log-change ,work-file ,backup-file changes)))
+;;             (let ((changes (ninja--diff-files ,backup-file ,work-file)))
+;;               (ninja--log-change ,work-file ,backup-file changes)))
 
 ;;           (message "Self-evolution completed"))))))
 
-;; ;; (defun semacs-self-evolve (&optional file)
+;; ;; (defun ninja-self-evolve (&optional file)
 ;; ;;   "Update FILE with improvements suggested by LLM.
-;; ;; If FILE is nil, use semacs source directory."
+;; ;; If FILE is nil, use ninja source directory."
 ;; ;;   (interactive)
-;; ;;   (semacs--init-workspace)
-;; ;;   (let* ((github-token (semacs--get-github-token))
-;; ;;          (file (or file (expand-file-name "semacs.el" semacs-source-dir)))
-;; ;;          (request-file semacs-user-request-file)
+;; ;;   (ninja--init-workspace)
+;; ;;   (let* ((github-token (ninja--get-github-token))
+;; ;;          (file (or file (expand-file-name "ninja.el" ninja-source-dir)))
+;; ;;          (request-file ninja-user-request-file)
 ;; ;;          (aspects (if (file-exists-p request-file)
 ;; ;;                      (with-temp-buffer
 ;; ;;                        (insert-file-contents request-file)
 ;; ;;                        (buffer-string))
 ;; ;;                    (read-string "Aspects to improve (empty for general review): ")))
-;; ;;          (workspace-dir semacs-workspace-dir))
+;; ;;          (workspace-dir ninja-workspace-dir))
 
 ;; ;;     (unless github-token
-;; ;;       (error "GitHub token not available. Check %s" semacs-github-token-file))
+;; ;;       (error "GitHub token not available. Check %s" ninja-github-token-file))
 
 ;; ;;     (unless (file-exists-p file)
 ;; ;;       (error "Source file not found: %s" file))
 
 ;; ;;     (let* ((work-file (expand-file-name (file-name-nondirectory file) workspace-dir))
-;; ;;            (backup-file (semacs--create-backup work-file)))
+;; ;;            (backup-file (ninja--create-backup work-file)))
 
 ;; ;;       (copy-file file work-file t)
 
-;; ;;       (semacs-run
+;; ;;       (ninja-run
 ;; ;;        (format "Review and improve %s\nFocus on these aspects:\n%s"
 ;; ;;                work-file
 ;; ;;                (if (string-empty-p aspects)
@@ -93,14 +93,14 @@
 ;; ;;                  aspects)))
 
 ;; ;;       (with-current-buffer (find-file-noselect work-file)
-;; ;;         (semacs--update-timestamp)
+;; ;;         (ninja--update-timestamp)
 ;; ;;         (save-buffer))
 
 ;; ;;       (when (file-exists-p backup-file)
-;; ;;         (let ((changes (semacs--diff-files backup-file work-file)))
-;; ;;           (semacs--log-change work-file backup-file changes))))))
-;; ; (semacs-self-evolve)
+;; ;;         (let ((changes (ninja--diff-files backup-file work-file)))
+;; ;;           (ninja--log-change work-file backup-file changes))))))
+;; ; (ninja-self-evolve)
 
-(provide 'semacs-self-evolve)
+(provide 'ninja-self-evolve)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

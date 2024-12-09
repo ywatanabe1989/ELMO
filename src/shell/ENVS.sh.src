@@ -1,45 +1,62 @@
 #!/bin/bash
-# Time-stamp: "2024-12-09 10:28:49 (ywatanabe)"
-# File: ./Semacs/src/shell/apptainer_builders/ENVS.sh.source
+# Time-stamp: "2024-12-09 23:14:24 (ywatanabe)"
+# File: ./Ninja/src/shell/ENVS.sh.src
+
+
+# Host user
+export HOST_USER=$USER
+export HOST_UID=1000
+export HOST_GROUP=$USER
+export HOST_HOME=/home/$USER
+export HOST_DOT_EMACS=$HOST_HOME/.emacs.d
 
 # Seamacs user
-export SEMACS_USER=semacs
-export SEMACS_UID=9999
-export SEMACS_GROUP=emacs-users
-export SEMACS_HOME=/home/$SEMACS_USER
-export SEMACS_DOT_EMACS=$SEMACS_HOME/.emacs.d
+export NINJA_USER=ninja
+export NINJA_UID=9999
+export NINJA_GROUP=ninja
+export NINJA_HOME=/home/$NINJA_USER
+export NINJA_DOT_EMACS=$NINJA_HOME/.emacs.d
+
+# Ninja shared group
+export NINJA_AGENTS_GROUP=ninja-agents
 
 # Seamacs project
-export SEMACS_OPT_DIR=/opt
+export NINJA_OPT_DIR=/opt
 
 # Seamacs workspaces
-export SEMACS_WORKSPACES=""
-export SEMACS_WORKSPACE=$SEMACS_WORKSPACES/workspace
-export SEMACS_SRC=$SEMACS_WORKSPACES/src
-export SEMACS_LOGS=$SEMACS_WORKSPACES/logs
-export SEMACS_CONFIG=$SEMACS_WORKSPACES/config
-export SEMACS_REQUESTS=$SEMACS_WORKSPACES/requests
-export SEMACS_BACKUPS=$SEMACS_WORKSPACES/backups
+export NINJA_WORKSPACES=""
+export NINJA_WORKSPACE=$NINJA_WORKSPACES/workspace
+export NINJA_SRC=$NINJA_WORKSPACES/src
+export NINJA_LOGS=$NINJA_WORKSPACES/logs
+export NINJA_CONFIG=$NINJA_WORKSPACES/config
+export NINJA_REQUESTS=$NINJA_WORKSPACES/requests
+export NINJA_BACKUPS=$NINJA_WORKSPACES/backups
 
 # Emacs Configuration
-export SEMACS_EMACS_BIN=/usr/bin/emacs
-export SEMACS_EMACS_CLIENT=/usr/bin/emacsclient
-# export SEMACS_SERVER_SOCKET_DIR=$SEMACS_DOT_EMACS
-# export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/$SEMACS_UID-server
+export NINJA_EMACS_BIN=/usr/bin/emacs
+export NINJA_EMACS_CLIENT=/usr/bin/emacsclient
+# export NINJA_SERVER_SOCKET_DIR=$NINJA_DOT_EMACS
+# export NINJA_SERVER_SOCKET=$NINJA_SERVER_SOCKET_DIR/$NINJA_UID-server
 # FIXME
-export SEMACS_SERVER_SOCKET_DIR=/home/ywatanabe/.emacs.d  # Point to host user's directory
-export SEMACS_SERVER_SOCKET=$SEMACS_SERVER_SOCKET_DIR/server  # Standard Emacs server socket name
-export SEMACS_SERVER_CHECK_INTERVAL=1
+export NINJA_SERVER_SOCKET_DIR=$HOST_DOT_EMACS
+export NINJA_SERVER_SOCKET=$NINJA_SERVER_SOCKET_DIR/server
+export NINJA_SERVER_CHECK_INTERVAL=1
 
 # Feedback Loop
-export SEMACS_MAX_RETRIES=5
-export SEMACS_API_TIMEOUT=30
+export NINJA_MAX_RETRIES=5
+export NINJA_API_TIMEOUT=30
 
 # LLM Configuration
 export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY  # Claude API key from Anthropic
 export ANTHROPIC_ENGINE=$ANTHROPIC_ENGINE    # Using Claude 2 model
 
 # Python Configuration
-export PYTHON_VIRTUAL_ENV=$SEMACS_WORKSPACE/.env
+export PYTHON_VIRTUAL_ENV=$NINJA_WORKSPACE/.env
+
+# Debian
+export DEBIAN_FRONTEND=noninteractive
+
+# PATH
+export PATH="/sbin:$PATH"
 # export PATH=$VIRTUAL_ENV/bin:$PATH
 # export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH

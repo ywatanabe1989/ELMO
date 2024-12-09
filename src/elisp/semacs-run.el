@@ -1,60 +1,60 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 05:44:22
 ;;; Time-stamp: <2024-12-06 05:44:22 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-run.el
+;;; File: ./self-evolving-agent/src/ninja-run.el
 
 
-(require 'semacs-config)
-(require 'semacs-lang2elisp)
-(require 'semacs-python)
-(require 'semacs-logging)
+(require 'ninja-config)
+(require 'ninja-lang2elisp)
+(require 'ninja-python)
+(require 'ninja-logging)
 
-(defun semacs-before-run-hook ()
-  "Prepare environment before running SEMACS operations."
+(defun ninja-before-run-hook ()
+  "Prepare environment before running NINJA operations."
   (condition-case err
-      (semacs-exec-elisp-code
+      (ninja-exec-elisp-code
       '(progn
         (tab-new)
-        (tab-rename (format-time-string "SEMACS-%Y-%m-%d %H:%M:%S"))
-        (generate-new-buffer "*semacs-output*")
-        (switch-to-buffer "*semacs-output*")
-        (setq default-directory "/home/semacs")
+        (tab-rename (format-time-string "NINJA-%Y-%m-%d %H:%M:%S"))
+        (generate-new-buffer "*ninja-output*")
+        (switch-to-buffer "*ninja-output*")
+        (setq default-directory "/home/ninja")
         (setq shell-file-name "/bin/bash"
-              python-shell-virtualenv-root "/home/semacs/.env"
-              python-shell-interpreter "/home/semacs/.env/bin/python3"
-              org-babel-python-command "/home/semacs/.env/bin/python3")
+              python-shell-virtualenv-root "/home/ninja/.env"
+              python-shell-interpreter "/home/ninja/.env/bin/python3"
+              org-babel-python-command "/home/ninja/.env/bin/python3")
         )
       )
     (error
-     (semacs--log-error (format "Failed in before-run hook: %s" err))
+     (ninja--log-error (format "Failed in before-run hook: %s" err))
      nil)))
 
 
-(defun semacs-run (&optional prompt)
+(defun ninja-run (&optional prompt)
   (interactive)
-  (let ((prompt-text (or prompt (read-string "SEMACS prompt: "))))
-    (semacs-before-run-hook)
+  (let ((prompt-text (or prompt (read-string "NINJA prompt: "))))
+    (ninja-before-run-hook)
     (condition-case err
-        (let ((elisp-code (semacs--prompt-to-elisp prompt-text)))
+        (let ((elisp-code (ninja--prompt-to-elisp prompt-text)))
           (if elisp-code
               (progn
-                (semacs-exec-elisp-code elisp-code)
-                (semacs--log-success "Successfully executed prompt")
-                (semacs--log-del-errors))
+                (ninja-exec-elisp-code elisp-code)
+                (ninja--log-success "Successfully executed prompt")
+                (ninja--log-del-errors))
             (progn
-              (semacs--log-error "No valid elisp code generated from prompt")
-              (semacs--log-command-error elisp-code))))
+              (ninja--log-error "No valid elisp code generated from prompt")
+              (ninja--log-command-error elisp-code))))
       (error
-       (semacs--log-error (format "Failed to run prompt: %s" err))
+       (ninja--log-error (format "Failed to run prompt: %s" err))
        nil))))
 
-(defalias 'sr 'semacs-run)
+(defalias 'sr 'ninja-run)
 
-;; (semacs-run "write hello world in python")
-;; (semacs-run "write simple python code")
+;; (ninja-run "write hello world in python")
+;; (ninja-run "write simple python code")
 
 
-;; (defun semacs--add-timestamp-suffix (name)
+;; (defun ninja--add-timestamp-suffix (name)
 ;;   (let ((timestamp (format-time-string "%Y%m%d-%H%M%S")))
 ;;     (if (string-match "\\.\\([^.]*\\)$" name)
 ;;         (replace-match (concat "-" timestamp "." (match-string 1 name)) t t name)
@@ -63,22 +63,22 @@
 
 
 
-;; (defun semacs-run (prompt)
-;;   "Run SEMACS prompt asynchronously."
+;; (defun ninja-run (prompt)
+;;   "Run NINJA prompt asynchronously."
 ;;   (interactive)
 ;;   (run-with-idle-timer
 ;;    0 nil
 ;;    (lambda (p)
 ;;      (condition-case err
-;;          (let ((elisp-code (semacs--prompt-to-elisp p)))
+;;          (let ((elisp-code (ninja--prompt-to-elisp p)))
 ;;            (if elisp-code
-;;                (semacs-exec-elisp-code elisp-code)
-;;              (semacs--log-error "No valid elisp code generated from prompt")))
+;;                (ninja-exec-elisp-code elisp-code)
+;;              (ninja--log-error "No valid elisp code generated from prompt")))
 ;;        (error
-;;         (semacs--log-error (format "Failed to run prompt: %s" err))
+;;         (ninja--log-error (format "Failed to run prompt: %s" err))
 ;;         nil)))
 ;;    prompt))
 
-(provide 'semacs-run)
+(provide 'ninja-run)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

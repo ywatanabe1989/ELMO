@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-09 10:43:35 (ywatanabe)"
-# File: ./Semacs/src/shell/install_emacs.sh
+# File: ./Ninja/src/shell/install_emacs.sh
 
 # Locale
 locale-gen en_US.UTF-8

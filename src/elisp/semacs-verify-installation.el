@@ -1,133 +1,133 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-02 06:44:15
 ;;; Time-stamp: <2024-12-02 06:44:15 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-verify-installation.el
+;;; File: ./self-evolving-agent/src/ninja-verify-installation.el
 
 
-(require 'semacs-config)
+(require 'ninja-config)
 (require 'ert)
 
-(ert-deftest test-semacs-check-dependencies ()
+(ert-deftest test-ninja-check-dependencies ()
   "Test dependency checking functionality."
-  (should (progn (semacs-check-dependencies) t))
+  (should (progn (ninja-check-dependencies) t))
   (let ((executable-find (lambda (_) nil)))
-    (should-error (semacs-check-dependencies))))
+    (should-error (ninja-check-dependencies))))
 
-(ert-deftest test-semacs-create-directories ()
+(ert-deftest test-ninja-create-directories ()
   "Test directory creation."
-  (let ((semacs-work-dir (make-temp-file "semacs-test-" t))
-        (semacs-workspace-dir (make-temp-file "semacs-workspace-" t))
-        (semacs-source-dir (make-temp-file "semacs-source-" t)))
+  (let ((ninja-work-dir (make-temp-file "ninja-test-" t))
+        (ninja-workspace-dir (make-temp-file "ninja-workspace-" t))
+        (ninja-source-dir (make-temp-file "ninja-source-" t)))
     (unwind-protect
         (progn
-          (semacs-create-directories)
-          (should (file-directory-p semacs-work-dir))
-          (should (file-directory-p semacs-workspace-dir))
-          (should (file-directory-p semacs-source-dir)))
-      (delete-directory semacs-work-dir t)
-      (delete-directory semacs-workspace-dir t)
-      (delete-directory semacs-source-dir t))))
+          (ninja-create-directories)
+          (should (file-directory-p ninja-work-dir))
+          (should (file-directory-p ninja-workspace-dir))
+          (should (file-directory-p ninja-source-dir)))
+      (delete-directory ninja-work-dir t)
+      (delete-directory ninja-workspace-dir t)
+      (delete-directory ninja-source-dir t))))
 
-(ert-deftest test-semacs-create-initial-files ()
+(ert-deftest test-ninja-create-initial-files ()
   "Test creation of initial files."
-  (let* ((temp-dir (make-temp-file "semacs-test-" t))
-         (semacs-user-request-file (expand-file-name "user-request.md" temp-dir))
-         (semacs-request-file (expand-file-name "request.md" temp-dir))
-         (semacs-history-file (expand-file-name "history.log" temp-dir)))
+  (let* ((temp-dir (make-temp-file "ninja-test-" t))
+         (ninja-user-request-file (expand-file-name "user-request.md" temp-dir))
+         (ninja-request-file (expand-file-name "request.md" temp-dir))
+         (ninja-history-file (expand-file-name "history.log" temp-dir)))
     (unwind-protect
         (progn
-          (semacs-create-initial-files)
-          (should (file-exists-p semacs-user-request-file))
-          (should (file-exists-p semacs-request-file))
-          (should (file-exists-p semacs-history-file)))
+          (ninja-create-initial-files)
+          (should (file-exists-p ninja-user-request-file))
+          (should (file-exists-p ninja-request-file))
+          (should (file-exists-p ninja-history-file)))
       (delete-directory temp-dir t))))
 
-(ert-deftest test-semacs-setup-environment ()
+(ert-deftest test-ninja-setup-environment ()
   "Test environment setup."
-  (let* ((temp-dir (make-temp-file "semacs-test-" t))
-         (semacs-config-dir temp-dir)
+  (let* ((temp-dir (make-temp-file "ninja-test-" t))
+         (ninja-config-dir temp-dir)
          (env-file (expand-file-name ".env" temp-dir)))
     (unwind-protect
         (progn
-          (semacs-setup-environment)
+          (ninja-setup-environment)
           (should (file-exists-p env-file))
-          (should (string-match-p "SEMACS_ROOT="
+          (should (string-match-p "NINJA_ROOT="
                                 (with-temp-buffer
                                   (insert-file-contents env-file)
                                   (buffer-string)))))
       (delete-directory temp-dir t))))
 
-(ert-deftest test-semacs-verify-installation ()
+(ert-deftest test-ninja-verify-installation ()
   "Test installation verification."
-  (let* ((temp-dir (make-temp-file "semacs-test-" t))
-         (semacs-work-dir temp-dir)
-         (semacs-workspace-dir (expand-file-name "workspace" temp-dir))
-         (semacs-source-dir (expand-file-name "source" temp-dir))
-         (semacs-logs-dir (expand-file-name "logs" temp-dir))
-         (semacs-config-dir (expand-file-name "config" temp-dir))
-         (semacs-github-token-file (expand-file-name "token" temp-dir))
-         (semacs-user-request-file (expand-file-name "user-request.md" temp-dir))
-         (semacs-request-file (expand-file-name "request.md" temp-dir))
-         (semacs-history-file (expand-file-name "history.log" temp-dir)))
+  (let* ((temp-dir (make-temp-file "ninja-test-" t))
+         (ninja-work-dir temp-dir)
+         (ninja-workspace-dir (expand-file-name "workspace" temp-dir))
+         (ninja-source-dir (expand-file-name "source" temp-dir))
+         (ninja-logs-dir (expand-file-name "logs" temp-dir))
+         (ninja-config-dir (expand-file-name "config" temp-dir))
+         (ninja-github-token-file (expand-file-name "token" temp-dir))
+         (ninja-user-request-file (expand-file-name "user-request.md" temp-dir))
+         (ninja-request-file (expand-file-name "request.md" temp-dir))
+         (ninja-history-file (expand-file-name "history.log" temp-dir)))
     (unwind-protect
         (progn
           (mapc (lambda (dir) (make-directory dir t))
-                (list semacs-workspace-dir semacs-source-dir semacs-logs-dir semacs-config-dir))
+                (list ninja-workspace-dir ninja-source-dir ninja-logs-dir ninja-config-dir))
           (mapc (lambda (file) (with-temp-file file (insert "test")))
-                (list semacs-github-token-file semacs-user-request-file semacs-request-file semacs-history-file))
-          (should (progn (semacs-verify-installation) t)))
+                (list ninja-github-token-file ninja-user-request-file ninja-request-file ninja-history-file))
+          (should (progn (ninja-verify-installation) t)))
       (delete-directory temp-dir t))))
 
-(ert-deftest test-semacs-setup-github-token ()
+(ert-deftest test-ninja-setup-github-token ()
   "Test GitHub token setup."
-  (let* ((temp-dir (make-temp-file "semacs-test-" t))
-         (semacs-github-token-file (expand-file-name "github-token" temp-dir))
+  (let* ((temp-dir (make-temp-file "ninja-test-" t))
+         (ninja-github-token-file (expand-file-name "github-token" temp-dir))
          (test-token "ghp_test1234567890"))
     (unwind-protect
         (progn
           (cl-letf (((symbol-function 'read-string)
                      (lambda (&rest _) test-token)))
-            (semacs-setup-github-token)
-            (should (file-exists-p semacs-github-token-file))
+            (ninja-setup-github-token)
+            (should (file-exists-p ninja-github-token-file))
             (should (string= (with-temp-buffer
-                             (insert-file-contents semacs-github-token-file)
+                             (insert-file-contents ninja-github-token-file)
                              (string-trim (buffer-string)))
                            test-token))))
       (delete-directory temp-dir t))))
 
-(ert-deftest test-semacs-full-installation-process ()
+(ert-deftest test-ninja-full-installation-process ()
   "Integration test for the full installation process."
-  (let* ((temp-root (make-temp-file "semacs-test-root-" t))
-         (semacs-work-dir (expand-file-name "semacs" temp-root))
-         (semacs-workspace-dir (expand-file-name "workspace" semacs-work-dir))
-         (semacs-source-dir (expand-file-name "source" semacs-work-dir))
-         (semacs-config-dir (expand-file-name "config" semacs-work-dir))
+  (let* ((temp-root (make-temp-file "ninja-test-root-" t))
+         (ninja-work-dir (expand-file-name "ninja" temp-root))
+         (ninja-workspace-dir (expand-file-name "workspace" ninja-work-dir))
+         (ninja-source-dir (expand-file-name "source" ninja-work-dir))
+         (ninja-config-dir (expand-file-name "config" ninja-work-dir))
          (test-token "ghp_testtoken12345"))
     (unwind-protect
         (cl-letf (((symbol-function 'read-string)
                    (lambda (&rest _) test-token))
                   ((symbol-function 'y-or-n-p)
                    (lambda (&rest _) t)))
-          (semacs-install)
-          (should (file-directory-p semacs-work-dir))
-          (should (file-directory-p semacs-workspace-dir))
-          (should (file-directory-p semacs-source-dir))
-          (should (file-directory-p semacs-config-dir))
-          (should (file-exists-p (expand-file-name ".env" semacs-config-dir)))
-          (should (file-exists-p (expand-file-name "github-token" semacs-config-dir)))
-          (should (semacs-verify-installation)))
+          (ninja-install)
+          (should (file-directory-p ninja-work-dir))
+          (should (file-directory-p ninja-workspace-dir))
+          (should (file-directory-p ninja-source-dir))
+          (should (file-directory-p ninja-config-dir))
+          (should (file-exists-p (expand-file-name ".env" ninja-config-dir)))
+          (should (file-exists-p (expand-file-name "github-token" ninja-config-dir)))
+          (should (ninja-verify-installation)))
       (delete-directory temp-root t))))
 
 ;; Main verification function
-(defun semacs-verify-installation ()
-  "Verify that all SEMACS components are properly installed."
-  (and (file-exists-p semacs-work-dir)
-       (file-exists-p semacs-workspace-dir)
-       (file-exists-p semacs-source-dir)
-       (file-exists-p semacs-logs-dir)
-       (file-exists-p semacs-config-dir)
-       (file-exists-p semacs-github-token-file)))
+(defun ninja-verify-installation ()
+  "Verify that all NINJA components are properly installed."
+  (and (file-exists-p ninja-work-dir)
+       (file-exists-p ninja-workspace-dir)
+       (file-exists-p ninja-source-dir)
+       (file-exists-p ninja-logs-dir)
+       (file-exists-p ninja-config-dir)
+       (file-exists-p ninja-github-token-file)))
 
-(provide 'semacs-verify-installation)
+(provide 'ninja-verify-installation)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

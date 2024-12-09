@@ -1,25 +1,25 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 01:23:22
 ;;; Time-stamp: <2024-12-06 01:23:22 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-install.el
+;;; File: ./self-evolving-agent/src/ninja-install.el
 
 
-(require 'semacs-config)
+(require 'ninja-config)
 (require 'cl-lib)
 (require 'auth-source)
-(require 'semacs-verify-installation)
-(require 'semacs-logging)
+(require 'ninja-verify-installation)
+(require 'ninja-logging)
 
 
-(defun semacs-setup-sudo ()
-  "Setup sudo configuration for SEMACS."
+(defun ninja-setup-sudo ()
+  "Setup sudo configuration for NINJA."
   (interactive)
-  (let ((sudo-file "/etc/sudoers.d/semacs-emacs")
-        (temp-file (make-temp-file "semacs-sudo"))
+  (let ((sudo-file "/etc/sudoers.d/ninja-emacs")
+        (temp-file (make-temp-file "ninja-sudo"))
         (content (format "%s ALL=(%s) NOPASSWD: %s\n"
                         (user-login-name)
-                        semacs-user
-                        semacs-emacs-cli)))
+                        ninja-user
+                        ninja-emacs-cli)))
     (write-region content nil temp-file)
     (call-process "sudo" nil nil nil
                  "cp" temp-file sudo-file)
@@ -29,13 +29,13 @@
                  "chmod" "440" sudo-file)
     (delete-file temp-file)))
 
-;; (semacs-setup-sudo)
+;; (ninja-setup-sudo)
 
-;; # /etc/sudoers.d/semacs-emacs
-;; ywatanabe ALL=(semacs) NOPASSWD: /usr/bin/emacsclient
+;; # /etc/sudoers.d/ninja-emacs
+;; ywatanabe ALL=(ninja) NOPASSWD: /usr/bin/emacsclient
 
 
-(defun semacs--check-dependencies ()
+(defun ninja--check-dependencies ()
   "Check if required system dependencies are available."
   (let ((required-commands '("git" "sudo" "python3"))
         (missing-commands '()))
@@ -48,8 +48,8 @@
       (error "Missing required commands: %s"
              (string-join missing-commands ", ")))))
 
-;; (defun semacs--create-user (username)
-;;   "Create a new system user for SEMACS."
+;; (defun ninja--create-user (username)
+;;   "Create a new system user for NINJA."
 ;;   (unless (zerop (shell-command
 ;;                   (format "id %s >/dev/null 2>&1" username)))
 ;;     (shell-command
@@ -57,34 +57,34 @@
 ;;     (shell-command
 ;;      (format "sudo usermod -aG sudo %s" username))))
 
-(defun semacs--setup-workspace ()
-  "Initialize SEMACS workspace with symbolic links."
+(defun ninja--setup-workspace ()
+  "Initialize NINJA workspace with symbolic links."
   (interactive)
   (let* ((user-name (user-login-name))
-         (source-dir (directory-file-name semacs-user-root-dir))
-         (workspace-dir (directory-file-name semacs-workspace-dir))
+         (source-dir (directory-file-name ninja-user-root-dir))
+         (workspace-dir (directory-file-name ninja-workspace-dir))
          (target-link (expand-file-name "self-evolving-agent" workspace-dir)))
 
-    ;; Verify user is in semacs group
-    (unless (member "semacs" (split-string (shell-command-to-string
+    ;; Verify user is in ninja group
+    (unless (member "ninja" (split-string (shell-command-to-string
                                        (format "groups %s" user-name))))
-      (error "Current user must be in 'semacs' group. Run install.sh first"))
+      (error "Current user must be in 'ninja' group. Run install.sh first"))
 
     ;; Create base directories
-    (dolist (dir (list semacs-work-dir
-                      semacs-workspace-dir
-                      semacs-backups-dir
-                      semacs-logs-dir
-                      semacs-command-logs-dir
-                      semacs-requests-dir
-                      semacs-config-dir))
+    (dolist (dir (list ninja-work-dir
+                      ninja-workspace-dir
+                      ninja-backups-dir
+                      ninja-logs-dir
+                      ninja-command-logs-dir
+                      ninja-requests-dir
+                      ninja-config-dir))
       (unless (file-exists-p dir)
         (make-directory dir t)
         (set-file-modes dir #o700)))
 
     ;; Touch request files
-    (dolist (file (list semacs-user-request-file
-                       semacs-request-file))
+    (dolist (file (list ninja-user-request-file
+                       ninja-request-file))
       (unless (file-exists-p file)
         (write-region "" nil file)))
 
@@ -93,53 +93,53 @@
       (delete-file target-link))
     (make-symbolic-link source-dir target-link)))
 
-(defun semacs--user-exists-p (username)
+(defun ninja--user-exists-p (username)
   "Check if USERNAME exists in the system."
   (zerop (shell-command
           (format "id %s >/dev/null 2>&1" username))))
 
-(defun semacs--setup-user (main-user)
-  "Set up SEMACS user and configure permissions for MAIN-USER."
-  (unless (semacs--user-exists-p main-user)
+(defun ninja--setup-user (main-user)
+  "Set up NINJA user and configure permissions for MAIN-USER."
+  (unless (ninja--user-exists-p main-user)
     (error "User %s does not exist" main-user))
 
-  (unless (semacs--user-exists-p "semacs")
-    (semacs--log-message "Creating semacs user...")
-    (unless (zerop (shell-command "sudo useradd -r -m -d /home/semacs semacs"))
-      (error "Failed to create semacs user"))
-    (shell-command "sudo chmod 755 /home/semacs"))
+  (unless (ninja--user-exists-p "ninja")
+    (ninja--log-message "Creating ninja user...")
+    (unless (zerop (shell-command "sudo useradd -r -m -d /home/ninja ninja"))
+      (error "Failed to create ninja user"))
+    (shell-command "sudo chmod 755 /home/ninja"))
 
-  (semacs--log-message "Configuring groups...")
-  (shell-command (format "sudo usermod -aG semacs %s" main-user))
-  (shell-command (format "sudo usermod -aG %s semacs" main-user))
+  (ninja--log-message "Configuring groups...")
+  (shell-command (format "sudo usermod -aG ninja %s" main-user))
+  (shell-command (format "sudo usermod -aG %s ninja" main-user))
   )
 
-(defun semacs--setup-git-config ()
-  "Configure git settings for SEMACS user."
-  (semacs--log-message "Setting up git configuration for semacs user...")
+(defun ninja--setup-git-config ()
+  "Configure git settings for NINJA user."
+  (ninja--log-message "Setting up git configuration for ninja user...")
 
   (let ((git-commands
-         '("git config --global user.name \"semacs-bot\""
-           "git config --global user.email \"semacs-bot@example.com\""
+         '("git config --global user.name \"ninja-bot\""
+           "git config --global user.email \"ninja-bot@example.com\""
            "git config --global core.editor \"gedit\""
            "git config --global init.defaultBranch \"main\"")))
     (dolist (cmd git-commands)
-      (shell-command (format "sudo -u semacs %s" cmd))))
+      (shell-command (format "sudo -u ninja %s" cmd))))
 
-  (let ((gitignore (expand-file-name ".gitignore_global" semacs-config-dir)))
+  (let ((gitignore (expand-file-name ".gitignore_global" ninja-config-dir)))
     (with-temp-file gitignore
       (insert "*~\n.DS_Store\n.env\n*.log\n"))
-    (shell-command (format "sudo -u semacs git config --global core.excludesfile %s" gitignore))
+    (shell-command (format "sudo -u ninja git config --global core.excludesfile %s" gitignore))
     (shell-command (format "sudo chmod 600 %s" gitignore))
-    (semacs--log-message "Git configuration completed")))
+    (ninja--log-message "Git configuration completed")))
 
-;; (defun semacs--setup-github-token ()
+;; (defun ninja--setup-github-token ()
 ;;   "Set up GitHub token interactively."
-;;   (semacs--log-message "Setting up GitHub token...")
+;;   (ninja--log-message "Setting up GitHub token...")
 
-;;   (when (file-exists-p semacs-github-token-file)
+;;   (when (file-exists-p ninja-github-token-file)
 ;;     (let* ((default-token (with-temp-buffer
-;;                            (insert-file-contents semacs-github-token-file)
+;;                            (insert-file-contents ninja-github-token-file)
 ;;                            (buffer-string)))
 ;;            (masked-token (concat (substring default-token 0 4)
 ;;                                "..."
@@ -148,33 +148,33 @@
 ;;                    (format "Enter GitHub Token (Enter for %s, s to skip): "
 ;;                           masked-token))))
 ;;         (cond ((string-empty-p input)
-;;                (semacs--log-message "Keeping existing token")
-;;                (cl-return-from semacs--setup-github-token t))
+;;                (ninja--log-message "Keeping existing token")
+;;                (cl-return-from ninja--setup-github-token t))
 ;;               ((string= input "s")
-;;                (semacs--log-message "Skipping token setup")
-;;                (cl-return-from semacs--setup-github-token t))))))
+;;                (ninja--log-message "Skipping token setup")
+;;                (cl-return-from ninja--setup-github-token t))))))
 
 ;;   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
 ;;     (when (string= token "s")
-;;       (semacs--log-message "Skipping token setup")
-;;       (cl-return-from semacs--setup-github-token t))
+;;       (ninja--log-message "Skipping token setup")
+;;       (cl-return-from ninja--setup-github-token t))
 
 ;;     (when (< (length token) 40)
-;;       (semacs--log-message "Error: Invalid token length")
-;;       (cl-return-from semacs--setup-github-token nil))
+;;       (ninja--log-message "Error: Invalid token length")
+;;       (cl-return-from ninja--setup-github-token nil))
 
-;;     (with-temp-file semacs-github-token-file
+;;     (with-temp-file ninja-github-token-file
 ;;       (insert token))
-;;     (shell-command (format "sudo chmod 600 %s" semacs-github-token-file))
-;;     (semacs--log-message "GitHub token saved")))
+;;     (shell-command (format "sudo chmod 600 %s" ninja-github-token-file))
+;;     (ninja--log-message "GitHub token saved")))
 
-(cl-defun semacs--setup-github-token ()
+(cl-defun ninja--setup-github-token ()
   "Set up GitHub token interactively."
-  (semacs--log-message "Setting up GitHub token...")
+  (ninja--log-message "Setting up GitHub token...")
 
-  (when (file-exists-p semacs-github-token-file)
+  (when (file-exists-p ninja-github-token-file)
     (let* ((default-token (with-temp-buffer
-                           (insert-file-contents semacs-github-token-file)
+                           (insert-file-contents ninja-github-token-file)
                            (buffer-string)))
            (masked-token (concat (substring default-token 0 4)
                                "..."
@@ -183,44 +183,44 @@
                    (format "Enter GitHub Token (Enter for %s, s to skip): "
                           masked-token))))
         (cond ((string-empty-p input)
-               (semacs--log-message "Keeping existing token")
-               (cl-return-from semacs--setup-github-token t))
+               (ninja--log-message "Keeping existing token")
+               (cl-return-from ninja--setup-github-token t))
               ((string= input "s")
-               (semacs--log-message "Skipping token setup")
-               (cl-return-from semacs--setup-github-token t))))))
+               (ninja--log-message "Skipping token setup")
+               (cl-return-from ninja--setup-github-token t))))))
 
   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
     (when (string= token "s")
-      (semacs--log-message "Skipping token setup")
-      (cl-return-from semacs--setup-github-token t))
+      (ninja--log-message "Skipping token setup")
+      (cl-return-from ninja--setup-github-token t))
 
     (when (< (length token) 40)
-      (semacs--log-message "Error: Invalid token length")
-      (cl-return-from semacs--setup-github-token nil))
+      (ninja--log-message "Error: Invalid token length")
+      (cl-return-from ninja--setup-github-token nil))
 
-    (with-temp-file semacs-github-token-file
+    (with-temp-file ninja-github-token-file
       (insert token))
-    (shell-command (format "sudo chmod 600 %s" semacs-github-token-file))
-    (semacs--log-message "GitHub token saved")))
+    (shell-command (format "sudo chmod 600 %s" ninja-github-token-file))
+    (ninja--log-message "GitHub token saved")))
 
 
 
-(defun semacs--install-dependencies ()
+(defun ninja--install-dependencies ()
   "Install required system packages and Emacs packages."
-  (semacs--log-message "Installing dependencies...")
+  (ninja--log-message "Installing dependencies...")
 
   ;; System packages
   (let ((packages '("python3" "curl" "wget")))
     (dolist (pkg packages)
       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
-        (semacs--log-message (format "Installing %s..." pkg))
+        (ninja--log-message (format "Installing %s..." pkg))
         (let ((result (shell-command (format "sudo apt-get install -y %s" pkg))))
           (unless (zerop result)
-            (display-warning 'semacs (format "Failed to install %s" pkg) :error))))))
+            (display-warning 'ninja (format "Failed to install %s" pkg) :error))))))
 
   ;; Python packages
-  (let* ((default-directory semacs-workspace-dir)
-         (venv-dir (expand-file-name ".env" semacs-workspace-dir)))
+  (let* ((default-directory ninja-workspace-dir)
+         (venv-dir (expand-file-name ".env" ninja-workspace-dir)))
     ;; Create and activate virtual environment
     (unless (file-exists-p venv-dir)
       (shell-command "python3 -m venv .env"))
@@ -228,11 +228,11 @@
     (let ((commands
            `(,(format "bash -c 'source %s/bin/activate && pip install --upgrade pip'" venv-dir)
              ,(format "bash -c 'source %s/bin/activate && pip install -r %s/requirements.txt'"
-                     venv-dir semacs-user-root-dir))))
+                     venv-dir ninja-user-root-dir))))
       (dolist (cmd commands)
         (let ((result (shell-command cmd)))
           (unless (zerop result)
-            (display-warning 'semacs
+            (display-warning 'ninja
                            (format "Failed to execute command: %s" cmd)
                            :error))))))
 
@@ -249,32 +249,32 @@
             (condition-case nil
                 (package-install pkg)
               (error
-               (display-warning 'semacs
+               (display-warning 'ninja
                               (format "Failed to install package: %s" pkg)
                               :error))))))
     (error
-     (display-warning 'semacs
+     (display-warning 'ninja
                      (format "Error during Emacs package setup: %s" (error-message-string err))
                      :error))))
 
-;; (defun semacs--install-dependencies ()
+;; (defun ninja--install-dependencies ()
 ;;   "Install required system packages and Emacs packages."
-;;   (semacs--log-message "Installing dependencies...")
+;;   (ninja--log-message "Installing dependencies...")
 
 ;;   ;; System packages
 ;;   (let ((packages '("python3" "curl" "wget")))
 ;;     (dolist (pkg packages)
 ;;       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
-;;         (semacs--log-message (format "Installing %s..." pkg))
+;;         (ninja--log-message (format "Installing %s..." pkg))
 ;;         (shell-command (format "sudo apt-get install -y %s" pkg)))))
 
 ;;   ;; Python packages
-;;   (shell-command "cd semacs-workspace-dir")
+;;   (shell-command "cd ninja-workspace-dir")
 ;;   (shell-command "python -m pip install -U pip")
 ;;   (shell-command "python -m venv .env")
 ;;   (shell-command "source .env/bin/activate")
 ;;   (shell-command "python -m pip install -U pip")
-;;   (shell-command (concat "python -m pip install -r " semacs-user-root-dir "requirements.txt"))
+;;   (shell-command (concat "python -m pip install -r " ninja-user-root-dir "requirements.txt"))
 
 ;;   ;; Emacs packages
 ;;   (require 'package)
@@ -286,66 +286,66 @@
 ;;     (unless (package-installed-p pkg)
 ;;       (package-install pkg))))
 
-(defun semacs--setup-permissions ()
-  "Set correct permissions for SEMACS directories and files."
-  (semacs--log-message "Setting up permissions...")
+(defun ninja--setup-permissions ()
+  "Set correct permissions for NINJA directories and files."
+  (ninja--log-message "Setting up permissions...")
 
   ;; Directory permissions
   (mapc (lambda (dir)
           (set-file-modes dir #o755)
-          (shell-command (format "sudo chown -R semacs:semacs %s" dir)))
-        (list semacs-work-dir
-              semacs-workspace-dir
-              semacs-source-dir
-              semacs-backups-dir
-              semacs-logs-dir
-              semacs-requests-dir
-              semacs-config-dir))
+          (shell-command (format "sudo chown -R ninja:ninja %s" dir)))
+        (list ninja-work-dir
+              ninja-workspace-dir
+              ninja-source-dir
+              ninja-backups-dir
+              ninja-logs-dir
+              ninja-requests-dir
+              ninja-config-dir))
 
   ;; Special file permissions
-  (when (file-exists-p semacs-github-token-file)
-    (set-file-modes semacs-github-token-file #o600))
+  (when (file-exists-p ninja-github-token-file)
+    (set-file-modes ninja-github-token-file #o600))
 
-  (dolist (file (directory-files-recursively semacs-logs-dir ".*\\.log$"))
+  (dolist (file (directory-files-recursively ninja-logs-dir ".*\\.log$"))
     (set-file-modes file #o644)))
 
-(defun semacs--backup-existing-files ()
-  "Backup existing SEMACS files if they exist."
-  (when (file-exists-p semacs-work-dir)
-    (let ((backup-dir (format "%s/semacs-backup-%s"
+(defun ninja--backup-existing-files ()
+  "Backup existing NINJA files if they exist."
+  (when (file-exists-p ninja-work-dir)
+    (let ((backup-dir (format "%s/ninja-backup-%s"
                              temporary-file-directory
                              (format-time-string "%Y%m%d-%H%M%S"))))
       (make-directory backup-dir t)
-      (copy-directory semacs-work-dir backup-dir t t t)
-      (semacs--log-message
+      (copy-directory ninja-work-dir backup-dir t t t)
+      (ninja--log-message
        (format "Existing files backed up to %s" backup-dir)))))
 
-;; (defun semacs--create-directories ()
-;;   "Create all necessary directories for SEMACS."
+;; (defun ninja--create-directories ()
+;;   "Create all necessary directories for NINJA."
 ;;   (mapc (lambda (dir)
 ;;           (unless (file-exists-p dir)
 ;;             (make-directory dir t)))
-;;         (list semacs-work-dir
-;;               semacs-workspace-dir
-;;               semacs-source-dir
-;;               semacs-backups-dir
-;;               semacs-logs-dir
-;;               semacs-requests-dir
-;;               semacs-config-dir)))
+;;         (list ninja-work-dir
+;;               ninja-workspace-dir
+;;               ninja-source-dir
+;;               ninja-backups-dir
+;;               ninja-logs-dir
+;;               ninja-requests-dir
+;;               ninja-config-dir)))
 
-(defun semacs--create-initial-files ()
+(defun ninja--create-initial-files ()
   "Create initial files and templates."
-  (semacs--log-message "Creating initial files...")
+  (ninja--log-message "Creating initial files...")
 
   ;; Create user request template
-  (with-temp-file semacs-user-request-file
+  (with-temp-file ninja-user-request-file
     (insert "# Improvement Request\n\n"
             "## Description\n\n"
             "## Expected Outcome\n\n"
             "## Additional Notes\n"))
 
-  ;; Create SEMACS request template
-  (with-temp-file semacs-request-file
+  ;; Create NINJA request template
+  (with-temp-file ninja-request-file
     (insert "# Self-Improvement Proposal\n\n"
             "## Current Limitation\n\n"
             "## Proposed Changes\n\n"
@@ -353,91 +353,91 @@
             "## Testing Strategy\n"))
 
   ;; Initialize history log
-  (unless (file-exists-p semacs-history-file)
-    (with-temp-file semacs-history-file
-      (insert (format-time-string "# SEMACS History Log\nInitialized on %Y-%m-%d %H:%M:%S\n\n")))))
+  (unless (file-exists-p ninja-history-file)
+    (with-temp-file ninja-history-file
+      (insert (format-time-string "# NINJA History Log\nInitialized on %Y-%m-%d %H:%M:%S\n\n")))))
 
-;; (defun semacs--verify-installation ()
+;; (defun ninja--verify-installation ()
 ;;   "Verify that all components are properly installed and configured."
-;;   (semacs--log-message "Verifying installation...")
+;;   (ninja--log-message "Verifying installation...")
 
 ;;   (let ((checks
-;;          `((,semacs-work-dir "Main working directory")
-;;            (,semacs-workspace-dir "Workspace directory")
-;;            (,semacs-source-dir "Source directory")
-;;            (,semacs-logs-dir "Logs directory")
-;;            (,semacs-config-dir "Config directory")
-;;            (,semacs-github-token-file "GitHub token file")
-;;            (,semacs-user-request-file "User request template")
-;;            (,semacs-request-file "SEMACS request template")
-;;            (,semacs-history-file "History log"))))
+;;          `((,ninja-work-dir "Main working directory")
+;;            (,ninja-workspace-dir "Workspace directory")
+;;            (,ninja-source-dir "Source directory")
+;;            (,ninja-logs-dir "Logs directory")
+;;            (,ninja-config-dir "Config directory")
+;;            (,ninja-github-token-file "GitHub token file")
+;;            (,ninja-user-request-file "User request template")
+;;            (,ninja-request-file "NINJA request template")
+;;            (,ninja-history-file "History log"))))
 
 ;;     (cl-loop for (path desc) in checks
 ;;              do (unless (file-exists-p path)
 ;;                   (error "Missing %s at %s" desc path))))
 
-;;   (semacs--log-message "Installation verified successfully"))
+;;   (ninja--log-message "Installation verified successfully"))
 
-(defun semacs--setup-environment ()
-  "Set up SEMACS environment variables and shell configuration."
-  (semacs--log-message "Setting up environment...")
+(defun ninja--setup-environment ()
+  "Set up NINJA environment variables and shell configuration."
+  (ninja--log-message "Setting up environment...")
 
-  (let ((env-file (expand-file-name ".env" semacs-config-dir)))
+  (let ((env-file (expand-file-name ".env" ninja-config-dir)))
     (with-temp-file env-file
-      (insert (format "SEMACS_ROOT=%s\n" semacs-work-dir)
-              (format "SEMACS_WORKSPACE=%s\n" semacs-workspace-dir)
-              (format "SEMACS_SOURCE=%s\n" semacs-source-dir)
-              (format "SEMACS_LOGS=%s\n" semacs-logs-dir)
-              (format "SEMACS_CONFIG=%s\n" semacs-config-dir)))
+      (insert (format "NINJA_ROOT=%s\n" ninja-work-dir)
+              (format "NINJA_WORKSPACE=%s\n" ninja-workspace-dir)
+              (format "NINJA_SOURCE=%s\n" ninja-source-dir)
+              (format "NINJA_LOGS=%s\n" ninja-logs-dir)
+              (format "NINJA_CONFIG=%s\n" ninja-config-dir)))
     (shell-command (format "sudo chmod 644 %s" env-file))))
 
-(defun semacs-install (&optional main-user)
-  "Install SEMACS system with MAIN-USER as primary user.
+(defun ninja-install (&optional main-user)
+  "Install NINJA system with MAIN-USER as primary user.
 If MAIN-USER is nil, use current user."
   (interactive)
 
   (let ((main-user (or main-user (user-login-name))))
     (condition-case err
         (progn
-          (semacs--log-message "Starting SEMACS installation...")
+          (ninja--log-message "Starting NINJA installation...")
 
           ;; Core setup
-          (semacs--setup-user main-user)
+          (ninja--setup-user main-user)
           ;; Directories and files
-          (semacs--setup-workspace)
+          (ninja--setup-workspace)
 
           ;; Pre-installation checks
-          (semacs--check-dependencies)
+          (ninja--check-dependencies)
 
           ;; Git/GitHub
-          (semacs--setup-git-config)
-          (semacs--setup-github-token)
+          (ninja--setup-git-config)
+          (ninja--setup-github-token)
 
           ;; Repository and dependencies
-          (semacs--install-dependencies)
+          (ninja--install-dependencies)
 
           ;; Configuration and files
-          (semacs--setup-permissions)
-          (semacs--create-initial-files)
-          (semacs--setup-environment)
+          (ninja--setup-permissions)
+          (ninja--create-initial-files)
+          (ninja--setup-environment)
 
           ;; Final verification
-          (semacs-verify-installation)
+          (ninja-verify-installation)
 
-          (semacs-setup-sudo)
+          (ninja-setup-sudo)
 
-          (semacs--log-message "SEMACS installation completed successfully!")
+          (ninja--log-message "NINJA installation completed successfully!")
           t)
 
       (error
-       (semacs--log-message (format "Installation failed: %s" (error-message-string err)))
+       (ninja--log-message (format "Installation failed: %s" (error-message-string err)))
        nil))))
 
-(provide 'semacs-install)
+(provide 'ninja-install)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
-;; (require 'semacs)
+;; (require 'ninja)
 
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

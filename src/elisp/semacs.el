@@ -1,50 +1,50 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 00:26:34
 ;;; Time-stamp: <2024-12-06 00:26:34 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs.el
+;;; File: ./self-evolving-agent/src/ninja.el
 
 
-;;(require 'semacs)
+;;(require 'ninja)
 
 ;; User installation paths
-(defvar semacs-user-root-dir (file-name-directory (directory-file-name
+(defvar ninja-user-root-dir (file-name-directory (directory-file-name
                                               (file-name-directory
                                                (or load-file-name buffer-file-name))))
-  "User's SEMACS installation root directory.")
+  "User's NINJA installation root directory.")
 
-(defvar semacs-user-source-dir (expand-file-name "src" semacs-user-root-dir)
-  "User's SEMACS source directory.")
+(defvar ninja-user-source-dir (expand-file-name "src" ninja-user-root-dir)
+  "User's NINJA source directory.")
 
-(add-to-list 'load-path semacs-user-root-dir)
-(add-to-list 'load-path semacs-user-source-dir)
+(add-to-list 'load-path ninja-user-root-dir)
+(add-to-list 'load-path ninja-user-source-dir)
 
 ;; Load base configuration first
-(require 'semacs-config)
-(require 'semacs-logging)
+(require 'ninja-config)
+(require 'ninja-logging)
 
 ;; Load components in order
-(require 'semacs-install)
-(require 'semacs-verify-installation)
+(require 'ninja-install)
+(require 'ninja-verify-installation)
 
 ;; Load remaining components after ensuring installation
-;; (require 'semacs-context)
-(require 'semacs-prompts)
-(require 'semacs-mode)
-(require 'semacs-utils)
-(require 'semacs-version-control)
-(require 'semacs-network)
-(require 'semacs-run)
-(require 'semacs-self-evolve)
-(require 'semacs-server)
-(require 'semacs-lang2elisp)
-(require 'semacs-run)
-(require 'semacs-python)
+;; (require 'ninja-context)
+(require 'ninja-prompts)
+(require 'ninja-mode)
+(require 'ninja-utils)
+(require 'ninja-version-control)
+(require 'ninja-network)
+(require 'ninja-run)
+(require 'ninja-self-evolve)
+(require 'ninja-server)
+(require 'ninja-lang2elisp)
+(require 'ninja-run)
+(require 'ninja-python)
 
 (remove-hook 'after-change-functions #'genai-mode)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
 
-(provide 'semacs)
+(provide 'ninja)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
