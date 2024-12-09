@@ -13,7 +13,7 @@ source "$(dirname $0)"/ENVS.sh.source
 ########################################
 # Emacs
 ########################################
-apt-get install -y \
+apt install -y \
         emacs \
         emacs-common \
         emacs-bin-common
