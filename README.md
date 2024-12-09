@@ -5,7 +5,7 @@
 !-- --- -->
 
 # Ninja: Neural Information Network of Joint Agents
-![logo](./docs/logo.jpg)
+<img src="./docs/logo.jpg" width="200px" alt="./docs/logo.jpg">
 
 THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
 =====================================================
