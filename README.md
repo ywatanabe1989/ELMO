@@ -4,47 +4,48 @@
 !-- date: 2024-12-08 03:12:12
 !-- --- -->
 
+# 🥷 Ninja 🥷
 
-# SEMACS: Self-Evolving AI agent on Emacs
+███╗   ██╗██╗███╗   ██╗     ██╗ █████╗ 
+████╗  ██║██║████╗  ██║     ██║██╔══██╗
+██╔██╗ ██║██║██╔██╗ ██║     ██║███████║
+██║╚██╗██║██║██║╚██╗██║██   ██║██╔══██║
+██║ ╚████║██║██║ ╚████║╚█████╔╝██║  ██║
+╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚════╝ ╚═╝  ╚═╝
+=======================================
+Neural Intelligence Network Joint Agent
+v0.1.0
+=======================================
 
-``` plaintext
-███████╗███████╗███╗   ███╗ █████╗  ██████╗███████╗
-██╔════╝██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
-███████╗█████╗  ██╔████╔██║███████║██║     ███████╗
-╚════██║██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
-███████║███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
-╚══════╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
-===================================================
-Version 0.1.0
-```
+## Overview
+Ninja is an LLM agent system darting through Emacs. Born from MIT's AI Lab heritage, Emacs serves as the perfect dojo for AI agents with its:
+- Full CUI operations
+- Visualization prowess
+- Battle-tested interfaces
+- Self-crafting nature
 
-## Introduction
-Semacs is an LLM agents system written in Elisp, and runs on Emacs within Apptainer. The choice of Emacs is well-founded because of its:
-- Full control via CUI — seamless connection between users and agents
-- Built-in visualization capabilities (e.g., image rendering, web browsing)
-- Mature interfaces (e.g., programming execution, text editing, file managing)
-- Extensive ecosystems
-- Reproducibility (i.e., Semacs is written in Elisp and can write Elisp)
-
-Here, we revive Emacs — born in MIT's AI Lab in the 1970s — as an ideal platform for AI agents.
-
-
-NOW, THIS REPOSITORY IS UNDER DEVELOPMENT
-==========================================
-
-## Installation
-
+## Quick Start
 ```bash
-git clone https://github.com/ywatanabe1989/seamacs.git ~/.emacs.d/lisp/seamacs
-git clone https://github.com/ywatanabe1989/apptainer-utils.git ~/.bash.d/apptainer-utils
+# Clone repositories
+git clone https://github.com/user/ninja.git ~/.emacs.d/ninja
+git clone https://github.com/user/ninja-utils.git ~/.ninja/utils
+
+# Build and run container
+cd ~/.ninja
+apptainer build ninja.sif ninja.def
+apptainer run ninja.sif
 ```
 
-#### Apptainer
-
-``` bash
-apptainer_build_def2sand ./.apptainer/semacs/semacs.def
-apptainer run ./.apptainer/semacs/semacs.sandbox
-```
+## Status
+🚧 Currently under active development 
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
+
+
+<!-- ----------------------------------------
+ !-- ``` bash
+ !-- apptainer_build_def2sand ./.apptainer/ninja/definitions/ninja_v004.def
+ !-- less ./.apptainer/ninja/ninja.sandbox.log
+ !-- apptainer run ./.apptainer/ninja/ninja.sandbox
+ !-- ``` -->
