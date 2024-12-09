@@ -623,3 +623,8 @@ flycheck_*.el
 .old
 src/.old
 src/sea-setup-sea.log
+
+### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Apptainer.gitignore ###
+**/*.log
+**/*.sandbox/*
+**/*.sif
