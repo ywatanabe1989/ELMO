@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-03 16:42:33
 ;;; Time-stamp: <2024-12-03 16:42:33 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/sea-network.el
+;;; File: ./self-evolving-agent/src/semacs-network.el
 
 
 ;;; Commentary:
@@ -9,29 +9,29 @@
 
 ;;; Code:
 
-(require 'sea-run)
+(require 'semacs-run)
 
-(defvar sea-server-port 8080
+(defvar semacs-server-port 8080
   "Port for agent server.")
 
-(defvar sea-agents nil
+(defvar semacs-agents nil
   "List of active agents.")
 
-(cl-defstruct sea-agent
+(cl-defstruct semacs-agent
   id task status)
 
-(defun sea-start-server ()
+(defun semacs-start-server ()
   "Start agent server."
   (interactive)
   (make-network-process
-   :name "sea-server"
-   :buffer "*sea-server*"
-   :service sea-server-port
+   :name "semacs-server"
+   :buffer "*semacs-server*"
+   :service semacs-server-port
    :family 'ipv4
    :server t
-   :filter 'sea--server-filter))
+   :filter 'semacs--server-filter))
 
-(defun sea--server-filter (proc string)
+(defun semacs--server-filter (proc string)
   "Filter function for server process PROC with STRING input."
   (with-current-buffer (process-buffer proc)
     (goto-char (point-max))
@@ -39,27 +39,27 @@
     (when (string-match "\n" string)
       (let ((command (buffer-substring (point-min) (point-max))))
         (erase-buffer)
-        (sea-run command)))))
+        (semacs-run command)))))
 
-(defun sea-spawn-agents (tasks)
+(defun semacs-spawn-agents (tasks)
   "Spawn multiple agents for TASKS."
   (dolist (task tasks)
-    (push (make-sea-agent :id (cl-gensym)
+    (push (make-semacs-agent :id (cl-gensym)
                          :task task
                          :status 'pending)
-          sea-agents))
-  (sea--coordinate-agents))
+          semacs-agents))
+  (semacs--coordinate-agents))
 
-(defun sea--coordinate-agents ()
+(defun semacs--coordinate-agents ()
   "Coordinate multiple agents' activities."
-  (while sea-agents
-    (let ((agent (pop sea-agents)))
-      (sea--show-progress
+  (while semacs-agents
+    (let ((agent (pop semacs-agents)))
+      (semacs--show-progress
        (format "Agent %s processing: %s"
-               (sea-agent-id agent)
-               (sea-agent-task agent)))
-      (sea-run (sea-agent-task agent)))))
+               (semacs-agent-id agent)
+               (semacs-agent-task agent)))
+      (semacs-run (semacs-agent-task agent)))))
 
-(provide 'sea-network)
+(provide 'semacs-network)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

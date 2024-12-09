@@ -1,44 +1,44 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-05 22:45:23
 ;;; Time-stamp: <2024-12-05 22:45:23 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/sea-lang2elisp.el
+;;; File: ./self-evolving-agent/src/semacs-lang2elisp.el
 
 
-(require 'sea-config)
-(require 'sea-prompts)
-(require 'sea-utils)
-(require 'sea-version-control)
-(require 'sea-server)
-(require 'sea-logging)
+(require 'semacs-config)
+(require 'semacs-prompts)
+(require 'semacs-utils)
+(require 'semacs-version-control)
+(require 'semacs-server)
+(require 'semacs-logging)
 
 
 ;; ;; working
-;; (defun sea-to-full-prompt (prompt)
+;; (defun semacs-to-full-prompt (prompt)
 ;;   (condition-case err
-;;       (let* ((template (sea-get-prompt "lang2elisp" "authorities" "logging" "notes"))
-;;              (log-content (sea--get-log)))
+;;       (let* ((template (semacs-get-prompt "lang2elisp" "authorities" "logging" "notes"))
+;;              (log-content (semacs--get-log)))
 ;;         (when template
 ;;           (let ((prompt-with-template (replace-regexp-in-string "PLACEHOLDER" prompt template t t)))
 ;;             (if log-content
 ;;                 (concat prompt-with-template "\n\n" log-content)
 ;;               prompt-with-template))))
 ;;     (error
-;;      (sea--log-error (format "Failed to create full prompt.\nError: %s\nPrompt: %s"
+;;      (semacs--log-error (format "Failed to create full prompt.\nError: %s\nPrompt: %s"
 ;;                            (error-message-string err) prompt))
 ;;      nil)))
 
 ;; detailed error handling?
-(defun sea-to-full-prompt (prompt)
+(defun semacs-to-full-prompt (prompt)
   (condition-case err
       (let* ((template (condition-case err1
-                          (sea-get-prompt "lang2elisp" "authorities" "logging" "notes")
+                          (semacs-get-prompt "lang2elisp" "authorities" "logging" "notes")
                         (error
-                         (sea--log-error (format "Template fetch failed: %s" (error-message-string err1)))
+                         (semacs--log-error (format "Template fetch failed: %s" (error-message-string err1)))
                          nil)))
              (log-content (condition-case err2
-                             (sea--get-log)
+                             (semacs--get-log)
                            (error
-                            (sea--log-error (format "Log fetch failed: %s" (error-message-string err2)))
+                            (semacs--log-error (format "Log fetch failed: %s" (error-message-string err2)))
                             nil))))
         (when template
           (condition-case err3
@@ -47,28 +47,28 @@
                     (concat prompt-with-template "\n\n" log-content)
                   prompt-with-template))
             (error
-             (sea--log-error (format "Template substitution failed: %s" (error-message-string err3)))
+             (semacs--log-error (format "Template substitution failed: %s" (error-message-string err3)))
              nil))))
     (error
-     (sea--log-error (format "Full prompt creation failed: %s" (error-message-string err)))
+     (semacs--log-error (format "Full prompt creation failed: %s" (error-message-string err)))
      nil)))
 
  ;; "authorities" "logging" "notes"
-;; (sea-to-full-prompt "Hello")
+;; (semacs-to-full-prompt "Hello")
 
 
-(defun sea-prompt2response (prompt)
+(defun semacs-prompt2response (prompt)
   (interactive)
   (condition-case err
-      (let* ((full-prompt (sea-to-full-prompt prompt))
+      (let* ((full-prompt (semacs-to-full-prompt prompt))
              (response (request
                        "https://api.anthropic.com/v1/messages"
                        :type "POST"
                        :headers `(("content-type" . "application/json")
-                                ("x-api-key" . ,sea-anthropic-key)
+                                ("x-api-key" . ,semacs-anthropic-key)
                                 ("anthropic-version" . "2023-06-01"))
                        :data (json-encode
-                             `(("model" . ,sea-anthropic-engine)
+                             `(("model" . ,semacs-anthropic-engine)
                                ("max_tokens" . 8192)
                                ("messages" . [,(list (cons "role" "user")
                                                    (cons "content" full-prompt))])))
@@ -79,10 +79,10 @@
         (when resp-data
           (alist-get 'text (aref (alist-get 'content resp-data) 0))))
     (error
-     (sea--log-error (format "API request failed.\nError: %s\nPrompt: %s"
+     (semacs--log-error (format "API request failed.\nError: %s\nPrompt: %s"
                            (error-message-string err) prompt))
      nil)))
-;; (sea-prompt2response "hello world")
+;; (semacs-prompt2response "hello world")
 ;; returns:
 ;; "```json
 ;; {
@@ -95,7 +95,7 @@
 ;; }
 ;; ```"
 
-(defun sea--json-elisp-commands-to-elisp (json-data)
+(defun semacs--json-elisp-commands-to-elisp (json-data)
   (condition-case err
       (if (not (alist-get 'commands json-data))
           (error "No 'commands' field in JSON data: %s" json-data)
@@ -113,23 +113,23 @@
                        commands))))
           progn-form))
     (error
-     (sea--log-error
+     (semacs--log-error
       (format "JSON to Elisp conversion failed.\nError: %s\nInput JSON: %s"
               (error-message-string err)
               json-data))
      nil)))
 
-;; (defun sea--prompt-to-elisp (prompt)
+;; (defun semacs--prompt-to-elisp (prompt)
 ;;   (interactive)
 ;;   (let ((response-text nil))
 ;;     (condition-case err
 ;;         (progn
-;;           (setq response-text (sea-prompt2response prompt))
+;;           (setq response-text (semacs-prompt2response prompt))
 ;;           (let* ((json-str-clean (replace-regexp-in-string "```json\\|```" "" response-text))
 ;;                  (json-data (json-read-from-string json-str-clean)))
-;;             (sea--json-elisp-commands-to-elisp json-data)))
+;;             (semacs--json-elisp-commands-to-elisp json-data)))
 ;;       (error
-;;        (sea--log-error
+;;        (semacs--log-error
 ;;         (format "Failed to convert prompt to elisp.\nError: %s\nPrompt: %s\nResponse: %s"
 ;;                 (error-message-string err) prompt response-text))
 ;;        nil))))
@@ -138,7 +138,7 @@
 
 
 
-(defun sea--extract-json-blocks (text)
+(defun semacs--extract-json-blocks (text)
   "Extract all JSON blocks between ```json and ``` markers from TEXT."
   (let ((blocks nil)
         (start 0))
@@ -153,47 +153,47 @@
   (with-temp-buffer
     (insert-file-contents "/tmp/jsonfile.json")
     (let ((content (buffer-string)))
-      (sea--extract-json-blocks content))))
+      (semacs--extract-json-blocks content))))
 
 ; (test-json-extraction)
 
 
-(defun sea--prompt-to-elisp (prompt)
+(defun semacs--prompt-to-elisp (prompt)
   (interactive)
   (let ((response-text nil)
         (json-blocks nil)
         (commands nil))
     (condition-case err
-        (setq response-text (sea-prompt2response prompt))
+        (setq response-text (semacs-prompt2response prompt))
       (error
-       (sea--log-error
+       (semacs--log-error
         (format "API request failed.\nError: %s\nPrompt: %s"
                 (error-message-string err) prompt))
-       (signal 'sea-api-error err)))
+       (signal 'semacs-api-error err)))
 
     (when response-text
       (condition-case err
-          (setq json-blocks (sea--extract-json-blocks response-text))
+          (setq json-blocks (semacs--extract-json-blocks response-text))
         (error
-         (sea--log-error
+         (semacs--log-error
           (format "JSON extraction failed.\nError: %s\nResponse: %s"
                   (error-message-string err) response-text))
-         (signal 'sea-json-cleanup-error err)))
+         (signal 'semacs-json-cleanup-error err)))
 
       (condition-case err
           (setq commands
                 (mapcar (lambda (block)
                          (let ((json-data (json-read-from-string block)))
-                           (sea--json-elisp-commands-to-elisp json-data)))
+                           (semacs--json-elisp-commands-to-elisp json-data)))
                        json-blocks))
         (error
-         (sea--log-error
+         (semacs--log-error
           (format "JSON parsing/conversion failed.\nError: %s\nBlocks: %s"
                   (error-message-string err) json-blocks))
-         (signal 'sea-json-parse-error err)))
+         (signal 'semacs-json-parse-error err)))
 
       (cons 'progn commands))))
 
-(provide 'sea-lang2elisp)
+(provide 'semacs-lang2elisp)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
