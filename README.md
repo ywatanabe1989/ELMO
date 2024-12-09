@@ -6,7 +6,8 @@
 
 # Ninja — Neural Information Network of Joint Agents
 <p align="center">
-  <img src="./docs/logo.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/logo_09.jpg" width="250px" alt="./docs/logo.jpg">
+  <!-- <img src="./docs/logo.jpg" width="250px" alt="./docs/logo.jpg"> -->
   <!-- <br><br>
    !-- <img src="./docs/logos/logo_01.jpg" width="250px" alt="./docs/logo.jpg">
    !-- <br><br>  
