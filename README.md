@@ -19,7 +19,7 @@ Neural Information Network of Joint Agents
 THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
 =====================================================
 
-## Overview
+## Introduction
 Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
 - Full CUI operations with rich rendering functionalities 
 - Interfaces for hacking tools seasoned by history
