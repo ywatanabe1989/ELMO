@@ -20,9 +20,9 @@ Version 0.1.0
 
 ## Introduction
 Semacs is written in Elisp, run on Emacs, powered by LLMs, and containerized by Apptainer. The choice of Emacs is well-founded bacause of:
-- Built-in CUI/GUI functionality (= backend + frontend)
-- Full control via CUI, and thus naturally connected with LLMs
-- Extensive ecosystems: developers and tools
+- Full control via CUI: seamless connection among users and LLMs
+- Built-in GUI functionality
+- Extensive ecosystems
 - Mature programming interfaces
 
 Here, we revive Emacs — born in MIT's AI Lab in the 1970s — as an ideal platform for AI agents.
