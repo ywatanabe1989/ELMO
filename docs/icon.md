@@ -1,15 +1,10 @@
-<!-- ---
-!-- title: ./Semacs/README.md
-!-- author: ywatanabe
-!-- date: 2024-12-08 03:12:12
-!-- --- -->
+generate an icon for this repository: Ninja (Neural Information Network of Joint Agents)
 
-# Ninja: Neural Information Network of Joint Agents
-![logo](./docs/logo.jpg)
+==========================================
+Neural Information Network of Joint Agents
+==========================================
 
-THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
-=====================================================
-
+Neural Information Network of Joint Agents
 ## Introduction
 Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
 - Full CUI operations with rich GUI
