@@ -1,12 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-08 03:58:48 (ywatanabe)"
+# Time-stamp: "2024-12-09 10:43:35 (ywatanabe)"
 # File: ./Semacs/src/shell/install_emacs.sh
-
-# Check if running as root
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root" >&2
-   exit 1
-fi
 
 # Locale
 locale-gen en_US.UTF-8
@@ -14,8 +8,7 @@ echo "LANG=en_US.UTF-8" | tee /etc/default/locale
 echo "LC_ALL=en_US.UTF-8" | tee -a /etc/default/locale
 
 # Dependencies
-apt update
-apt install -y \
+apt-get update && apt install -y \
      w3m \
      autoconf \
      make \
@@ -50,7 +43,6 @@ apt install -y \
      libacl1-dev \
      > /dev/null
 export LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/12:$LIBRARY_PATH
-
 
 # Source
 version=29.4

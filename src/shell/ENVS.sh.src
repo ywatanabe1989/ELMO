@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-08 07:45:41 (ywatanabe)"
-# File: ./Semacs/src/shell/ENVS.sh.source
+# Time-stamp: "2024-12-09 10:28:49 (ywatanabe)"
+# File: ./Semacs/src/shell/apptainer_builders/ENVS.sh.source
 
 # Seamacs user
 export SEMACS_USER=semacs
@@ -10,10 +10,10 @@ export SEMACS_HOME=/home/$SEMACS_USER
 export SEMACS_DOT_EMACS=$SEMACS_HOME/.emacs.d
 
 # Seamacs project
-export SEMACS_OPT_DIR=/opt/$SEMACS_USER
+export SEMACS_OPT_DIR=/opt
 
 # Seamacs workspaces
-export SEMACS_WORKSPACES=/
+export SEMACS_WORKSPACES=""
 export SEMACS_WORKSPACE=$SEMACS_WORKSPACES/workspace
 export SEMACS_SRC=$SEMACS_WORKSPACES/src
 export SEMACS_LOGS=$SEMACS_WORKSPACES/logs
@@ -36,10 +36,10 @@ export SEMACS_MAX_RETRIES=5
 export SEMACS_API_TIMEOUT=30
 
 # LLM Configuration
-export ANTHROPIC_API_KEY="your-api-key-here"  # Claude API key from Anthropic
-export ANTHROPIC_ENGINE="claude-2"            # Using Claude 2 model
+export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY  # Claude API key from Anthropic
+export ANTHROPIC_ENGINE=$ANTHROPIC_ENGINE    # Using Claude 2 model
 
 # Python Configuration
-export VIRTUAL_ENV=$SEMACS_WORKSPACE/.env
-export PATH=$VIRTUAL_ENV/bin:$PATH
-export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH
+export PYTHON_VIRTUAL_ENV=$SEMACS_WORKSPACE/.env
+# export PATH=$VIRTUAL_ENV/bin:$PATH
+# export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH
