@@ -4,7 +4,7 @@
 !-- date: 2024-12-08 03:12:12
 !-- --- -->
 
-# Ninja (Neural Information Network of Joint Agents)
+# Ninja — Neural Information Network of Joint Agents
 <p align="center">
   <img src="./docs/logo.jpg" width="250px" alt="./docs/logo.jpg">
 </p>
