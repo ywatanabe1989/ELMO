@@ -7,7 +7,7 @@
 # Ninja — Neural Information Network of Joint Agents
 <p align="center">
   <img src="./docs/logos/logo_09.jpg" width="250px" alt="./docs/logo.jpg">
-  <img src="./docs/logos/logo_09.jpg" width="250px" alt="./docs/logo_14.jpg">  
+  <img src="./docs/logos/logo_14.jpg" width="250px" alt="./docs/logo_14.jpg">  
 </p>
 
 
@@ -32,6 +32,7 @@ git clone https://github.com/user/ninja-utils.git ~/.ninja/utils
 ## Developing
 ``` bash
 apptainer_build_def2sand ./.apptainer/ninja/ninja.def
+apptainer run ./.apptainer/ninja/ninja.sandbox
 less ./.apptainer/ninja/ninja.sandbox.log
 apptainer run ./.apptainer/ninja/ninja.sandbox
 ```

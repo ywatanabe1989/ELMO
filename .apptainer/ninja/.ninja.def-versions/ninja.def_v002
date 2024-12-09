@@ -62,28 +62,44 @@ From: ubuntu:latest
     $NINJA_OPT_DIR/Ninja/src/apptainer_builders/install_python.sh
 
 
-%runscript
-    echo "========================================"
-    echo "Runscript Section"
-    echo "========================================"
-
-    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
-        export HOME=$NINJA_HOME && cd $HOME
-        exec sudo -u $NINJA_USER sh -c bash $NINJA_OPT_DIR/Ninja/src/apptainer_builders/start_emacs.sh        
-
-    else
-        exec "$@"
-    fi
-
 %startscript
     echo "========================================"
     echo "Startscript Section"
     echo "========================================"
 
-    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+    . $NINJA_OPT_DIR/Ninja/src/apptainer_builders/ENVS.sh.src
     export HOME=$NINJA_HOME && cd $HOME
     exec sudo -u $NINJA_USER sh -c bash $NINJA_OPT_DIR/Ninja/src/apptainer_builders/start_emacs.sh
 
+%runscript
+    echo "========================================"
+    echo "Runscript Section"
+    echo "========================================"
 
-# apptainer_build_def2sand ./.apptainer/ninja/ninja.def
+    . $NINJA_OPT_DIR/Ninja/src/apptainer_builders/ENVS.sh.src
+    if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+        export HOME=$NINJA_HOME && cd $HOME
+        exec sudo -u $NINJA_USER sh -c bash $NINJA_OPT_DIR/Ninja/src/apptainer_builders/start_emacs.sh
+    else
+        exec "$@"
+    fi
+
+
+################################################################################
+# Now, this is a development stage, using sandbox.
+# This container aims to prepare reprodusable, safer, and more reliable environment
+# for the SEA project.
+#
+# apptainer build --fakeroot --sandbox ./apptainer/sea.sandbox ./apptainer/sea.def
+#
+# apptainer shell --writable --fakeroot --cleanenv ./apptainer/sea.sandbox
+# apptainer run --fakeroot ./apptainer/sea.sandbox
+################################################################################
+
+# su sea
+# cd
+# ln -s
+# ./start.sh
+# . /opt/self-evolving-agent/apptainer/envs.sh.source
+# ln -s /opt/self-evolving-agent/Ninja/src/.emacs.d /home/$NINJA_USER/.emacs.d
+# (find-file ~/.emacs.d/init.el)
