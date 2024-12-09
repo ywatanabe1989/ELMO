@@ -628,3 +628,5 @@ src/sea-setup-sea.log
 **/*.log
 **/*.sandbox/*
 **/*.sif
+**/build-temp-*
+.apptainer/ninja/definitions/build-temp-889387931/

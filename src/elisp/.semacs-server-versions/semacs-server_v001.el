@@ -1,86 +1,86 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 04:34:52
 ;;; Time-stamp: <2024-12-06 04:34:52 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/semacs-server.el
+;;; File: ./self-evolving-agent/src/ninja-server.el
 
 
 (require 'cl-lib)
-(require 'semacs-config)
-(require 'semacs-sudo)
+(require 'ninja-config)
+(require 'ninja-sudo)
 
-(defcustom semacs-server-check-interval 1
+(defcustom ninja-server-check-interval 1
   "Interval in seconds to check server status."
   :type 'integer
-  :group 'semacs-server)
+  :group 'ninja-server)
 
-(defun semacs-server-running-p ()
-  "Check if SEMACS server is running."
+(defun ninja-server-running-p ()
+  "Check if NINJA server is running."
   (interactive)
-  (semacs--run-sudo-server-script "status"))
-;; (semacs-server-running-p)
+  (ninja--run-sudo-server-script "status"))
+;; (ninja-server-running-p)
 
-(defun semacs-kill-server ()
-  "Stop SEMACS server."
+(defun ninja-kill-server ()
+  "Stop NINJA server."
   (interactive)
-  (semacs--run-sudo-server-script "stop"))
-;; (semacs-kill-server)
+  (ninja--run-sudo-server-script "stop"))
+;; (ninja-kill-server)
 
-(defun semacs-init-server ()
-  "Start SEMACS server."
+(defun ninja-init-server ()
+  "Start NINJA server."
   (interactive)
-  (semacs--run-sudo-server-script "start"))
+  (ninja--run-sudo-server-script "start"))
 
-(defun semacs-restart-server ()
-  "Restart SEMACS server."
+(defun ninja-restart-server ()
+  "Restart NINJA server."
   (interactive)
-  (semacs--run-sudo-server-script "restart"))
+  (ninja--run-sudo-server-script "restart"))
 
-(defun semacs-reload-server ()
-  "Restart SEMACS server."
+(defun ninja-reload-server ()
+  "Restart NINJA server."
   (interactive)
-  (semacs--run-sudo-server-script "execute '(load-file /home/semacs/.emacs.d/init.el)"))
+  (ninja--run-sudo-server-script "execute '(load-file /home/ninja/.emacs.d/init.el)"))
 
-(defun semacs-ensure-server ()
-  "Ensure SEMACS server is running."
+(defun ninja-ensure-server ()
+  "Ensure NINJA server is running."
   (interactive)
   (let ((was-started nil))
-    (unless (semacs-server-running-p)
-      (semacs-init-server)
+    (unless (ninja-server-running-p)
+      (ninja-init-server)
       (let ((attempts 0))
-        (while (and (not (semacs-server-running-p))
+        (while (and (not (ninja-server-running-p))
                     (< attempts 5))
-          (message "Waiting for server... (%s)" semacs-server-script-output)
-          (sleep-for semacs-server-check-interval)
+          (message "Waiting for server... (%s)" ninja-server-script-output)
+          (sleep-for ninja-server-check-interval)
           (cl-incf attempts))
         (setq was-started t)))
     was-started))
-;; (semacs-ensure-server)
+;; (ninja-ensure-server)
 
-(defun semacs-init-or-connect ()
+(defun ninja-init-or-connect ()
   "Initialize server if not running, then connect."
   (interactive)
-  (let ((result (semacs-ensure-server)))
-    (when (or result (semacs-server-running-p))
+  (let ((result (ninja-ensure-server)))
+    (when (or result (ninja-server-running-p))
       t)))
-;; (semacs-init-or-connect)
+;; (ninja-init-or-connect)
 
 
 
-(provide 'semacs-server)
+(provide 'ninja-server)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
-;; (semacs-kill-server)
-;; (semacs-server-running-p) ; nil
-;; (semacs-init-server) # works
-;; (semacs-server-running-p) ; t
-;; (semacs-kill-server)
-;; (semacs-server-running-p) ; nil
-;; (semacs-restart-server)
-;; (semacs-server-running-p) ; t
-;; (semacs-ensure-server)
-;; (semacs-init-or-connect)
-;; (semacs-exec-elisp-code "'\(message \"Hello SEMACS!!!\"\)'")
+;; (ninja-kill-server)
+;; (ninja-server-running-p) ; nil
+;; (ninja-init-server) # works
+;; (ninja-server-running-p) ; t
+;; (ninja-kill-server)
+;; (ninja-server-running-p) ; nil
+;; (ninja-restart-server)
+;; (ninja-server-running-p) ; t
+;; (ninja-ensure-server)
+;; (ninja-init-or-connect)
+;; (ninja-exec-elisp-code "'\(message \"Hello NINJA!!!\"\)'")
 
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
