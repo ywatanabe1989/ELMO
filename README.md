@@ -5,23 +5,27 @@
 !-- --- -->
 
 ``` plaintext
-   ███╗   ██╗██╗███╗   ██╗     ██╗ █████╗ 
-   ████╗  ██║██║████╗  ██║     ██║██╔══██╗
-   ██╔██╗ ██║██║██╔██╗ ██║     ██║███████║
-   ██║╚██╗██║██║██║╚██╗██║██   ██║██╔══██║
-   ██║ ╚████║██║██║ ╚████║╚█████╔╝██║  ██║
-   ╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚════╝ ╚═╝  ╚═╝
-==============================================
-🥷 Neural Intelligence Network Joint Agents 🥷
-==============================================
+ ███╗   ██╗██╗███╗   ██╗     ██╗ █████╗ 
+ ████╗  ██║██║████╗  ██║     ██║██╔══██╗
+ ██╔██╗ ██║██║██╔██╗ ██║     ██║███████║
+ ██║╚██╗██║██║██║╚██╗██║██   ██║██╔══██║
+ ██║ ╚████║██║██║ ╚████║╚█████╔╝██║  ██║
+ ╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚════╝ ╚═╝  ╚═╝
+==========================================
+Neural Information Network of Joint Agents
+==========================================
 ```
 
+THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
+=====================================================
+
 ## Overview
-Ninja is an LLM agent system darting through Emacs. Born from MIT's AI Lab heritage, Emacs serves as the perfect dojo for AI agents with its:
-- Full CUI operations
-- Visualization prowess
-- Battle-tested interfaces
-- Self-crafting nature
+Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
+- Full CUI operations with rich rendering functionalities 
+- Interfaces for hacking tools seasoned by history
+- Self-modifying system that reads, writes, and executes its own Elisp code
+
+Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a basis for AI agents.
 
 ## Quick Start
 ```bash
@@ -35,8 +39,6 @@ apptainer build ninja.sif ninja.def
 apptainer run ninja.sif
 ```
 
-## Status
-🚧 Currently under active development 
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
