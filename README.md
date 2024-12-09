@@ -7,6 +7,16 @@
 # Ninja — Neural Information Network of Joint Agents
 <p align="center">
   <img src="./docs/logo.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_01.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_02.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_03.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_04.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_05.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_06.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_07.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_08.jpg" width="250px" alt="./docs/logo.jpg">
+  <img src="./docs/logos/log_09.jpg" width="250px" alt="./docs/logo.jpg">  
+  <img src="./docs/logos/log_10.jpg" width="250px" alt="./docs/logo.jpg">    
 </p>
 
 
@@ -30,7 +40,7 @@ git clone https://github.com/user/ninja-utils.git ~/.ninja/utils
 
 ## Developing
 ``` bash
-apptainer_build_def2sand ./.apptainer/ninja/definitions/ninja_v004.def
+apptainer_build_def2sand ./.apptainer/ninja/ninja.def
 less ./.apptainer/ninja/ninja.sandbox.log
 apptainer run ./.apptainer/ninja/ninja.sandbox
 ```
