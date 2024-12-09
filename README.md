@@ -21,10 +21,10 @@ Version 0.1.0
 ## Introduction
 Semacs is an LLM agents system written in Elisp, and runs on Emacs within Apptainer. The choice of Emacs is well-founded because of its:
 - Full control via CUI — seamless connection between users and agents
-- Built-in GUI functionality
-- Mature interfaces — programming execution, text editing, file managing, image rendering, web browsing and more
+- Built-in visualization capabilities (e.g., image rendering, web browsing)
+- Mature interfaces (e.g., programming execution, text editing, file managing)
 - Extensive ecosystems
-- Reproducibility — Semacs can write Elisp
+- Reproducibility (i.e., Semacs is written in Elisp and can write Elisp)
 
 Here, we revive Emacs — born in MIT's AI Lab in the 1970s — as an ideal platform for AI agents.
 
