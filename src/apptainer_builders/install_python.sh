@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-09 10:29:10 (ywatanabe)"
-# File: ./Ninja/src/shell/apptainer_builders/install_python.sh
+# Time-stamp: "2024-12-10 09:22:58 (ywatanabe)"
+# File: ./ninja/src/apptainer_builders/install_python.sh
 
 THIS_DIR="$(dirname $0)"
 
@@ -9,14 +9,16 @@ apt install -y \
     python3-pip \
     python3-venv
 
+
 # Set up Python virtual environment
-sudo -u $NINJA_USER bash -c "python3 -m venv $PYTHON_VIRTUAL_ENV"
+python3 -m venv $PYTHON_VIRTUAL_ENV
 
 # Install Python packages
-sudo -u $NINJA_USER bash -c ". $PYTHON_VIRTUAL_ENV/bin/activate && pip install --upgrade pip"
-sudo -u $NINJA_USER bash -c ". $PYTHON_VIRTUAL_ENV/bin/activate && pip install $THIS_DIR/requirements.txt"
+. $PYTHON_VIRTUAL_ENV/bin/activate && pip install --upgrade pip
+. $PYTHON_VIRTUAL_ENV/bin/activate && pip install -r $THIS_DIR/requirements.txt
 
-
-
+# Fixme: chown: invalid user: 'ninja:ninja'
+# # Set permissions for NINJA_USER
+# chown -R $NINJA_USER:$NINJA_GROUP $PYTHON_VIRTUAL_ENV
 
 # EOF

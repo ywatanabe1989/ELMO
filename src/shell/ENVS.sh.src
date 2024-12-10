@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-09 23:14:24 (ywatanabe)"
-# File: ./Ninja/src/shell/ENVS.sh.src
+# Time-stamp: "2024-12-10 17:18:43 (ywatanabe)"
+# File: ./ninja/src/apptainer_builders/ENVS.sh.src
 
 
 # Host user
@@ -19,6 +19,7 @@ export NINJA_DOT_EMACS=$NINJA_HOME/.emacs.d
 
 # Ninja shared group
 export NINJA_AGENTS_GROUP=ninja-agents
+export NINJA_N_AGENTS=16
 
 # Seamacs project
 export NINJA_OPT_DIR=/opt
