@@ -1,0 +1,63 @@
+#!/bin/bash
+# Time-stamp: "2024-12-11 07:53:20 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/ENVS.sh.src
+
+
+# Host user
+export HOST_USER=$USER
+export HOST_UID=1000
+export HOST_GROUP=$USER
+export HOST_HOME=/home/$USER
+export HOST_DOT_EMACS=$HOST_HOME/.emacs.d
+
+# Ninja user
+export NINJA_USER=ninja
+export NINJA_UID=9999
+export NINJA_GROUP=ninja
+export NINJA_HOME=/home/$NINJA_USER
+export NINJA_DOT_EMACS=$NINJA_HOME/.emacs.d
+
+# Ninja shared group
+export NINJAS_GROUP=ninja-agents
+export NINJA_N_AGENTS=16
+
+# Ninja project
+export NINJA_OPT_DIR=/opt
+
+# Ninja workspaces
+export NINJA_WORKSPACES=""
+export NINJA_WORKSPACE=$NINJA_WORKSPACES/workspace
+export NINJA_SRC=$NINJA_WORKSPACES/src
+export NINJA_LOGS=$NINJA_WORKSPACES/logs
+export NINJA_CONFIG=$NINJA_WORKSPACES/config
+export NINJA_REQUESTS=$NINJA_WORKSPACES/requests
+export NINJA_BACKUPS=$NINJA_WORKSPACES/backups
+
+# Emacs Configuration
+export NINJA_EMACS_BIN=/usr/bin/emacs
+export NINJA_EMACS_CLIENT=/usr/bin/emacsclient
+# export NINJA_SERVER_SOCKET_DIR=$NINJA_DOT_EMACS
+# export NINJA_SERVER_SOCKET=$NINJA_SERVER_SOCKET_DIR/$NINJA_UID-server
+# FIXME
+export NINJA_SERVER_SOCKET_DIR=$HOST_DOT_EMACS
+export NINJA_SERVER_SOCKET=$NINJA_SERVER_SOCKET_DIR/server
+export NINJA_SERVER_CHECK_INTERVAL=1
+
+# Feedback Loop
+export NINJA_MAX_RETRIES=5
+export NINJA_API_TIMEOUT=30
+
+# LLM Configuration
+export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY  # Claude API key from Anthropic
+export ANTHROPIC_ENGINE=$ANTHROPIC_ENGINE    # Using Claude 2 model
+
+# Python Configuration
+export PYTHON_VIRTUAL_ENV=$NINJA_WORKSPACE/.env
+
+# Debian
+export DEBIAN_FRONTEND=noninteractive
+
+# PATH
+export PATH="/sbin:$PATH"
+# export PATH=$VIRTUAL_ENV/bin:$PATH
+# export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH

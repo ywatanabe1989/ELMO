@@ -1,8 +1,9 @@
 <!-- ---
-!-- title: ./Semacs/README.md
+!-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-08 03:12:12
+!-- date: 2024-12-11 14:03:39
 !-- --- -->
+
 
 # Ninja — Neural Information Network of Journaling Agents
 
@@ -19,14 +20,31 @@ Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a catalyst f
 
 ## Quick Start
 ```bash
-# Clone repositories
-git clone https://github.com/user/ninja.git ~/.emacs.d/ninja
-git clone https://github.com/user/ninja-utils.git ~/.ninja/utils
+git clone https://github.com/user/Ninja.git ~/.emacs.d/Ninja
 ```
+
+## Apptainer
+
+``` bash
+apptainer build \
+    --sandbox \
+    --fakeroot \
+    ./.apptainer/ninja/ninja.sandbox \
+    ./.apptainer/ninja/ninja.def \
+    2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
+    
+apptainer shell \
+     --fakeroot \
+     --writable \
+     ./.apptainer/ninja/ninja.sandbox
+# /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh
+```
+
+## Contact
+ywatanabe@alumni.u-tokyo.ac.jp
 
 ## Developing
 ``` bash
-apptainer_build_def2sand ./.apptainer/ninja/ninja.def
 apptainer run -f ./.apptainer/ninja/ninja.sandbox
 # ./.apptainer/ninja/ninja.sandbox.log
 # apptainer run --fakeroot ./.apptainer/ninja/ninja.sandbox # not working yet
@@ -35,18 +53,34 @@ apptainer run -f ./.apptainer/ninja/ninja.sandbox
 ./src/shell/launch_emacs.sh
 ```
 
-## Contact
-ywatanabe@alumni.u-tokyo.ac.jp
-
-
+``` bash
 source /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-/opt/Ninja/src/apptainer_builders/create_ninja_user.sh
+
+/home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/user_create_python_env.sh
+
+
+## HOME
+ls /home/ -alt
+ls /home/ninja-001/ -al
+cat /home/ninja-001/.bashrc
+ls /home/ninja-001/.emacs.d
+cat /home/ninja-001/.emacs.d/init.el
+tree /workspace
+
+
+su ninja-001
+ls /home/ninja-001 -al
+
+echo $NINJAS_GROUP
+
 echo $NINJA_USER
-groupadd -g 1000 ninja
-useradd -m -u 1000 -g ninja -s /bin/bash ninja
-echo "ninja:ninja" | chpasswd
-usermod -aG sudo ninja
-echo "ninja ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ninja
-chmod 0440 /etc/sudoers.d/ninja
-mkdir -p /home/ninja
-chown -R ninja:ninja /home/ninja
+echo $NINJA_WORKSPACES
+ls $NINJA_WORKSPACES
+# apptainer shell --fakeroot --writable ./.apptainer/ninja/ninja.sandbox
+
+
+# source /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+# /home/ywatanabe/.emacs.d/lisp/ninja/src/apptainer_builders/create_ninja_user.sh
+
+# ../ninja.sandbox.log
+```
