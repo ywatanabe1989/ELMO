@@ -1,14 +1,13 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-11 14:03:39
+!-- date: 2024-12-11 14:12:07
 !-- --- -->
 
 
 # Ninja — Neural Information Network of Journaling Agents
 
-THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
-=====================================================
+(THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
 
 ## Introduction
 Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
@@ -37,6 +36,7 @@ apptainer shell \
      --fakeroot \
      --writable \
      ./.apptainer/ninja/ninja.sandbox
+
 # /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh
 ```
 
@@ -51,36 +51,4 @@ apptainer run -f ./.apptainer/ninja/ninja.sandbox
 
 # Running Emacs from the Ninja user
 ./src/shell/launch_emacs.sh
-```
-
-``` bash
-source /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-
-/home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/user_create_python_env.sh
-
-
-## HOME
-ls /home/ -alt
-ls /home/ninja-001/ -al
-cat /home/ninja-001/.bashrc
-ls /home/ninja-001/.emacs.d
-cat /home/ninja-001/.emacs.d/init.el
-tree /workspace
-
-
-su ninja-001
-ls /home/ninja-001 -al
-
-echo $NINJAS_GROUP
-
-echo $NINJA_USER
-echo $NINJA_WORKSPACES
-ls $NINJA_WORKSPACES
-# apptainer shell --fakeroot --writable ./.apptainer/ninja/ninja.sandbox
-
-
-# source /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-# /home/ywatanabe/.emacs.d/lisp/ninja/src/apptainer_builders/create_ninja_user.sh
-
-# ../ninja.sandbox.log
 ```
