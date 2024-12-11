@@ -1,0 +1,165 @@
+Apptainer> /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh
+=== NINJA Environment Variables for ninja-001===
+HOSTNAME=ywata-note-win
+HOSTTYPE=x86_64
+HOST_DOT_EMACS=/home/ywatanabe/.emacs.d
+HOST_GROUP=ywatanabe
+HOST_HOME=/home/ywatanabe
+HOST_UID=1000
+HOST_USER=ywatanabe
+NINJAS_GROUP=ninja
+NINJA_API_TIMEOUT=30
+NINJA_BACKUPS=/workspace/ninja-001/backups
+NINJA_BASE_DOT_EMACS=/home/ninja/.emacs.d
+NINJA_BASE_HOME=/home/ninja
+NINJA_BASE_OPT_DIR=/opt
+NINJA_BASE_UID=9999
+NINJA_BASE_USER=ninja
+NINJA_CONFIG=/workspace/ninja-001/config
+NINJA_EMACS_BIN=/usr/bin/emacs
+NINJA_EMACS_CLIENT=/usr/bin/emacsclient
+NINJA_GROUP=ninja-001
+NINJA_HOME=/home/ninja-001
+NINJA_HOME_EMACSD=/home/ninja-001/.emacs.d
+NINJA_ID=1
+NINJA_LOGS=/workspace/ninja-001/logs
+NINJA_MAX_RETRIES=5
+NINJA_N_AGENTS=4
+NINJA_PYTHON_VIRTUAL_ENV=/workspace/ninja-001/.env
+NINJA_REQUESTS=/workspace/ninja-001/requests
+NINJA_SERVER_CHECK_INTERVAL=1
+NINJA_SERVER_SOCKET=/server
+NINJA_SERVER_SOCKET_DIR=
+NINJA_SHARED_BACKUPS=/workspace/shared/backups
+NINJA_SHARED_CONFIG=/workspace/shared/config
+NINJA_SHARED_LOGS=/workspace/shared/logs
+NINJA_SHARED_REQUESTS=/workspace/shared/requests
+NINJA_SHARED_SRC=/workspace/shared/src
+NINJA_SHARED_WORKSPACE=/workspace/shared
+NINJA_SRC=/workspace/ninja-001/src
+NINJA_UID=10000
+NINJA_USER=ninja-001
+NINJA_WORKSPACE=/workspace/ninja-001
+
+=== Checking User Setup ===
+Checking ninja-001...
+uid=10000(ninja-001) gid=10000(ninja-001) groups=10000(ninja-001),100(users),1001(ninja)
+drwxr-x--- 2 ninja-001 ninja 4096 Dec 11 13:29 /home/ninja-001
+-rwxr-x--- 1 ninja-001 ninja 6726 Dec 11 13:29 /home/ninja-001/.bashrc
+lrwxrwxrwx 1 ninja-001 ninja 47 Dec 11 13:29 /home/ninja-001/.emacs.d -> /opt/Ninja/src/apptainer_builders/shared_emacsd
+Checking ninja-002...
+uid=10001(ninja-002) gid=10001(ninja-002) groups=10001(ninja-002),100(users),1001(ninja)
+drwxr-x--- 2 ninja-002 ninja 4096 Dec 11 13:29 /home/ninja-002
+-rwxr-x--- 1 ninja-002 ninja 6726 Dec 11 13:29 /home/ninja-002/.bashrc
+lrwxrwxrwx 1 ninja-002 ninja 47 Dec 11 13:29 /home/ninja-002/.emacs.d -> /opt/Ninja/src/apptainer_builders/shared_emacsd
+Checking ninja-003...
+uid=10002(ninja-003) gid=10002(ninja-003) groups=10002(ninja-003),100(users),1001(ninja)
+drwxr-x--- 2 ninja-003 ninja 4096 Dec 11 13:29 /home/ninja-003
+-rwxr-x--- 1 ninja-003 ninja 6726 Dec 11 13:29 /home/ninja-003/.bashrc
+lrwxrwxrwx 1 ninja-003 ninja 47 Dec 11 13:29 /home/ninja-003/.emacs.d -> /opt/Ninja/src/apptainer_builders/shared_emacsd
+Checking ninja-004...
+uid=10003(ninja-004) gid=10003(ninja-004) groups=10003(ninja-004),100(users),1001(ninja)
+drwxr-x--- 2 ninja-004 ninja 4096 Dec 11 13:29 /home/ninja-004
+-rwxr-x--- 1 ninja-004 ninja 6726 Dec 11 13:29 /home/ninja-004/.bashrc
+lrwxrwxrwx 1 ninja-004 ninja 47 Dec 11 13:29 /home/ninja-004/.emacs.d -> /opt/Ninja/src/apptainer_builders/shared_emacsd
+
+=== Checking Workspace Structure ===
+/workspace
+├── ninja-001
+│   ├── backups
+│   ├── config
+│   ├── logs
+│   ├── requests
+│   └── src
+├── ninja-002
+│   ├── backups
+│   ├── config
+│   ├── logs
+│   ├── requests
+│   └── src
+├── ninja-003
+│   ├── backups
+│   ├── config
+│   ├── logs
+│   ├── requests
+│   └── src
+├── ninja-004
+│   ├── backups
+│   ├── config
+│   ├── logs
+│   ├── requests
+│   └── src
+└── shared
+    ├── backups
+    ├── config
+    ├── logs
+    ├── requests
+    └── src
+
+31 directories, 0 files
+
+=== Checking Permissions ===
+Checking /workspace/ninja-001 permissions...
+drwxr-s--- 8 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001
+drwxr-s--- 2 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001/src
+drwxr-s--- 2 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001/logs
+drwxr-s--- 2 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001/config
+drwxr-s--- 2 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001/requests
+drwxr-s--- 2 ninja-001 ninja 4096 Dec 11 13:29 /workspace/ninja-001/backups
+Checking /workspace/ninja-002 permissions...
+drwxr-s--- 8 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002
+drwxr-s--- 2 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002/src
+drwxr-s--- 2 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002/logs
+drwxr-s--- 2 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002/config
+drwxr-s--- 2 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002/requests
+drwxr-s--- 2 ninja-002 ninja 4096 Dec 11 13:29 /workspace/ninja-002/backups
+Checking /workspace/ninja-003 permissions...
+drwxr-s--- 8 ninja-003 ninja 4096 Dec 11 13:30 /workspace/ninja-003
+drwxr-s--- 2 ninja-003 ninja 4096 Dec 11 13:29 /workspace/ninja-003/src
+drwxr-s--- 2 ninja-003 ninja 4096 Dec 11 13:29 /workspace/ninja-003/logs
+drwxr-s--- 2 ninja-003 ninja 4096 Dec 11 13:29 /workspace/ninja-003/config
+drwxr-s--- 2 ninja-003 ninja 4096 Dec 11 13:29 /workspace/ninja-003/requests
+drwxr-s--- 2 ninja-003 ninja 4096 Dec 11 13:29 /workspace/ninja-003/backups
+Checking /workspace/ninja-004 permissions...
+drwxr-s--- 8 ninja-004 ninja 4096 Dec 11 13:30 /workspace/ninja-004
+drwxr-s--- 2 ninja-004 ninja 4096 Dec 11 13:29 /workspace/ninja-004/src
+drwxr-s--- 2 ninja-004 ninja 4096 Dec 11 13:29 /workspace/ninja-004/logs
+drwxr-s--- 2 ninja-004 ninja 4096 Dec 11 13:29 /workspace/ninja-004/config
+drwxr-s--- 2 ninja-004 ninja 4096 Dec 11 13:29 /workspace/ninja-004/requests
+drwxr-s--- 2 ninja-004 ninja 4096 Dec 11 13:29 /workspace/ninja-004/backups
+
+=== Checking User Environment for ninja-001 ===
+NINJA_REQUESTS=/workspace/ninja-001/requests
+NINJA_BACKUPS=/workspace/ninja-001/backups
+NINJA_BASE_UID=9999
+NINJA_SHARED_LOGS=/workspace/shared/logs
+NINJA_SHARED_SRC=/workspace/shared/src
+NINJA_API_TIMEOUT=30
+NINJA_BASE_OPT_DIR=/opt
+NINJA_BASE_HOME=/home/ninja
+NINJA_EMACS_BIN=/usr/bin/emacs
+NINJA_GROUP=ninja-001
+NINJA_CONFIG=/workspace/ninja-001/config
+NINJA_HOME_EMACSD=/home/ninja-001/.emacs.d
+NINJA_MAX_RETRIES=5
+NINJA_EMACS_CLIENT=/usr/bin/emacsclient
+NINJA_SRC=/workspace/ninja-001/src
+NINJA_SHARED_REQUESTS=/workspace/shared/requests
+NINJA_USER=ninja-001
+NINJA_SHARED_BACKUPS=/workspace/shared/backups
+NINJA_SERVER_SOCKET_DIR=
+NINJA_SHARED_CONFIG=/workspace/shared/config
+NINJA_SERVER_SOCKET=/server
+NINJA_ID=1
+NINJA_BASE_DOT_EMACS=/home/ninja/.emacs.d
+NINJA_SHARED_WORKSPACE=/workspace/shared
+NINJAS_GROUP=ninja
+NINJA_N_AGENTS=4
+NINJA_SERVER_CHECK_INTERVAL=1
+NINJA_WORKSPACE=/workspace/ninja-001
+NINJA_UID=10000
+NINJA_HOME=/home/ninja-001
+NINJA_BASE_USER=ninja
+NINJA_LOGS=/workspace/ninja-001/logs
+Python venv: /workspace/ninja-001/.env
+/usr/bin/python
