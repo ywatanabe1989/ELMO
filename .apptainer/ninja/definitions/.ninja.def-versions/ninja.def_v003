@@ -1,0 +1,84 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE \"`date`\"
+    DEFINITION_FILE_NAME \"`basename "$0"`\"
+
+%setup
+    echo "========================================"
+    echo "Setup Section"
+    echo "========================================"
+
+    # Envs
+    . ./src/apptainer_builders/ENVS.sh.src
+
+    # Copy source
+    . ./src/apptainer_builders/rsync_exclude_options.sh.src
+    mkdir -p ${APPTAINER_ROOTFS}/opt/Ninja/
+    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS --safe-links . ${APPTAINER_ROOTFS}/opt/Ninja/
+
+%post -c /bin/bash
+    echo "========================================"
+    echo "Post Section"
+    echo "========================================"
+
+    ########################################
+    # Environmental Variables
+    ########################################
+    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+    # cat /opt/Ninja/src/apptainer_builders/ENVS.sh.src >> $NINJA_HOME/.bashrc
+
+    ########################################
+    # Basic Setup
+    ########################################
+    /opt/Ninja/src/apptainer_builders/system_install_basic_apt_packages.sh
+    /opt/Ninja/src/apptainer_builders/system_install_emacs.sh
+    /opt/Ninja/src/apptainer_builders/system_install_python.sh
+    apt install -y tree
+
+    ########################################
+    # Ninja Users
+    ########################################
+    bash /opt/Ninja/src/apptainer_builders/user_create_ninja_users.sh
+    bash /opt/Ninja/src/apptainer_builders/user_create_working_directories.sh
+    bash /opt/Ninja/src/apptainer_builders/user_create_bashrc.sh
+    bash /opt/Ninja/src/apptainer_builders/user_create_emacsd.sh
+    # bash /opt/Ninja/src/apptainer_builders/user_create_python_env.sh
+
+#     ########################################
+#     # Permissions
+#     ########################################
+#     bash /opt/Ninja/src/apptainer_builders/user_correct_permissions.sh
+
+
+%runscript
+    echo "========================================"
+    echo "Runscript Section"
+    echo "========================================"
+
+    ninja_id=$1
+    shift
+
+    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+    update_ninja_envs $ninja_id
+
+#     if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
+#         export HOME=$NINJA_HOME && cd $HOME
+#         exec sudo $NINJA_USER /bin/bash
+#         # exec sudo -u $NINJA_USER sh -c bash /opt/Ninja/src/apptainer_builders/start_emacs.sh
+#     else
+#         exec "$@"
+#     fi
+
+%startscript
+    echo "========================================"
+    echo "Startscript Section"
+    echo "========================================"
+
+    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src # does not work
+    source /opt/Ninja/src/apptainer_builders/ENVS.sh.src # dev
+    # export HOME=$NINJA_HOME && cd $HOME
+    # exec sudo -u $NINJA_USER sh -c bash /opt/Ninja/src/apptainer_builders/start_emacs.sh
