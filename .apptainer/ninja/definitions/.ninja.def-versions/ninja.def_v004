@@ -30,13 +30,6 @@ From: ubuntu:latest
     ########################################
     . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
 
-    # ########################################
-    # # Dev
-    # ########################################    
-    # # Export all variables to APPTAINER_ENVIRONMENT
-    # env | grep "^HOST_\|^NINJA_\|^DEBIAN_\|^PYTHON_\|^PATH=" >> $APPTAINER_ENVIRONMENT
-    # ########################################    
-    
     ########################################
     # Basic Setup
     ########################################

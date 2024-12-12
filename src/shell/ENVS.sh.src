@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-11 13:46:28 (ywatanabe)"
+# Time-stamp: "2024-12-12 10:02:16 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/ENVS.sh.src
 
 # Host user
@@ -48,14 +48,22 @@ export ANTHROPIC_ENGINE=$ANTHROPIC_ENGINE
 # Python Configuration
 export PYTHON_BASE_VIRTUAL_ENV=$NINJA_BASE_WORKSPACE/.env
 
+
+################################################################################
+# System
+################################################################################
+if [ -n "$APPTAINER_CONTAINER" ]; then
+    export PS1="(A) \u $ "
+fi
+# export PS1="(A) \u $ "
+
+# export TERM=xterm-256color
+
 # Debian
 export DEBIAN_FRONTEND=noninteractive
 
-
 # PATH
 export PATH="/sbin:$PATH"
-# export PATH=$VIRTUAL_ENV/bin:$PATH
-# export PYTHONPATH=VIRTUAL_ENV/.env/bin:$PYTHONPATH
 
 update_ninja_envs() {
     local ninja_id="$1"
