@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-11 14:12:07
+!-- date: 2024-12-11 14:23:21
 !-- --- -->
 
 
@@ -45,6 +45,28 @@ ywatanabe@alumni.u-tokyo.ac.jp
 
 ## Developing
 ``` bash
+su ninja-001
+
+
+su ninja-001 && cd 
+su ninja-002
+echo $NINJA_HOME
+# no such directory: /home/ninja-001
+ls ~
+ls $HOME
+
+echo $TERM
+export TERM=xterm-256color
+clear      # Clear screen
+reset      # Reset terminal
+echo -e '\033c'  # ANSI escape sequence to clear
+
+
+
+su ninja-001
+
+
+
 apptainer run -f ./.apptainer/ninja/ninja.sandbox
 # ./.apptainer/ninja/ninja.sandbox.log
 # apptainer run --fakeroot ./.apptainer/ninja/ninja.sandbox # not working yet
