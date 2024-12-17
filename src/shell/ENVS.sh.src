@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-15 20:56:35 (ywatanabe)"
+# Time-stamp: "2024-12-18 05:43:00 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/ENVS.sh.src
 
 # Project
@@ -10,7 +10,7 @@ export HOST_USER=${HOST_USER:-$USER}
 export HOST_UID=${HOST_UID:-1000}
 export HOST_GROUP=${HOST_GROUP:-$USER}
 export HOST_HOME=${HOST_HOME:-/home/$USER}
-export HOST_DOT_EMACS=${HOST_DOT_EMACS:-$HOST_HOME/.emacs.d}
+export HOST_EMACSD=${HOST_EMACSD:-$HOST_HOME/.emacs.d}
 
 # Ninja user
 export NINJA_BASE_USER=${NINJA_BASE_USER:-ninja}
@@ -28,17 +28,14 @@ export NINJA_BASE_OPT_DIR=${NINJA_BASE_OPT_DIR:-/opt}
 # Ninja workspaces
 export NINJA_SHARED_WORKSPACE=${NINJA_SHARED_WORKSPACE:-/workspace/shared}
 export NINJA_SHARED_SRC=${NINJA_SHARED_SRC:-$NINJA_SHARED_WORKSPACE/src}
-export NINJA_SHARED_LOGS=${NINJA_SHARED_LOGS:-$NINJA_SHARED_WORKSPACE/logs}
-export NINJA_SHARED_CONFIG=${NINJA_SHARED_CONFIG:-$NINJA_SHARED_WORKSPACE/config}
-export NINJA_SHARED_REQUESTS=${NINJA_SHARED_REQUESTS:-$NINJA_SHARED_WORKSPACE/requests}
-export NINJA_SHARED_BACKUPS=${NINJA_SHARED_BACKUPS:-$NINJA_SHARED_WORKSPACE/backups}
 
 # Emacs Configuration
-export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-/usr/bin/emacs}
-export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-/usr/bin/emacsclient}
-# export NINJA_EMACSD=${NINJA_EMACSD:-$NINJA_HOME/.emacs.d}
-export NINJA_EMACS_SERVER_SOCKET_DIR=${NINJA_EMACS_SERVER_SOCKET_DIR:-"/tmp/ninja-shared/"}
-export NINJA_EMACS_SERVER_SOCKET=${NINJA_EMACS_SERVER_SOCKET:-$NINJA_EMACS_SERVER_SOCKET_DIR/server}
+export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-emacs}
+export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-emacsclient}
+# export NINJA_EMACSD_PRIVATE
+export NINJA_EMACSD_SHARED=/opt/Ninja/src/apptainer_builders/shared_emacsd
+# export NINJA_EMACS_SERVER_DIR
+# export NINJA_EMACS_SERVER_FILE
 export NINJA_EMACS_SERVER_CHECK_INTERVAL=${NINJA_EMACS_SERVER_CHECK_INTERVAL:-1}
 
 # Feedback Loop
@@ -46,8 +43,8 @@ export NINJA_MAX_RETRIES=${NINJA_MAX_RETRIES:-5}
 export NINJA_API_TIMEOUT=${NINJA_API_TIMEOUT:-30}
 
 # LLM Configuration
-export ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-""}
-export ANTHROPIC_ENGINE=${ANTHROPIC_ENGINE:-""}
+export LLM_API_KEY=${LLM_API_KEY:-""}
+export LLM_ENGINE=${LLM_ENGINE:-""}
 
 # Python Configuration
 export PYTHON_BASE_VIRTUAL_ENV=${PYTHON_BASE_VIRTUAL_ENV:-$NINJA_BASE_WORKSPACE/.env}
@@ -78,17 +75,12 @@ update_ninja_envs() {
 
     # Ninja workspaces
     NINJA_WORKSPACE="/workspace/$NINJA_USER"
-    NINJA_SRC="$NINJA_WORKSPACE/src"
-    NINJA_LOGS="$NINJA_WORKSPACE/logs"
-    NINJA_CONFIG="$NINJA_WORKSPACE/config"
-    NINJA_REQUESTS="$NINJA_WORKSPACE/requests"
-    NINJA_BACKUPS="$NINJA_WORKSPACE/backups"
 
-    # # Emacs Configuration
-    export NINJA_EMACSD=${NINJA_EMACSD:-$NINJA_HOME/.emacs.d}
+    # Emacs Configuration
+    NINJA_EMACSD_PRIVATE=${NINJA_EMACSD_PRIVATE:"$NINJA_HOME/.emacs.d"}
+    NINJA_EMACS_SERVER_DIR=${NINJA_EMACS_SERVER_DIR:-"$NINJA_HOME/emacs-server"}
+    NINJA_EMACS_SERVER_FILE=${NINJA_EMACS_SERVER_FILE:-$NINJA_EMACS_SERVER_DIR/server}
 
-    # Python Configuration
-    NINJA_PYTHON_VIRTUAL_ENV="$NINJA_WORKSPACE/.env"
 
     # Export all variables
     export NINJA_ID \
@@ -96,19 +88,10 @@ update_ninja_envs() {
            NINJA_UID \
            NINJA_GROUP \
            NINJA_HOME \
-           NINJA_HOME_EMACSD \
-           NINJA_OPT_DIR \
-           NINJA_WORKSPACES \
            NINJA_WORKSPACE \
-           NINJA_SRC \
-           NINJA_LOGS \
-           NINJA_CONFIG \
-           NINJA_REQUESTS \
-           NINJA_BACKUPS \
-           NINJA_EMACSD \
-           NINJA_EMACS_SERVER_SOCKET_DIR \
-           NINJA_EMACS_SERVER_SOCKET \
-           PYTHON_VIRTUAL_ENV
+           NINJA_EMACSD_PRIVATE \
+           NINJA_EMACS_SERVER_DIR \
+           NINJA_EMACS_SERVER_FILE
 }
 
 # Check if NINJA_ID is set
