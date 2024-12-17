@@ -1,0 +1,23 @@
+#!/bin/bash
+# Time-stamp: "2024-12-17 18:01:15 (ywatanabe)"
+# File: ./Ninja/src/shell/apptainer_builders/rsync_exclude_options.sh.src
+
+
+export RSYNC_OPTIONS="-av \
+    --safe-links \
+    --include='**/apptainer_builders/**' \
+    --include='**/apptainer_builders' \
+    --exclude=**/.git \
+    --exclude=**/*.sandbox \
+    --exclude=**/*.sif \
+    --exclude=**/var/run \
+    --exclude=**/postgresql \
+    --exclude=**/containerd \
+    --exclude=**/__pycache__ \
+    --exclude=**/*docker* \
+    --exclude=**/.apptainer \
+    --exclude=**/.old \
+    --exclude=**/.* \
+    --exclude=**/*cache* \
+    --exclude='**/build-temp*'
+"
