@@ -30,12 +30,12 @@ chmod -R 770 $NINJA_HOME || exit 1
 chown -R $NINJA_USER:$NINJA_GROUP $NINJA_HOME || exit 1
 
 # Set socket directory permissions
-mkdir -p $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
-chmod 2775 $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
-chgrp $NINJA_GROUP $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
+mkdir -p $NINJA_EMACS_SERVER_DIR || exit 1
+chmod 2775 $NINJA_EMACS_SERVER_DIR || exit 1
+chgrp $NINJA_GROUP $NINJA_EMACS_SERVER_DIR || exit 1
 
 # Set socket file permissions (if exists)
-[ -S "$NINJA_EMACS_SERVER_SOCKET" ] && { chmod 660 "$NINJA_EMACS_SERVER_SOCKET" || exit 1; }
-[ -S "$NINJA_EMACS_SERVER_SOCKET" ] && { chgrp $NINJA_GROUP "$NINJA_EMACS_SERVER_SOCKET" || exit 1; }
+[ -S "$NINJA_EMACS_SERVER_FILE" ] && { chmod 660 "$NINJA_EMACS_SERVER_FILE" || exit 1; }
+[ -S "$NINJA_EMACS_SERVER_FILE" ] && { chgrp $NINJA_GROUP "$NINJA_EMACS_SERVER_FILE" || exit 1; }
 
 # EOF

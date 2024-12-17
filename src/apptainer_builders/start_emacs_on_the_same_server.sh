@@ -11,26 +11,26 @@ fi
 source "$(dirname $0)"/ENVS.sh.src
 
 rm_socket() {
-    if [ -d "$NINJA_EMACS_SERVER_SOCKET_DIR" ]; then
-        rm -rf "$NINJA_EMACS_SERVER_SOCKET_DIR"
+    if [ -d "$NINJA_EMACS_SERVER_DIR" ]; then
+        rm -rf "$NINJA_EMACS_SERVER_DIR"
     fi
 }
 
 correct_socket_dir_permissions() {
 
-    mkdir -p "$NINJA_EMACS_SERVER_SOCKET_DIR"
-    chown root:"$NINJAS_GROUP" "$NINJA_EMACS_SERVER_SOCKET_DIR"
-    chmod 770 "$NINJA_EMACS_SERVER_SOCKET_DIR"
+    mkdir -p "$NINJA_EMACS_SERVER_DIR"
+    chown root:"$NINJAS_GROUP" "$NINJA_EMACS_SERVER_DIR"
+    chmod 770 "$NINJA_EMACS_SERVER_DIR"
     if [ $? -ne 0 ]; then
-        echo "Error setting permissions for $NINJA_EMACS_SERVER_SOCKET_DIR" >&2
+        echo "Error setting permissions for $NINJA_EMACS_SERVER_DIR" >&2
         exit 1
     fi
 
     echo ""
     echo "----------------------------------------"
     echo "Socket directory permissions were corrected."
-    echo "$NINJA_EMACS_SERVER_SOCKET_DIR"
-    ls "$NINJA_EMACS_SERVER_SOCKET_DIR" -al
+    echo "$NINJA_EMACS_SERVER_DIR"
+    ls "$NINJA_EMACS_SERVER_DIR" -al
     echo "----------------------------------------"
     echo ""
 }
@@ -38,7 +38,7 @@ correct_socket_dir_permissions() {
 
 correct_socket_permissions() {
     local socket_dir
-    socket_dir=$(dirname "$NINJA_EMACS_SERVER_SOCKET")
+    socket_dir=$(dirname "$NINJA_EMACS_SERVER_FILE")
     if [ -d "$socket_dir" ]; then
         chown -R root:"$NINJAS_GROUP" "$socket_dir"
         chmod -R 770 "$socket_dir"
@@ -50,8 +50,8 @@ correct_socket_permissions() {
     echo ""
     echo "----------------------------------------"
     echo "Socket permissions were corrected."
-    echo "$NINJA_EMACS_SERVER_SOCKET"
-    ls "$NINJA_EMACS_SERVER_SOCKET" -al
+    echo "$NINJA_EMACS_SERVER_FILE"
+    ls "$NINJA_EMACS_SERVER_FILE" -al
     echo "----------------------------------------"
     echo ""
 }
@@ -61,13 +61,13 @@ debugging_echo() {
     echo "User: $NINJA_USER"
 
     # Socket directory
-    echo "Socket Directory: $NINJA_EMACS_SERVER_SOCKET_DIR"
-    ls "$NINJA_EMACS_SERVER_SOCKET_DIR" -al
+    echo "Socket Directory: $NINJA_EMACS_SERVER_DIR"
+    ls "$NINJA_EMACS_SERVER_DIR" -al
 
     # Socket
-    echo "Socket: $NINJA_EMACS_SERVER_SOCKET"
-    if [ -S "$NINJA_EMACS_SERVER_SOCKET" ]; then
-        ls "$NINJA_EMACS_SERVER_SOCKET" -al
+    echo "Socket: $NINJA_EMACS_SERVER_FILE"
+    if [ -S "$NINJA_EMACS_SERVER_FILE" ]; then
+        ls "$NINJA_EMACS_SERVER_FILE" -al
     fi
 }
 
@@ -82,7 +82,7 @@ display_check() {
 
 get_connected_clients() {
     local count
-    count=$("$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_SOCKET" --eval '(message (length server-clients))')
+    count=$("$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_FILE" --eval '(message (length server-clients))')
 
     echo ""
     echo "========================================"
@@ -94,19 +94,19 @@ get_connected_clients() {
 connect_user() {
     local current_user="$1"
     local current_display="$2"
-    su - $current_user -c "DISPLAY=$current_display $NINJA_EMACS_CLIENT -c -s $NINJA_EMACS_SERVER_SOCKET &"
+    su - $current_user -c "DISPLAY=$current_display $NINJA_EMACS_CLIENT -c -s $NINJA_EMACS_SERVER_FILE &"
     get_connected_clients
 }
 
 
 kill_emacs() {
-    echo "pkill -9 -f \"$NINJA_EMACS_CLIENT.*$NINJA_EMACS_SERVER_SOCKET\""
-    pkill -9 -f "$NINJA_EMACS_CLIENT.*$NINJA_EMACS_SERVER_SOCKET"
+    echo "pkill -9 -f \"$NINJA_EMACS_CLIENT.*$NINJA_EMACS_SERVER_FILE\""
+    pkill -9 -f "$NINJA_EMACS_CLIENT.*$NINJA_EMACS_SERVER_FILE"
 
 }
 
 connect_gui() {
-    DISPLAY="$DISPLAY" "$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_SOCKET" -c &
+    DISPLAY="$DISPLAY" "$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_FILE" -c &
 }
 
 start_emacs() {
@@ -116,7 +116,7 @@ start_emacs() {
     display_check
 
     # Start the emacs server before the loop
-    rm -f "$NINJA_EMACS_SERVER_SOCKET"
+    rm -f "$NINJA_EMACS_SERVER_FILE"
     kill_emacs
     echo "----------------------------------------"
     echo $HOME
@@ -126,22 +126,22 @@ start_emacs() {
     # # does not work due to .emacs.d
     # DISPLAY=$DISPLAY \
         #     $NINJA_EMACS_BIN \
-        #     --daemon=$NINJA_EMACS_SERVER_SOCKET &
+        #     --daemon=$NINJA_EMACS_SERVER_FILE &
     # Wrong type argument: frame-live-p, #<dead frame F2 Ox557eeba308fO>
 
     DISPLAY=$DISPLAY \
         $NINJA_EMACS_BIN \
-        --daemon=$NINJA_EMACS_SERVER_SOCKET \
+        --daemon=$NINJA_EMACS_SERVER_FILE \
         --init-directory=/opt/Ninja/src/apptainer_builders/shared_emacsd/ &
 
     # Wait for socket creation
-    while [ ! -S "$NINJA_EMACS_SERVER_SOCKET" ]; do
+    while [ ! -S "$NINJA_EMACS_SERVER_FILE" ]; do
         echo "Waiting for socket..."
         sleep 1
     done
 
     # # Working without loading init.el
-    # $NINJA_EMACS_BIN --daemon=$NINJA_EMACS_SERVER_SOCKET
+    # $NINJA_EMACS_BIN --daemon=$NINJA_EMACS_SERVER_FILE
     correct_socket_dir_permissions
     correct_socket_permissions
 
@@ -151,11 +151,11 @@ start_emacs() {
     connect_user ninja-004 :1
 
     # I would like to load host user's ~/.emacs.d
-    # DISPLAY=$DISPLAY $NINJA_EMACS_CLIENT /tmp/dev.el -s $NINJA_EMACS_SERVER_SOCKET -c &
+    # DISPLAY=$DISPLAY $NINJA_EMACS_CLIENT /tmp/dev.el -s $NINJA_EMACS_SERVER_FILE -c &
     connect_gui
 
     sleep 120
-    # $NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_SOCKET --eval '(length server-clients)'
+    # $NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_FILE --eval '(length server-clients)'
 }
 
 start_emacs
