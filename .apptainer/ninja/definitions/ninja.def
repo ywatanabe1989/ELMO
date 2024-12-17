@@ -16,9 +16,9 @@ From: ubuntu:latest
     . ./src/apptainer_builders/ENVS.sh.src
 
     # Copy source
-    . ./src/apptainer_builders/rsync_exclude_options.sh.src
+    . ./src/apptainer_builders/RSYNC_OPTIONS.sh.src
     mkdir -p ${APPTAINER_ROOTFS}/opt/Ninja/
-    rsync -avc $RSYNC_EXCLUDE_EXPRESSIONS --safe-links . ${APPTAINER_ROOTFS}/opt/Ninja/
+    rsync $RSYNC_OPTIONS . ${APPTAINER_ROOTFS}/opt/Ninja/
 
 %post -c /bin/bash
     echo "========================================"
@@ -29,13 +29,6 @@ From: ubuntu:latest
     # Environmental Variables
     ########################################
     . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-
-    # ########################################
-    # # Dev
-    # ########################################    
-    # # Export all variables to APPTAINER_ENVIRONMENT
-    # env | grep "^HOST_\|^NINJA_\|^DEBIAN_\|^PYTHON_\|^PATH=" >> $APPTAINER_ENVIRONMENT
-    # ########################################    
     
     ########################################
     # Basic Setup
@@ -43,7 +36,7 @@ From: ubuntu:latest
     /opt/Ninja/src/apptainer_builders/system_install_basic_apt_packages.sh
     /opt/Ninja/src/apptainer_builders/system_install_emacs.sh
     /opt/Ninja/src/apptainer_builders/system_install_python.sh
-    apt install -y tree
+
 
     ########################################
     # Ninja Users
