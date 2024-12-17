@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-11 14:23:21
+!-- date: 2024-12-17 17:22:55
 !-- --- -->
 
 
@@ -31,46 +31,120 @@ apptainer build \
     ./.apptainer/ninja/ninja.sandbox \
     ./.apptainer/ninja/ninja.def \
     2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
-    
+
+cd
 apptainer shell \
+    --writable \
+    --fakeroot \
+    --bind /home/ywatanabe/.emacs.d:/root/.emacs.d \
+    /home/ywatanabe/.emacs.d/lisp/Ninja/.apptainer/ninja/ninja.sandbox
+
+
+# Working to open emacs using the host's .emacs.d
+apptainer shell \
+    --writable \
+    --fakeroot \
+    --env USER=root \
+    --env LOGNAME=root \
+    --bind "/home/ywatanabe/.dotfiles/.emacs.d:/root/.emacs.d" \
+    --bind "/home/ywatanabe:/home/ywatanabe" \
+    --bind "/home/ywatanabe:/root" \
+    --home /root \
+    /home/ywatanabe/.emacs.d/lisp/Ninja/.apptainer/ninja/ninja.sandbox
+# Apptainer > emacs
+# --bind "/tmp/ninja-shared:/tmp/ninja-shared" \
+
+
+apptainer shell \
+    --writable \
+    --fakeroot \
+    --env USER=root \
+    --env LOGNAME=root \
+    --bind "/home/ywatanabe/.dotfiles/.emacs.d:/root/.emacs.d" \
+    --bind "/home/ywatanabe:/home/ywatanabe" \
+    --bind "/home/ywatanabe:/root" \
+    --home /root \
+    /home/ywatanabe/.emacs.d/lisp/Ninja/.apptainer/ninja/ninja.sandbox
+
+
+apptainer run \
+    --writable \
+    --fakeroot \
+    --env USER=root \
+    --env LOGNAME=root \
+    --bind "/home/ywatanabe/.dotfiles/.emacs.d:/root/.emacs.d" \
+    --bind "/home/ywatanabe:/home/ywatanabe" \
+    --bind "/home/ywatanabe:/root" \
+    --home /root \
+    /home/ywatanabe/.emacs.d/lisp/Ninja/.apptainer/ninja/ninja.sandbox
+
+kill_grep ninja -f
+apptainer run \
+    --writable \
+    --fakeroot \
+    --env USER=root \
+    --env LOGNAME=root \
+    --env HOME=/root \
+    --env DISPLAY=$DISPLAY \
+    --bind "/home/ywatanabe/.dotfiles/.emacs.d:/root/.emacs.d" \
+    --bind "/home/ywatanabe:/home/ywatanabe" \
+    --bind "/home/ywatanabe:/root" \
+    --bind /tmp/.X11-unix:/tmp/.X11-unix \
+    --home /root \
+    /home/ywatanabe/.emacs.d/lisp/Ninja/.apptainer/ninja/ninja.sandbox
+
+
+
+emacs --init-directory=/root/.emacs.d
+
+HOME=$MYHOME emacs
+
+apptainer shell \
+     --bind /home/$USER:/root \
      --fakeroot \
      --writable \
      ./.apptainer/ninja/ninja.sandbox
 
-# /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh
+
+
+apptainer run \
+    --fakeroot \
+    --writable \
+    ./.apptainer/ninja/ninja.sandbox
 ```
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
 
-## Developing
-``` bash
-su ninja-001
-
-
-su ninja-001 && cd 
-su ninja-002
-echo $NINJA_HOME
-# no such directory: /home/ninja-001
-ls ~
-ls $HOME
-
-echo $TERM
-export TERM=xterm-256color
-clear      # Clear screen
-reset      # Reset terminal
-echo -e '\033c'  # ANSI escape sequence to clear
-
-
-
-su ninja-001
-
-
-
-apptainer run -f ./.apptainer/ninja/ninja.sandbox
-# ./.apptainer/ninja/ninja.sandbox.log
-# apptainer run --fakeroot ./.apptainer/ninja/ninja.sandbox # not working yet
 
 # Running Emacs from the Ninja user
 ./src/shell/launch_emacs.sh
 ```
+
+
+arun_sw
+
+# ashell_sw
+
+less /opt/Ninja/src/apptainer_builders/ninja_environments.txt
+
+
+
+
+apptainer exec \
+    --fakeroot \
+    --writable \
+    --bind /home/$USER/.emacs.d:/root/.emacs.d \
+    --bind /home/$USER:/root \
+    --bind /home/$USER:/home/$USER \
+    --bind /tmp/.X11-unix:/tmp/.X11-unix \
+    --home /root \
+    ./.apptainer/ninja/ninja.sandbox \
+    /opt/Ninja/src/apptainer_builders/start_emacs.sh
+
+
+
+# (make-frame-on-display)
+(use-package crdt)
+(crdt-protocol-version)
+(crdt-share-buffer)

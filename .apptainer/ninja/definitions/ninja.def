@@ -18,7 +18,7 @@ From: ubuntu:latest
     # Copy source
     . ./src/apptainer_builders/rsync_exclude_options.sh.src
     mkdir -p ${APPTAINER_ROOTFS}/opt/Ninja/
-    rsync -a $RSYNC_EXCLUDE_EXPRESSIONS --safe-links . ${APPTAINER_ROOTFS}/opt/Ninja/
+    rsync -avc $RSYNC_EXCLUDE_EXPRESSIONS --safe-links . ${APPTAINER_ROOTFS}/opt/Ninja/
 
 %post -c /bin/bash
     echo "========================================"
@@ -61,30 +61,30 @@ From: ubuntu:latest
 
 
 %runscript
+    # `/.singularity.d/runscript`
     echo "========================================"
     echo "Runscript Section"
     echo "========================================"
 
-    ninja_id=$1
-    shift
-
     . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-    update_ninja_envs $ninja_id
 
-#     if [ "$1" = "emacs" ] || [ "$#" = 0 ]; then
-#         export HOME=$NINJA_HOME && cd $HOME
-#         exec sudo $NINJA_USER /bin/bash
-#         # exec sudo -u $NINJA_USER sh -c bash /opt/Ninja/src/apptainer_builders/start_emacs.sh
-#     else
-#         exec "$@"
-#     fi
+    # Check Ninja Environment
+    /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh > \
+    /opt/Ninja/src/apptainer_builders/ninja_environments.txt
+
+    # Start Emacs
+    /opt/Ninja/src/apptainer_builders/start_emacs.sh
 
 %startscript
+    # `/.singularity.d/startscript`
     echo "========================================"
     echo "Startscript Section"
     echo "========================================"
 
-    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src # does not work
-    source /opt/Ninja/src/apptainer_builders/ENVS.sh.src # dev
+    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+
+    /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh > \
+    /opt/Ninja/src/apptainer_builders/inja_environments.txt
+    
     # export HOME=$NINJA_HOME && cd $HOME
     # exec sudo -u $NINJA_USER sh -c bash /opt/Ninja/src/apptainer_builders/start_emacs.sh

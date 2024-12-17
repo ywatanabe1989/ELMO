@@ -1,18 +1,11 @@
 #!/bin/bash
-# Time-stamp: "2024-12-11 14:04:29 (ywatanabe)"
+# Time-stamp: "2024-12-16 19:55:14 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/check_ninja_environment.sh
 
 # Source environment variables
 THIS_DIR="$(dirname $0)"
 source "${THIS_DIR}/ENVS.sh.src"
 
-
-# check_ninja_envs() {
-#     echo "=== NINJA Environment Variables ==="
-#     compgen -v | grep '^NINJA\|^HOST' | while read var; do
-#         echo "$var=${!var}"
-#     done
-# }
 
 check_ninja_envs() {
     # Set NINJA_ID before checking variables
@@ -27,14 +20,6 @@ check_ninja_envs() {
     unset NINJA_ID
     source "${THIS_DIR}/ENVS.sh.src"
 }
-
-# check_basic_envs() {
-#     echo "=== Checking Basic Environment Variables ==="
-#     local vars=(NINJAS_GROUP NINJA_N_AGENTS)
-#     for var in "${vars[@]}"; do
-#         echo "$var: ${!var}"
-#     done
-# }
 
 check_user_setup() {
     echo -e "\n=== Checking User Setup ==="
@@ -66,17 +51,6 @@ check_permissions() {
     done
 }
 
-# check_user_environment() {
-#     echo -e "\n=== Checking User Environment ==="
-#     local test_user="ninja-001"
-#     echo "Testing as $test_user..."
-#     su - $test_user -c '
-#         echo "NINJA_USER: $NINJA_USER"
-#         echo "NINJA_WORKSPACE: $NINJA_WORKSPACE"
-#         echo "Python venv: "
-#         ls $NINJA_PYTHON_VIRTUAL_ENV/bin/python 2>/dev/null || echo "Python venv not found!"
-#     '
-# }
 check_user_environment() {
     local test_user="ninja-001"
     echo -e "\n=== Checking User Environment for $test_user ==="

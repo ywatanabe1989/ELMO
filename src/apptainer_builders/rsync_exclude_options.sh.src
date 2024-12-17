@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-09 15:36:47 (ywatanabe)"
+# Time-stamp: "2024-12-17 17:26:29 (ywatanabe)"
 # File: ./Ninja/src/shell/apptainer_builders/rsync_exclude_options.sh.src
 
 export RSYNC_EXCLUDE_EXPRESSIONS="
@@ -14,5 +14,6 @@ export RSYNC_EXCLUDE_EXPRESSIONS="
     --exclude='*apptainer*' \
     --exclude='*.apptainer*' \
     --exclude='.old' \
-    --exclude='.*'
-    "
+    --exclude='.*' \
+    --exclude='*cache*'
+"

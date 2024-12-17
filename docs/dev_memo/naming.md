@@ -1,11 +1,13 @@
 <!-- ---
-!-- title: ./Semacs/docs/naming.md
+!-- title: ./Ninja/docs/dev_memo/naming.md
 !-- author: ywatanabe
-!-- date: 2024-12-08 02:50:36
+!-- date: 2024-12-16 19:46:50
 !-- --- -->
 
 
 NINJA: Neural Intelligence Network Joint Agents
+
+interaction of Journaling Agents
 
 
 SAMURAI-NINJA

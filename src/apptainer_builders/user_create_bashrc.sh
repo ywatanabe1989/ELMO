@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-12 06:13:31 (ywatanabe)"
+# Time-stamp: "2024-12-15 18:26:28 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/user_create_bashrc.sh
 
 # Check if running as root
@@ -32,14 +32,14 @@ create_ninja_bashrc() {
 
     # NINJA_ID
     echo "" >> $NINJA_BASHRC
-    echo "========================================" >> $NINJA_BASHRC
+    echo "# ========================================" >> $NINJA_BASHRC
     echo "export NINJA_ID=$NINJA_ID" >> $NINJA_BASHRC
-    echo "========================================" >> $NINJA_BASHRC
+    echo "# ========================================" >> $NINJA_BASHRC
     echo "" >> $NINJA_BASHRC
 
     # NINJA_ENVS
     echo "" >> $NINJA_BASHRC
-    echo "========================================" >> $NINJA_BASHRC
+    echo "# ========================================" >> $NINJA_BASHRC
     echo "" >> $NINJA_BASHRC
     cat $ENVS_SRC >> $NINJA_BASHRC
 }

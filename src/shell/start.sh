@@ -1,8 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-05 02:55:03 (ywatanabe)"
-# File: ./self-evolving-agent/src/start.sh
+# Time-stamp: "2024-12-13 13:26:37 (ywatanabe)"
+# File: ./Ninja/src/shell/start.sh
 
-. /etc/profile.d/sea.sh
+# . /etc/profile.d/sea.sh
 $SEA_EMACS_CLIENT -e '(kill-emacs)'
 HOME=SEA_HOME $SEA_EMACS_BIN --daemon &
 for _ in seq 30; do

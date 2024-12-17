@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-11 12:33:38 (ywatanabe)"
-# File: ./Ninja/src/apptainer_builders/install_emacs.sh
+# Time-stamp: "2024-12-16 19:57:43 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/user_create_emacsd.sh
 
 # Check if running as root
 if [ "$(id -u)" != "0" ]; then
@@ -18,15 +18,15 @@ create_ninjas_emacsd() {
 
 create_ninja_emacsd() {
     local ninja_id="$1"
-    update_ninja_envs $ninja_id    
+    update_ninja_envs $ninja_id
 
     # Initialization
     rm -rf $NINJA_HOME_EMACSD
 
     # Softlink; (is copying better)
-    ln -sf /opt/Ninja/src/apptainer_builders/shared_emacsd $NINJA_HOME_EMACSD
+    ln -sf /opt/Ninja/src/apptainer_builders/shared_emacsd $NINJA_HOME/.emacs.d
     ln -sf /opt/Ninja/src/apptainer_builders/start_emacs.sh $NINJA_HOME/
-    }
+}
 
 create_ninjas_emacsd
 
