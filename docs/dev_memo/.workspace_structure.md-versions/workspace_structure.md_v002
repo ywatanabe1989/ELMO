@@ -1,0 +1,227 @@
+<!-- ---
+!-- title: ./Ninja/docs/dev_memo/workspace_structure.md
+!-- author: ywatanabe
+!-- date: 2024-12-15 05:54:52
+!-- --- -->
+
+# Blueprint 
+- I am creating a multi-agent system on emacs
+
+- please add/remove/organize the workspace structures below
+- Please avoid comments as structures should be self-explainatory
+- Please keep MECE
+- Please keep clean
+- Please keep minimal - simplicity is ultimate sophistication
+- Please consider self-evolving nature
+- Please consider scalability
+- Please add layer of shared/projects/individual
+- keep file based approach, mainly using text (.txt, .md, .json, ...) except for data
+- write exapmles, with solid templates for each element (e.g., prompt-template.txt))
+- Use tag system to efficient query
+- Keywords: Simple, maintainnable, scalable, readable, useful, self-evolving
+
+```
+workspace/
+├── shared/
+│   ├── agents/
+│   │   ├── README.md
+│   │   ├── templates/
+│   │   │   └── agent-template.md (tags: role, available tools, ...)
+│   │   └── configs/
+│   │       └── agent-config.json
+│   ├── tools/
+│   │   ├── README.md
+│   │   └── tool-{id}.md (tags: tool-name, usage via elisp)
+│   ├── prompts/
+│   │   ├── README.md
+│   │   └── prompt-template.md (tags: why, what, which, where, when, how, expected output, output format)
+│   └── system/
+│       ├── README.md
+│       ├── logs/
+│       │   └── system.log (tags: date, agent-id, error level (info, warnings, error, note))
+├── projects/
+│   ├── README.md (tags: ?)
+│   └── project-{id}/
+│       ├── README.md (tags: aim, assignments)
+│       ├── .env
+│       ├── scripts/
+│       ├── data/
+│       │   ├── README.md (tags: data_structure)
+│       │   └── dataset.{ext}
+│       ├── docs/
+│       │   ├── README.md (tags: task, status, issues)
+│       ├── outputs/
+│       │   ├── README.md (tags: ?)
+│       │   └── report-{id}/
+│       │       ├── README.md (tags: title, what's new, achieved)
+│       │       ├── data/ (symlink)
+│       │       └── report.pdf (tags: overview, methods, figures, tables)
+└── ninjas/
+    ├── README.md
+    └── ninja-{id}/
+        ├── profile.json (tags: ninja name in project, role, ...?)
+        ├── status.md (tags: todo, waiting, pending, done, canceled, reason)
+        ├── memory/
+        │   ├── README.md
+        │   ├── YYYY-MM-DD-<title>.md (tags: success, failure, tool, data, idea)
+        ├── messages/
+        │   ├── README.md
+
+        └── projects/
+            ├── README.md
+            └── project-{id}/
+                ├── README.md (tags: project title, project description, goal, background, methods, results, outputs, issues, progress, todo, pending, waiting, in-progress, done, canceled)
+                ├── forum.md
+                ├── messages/
+                │   ├── README.md
+                │   ├── inbox/
+                │   │   ├── README.md
+                │   │   └── YYYY-MM-DD-{subject}-from-<from>-to-<to>.md (tags: subject, from, to, cc, content, attachment, reference...)
+                │   └── outbox/
+                │       ├── README.md
+                │   │   └── YYYY-MM-DD-{subject}-from-<from>-to-<to>.md (tags: subject, from, to, cc, content, attachment, reference...)
+```
+---
+
+### **Incorporating a Tag System for Efficient Querying**
+
+To enable efficient querying and organization within Emacs, incorporate a tagging system directly into the metadata of each text-based file. This approach keeps the directory structure minimal and leverages Emacs' powerful text-handling capabilities.
+
+#### **Example Templates with Tags**
+
+- **`shared/prompts/prompt-template.md`**
+
+  ```markdown
+  ---
+  title: "[Prompt Title]"
+  tags: [prompt, template]
+  ---
+
+  # [Prompt Title]
+
+  [Prompt content goes here...]
+  ```
+
+- **`shared/agents/templates/agent-template.md`**
+
+  ```markdown
+  ---
+  name: "[Agent Name]"
+  id: agent-{id}
+  tags: [agent, template]
+  ---
+
+  # Agent: [Agent Name]
+
+  ## Description
+
+  [Detailed description of the agent.]
+
+  ## Capabilities
+
+  - [Capability 1]
+  - [Capability 2]
+  ```
+
+- **`projects/project-{id}/README.md`**
+
+  ```markdown
+  ---
+  title: "Project {id} Overview"
+  tags: [project, project-{id}]
+  ---
+
+  # Project {id} Overview
+
+  [Brief description of the project.]
+
+  ## Objectives
+
+  - [Objective 1]
+  - [Objective 2]
+  ```
+
+- **`projects/project-{id}/tasks/task-{id}.md`**
+
+  ```markdown
+  ---
+  title: "Task {id}"
+  tags: [project-{id}, task, ninja-{assigned_ninja_id}]
+  assigned_to: ninja-{assigned_ninja_id}
+  ---
+
+  # Task {id}
+
+  **Description:**
+
+  [Detailed task description.]
+
+  **Status:** [Status of the task]
+
+  **Due Date:** [YYYY-MM-DD]
+  ```
+
+- **`ninjas/ninja-{id}/memory/thoughts/ideas.md`**
+
+  ```markdown
+  ---
+  title: "Ideas and Thoughts"
+  tags: [ninja-{id}, thoughts, ideas]
+  ---
+
+  # Ideas and Thoughts
+
+  [Collection of ideas and reflections.]
+  ```
+
+- **`ninjas/ninja-{id}/projects/project-{id}/progress.md`**
+
+  ```markdown
+  ---
+  title: "Progress Report for Project {id}"
+  tags: [ninja-{id}, project-{id}, progress]
+  ---
+
+  # Progress Report
+
+  **Date:** [YYYY-MM-DD]
+
+  [Progress details and updates.]
+  ```
+
+---
+
+### **Leveraging Tags in Emacs**
+
+- **Search and Navigation:** Use Emacs features like `org-mode` or `helm` to search for files based on tags within the metadata headers.
+- **Organization:** Tags allow grouping of files across different directories, aiding in project management and collaboration.
+- **Automation:** Scripts or Emacs Lisp functions can parse these tags to automate tasks like generating summaries or updating statuses.
+
+---
+
+### **Ensuring MECE and Scalability**
+
+- **Mutually Exclusive:** Each directory and file serves a unique purpose without overlap.
+- **Collectively Exhaustive:** Combined, they cover all aspects of the multi-agent system.
+- **Scalability:** Adding new projects (`project-{id}`) or agents (`ninja-{id}`) follows the existing structure without modification.
+- **Self-Evolving:** Agents (ninjas) can update their own directories, and projects can grow organically.
+
+---
+
+### **File-Based Approach with Text Formats**
+
+- **Text Files:** Use `.md` (Markdown) for rich text formatting and easy readability.
+- **JSON Files:** Use `.json` for configurations and data that require a structured format.
+- **Data Files:** Store datasets in appropriate formats (`.csv`, `.npy`, `.pkl`) under the `data/` directories.
+
+---
+
+### **Summary**
+
+This organized workspace structure is designed to be minimal yet comprehensive, facilitating efficient development within an Emacs environment. By embedding tags within files and following a consistent directory layout, the system promotes ease of use, scalability, and adaptability.
+
+- **Shared Resources:** Centralized templates, configurations, tools, and prompts for use by all agents and projects.
+- **Projects:** Isolated project directories containing all necessary files, clearly structured for collaboration.
+- **Ninjas (Agents):** Individual directories for each agent, encapsulating their personal data, communications, and project contributions.
+
+This structure ensures clarity, simplicity, and efficiency, aligning with the principles of minimalism and sophistication you've outlined.

@@ -1,0 +1,57 @@
+#!/bin/bash
+# Time-stamp: "2024-12-15 19:14:08 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/start_emacs.sh
+
+# Check if running as root
+if [ "$(id -u)" != "0" ]; then
+    echo "This script ($0) must be run as root" >&2
+    exit 1
+fi
+
+source "$(dirname $0)"/ENVS.sh.src
+
+correct_socket_dir_permissions() {
+    rm -rf $NINJA_EMACS_SERVER_SOCKET_DIR
+    mkdir -p $NINJA_EMACS_SERVER_SOCKET_DIR
+    chown root:$NINJAS_GROUP $NINJA_EMACS_SERVER_SOCKET_DIR
+    chmod 777 $NINJA_EMACS_SERVER_SOCKET_DIR
+
+    echo "Socket directory: $NINJA_EMACS_SERVER_SOCKET_DIR"
+    ls $NINJA_EMACS_SERVER_SOCKET_DIR -al
+}
+
+correct_socket_permissions() {
+    chown root:$NINJAS_GROUP $NINJA_EMACS_SERVER_SOCKET
+    chmod 777 $NINJA_EMACS_SERVER_SOCKET
+
+    echo "Socket: $NINJA_EMACS_SERVER_SOCKE_DIR"
+    ls $NINJA_EMACS_SERVER_SOCKET -al
+}
+
+
+start_emacs() {
+    correct_socket_dir_permissions
+
+    for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
+        update_ninja_envs $ninja_id
+        export HOME=$NINJA_HOME
+        cd $HOME
+
+        correct_socket_permissions
+
+        echo "$NINJA_USER is connecting to $NINJA_EMACS_SERVER_SOCKET"
+        if [ ! -S "$NINJA_EMACS_SERVER_SOCKET" ]; then
+            ls $NINJA_HOME/.emacs.d/ -al
+            exec su - $NINJA_USER -c "'$NINJA_EMACS_BIN'"
+            exec su - $NINJA_USER -c "'$NINJA_EMACS_BIN' --daemon='$NINJA_EMACS_SERVER_SOCKET' $@"
+            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_SOCKET -c -n $@"
+        else
+            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_SOCKET $@"
+        fi
+    done
+}
+
+start_emacs
+
+
+# EOF

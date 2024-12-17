@@ -31,8 +31,8 @@ data/*
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Singularity.gitignore ###
 **/*.log
-**/*sandbox
-**/*.sif
+**/*sandbox*
+**/*.sif*
 **/*image
 **/image
 **/image.sif

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-11 14:03:12 (ywatanabe)"
+# Time-stamp: "2024-12-15 15:06:51 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/user_correct_permissions.sh
 
 # Check if running as root
@@ -29,6 +29,8 @@ correct_ninja_permissions() {
         chmod -R 750 $wdir >/dev/null
         chown -R $NINJA_USER:$NINJAS_GROUP $wdir >/dev/null
     done
+
+    NINJA_EMACSD
     }
 
 correct_shared_permissions() {
@@ -42,13 +44,13 @@ correct_shared_permissions
 
 
 # # Set socket directory permissions
-# mkdir -p $NINJA_SERVER_SOCKET_DIR || exit 1
-# chmod 2775 $NINJA_SERVER_SOCKET_DIR || exit 1
-# chgrp $NINJA_GROUP $NINJA_SERVER_SOCKET_DIR || exit 1
+# mkdir -p $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
+# chmod 2775 $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
+# chgrp $NINJA_GROUP $NINJA_EMACS_SERVER_SOCKET_DIR || exit 1
 
 # # Set socket file permissions (if exists)
-# [ -S "$NINJA_SERVER_SOCKET" ] && { chmod 660 "$NINJA_SERVER_SOCKET" || exit 1; }
-# [ -S "$NINJA_SERVER_SOCKET" ] && { chgrp $NINJA_GROUP "$NINJA_SERVER_SOCKET" || exit 1; }
+# [ -S "$NINJA_EMACS_SERVER_SOCKET" ] && { chmod 660 "$NINJA_EMACS_SERVER_SOCKET" || exit 1; }
+# [ -S "$NINJA_EMACS_SERVER_SOCKET" ] && { chgrp $NINJA_GROUP "$NINJA_EMACS_SERVER_SOCKET" || exit 1; }
 
 # ########################################
 # # sudo permissions

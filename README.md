@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-11 14:23:21
+!-- date: 2024-12-18 04:49:48
 !-- --- -->
 
 
@@ -31,46 +31,13 @@ apptainer build \
     ./.apptainer/ninja/ninja.sandbox \
     ./.apptainer/ninja/ninja.def \
     2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
-    
-apptainer shell \
-     --fakeroot \
-     --writable \
-     ./.apptainer/ninja/ninja.sandbox
 
-# /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh
+apptainer run \
+    --writable \
+    --fakeroot \
+    ./.apptainer/ninja/ninja.sandbox
 ```
 
 ## Contact
 ywatanabe@alumni.u-tokyo.ac.jp
-
-## Developing
-``` bash
-su ninja-001
-
-
-su ninja-001 && cd 
-su ninja-002
-echo $NINJA_HOME
-# no such directory: /home/ninja-001
-ls ~
-ls $HOME
-
-echo $TERM
-export TERM=xterm-256color
-clear      # Clear screen
-reset      # Reset terminal
-echo -e '\033c'  # ANSI escape sequence to clear
-
-
-
-su ninja-001
-
-
-
-apptainer run -f ./.apptainer/ninja/ninja.sandbox
-# ./.apptainer/ninja/ninja.sandbox.log
-# apptainer run --fakeroot ./.apptainer/ninja/ninja.sandbox # not working yet
-
-# Running Emacs from the Ninja user
-./src/shell/launch_emacs.sh
 ```

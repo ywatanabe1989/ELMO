@@ -5,11 +5,15 @@
 !-- --- -->
 
 
-- [ ] Apptainer
 - [ ] Working on the same Emacs server with the host user
-- [ ] Logging (SQL)
+- [ ] Logging
 - [ ] Feedback Loop
 - [ ] SSH
 - [ ] Web
-- [ ] Generate Agents
+  - [ ] BRAVE_SEARCH_API_KEY
+- [ ] CI/CD
+- [ ] Emacs Lisp's ERT (Emacs Lisp Regression Testing) framework
+- [ ] Centralized Logging
+- [ ] Monitoring Tools: Nagios, Prometheus, or custom Emacs Lisp scripts can be useful.
+- [ ] Dynamic Agent Provisioning
 

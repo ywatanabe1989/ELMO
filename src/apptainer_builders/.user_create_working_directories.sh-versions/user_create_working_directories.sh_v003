@@ -1,0 +1,235 @@
+#!/bin/bash
+# Time-stamp: "2024-12-16 20:16:38 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/user_create_working_directories.sh
+
+# # Check if running as root
+# if [ "$(id -u)" != "0" ]; then
+#     echo "This script ($0) must be run as root" >&2
+#     exit 1
+# fi
+
+# # Source environment variables
+# source "$(dirname $0)"/ENVS.sh.src
+
+setup_shared_dir() {
+    local workspace_dir="$1"
+    mkdir -p "$workspace_dir/shared/agents/templates"
+    touch "$workspace_dir/shared/agents/templates/agent-template.md"
+    mkdir -p "$workspace_dir/shared/agents/configs"
+    touch "$workspace_dir/shared/agents/configs/agent-config.json"
+    touch "$workspace_dir/shared/agents/README.md"
+
+    mkdir -p "$workspace_dir/shared/tools"
+    touch "$workspace_dir/shared/tools/README.md"
+    touch "$workspace_dir/shared/tools/tool-001.md"
+
+    mkdir -p "$workspace_dir/shared/prompts"
+    touch "$workspace_dir/shared/prompts/README.md"
+    touch "$workspace_dir/shared/prompts/prompt-template.md"
+
+    mkdir -p "$workspace_dir/shared/system/logs"
+    touch "$workspace_dir/shared/system/logs/system.log"
+    touch "$workspace_dir/shared/system/README.md"
+
+    touch "$workspace_dir/shared/TAGS.md"
+}
+
+setup_project_dir() {
+    local workspace_dir="$1"
+    local project_id="$2"
+    local timestamp="$3"
+
+    mkdir -p "$workspace_dir/projects/project-$project_id/scripts"
+    mkdir -p "$workspace_dir/projects/project-$project_id/data"
+    touch "$workspace_dir/projects/project-$project_id/data/README.md"
+    touch "$workspace_dir/projects/project-$project_id/data/dataset.txt"
+    mkdir -p "$workspace_dir/projects/project-$project_id/docs"
+    touch "$workspace_dir/projects/project-$project_id/docs/README.md"
+    mkdir -p "$workspace_dir/projects/project-$project_id/outputs/report-001"
+    touch "$workspace_dir/projects/project-$project_id/outputs/report-001/README.md"
+    mkdir -p "$workspace_dir/projects/project-$project_id/outputs"
+    touch "$workspace_dir/projects/project-$project_id/outputs/README.md"
+    ln -s "$workspace_dir/projects/project-$project_id/data" "$workspace_dir/projects/project-$project_id/outputs/report-001/data"
+    touch "$workspace_dir/projects/project-$project_id/outputs/report-001/report.pdf"
+
+    mkdir -p "$workspace_dir/projects/project-$project_id/issues"
+    touch "$workspace_dir/projects/project-$project_id/issues/$timestamp-TITLE-001.md"
+    touch "$workspace_dir/projects/project-$project_id/.env"
+    touch "$workspace_dir/projects/project-$project_id/README.md"
+    touch "$workspace_dir/projects/README.md"
+}
+
+setup_ninja_dir() {
+    local workspace_dir="$1"
+    local ninja_id="$2"
+    local project_id="$3"
+    local timestamp="$4"
+
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/memory"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/memory/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/memory/$timestamp-TITLE.md"
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/messages/inbox"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/messages/inbox/README.md"
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/messages/outbox"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/messages/outbox/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/messages/README.md"
+
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/inbox"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/inbox/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/inbox/2024-12-17-SUBJECT-from-USER1-to-USER2.md"
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/outbox"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/outbox/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/outbox/2024-12-17-SUBJECT-from-USER1-to-USER2.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/messages/README.md"
+
+    mkdir -p "$workspace_dir/ninjas/ninja-$ninja_id/projects"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/project-$project_id/forum.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/projects/README.md"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/profile.json"
+    touch "$workspace_dir/ninjas/ninja-$ninja_id/status.md"
+    touch "$workspace_dir/ninjas/README.md"
+}
+
+setup_workspace() {
+    local workspace_dir="/workspace"
+    local timestamp=$(date +%Y-%m-%d-%H-%M-%S)
+    local ninja_id="001"
+    local project_id="001"
+    mkdir -p "$workspace_dir"
+
+    setup_shared_dir "$workspace_dir"
+    setup_project_dir "$workspace_dir" "$project_id" "$timestamp"
+    setup_ninja_dir "$workspace_dir" "$ninja_id" "$project_id" "$timestamp"
+
+    echo ""
+    echo "========================================"
+    echo "Workspace setup complete in $workspace_dir"
+    echo "========================================"
+    echo ""
+
+    tree /workspace/ninjas
+    tree /workspace/projects
+    tree /workspace/shared
+
+}
+
+rm -rf /workspace/ninjas
+rm -rf /workspace/projects
+rm -rf /workspace/shared
+
+setup_workspace
+
+
+# setup_workspace() {
+#     local workspace_dir="/workspace"
+#     mkdir -p "$workspace_dir"
+
+#     # shared directory and its subdirectories/files
+#     mkdir -p "$workspace_dir/shared/agents/templates"
+#     touch "$workspace_dir/shared/agents/templates/agent-template.md"
+#     mkdir -p "$workspace_dir/shared/agents/configs"
+#     touch "$workspace_dir/shared/agents/configs/agent-config.json"
+#     touch "$workspace_dir/shared/agents/README.md"
+
+#     mkdir -p "$workspace_dir/shared/tools"
+#     touch "$workspace_dir/shared/tools/README.md"
+#     touch "$workspace_dir/shared/tools/tool-001.md"
+
+#     mkdir -p "$workspace_dir/shared/prompts"
+#     touch "$workspace_dir/shared/prompts/README.md"
+#     touch "$workspace_dir/shared/prompts/prompt-template.md"
+
+#     mkdir -p "$workspace_dir/shared/system/logs"
+#     touch "$workspace_dir/shared/system/logs/system.log"
+#     touch "$workspace_dir/shared/system/README.md"
+
+#     touch "$workspace_dir/shared/TAGS.md"
+
+#     # projects directory and its subdirectories/files
+#     mkdir -p "$workspace_dir/projects/project-001/scripts"
+#     mkdir -p "$workspace_dir/projects/project-001/data"
+#     touch "$workspace_dir/projects/project-001/data/README.md"
+#     touch "$workspace_dir/projects/project-001/data/dataset.txt"
+#     mkdir -p "$workspace_dir/projects/project-001/docs"
+#     touch "$workspace_dir/projects/project-001/docs/README.md"
+#     mkdir -p "$workspace_dir/projects/project-001/outputs/report-001"
+#     touch "$workspace_dir/projects/project-001/outputs/report-001/README.md"
+#     mkdir -p "$workspace_dir/projects/project-001/outputs"
+#     touch "$workspace_dir/projects/project-001/outputs/README.md"
+#     ln -s "$workspace_dir/projects/project-001/data" "$workspace_dir/projects/project-001/outputs/report-001/data"
+#     touch "$workspace_dir/projects/project-001/outputs/report-001/report.pdf"
+
+#     mkdir -p "$workspace_dir/projects/project-001/issues"
+#     touch "$workspace_dir/projects/project-001/issues/$TIMESTAMP-TITLE-001.md"
+#     touch "$workspace_dir/projects/project-001/.env"
+#     touch "$workspace_dir/projects/project-001/README.md"
+#     touch "$workspace_dir/projects/README.md"
+
+#     # ninjas directory and its subdirectories/files
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/memory"
+#     touch "$workspace_dir/ninjas/ninja-001/memory/README.md"
+#     touch "$workspace_dir/ninjas/ninja-001/memory/$TIMESTAMP-test-memory.md"
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/messages/inbox"
+#     touch "$workspace_dir/ninjas/ninja-001/messages/inbox/README.md"
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/messages/outbox"
+#     touch "$workspace_dir/ninjas/ninja-001/messages/outbox/README.md"
+
+#     touch "$workspace_dir/ninjas/ninja-001/messages/README.md"
+
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/inbox"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/inbox/README.md"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/inbox/2024-12-17-SUBJECT-from-test-from-to-test-to.md"
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/outbox"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/outbox/README.md"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/outbox/2024-12-17-SUBJECT-from-test-from-to-test-to.md"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/messages/README.md"
+
+#     mkdir -p "$workspace_dir/ninjas/ninja-001/projects"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/README.md"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/project-001/forum.md"
+#     touch "$workspace_dir/ninjas/ninja-001/projects/README.md"
+#     touch "$workspace_dir/ninjas/ninja-001/profile.json"
+#     touch "$workspace_dir/ninjas/ninja-001/status.md"
+#     touch "$workspace_dir/ninjas/README.md"
+
+#     echo "Workspace setup complete in $workspace_dir"
+# }
+
+# make_shared_working_directories() {
+#     mkdir -p \
+    #           "$NINJA_SHARED_WORKSPACE" \
+    #           "$NINJA_SHARED_SRC" \
+    #           "$NINJA_SHARED_LOGS" \
+    #           "$NINJA_SHARED_CONFIG" \
+    #           "$NINJA_SHARED_REQUESTS" \
+    #           "$NINJA_SHARED_BACKUPS" \
+    #           >/dev/null
+#     }
+
+make_ninjas_working_directories() {
+    for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
+        make_ninja_working_directories $ninja_id >/dev/null
+    done
+
+}
+
+make_ninja_working_directories() {
+    local ninja_id="$1"
+    update_ninja_envs $ninja_id
+    mkdir -p \
+          "$NINJA_WORKSPACE" \
+          "$NINJA_SRC" \
+          "$NINJA_LOGS" \
+          "$NINJA_CONFIG" \
+          "$NINJA_REQUESTS" \
+          "$NINJA_BACKUPS" \
+          >/dev/null
+}
+
+# Make ninjas' working directories
+make_shared_working_directories >/dev/null
+make_ninjas_working_directories >/dev/null
+
+
+# EOF
