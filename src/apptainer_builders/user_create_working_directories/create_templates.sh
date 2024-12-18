@@ -1,254 +1,378 @@
 #!/bin/bash
-# Time-stamp: "2024-12-17 07:34:09 (ywatanabe)"
-# File: ./Ninja/src/apptainer_builders/working_directories/create_templates.sh
+set -euo pipefail
 
+# Common logging function
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $*" >&2
+}
 
-create_agent_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/agents/templates/agent-template.md"
-    ensure_sdir "$spath"
+# Error handling
+error() {
+    log "ERROR: $*"
+    exit 1
+}
 
-    echo "---
-title: \"[Agent Name] Template\"
-available tags: [agent-template, role, available-tools, expertise]
+# Check dependencies
+for cmd in jq; do
+    command -v "$cmd" >/dev/null 2>&1 || error "$cmd is required"
+done
+
+# Cleanup function
+cleanup() {
+    local tmpfiles=("$@")
+    rm -f "${tmpfiles[@]}"
+}
+trap cleanup EXIT
+
+# Function to create a JSON template file
+create_json_template() {
+    local type="$1"
+    local filename="$2"
+    local json_content=""
+
+    case "$type" in
+        "agent_profile")
+            json_content='{
+        "title": "[Agent Name]",
+        "available_tags": [],
+        "role": "[Agent Role]",
+        "responsibilities": [],
+        "available_tools": [],
+        "expertise": [],
+        "communication_protocols": "",
+        "authorities": "",
+        "additional_notes": ""
+      }'
+            ;;
+        "agent_config")
+            json_content='{
+        "agent_id": "000",
+        "name": "Example Agent",
+        "model": "gpt-4",
+        "temperature": 0.7,
+        "max_tokens": 2000
+      }'
+            ;;
+        "prompt")
+            json_content='{
+        "title": "[Prompt Title]",
+        "available_tags": [],
+        "background": "",
+        "requests": "",
+        "tools": "",
+        "data": "",
+        "queue": "",
+        "expected_output": "",
+        "output_format": "",
+        "additional_context": ""
+      }'
+            ;;
+        "tool")
+            json_content='{
+        "tool_id": "000",
+        "tool_name": "Example Tool",
+        "description": "",
+        "elisp_command": "",
+        "available_tags": [],
+        "input": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "output": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }'
+            ;;
+        "tool_schema")
+            json_content='{
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "title": "Tool Schema",
+            "description": "Schema for validating tools",
+            "type": "object",
+            "properties": {
+              "tool_id": { "type": "string" },
+              "tool_name": { "type": "string" },
+              "description": { "type": "string" },
+              "elisp_command": { "type": "string" },
+              "input": { "$ref": "#/definitions/io" },
+              "output": { "$ref": "#/definitions/io" }
+            },
+            "required": ["tool_id", "tool_name", "description", "elisp_command", "input", "output"],
+            "definitions": {
+              "io": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["object"] },
+                  "properties": { "type": "object" },
+                  "required": { "type": "array", "items": { "type": "string" } }
+                },
+                "required": ["type", "properties", "required"]
+              }
+            }
+          }'
+            ;;
+        *)
+            error "Invalid template type: $type"
+            ;;
+    esac
+
+    echo "$json_content" > "$filename" || error "Failed to create $filename"
+    log "Created $filename"
+}
+
+# Function to convert JSON to MD
+json2md_template() {
+    local json_file="$1"
+    local md_file="${json_file%.json}.md"
+    validate_file "$json_file"
+    local type=$(basename "$json_file" .json)
+    local title=$(jq -r ".title // \"\"" "$json_file")
+    local tags=$(jq -r ".available_tags[]" "$json_file" | tr '\n' ',' | sed 's/,$//')
+    local content=""
+
+    case "$type" in
+        "agent_profile")
+            local role=$(jq -r ".role // \"\"" "$json_file")
+            local responsibilities=$(jq -r ".responsibilities[]" "$json_file" | tr '\n' '  - ' | sed 's/,$//')
+            local tools=$(jq -r ".available_tools[]" "$json_file" | tr '\n' '  - ' | sed 's/,$//')
+            local expertise=$(jq -r ".expertise[]" "$json_file" | tr '\n' '  - ' | sed 's/,$//')
+            local communication=$(jq -r ".communication_protocols // \"\"" "$json_file")
+            local authorities=$(jq -r ".authorities // \"\"" "$json_file")
+            local notes=$(jq -r ".additional_notes // \"\"" "$json_file")
+            content="---
+title: \"$title\"
+available tags: [$tags]
 ---
-
-# Agent Template: [Agent Name]
-
+# Agent Template: $title
 ## **Role**
-
-- **Primary Role:** [Describe the primary role of the agent]
-- **Responsibilities:**
-- [Responsibility 1]
-- [Responsibility 2]
-
+* **Primary Role:** $role
+## **Responsibilities**
+$responsibilities
 ## **Available Tools**
-
-- [Tool 1](../tools/tool-001.md)
-- [Tool 2](../tools/tool-002.md)
-
+$tools
 ## **Expertise**
-
-- [Area of Expertise 1]
-- [Area of Expertise 2]
-
+$expertise
 ## **Communication Protocols**
-
-- **Preferred Method:** [e.g., Not allowed, Direct Messages, Forums]
-
+* **Preferred Method:** $communication
 ## **Authorities**
-
+$authorities
 ## **Additional Notes**
-
-[Include any additional information relevant to the agent.]" > "$spath"
-}
-create_agent_config() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/agents/configs/.agent-config.json"
-    ensure_sdir "$spath"
-
-    echo "{
-    \"agent_id\": \"agent-001\",
-    \"name\": \"Example Agent\",
-    \"model\": \"gpt-4\",
-    \"temperature\": 0.7,
-    \"max_tokens\": 2000
-    }" > "$spath"
-}
-create_tool_md_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/tools/tool-001/tool.md"
-    ensure_sdir "$spath"
-
-    echo "---
-title: \"Example Tool\"
-available tags: [tool name, description, elisp command, examples]
+$notes
+"
+            ;;
+        "tool")
+            local description=$(jq -r ".description // \"\"" "$json_file")
+            local elisp_command=$(jq -r ".elisp_command // \"\"" "$json_file")
+            local examples=$(jq -r ".examples // \"\"" "$json_file")
+            content="---
+title: \"$title\"
+available tags: [$tags]
 ---
-
-# Tool: Example Tool
-
+# Tool: $title
 ## **Description**
-
-This is an example tool.
-
+$description
 ## **Usage**
-
 ## **Elisp Command**
 \`\`\`emacs-lisp
-(progn
-  (command1 arg1 arg2)
-  (command2 arg1 arg2)
-  ...)
+$elisp_command
 \`\`\`
-
 ## **Examples**
-
-- **Example 1:**
-
-\`\`\`emacs-lisp
-(progn
-(setq default-directory \"/workspace/\")
-(delete-other-windows)
-(split-window-right)
-(let* ((timestamp (format-time-string \"%Y%m%d-%H%M%S\"))
-(script-filename (expand-file-name (format \"plot-%s.py\" timestamp) default-directory))
-(image-filename (expand-file-name (format \"plot-%s.png\" timestamp)))
-(py-code \"
-import matplotlib.pyplot as plt
-import numpy as np
-
-np.random.seed(19680801)
-
-dt = 0.01
-t = np.arange(0, 30, dt)
-nse1 = np.random.randn(len(t))
-nse2 = np.random.randn(len(t))
-
-s1 = np.sin(2 * np.pi * 10 * t) + nse1
-s2 = np.sin(2 * np.pi * 10 * t) + nse2
-
-fig, axs = plt.subplots(2, 1, layout='constrained')
-axs[0].plot(t, s1, t, s2)
-axs[0].set_xlim(0, 2)
-axs[0].set_xlabel('Time (s)')
-axs[0].set_ylabel('s1 and s2')
-axs[0].grid(True)
-
-cxy, f = axs[1].cohere(s1, s2, 256, 1. / dt)
-axs[1].set_ylabel('Coherence')
-
-plt.savefig('image-file')
-\"))
-    (with-temp-buffer
-(insert (replace-regexp-in-string \"image-file\" image-filename py-code))
-(write-region (point-min) (point-max) script-filename)
-(shell-command (format \"bash -c 'source /workspace/.env/bin/activate && python3 %s'\" script-filename)))
-    (find-file script-filename)
-    (sleep-for 3)
-    (other-window 1)
-    (find-file (expand-file-name image-filename default-directory))
-    (sleep-for 3)))
-\"))" > "$spath"
-}
-create_prompt_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/prompts/prompt-template.md"
-    ensure_sdir "$spath"
-    echo "---
-title: \"[Prompt Title]\"
-available tags: [prompt-template, background, requests, tools, where, when, how, expected-output, output-format]
+$examples
+"
+            ;;
+        "prompt")
+            local background=$(jq -r ".background // \"\"" "$json_file")
+            local requests=$(jq -r ".requests // \"\"" "$json_file")
+            local tools=$(jq -r ".tools // \"\"" "$json_file")
+            local data=$(jq -r ".data // \"\"" "$json_file")
+            local queue=$(jq -r ".queue // \"\"" "$json_file")
+            local expected_output=$(jq -r ".expected_output // \"\"" "$json_file")
+            local output_format=$(jq -r ".output_format // \"\"" "$json_file")
+            local additional_context=$(jq -r ".additional_context // \"\"" "$json_file")
+            content="---
+title: \"$title\"
+available tags: [$tags]
 ---
-
-# [Prompt Title]
-
+# $title
 ## Background
-
-[Explain the purpose of the prompt.]
-
+$background
 ## Requests
-
-[Describe what is being requested.]
-
+$requests
 ## Tools (optional)
-
-[Specify any options or selections relevant to the prompt.]
-
+$tools
 ## Data (optional)
-
+$data
 ## Queue (optional)
-
+$queue
 ## **Expected Output**
-
-[Detail what the expected result should be.]
-
+$expected_output
 ## **Output Format**
-
-[Specify the desired format of the output, e.g., plain text, JSON, Markdown.]
-
+$output_format
 ## **Additional Context**
-
-[Include any other relevant information.]" > "$spath"
-}
-create_tool_json_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/tools/.tool-001.json"
-    ensure_sdir "$spath"
-    echo "{
-    \"tool_id\": \"tool-001\",
-    \"tool_name\": \"Example Tool\",
-    \"description\": \"This is an example tool.\",
-    \"elisp_command\": \"(progn (command1 arg1 arg2))\",
-     \"input\": {
-      \"type\": \"object\",
-      \"properties\": {
-          \"arg1\": { \"type\": \"string\", \"description\": \"Argument 1\" },
-          \"arg2\": { \"type\": \"integer\", \"description\": \"Argument 2\" }
-        },
-      \"required\": [\"arg1\",\"arg2\"]
-    },
-    \"output\": {
-        \"type\": \"object\",
-        \"properties\": {
-            \"result\": {\"type\": \"string\", \"description\": \"The result of the tool\"},
-          \"status\": {\"type\": \"string\", \"description\": \"Status of the tool's execution\"}
-        },
-        \"required\": [\"result\", \"status\"]
-    }
-}" > "$spath"
-create_tool_json_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/tools/tool-001/tool.json"
-    ensure_sdir "$spath"
-    echo "{
-  \"tool_id\": \"tool-001\",
-  \"description\": \"This is a tool description.\",
-   \"input\": {
-    \"type\": \"object\",
-    \"properties\": {
-      \"arg1\": { \"type\": \"string\", \"description\": \"Argument 1\" },
-      \"arg2\": { \"type\": \"integer\", \"description\": \"Argument 2\" }
-    },
-    \"required\": [\"arg1\", \"arg2\"]
-  },
-   \"output\": {
-    \"type\": \"object\",
-    \"properties\": {
-      \"result\": { \"type\": \"string\", \"description\": \"The result of the tool\" }
-        },
-        \"required\": [\"result\"]
-    }
-}" > "$spath"
-create_tool_schema_template() {
-    local workspace_dir="$1"
-    local spath="$workspace_dir/shared/tools/.tool-schema.json"
-    ensure_sdir "$spath"
-    echo "{
-      \"type\": \"object\",
-      \"properties\": {
-          \"tool_id\": { \"type\": \"string\" },
-          \"tool_name\": { \"type\": \"string\" },
-          \"description\": { \"type\": \"string\" },
-          \"elisp_command\": { \"type\": \"string\" },
-          \"input\": {
-            \"type\": \"object\",
-            \"properties\": {
-              \"arg1\": { \"type\": \"string\" },
-              \"arg2\": { \"type\": \"integer\" }
-            },
-            \"required\": [\"arg1\", \"arg2\"]
-          },
-           \"output\": {
-            \"type\": \"object\",
-            \"properties\": {
-              \"result\": { \"type\": \"string\" },
-              \"status\": { \"type\": \"string\" }
-             },
-            \"required\": [\"result\", \"status\"]
-          }
-        },
-      \"required\": [\"tool_id\", \"tool_name\", \"description\", \"elisp_command\", \"input\", \"output\"]
-    }" > "$spath"
+$additional_context
+"
+            ;;
+        *)
+            error "Unsupported template type: $type"
+            ;;
+    esac
+    echo "$content" > "$md_file" || error "Error creating $md_file"
+    log "Created $md_file"
 }
 
 
-# EOF
+# Validate File Function
+validate_file() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        error "Error: File not found: $file"
+    fi
+}
+
+
+# Create JSON templates
+create_json_template "agent_profile" "agent_profile.json"
+create_json_template "agent_config" "agent_config.json"
+create_json_template "prompt" "prompt.json"
+create_json_template "tool" "tool.json"
+create_json_template "tool_schema" "tool_schema.json"
+
+# Convert JSON to MD
+json2md_template "agent_profile.json"
+json2md_template "tool.json"
+json2md_template "prompt.json"
+
+exit 0
+
+# #!/bin/bash
+
+# # Function to create a JSON template file
+# create_json_template() {
+#     local type="$1"
+#     local filename="$2"
+
+#     local json_content=""
+
+#     case "$type" in
+#         "agent_profile")
+#             json_content='{
+#         "title": "[Agent Name]",
+#         "available_tags": [],
+#         "role": "[Agent Role]",
+#         "responsibilities": [],
+#         "available_tools": [],
+#         "expertise": [],
+#         "communication_protocols": "",
+#         "authorities": "",
+#         "additional_notes": ""
+#       }'
+#             ;;
+#         "agent_config")
+#             json_content='{
+#         "agent_id": "000",
+#         "name": "Example Agent",
+#         "model": "gpt-4",
+#         "temperature": 0.7,
+#         "max_tokens": 2000
+#       }'
+#             ;;
+#         "prompt")
+#             json_content='{
+#         "title": "[Prompt Title]",
+#         "available_tags": [],
+#         "background": "",
+#         "requests": "",
+#         "tools": "",
+#         "data": "",
+#         "queue": "",
+#         "expected_output": "",
+#         "output_format": "",
+#         "additional_context": ""
+#       }'
+#             ;;
+#         "tool")
+#             json_content='{
+#         "tool_id": "000",
+#         "tool_name": "Example Tool",
+#         "description": "",
+#         "elisp_command": "",
+#         "input": {
+#           "type": "object",
+#           "properties": {},
+#           "required": []
+#         },
+#         "output": {
+#           "type": "object",
+#           "properties": {},
+#           "required": []
+#         }
+#       }'
+#             ;;
+#         "tool_schema")
+#             json_content='{
+#             "$schema": "http://json-schema.org/draft-07/schema#",
+#             "title": "Tool Schema",
+#             "description": "Schema for validating tools",
+#             "type": "object",
+#             "properties": {
+#               "tool_id": { "type": "string" },
+#               "tool_name": { "type": "string" },
+#               "description": { "type": "string" },
+#               "elisp_command": { "type": "string" },
+#               "input": { "$ref": "#/definitions/io" },
+#               "output": { "$ref": "#/definitions/io" }
+#             },
+#             "required": ["tool_id", "tool_name", "description", "elisp_command", "input", "output"],
+#             "definitions": {
+#               "io": {
+#                 "type": "object",
+#                 "properties": {
+#                   "type": { "type": "string", "enum": ["object"] },
+#                   "properties": { "type": "object" },
+#                   "required": { "type": "array", "items": { "type": "string" } }
+#                 },
+#                 "required": ["type", "properties", "required"]
+#               }
+#             }
+#           }'
+#             ;;
+#         *)
+#             echo "Error: Invalid template type: $type" >&2
+#             return 1
+#             ;;
+#     esac
+
+#     echo "$json_content" > "$filename"
+#     if [[ $? -ne 0 ]]; then
+#         echo "Error creating $filename"
+#         return 1
+#     fi
+# }
+
+# # Create JSON templates
+# create_json_template "agent_profile" "agent_profile.json"
+# create_json_template "agent_config" "agent_config.json"
+# create_json_template "prompt" "prompt.json"
+# create_json_template "tool" "tool.json"
+# create_json_template "tool_schema" "tool_schema.json"
+
+# # Create MD "aliases" (using md2json)
+# if command -v md2json >/dev/null 2>&1; then #check if md2json exists
+#     touch agent_profile.md
+#     md2json agent_profile.md
+#     touch agent_config.md
+#     md2json agent_config.md
+#     touch prompt.md
+#     md2json prompt.md
+#     touch tool.md
+#     md2json tool.md
+#     touch tool_schema.md
+#     md2json tool_schema.md
+# else
+#     echo "Warning: md2json command not found. Skipping MD template creation."
+# fi
+
+# exit 0

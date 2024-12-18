@@ -1,0 +1,8 @@
+{
+    "role_id": "string",
+    "role_name": "string",
+    "description": "string",
+    "input_example": "string",
+    "output_example": "string",
+    "constraints": ["string"]
+}
