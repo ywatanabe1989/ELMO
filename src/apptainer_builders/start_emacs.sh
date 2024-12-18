@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 21:39:24 (ywatanabe)"
+# Time-stamp: "2024-12-19 01:02:31 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/start_emacs_independently.sh
 
 # Check if running as root
@@ -8,8 +8,9 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source "$(dirname $0)"/ENVS.sh.src
-source "$(dirname $0)"/user_correct_permissions_emacsd.sh.src
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$THIS_DIR"/ENVS.sh.src
+source "$THIS_DIR"/user_correct_permissions_emacsd.sh.src
 
 # Add at beginning of script
 xhost +local:root > /dev/null 2>&1
@@ -23,107 +24,36 @@ init_environment() {
     killall -9 "$NINJA_EMACS_BIN" 2>/dev/null || true
 }
 
-# start_emacs_daemon() {
-#     local user=$1
-#     local display=$2
-#     local user_socket_dir="/home/$user/emacs-server"
-#     local user_socket="$user_socket_dir/server"
-#     local log_file=/tmp/emacs-$user.log
-
-#     mkdir -p $user_socket_dir
-#     chown $user:$user $user_socket_dir
-#     chmod 700 $user_socket_dir
-
-#     # Cleanup existing socket
-#     rm -f $user_socket 2>&1 >/dev/null
-
-#     # Start daemon
-#     rm $log_file 2>&1 >/dev/null
-#     su - $user -c "DISPLAY=$DISPLAY emacs --daemon=$user_socket -Q > $log_file 2>&1" &
-
-#     # Verify daemon
-#     sleep 2
-#     if ! pgrep -u $user emacs >/dev/null; then
-#         echo "Emacs daemon failed to start for $user"
-#         cat $log_file
-#         return 1
-#     fi
-
-#     # Wait for socket
-#     local attempt=0
-#     while [ ! -S "$user_socket" ] && [ $attempt -lt 10 ]; do
-#         echo "Waiting for socket ($attempt/10)..."
-#         ls -l "$user_socket"* 2>/dev/null || true
-#         sleep 1
-#         ((attempt++))
-#     done
-
-
-#     # Start client with init file
-#     if su - $user -c "DISPLAY=$DISPLAY emacsclient -c -n -s $user_socket --eval '(load-file \"~/.emacs.d/init.el\")' > /dev/null 2>&1 &"; then
-#         echo "Success: $user_socket launched"
-#         return 0
-#     else
-#         echo "Failed: Check error log below"
-#         cat $log_file
-#         return 1
-#     fi
-
-# }
-
-
-# start_emacs_for_user() {
-#     local user=$1
-#     local display=$2
-
-#     # setup_user_directories "$user"
-#     start_emacs_daemon "$user" "$DISPLAY"
-# }
 
 start_emacs_daemon() {
     local ninja_id="$1"
     update_ninja_envs $ninja_id
-    local log_file=/tmp/emacs-$user.log
 
-    # mkdir -p $NINJA_EMACSD_SERVER_DIR
-    # chown $NINJA_USER:$NINJA_USER $NINJA_EMACSD_SERVER_DIR
-    # chmod 700 $NINJA_EMACSD_SERVER_DIR
+    local log_file=/tmp/emacs-$NINJA_USER.log
+    local max_attempts=10
+    local attempt=1
 
-    # Cleanup existing socket
-    rm -f $NINJA_USER_socket 2>&1 >/dev/null
+    echo "Current DISPLAY: $DISPLAY"
+    if [ -z "$DISPLAY" ]; then
+        echo "Error: DISPLAY not set"
+        return 1
+    fi
 
-    # Start daemon
-    rm $log_file 2>&1 >/dev/null
-    su - $NINJA_USER -c "DISPLAY=$DISPLAY emacs --daemon=$NINJA_USER_socket -Q > $log_file 2>&1" &
+    # Ensure directory exists and has correct permissions
+    mkdir -p $(dirname $NINJA_EMACSD_SERVER_FILE)
+    chown -R $NINJA_USER:$NINJA_USER $(dirname $NINJA_EMACSD_SERVER_FILE)
+    chmod 700 $(dirname $NINJA_EMACSD_SERVER_FILE)
 
-    # Verify daemon
+    rm -f $NINJA_EMACSD_SERVER_FILE >/dev/null
+    rm -f $log_file 2>/dev/null
+
+    # Server start
+    su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacs --daemon=$NINJA_EMACSD_SERVER_FILE -Q > $log_file 2>&1"
+
+    # Connect
+    su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacsclient -s $NINJA_EMACSD_SERVER_FILE -c -n --eval '(load-file \"$NINJA_EMACSD_PRIVATE/init.el\")'" &
+
     sleep 2
-    if ! pgrep -u $NINJA_USER emacs >/dev/null; then
-        echo "Emacs daemon failed to start for $NINJA_USER"
-        cat $log_file
-        return 1
-    fi
-
-    # Wait for socket
-    local attempt=0
-    while [ ! -S "$NINJA_USER_socket" ] && [ $attempt -lt 10 ]; do
-        echo "Waiting for socket ($attempt/10)..."
-        ls -l "$NINJA_USER_socket"* 2>/dev/null || true
-        sleep 1
-        ((attempt++))
-    done
-
-
-    # Start client with init file
-    if su - $NINJA_USER -c "DISPLAY=$DISPLAY emacsclient -c -n -s $NINJA_USER_socket --eval '(load-file \"~/.emacs.d/init.el\")' > /dev/null 2>&1 &"; then
-        echo "Success: $NINJA_USER_socket launched"
-        return 0
-    else
-        echo "Failed: Check error log below"
-        cat $log_file
-        return 1
-    fi
-
 }
 
 
@@ -133,10 +63,10 @@ main() {
     for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
         start_emacs_daemon $ninja_id
     done
+
+    sleep 120
 }
 
 main
 
 # EOF
-
-

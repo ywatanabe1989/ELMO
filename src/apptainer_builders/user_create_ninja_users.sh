@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-17 11:05:14 (ywatanabe)"
+# Time-stamp: "2024-12-19 01:06:04 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/user_create_ninja_users.sh
 
 # Check if running as root
@@ -48,8 +48,6 @@ create_ninja_user() {
 
     mkdir -p "$NINJA_HOME" >/dev/null
     mkdir -p "$NINJA_HOME/.emacs.d" >/dev/null
-
-    # Fixme: Should each ninja have permission to read other ninjas' home???
     chown -R "${NINJA_USER}:${NINJA_USER}" "$NINJA_HOME" >/dev/null
 
     # Group
@@ -62,21 +60,9 @@ delete_ubuntu_user() {
     /sbin/deluser ubuntu >/dev/null
 }
 
-# # Checkpoint
-# echo "----------------------------------------"
-# echo "Before Ninja users creation"
-# echo "----------------------------------------"
-# check_users
-
 # Main
 delete_ubuntu_user
 create_ninja_group
 create_ninja_users
-
-# # Checkpoint
-# echo "----------------------------------------"
-# echo "After Ninja users creation"
-# echo "----------------------------------------"
-# check_users
 
 # EOF
