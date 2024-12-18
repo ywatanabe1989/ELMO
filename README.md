@@ -1,13 +1,11 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-18 11:53:13
+!-- date: 2024-12-19 01:27:46
 !-- --- -->
 
 
-# Ninja — Neural Information Network of Journaling Agents
-
-(THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
+# Ninja — Networked Intelligence of JASON Agents
 
 ## Introduction
 Ninja is an LLM agent system run on Emacs, which offers unique characteristics:
@@ -31,7 +29,11 @@ apptainer build \
     ./.apptainer/ninja/ninja.sandbox \
     ./.apptainer/ninja/ninja.def \
     2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
-
+    
+apptainer shell \
+    --fakeroot \
+    --writable \
+    ./.apptainer/ninja/ninja.sandbox
 ```
 
 ## Usage
