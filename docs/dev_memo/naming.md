@@ -1,11 +1,33 @@
 <!-- ---
 !-- title: ./Ninja/docs/dev_memo/naming.md
 !-- author: ywatanabe
-!-- date: 2024-12-16 19:46:50
+!-- date: 2024-12-19 00:00:29
 !-- --- -->
 
 
-NINJA: Neural Intelligence Network Joint Agents
+NINJA: 
+Networked Intelligence of JASON Agents
+
+
+- Neural Intelligence Network of Journaling Agents
+- Networked Intelligence Node for Joint Actions
+- Nasty INteractions of Journaling Agents
+- Neural Intelligence Network Joint Agents
+- Networked Intelligence of Journaling Agents
+- Networked Intelligence of JASON Agents
+- Network Introduces JASON Agents
+- Network Introduces JASON Agents
+- NetworkINg JASON Agents
+- Neural Intelligence of JASON Agents
+- Network-in-Network JASON Agents
+- Network-in-Network JASON Agents
+- Network-in-Network Joint Analytics
+- Network-in-Network JSON Architecture
+- Network-in-Network Junction Array
+- Network-in-Network Journal Agents
+- Network-in-Network Joint Automation
+- Network-in-Network JSON Assembly
+- Network-in-Network Junction Analytics
 
 interaction of Journaling Agents
 
