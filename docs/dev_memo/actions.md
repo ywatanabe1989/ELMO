@@ -1,8 +1,9 @@
 <!-- ---
 !-- title: ./Ninja/docs/dev_memo/actions.md
 !-- author: ywatanabe
-!-- date: 2024-12-15 06:10:49
+!-- date: 2024-12-18 12:01:44
 !-- --- -->
+
 
 # actions
 
