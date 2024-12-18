@@ -1,0 +1,121 @@
+#!/bin/bash
+# Time-stamp: "2024-12-18 21:33:44 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/user_create_emacsd.sh
+
+# Check if running as root
+if [ "$(id -u)" != "0" ]; then
+    echo "This script ($0) must be run as root" >&2
+    exit 1
+fi
+
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$THIS_DIR"/ENVS.sh.src
+
+emacsd_correct_permissions() {
+    for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
+        _emacsd_correct_permissions_shared $ninja_id
+        _emacsd_correct_permissions_private $ninja_id
+        _emacsd_correct_permissions_server_dir $ninja_id
+    done
+}
+
+_emacsd_correct_permissions_shared() {
+    local ninja_id="$1"
+    update_ninja_envs $ninja_id
+
+    # for shared_resource in elpa init.el inits lisp custom.el; do
+    for shared_resource in "$NINJA_EMACSD_SHARED_RESOURCES"; do
+        src=$NINJA_EMACSD_SHARED/$shared_resource
+        tgt=$NINJA_EMACSD_PRIVATE/$shared_resource
+
+        chown -R $NINJA_USER:$NINJAS_GROUP $tgt >/dev/null
+        chmod -R 770 $tgt >/dev/null
+    done
+}
+
+_emacsd_correct_permissions_server_dir() {
+    local ninja_id="$1"
+    update_ninja_envs $ninja_id
+
+    # Create directory as well for convenience
+    mkdir -p $NINJA_EMACSD_SERVER_DIR >/dev/null
+
+    chown -R $NINJA_USER:$NINJA_USER $NINJA_EMACSD_SERVER_DIR >/dev/null
+    chmod -R 700 $NINJA_EMACSD_SERVER_DIR >/dev/null
+}
+
+_emacsd_correct_permissions_private() {
+    local ninja_id="$1"
+    update_ninja_envs $ninja_id
+
+
+    # for private_resource in recentf history; do
+    for private_resource in "$NINJA_EMACSD_PRIVATE_RESOURCES"; do
+        tgt=$NINJA_EMACSD_PRIVATE/$private_resource
+        chown $NINJA_USER:$NINJA_USER $tgt >/dev/null
+        chmod 700 $tgt >/dev/null
+    done
+}
+
+# EOF
+
+# #!/bin/bash
+# # Time-stamp: "2024-12-18 21:22:36 (ywatanabe)"
+# # File: ./Ninja/src/apptainer_builders/user_create_emacsd.sh
+
+# # Check if running as root
+# if [ "$(id -u)" != "0" ]; then
+#    echo "This script ($0) must be run as root" >&2
+#    exit 1
+# fi
+
+# source "$(dirname $0)"/ENVS.sh.src
+
+# emacsd_correct_permissions() {
+#     for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
+#         _emacsd_correct_permissions_shared $ninja_id
+#         _emacsd_correct_permissions_private $ninja_id
+#         _emacsd_correct_permissions_server_dir $ninja_id
+#     done
+# }
+# alias correct_permissions_emacsd=emacsd_correct_permissions
+
+# _emacsd_correct_permissions_shared() {
+#     local ninja_id="$1"
+#     update_ninja_envs $ninja_id
+
+#     # for shared_resource in elpa init.el inits lisp custom.el; do
+#     for shared_resource in "$NINJA_EMACSD_SHARED_RESOURCES"; do
+#         src=$NINJA_EMACSD_SHARED/$shared_resource
+#         tgt=$NINJA_EMACSD_PRIVATE/$shared_resource
+
+#         chown -R $NINJA_USER:$NINJAS_GROUP $tgt 2>&1 >/dev/null
+#         chmod -R 770 $tgt 2>&1 >/dev/null
+#     done
+# }
+
+# _emacsd_correct_permissions_server_dir() {
+#     local ninja_id="$1"
+#     update_ninja_envs $ninja_id
+
+#     # Create directory as well for convenience
+#     mkdir -p $NINJA_EMACSD_SERVER_DIR 2>&1 >/dev/null
+
+#     chown -R $NINJA_USER:$NINJA_USER $NINJA_EMACSD_SERVER_DIR 2>&1 >/dev/null
+#     chmod -R 700 $NINJA_EMACSD_SERVER_DIR 2>&1 >/dev/null
+# }
+
+# _emacsd_correct_permissions_private() {
+#     local ninja_id="$1"
+#     update_ninja_envs $ninja_id
+
+
+#     # for private_resource in recentf history; do
+#     for private_resource in "$NINJA_EMACSD_PRIVATE_RESOURCES"; do
+#         tgt=$NINJA_EMACSD_PRIVATE/$private_resource
+#         chown $NINJA_USER:$NINJA_USER $tgt
+#         chmod 700 $tgt
+#     done
+# }
+
+# # EOF

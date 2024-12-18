@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 05:43:00 (ywatanabe)"
+# Time-stamp: "2024-12-18 23:11:25 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/ENVS.sh.src
 
 # Project
@@ -32,11 +32,13 @@ export NINJA_SHARED_SRC=${NINJA_SHARED_SRC:-$NINJA_SHARED_WORKSPACE/src}
 # Emacs Configuration
 export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-emacs}
 export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-emacsclient}
+export NINJA_EMACSD_SHARED_RESOURCES="elpa init.el inits lisp custom.el"
+export NINJA_EMACSD_PRIVATE_RESOURCES="recentf history"
 # export NINJA_EMACSD_PRIVATE
 export NINJA_EMACSD_SHARED=/opt/Ninja/src/apptainer_builders/shared_emacsd
-# export NINJA_EMACS_SERVER_DIR
-# export NINJA_EMACS_SERVER_FILE
-export NINJA_EMACS_SERVER_CHECK_INTERVAL=${NINJA_EMACS_SERVER_CHECK_INTERVAL:-1}
+# export NINJA_EMACSD_SERVER_DIR
+# export NINJA_EMACSD_SERVER_FILE
+# export NINJA_EMACSD_SERVER_CHECK_INTERVAL=${NINJA_EMACSD_SERVER_CHECK_INTERVAL:-1}
 
 # Feedback Loop
 export NINJA_MAX_RETRIES=${NINJA_MAX_RETRIES:-5}
@@ -47,7 +49,7 @@ export LLM_API_KEY=${LLM_API_KEY:-""}
 export LLM_ENGINE=${LLM_ENGINE:-""}
 
 # Python Configuration
-export PYTHON_BASE_VIRTUAL_ENV=${PYTHON_BASE_VIRTUAL_ENV:-$NINJA_BASE_WORKSPACE/.env}
+# export PYTHON_BASE_VIRTUAL_ENV=${PYTHON_BASE_VIRTUAL_ENV:-$NINJA_BASE_WORKSPACE/.env}
 
 
 ################################################################################
@@ -77,10 +79,9 @@ update_ninja_envs() {
     NINJA_WORKSPACE="/workspace/$NINJA_USER"
 
     # Emacs Configuration
-    NINJA_EMACSD_PRIVATE=${NINJA_EMACSD_PRIVATE:"$NINJA_HOME/.emacs.d"}
-    NINJA_EMACS_SERVER_DIR=${NINJA_EMACS_SERVER_DIR:-"$NINJA_HOME/emacs-server"}
-    NINJA_EMACS_SERVER_FILE=${NINJA_EMACS_SERVER_FILE:-$NINJA_EMACS_SERVER_DIR/server}
-
+    NINJA_EMACSD_PRIVATE="$NINJA_HOME/.emacs.d"
+    NINJA_EMACSD_SERVER_DIR="$NINJA_EMACSD_PRIVATE/emacs-server"
+    NINJA_EMACSD_SERVER_FILE="$NINJA_EMACSD_SERVER_DIR/server"
 
     # Export all variables
     export NINJA_ID \
@@ -90,13 +91,13 @@ update_ninja_envs() {
            NINJA_HOME \
            NINJA_WORKSPACE \
            NINJA_EMACSD_PRIVATE \
-           NINJA_EMACS_SERVER_DIR \
-           NINJA_EMACS_SERVER_FILE
+           NINJA_EMACSD_SERVER_DIR \
+           NINJA_EMACSD_SERVER_FILE
 }
 
 # Check if NINJA_ID is set
 if [ ! -z "${NINJA_ID+x}" ]; then
     update_ninja_envs $NINJA_ID
     HOME=$NINJA_HOME
-    # cd $NINJA_HOME
+    cd $NINJA_HOME
 fi
