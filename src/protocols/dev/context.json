@@ -1,0 +1,26 @@
+{
+    "project_id": "string",
+    "milestone_id": "string",
+    "task_id": "string",
+    "process_id": "string",
+    "thread_id": "string",
+    "branch_id": "string",
+    "description": "string",
+    "resources": [
+        {
+            "type": "file | link | data",
+            "id": "string",
+            "path": "string",
+            "access": "read | write"
+        }
+    ],
+    "tags": ["string"],
+    "created_at": "timestamp",
+    "updated_at": "timestamp",
+    "status": "ready | running | pending | finished",
+    "parent_context": {
+        "project_id": "string",
+        "milestone_id": "string",
+        "task_id": "string"
+    }
+}

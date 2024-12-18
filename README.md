@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-18 04:49:48
+!-- date: 2024-12-18 11:53:13
 !-- --- -->
 
 
@@ -32,10 +32,12 @@ apptainer build \
     ./.apptainer/ninja/ninja.def \
     2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
 
-apptainer run \
-    --writable \
-    --fakeroot \
-    ./.apptainer/ninja/ninja.sandbox
+```
+
+## Usage
+
+``` bash
+./run.sh
 ```
 
 ## Contact

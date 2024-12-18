@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 09:47:52 (ywatanabe)"
+# Time-stamp: "2024-12-18 09:47:39 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/start_emacs_independently.sh
 
 # Check if running as root
@@ -20,17 +20,45 @@ xhost +local:root > /dev/null 2>&1
 CRDT_PASSWORD=$(openssl rand -base64 12)
 export CRDT_PASSWORD
 
-
 init_environment() {
-    killall -9 "$NINJA_EMACS_CLIENT" 2>/dev/null || true
-    killall -9 "$NINJA_EMACS_BIN" 2>/dev/null || true
+    pkill -f "emacs --daemon=/home/ninja-"
+    # killall -9 "$NINJA_EMACS_CLIENT" 2>/dev/null || true
+    # killall -9 "$NINJA_EMACS_BIN" 2>/dev/null || true
 
-    # # Global permissions
-    # chown -R root:$NINJAS_GROUP /home
-    # chown -R root:$NINJAS_GROUP $shared_emacsd
-    # chmod -R 750 $shared_emacsd
+    # Global permissions
+    chown -R root:$NINJAS_GROUP /home
+    chown -R root:$NINJAS_GROUP $shared_emacsd
+    chmod -R 750 $shared_emacsd
 }
 
+setup_user_directories() {
+    local user=$1
+    local user_socket_dir="/home/$user"
+
+    # User directory setup
+    mkdir -p $user_socket_dir
+    chown -R $user:$NINJAS_GROUP $user_socket_dir
+    chmod -R 750 $user_socket_dir
+
+    # .emacs.d setup
+    su - $user -c "rm -rf /home/$user/.emacs.d 2>&1 >/dev/null"
+    su - $user -c "mkdir -p /home/$user/.emacs.d 2>&1 >/dev/null"
+    chown $user:$NINJAS_GROUP /home/$user/.emacs.d
+    chmod 770 /home/$user/.emacs.d
+
+    # Create symlinks
+    for file_or_dir in elpa init.el inits lisp custom.el; do
+        su - $user -c "ln -sf $shared_emacsd/$file_or_dir /home/$user/.emacs.d/$file_or_dir"
+        chown -R $user:$NINJAS_GROUP /home/$user/.emacs.d/$file_or_dir
+        chmod -R 770 /home/$user/.emacs.d/$file_or_dir
+    done
+
+    # Setup user files
+    su - $user -c "rm /home/$user/{recentf,history} 2>&1 >/dev/null" 2>&1 >/dev/null
+    su - $user -c "touch /home/$user/.emacs.d/{recentf,history} 2>&1 >/dev/null" 2>&1 >/dev/null
+    chown $user:$user /home/$user/.emacs.d/{recentf,history}
+    chmod 700 /home/$user/.emacs.d/{recentf,history}
+}
 
 start_emacs_daemon() {
     local user=$1
@@ -69,7 +97,7 @@ start_emacs_daemon() {
 
 
     # Start client with init file
-    if su - $user -c "DISPLAY=$display emacsclient -c -n -s $user_socket --eval '(load-file \"~/.emacs.d/init.el\")' > /dev/null 2>&1 &"; then
+    if su - $user -c "DISPLAY=$display emacsclient -c -s $user_socket --eval '(load-file \"~/.emacs.d/init.el\")'"; then
         echo "Success: $user_socket launched"
         return 0
     else
@@ -85,7 +113,7 @@ start_emacs_for_user() {
     local user=$1
     local display=$2
 
-    # setup_user_directories "$user"
+    setup_user_directories "$user"
     start_emacs_daemon "$user" "$display"
 }
 

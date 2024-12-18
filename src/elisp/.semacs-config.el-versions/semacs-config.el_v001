@@ -161,10 +161,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LLM
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar ninja-anthropic-key (getenv "ANTHROPIC_API_KEY")
+(defvar ninja-anthropic-key (getenv "LLM_API_KEY")
   "API key for Anthropic Claude.")
 
-(defvar ninja-anthropic-engine (getenv "ANTHROPIC_ENGINE")
+(defvar ninja-anthropic-engine (getenv "LLM_ENGINE")
   "Model for Anthropic Claude.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

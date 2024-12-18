@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/docs/dev_memo/workspace_structure.md
 !-- author: ywatanabe
-!-- date: 2024-12-16 21:11:57
+!-- date: 2024-12-18 14:34:01
 !-- --- -->
 
 

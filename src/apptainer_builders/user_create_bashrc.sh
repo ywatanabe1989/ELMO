@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-15 18:26:28 (ywatanabe)"
+# Time-stamp: "2024-12-18 05:29:58 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/user_create_bashrc.sh
 
 # Check if running as root
@@ -10,13 +10,6 @@ fi
 
 ENVS_SRC="$(dirname $0)"/ENVS.sh.src
 source $ENVS_SRC
-
-# create_ubuntu_user_bashrc() {
-#     echo "" >> $NINJA_HOME/.bashrc
-#     echo "========================================" >> $NINJA_HOME/.bashrc
-#     echo "" >> $NINJA_HOME/.bashrc
-#     cat $ENVS_SRC >> $NINJA_HOME/.bashrc
-# }
 
 create_ninjas_bashrc() {
     for ninja_id in $(seq 1 $NINJA_N_AGENTS); do

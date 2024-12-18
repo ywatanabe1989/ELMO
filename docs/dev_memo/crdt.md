@@ -1,8 +1,9 @@
 <!-- ---
 !-- title: ./Ninja/docs/dev_memo/crdt.md
 !-- author: ywatanabe
-!-- date: 2024-12-17 13:58:23
+!-- date: 2024-12-18 09:15:18
 !-- --- -->
+
 
 For using CRDT in Apptainer containers:
 

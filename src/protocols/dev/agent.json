@@ -1,0 +1,35 @@
+{
+    "title": "protocol for agents",
+    "agent_id": {
+        "type": "string",
+        "description": "unique identifier for the agent",
+        "example": "ninja-000"
+        "is_required": true
+    },
+    "name": {
+        "type": "string",
+        "description": "name of the agent",
+        "example": "code generator",
+        "is_required": true
+    },
+    "description": {
+        "type": "string",
+        "description": "detailed description of the agent's purpose",
+        "is_required": true
+    },
+    "status": {
+        "type": "string",
+        "enum": ["ready", "running", "pending", "finished"],
+        "description": "current status of the agent",
+        "is_required": true
+    },
+    "tools": {
+        "type": "array",
+        "items": {
+            "type": "string",
+            "description": "id of available tools"
+        },
+        "description": "list of available tools for the agent",
+        "is_required": false
+    }
+}

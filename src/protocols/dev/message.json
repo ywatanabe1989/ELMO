@@ -1,0 +1,12 @@
+{
+    "message_id": "string",
+    "type": "log | command | event",
+    "sender": "string",
+    "recipient": "string",
+    "timestamp": "timestamp",
+    "payload": {
+        "type": "string",
+        "content": "string | object"
+    },
+    "status": "sent | read | junk"
+}

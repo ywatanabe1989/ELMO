@@ -1,0 +1,9 @@
+{
+    "template_id": "string",
+    "version": "integer",
+    "description": "string",
+    "template": "string",
+    "variables": ["string"],
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+}

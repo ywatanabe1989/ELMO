@@ -1,0 +1,22 @@
+{
+    "nj/log-success": {
+        "args": ["message", "path"],
+        "help": "Append success log `message` to `path`",
+        "example": "(nj/log-success \"Calculation finished\" \"/workspace/log.txt\")"
+    },
+    "nj/log-warn": {
+        "args": ["message", "path"],
+        "help": "Append warning log `message` to `path`",
+        "example": "(nj/log-warn \"Low memory\" \"/workspace/log.txt\")"
+    },
+    "nj/log-error": {
+        "args": ["message", "path"],
+        "help": "Append error log `message` to `path`",
+        "example": "(nj/log-error \"File not found\" \"/workspace/log.txt\")"
+    },
+    "nj/log-note": {
+        "args": ["message", "path"],
+        "help": "Append note log `message` to `path`",
+        "example": "(nj/log-note \"Started processing\" \"/workspace/log.txt\")"
+    }
+}
