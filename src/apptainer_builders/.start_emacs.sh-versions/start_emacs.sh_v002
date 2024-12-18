@@ -21,25 +21,25 @@ source "$(dirname $0)"/ENVS.sh.src
 
 
 correct_socket_dir_permissions() {
-    if [ -d "$NINJA_EMACS_SERVER_DIR" ]; then
-        rm -rf "$NINJA_EMACS_SERVER_DIR"
+    if [ -d "$NINJA_EMACSD_SERVER_DIR" ]; then
+        rm -rf "$NINJA_EMACSD_SERVER_DIR"
     fi
-    mkdir -p "$NINJA_EMACS_SERVER_DIR"
-    chown root:"$NINJAS_GROUP" "$NINJA_EMACS_SERVER_DIR"
-    chmod 770 "$NINJA_EMACS_SERVER_DIR"
+    mkdir -p "$NINJA_EMACSD_SERVER_DIR"
+    chown root:"$NINJAS_GROUP" "$NINJA_EMACSD_SERVER_DIR"
+    chmod 770 "$NINJA_EMACSD_SERVER_DIR"
     if [ $? -ne 0 ]; then
-        echo "Error setting permissions for $NINJA_EMACS_SERVER_DIR" >&2
+        echo "Error setting permissions for $NINJA_EMACSD_SERVER_DIR" >&2
         exit 1
     fi
 
-    echo "Socket directory: $NINJA_EMACS_SERVER_DIR"
-    ls "$NINJA_EMACS_SERVER_DIR" -al
+    echo "Socket directory: $NINJA_EMACSD_SERVER_DIR"
+    ls "$NINJA_EMACSD_SERVER_DIR" -al
 }
 
 
 correct_socket_permissions() {
     local socket_dir
-    socket_dir=$(dirname "$NINJA_EMACS_SERVER_FILE")
+    socket_dir=$(dirname "$NINJA_EMACSD_SERVER_FILE")
     if [ -d "$socket_dir" ]; then
         chown -R root:"$NINJAS_GROUP" "$socket_dir"
         chmod -R 770 "$socket_dir"
@@ -55,13 +55,13 @@ debugging_echo() {
     echo "User: $NINJA_USER"
 
     # Socket directory
-    echo "Socket Directory: $NINJA_EMACS_SERVER_DIR"
-    ls "$NINJA_EMACS_SERVER_DIR" -al
+    echo "Socket Directory: $NINJA_EMACSD_SERVER_DIR"
+    ls "$NINJA_EMACSD_SERVER_DIR" -al
 
     # Socket
-    echo "Socket: $NINJA_EMACS_SERVER_FILE"
-    if [ -S "$NINJA_EMACS_SERVER_FILE" ]; then
-        ls "$NINJA_EMACS_SERVER_FILE" -al
+    echo "Socket: $NINJA_EMACSD_SERVER_FILE"
+    if [ -S "$NINJA_EMACSD_SERVER_FILE" ]; then
+        ls "$NINJA_EMACSD_SERVER_FILE" -al
     fi
 }
 
@@ -76,7 +76,7 @@ display_check() {
 
 get_connected_clients() {
     local count
-    count=$("$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_FILE" --eval '(length server-clients)' 2>/dev/null)
+    count=$("$NINJA_EMACS_CLIENT" -s "$NINJA_EMACSD_SERVER_FILE" --eval '(length server-clients)' 2>/dev/null)
 
     echo ""
     echo "========================================"
@@ -89,7 +89,7 @@ create_init_file() {
     local init_file="/tmp/ninja-emacs-init.el"
     cat > "$init_file" <<EOF
 (require 'server)
-(setq server-name "$NINJA_EMACS_SERVER_FILE")
+(setq server-name "$NINJA_EMACSD_SERVER_FILE")
 (server-start)
 EOF
     echo "$init_file"
@@ -116,7 +116,7 @@ start_emacs() {
 
         debugging_echo
 
-        if [ ! -S "$NINJA_EMACS_SERVER_FILE" ]; then
+        if [ ! -S "$NINJA_EMACSD_SERVER_FILE" ]; then
             # Start the emacs server
             echo "Starting emacs server for $NINJA_USER"
             su -l "$NINJA_USER" -c "$NINJA_EMACS_BIN --daemon -Q -l $init_file 2>&1" &
@@ -124,13 +124,13 @@ start_emacs() {
             # Wait for the socket with timeout
             local timeout=10
             local elapsed=0
-            while [ ! -S "$NINJA_EMACS_SERVER_FILE" ] && [ $elapsed -lt $timeout ]; do
+            while [ ! -S "$NINJA_EMACSD_SERVER_FILE" ] && [ $elapsed -lt $timeout ]; do
                 sleep 1
                 elapsed=$((elapsed + 1))
                 echo "Waiting for socket... ${elapsed}s"
             done
 
-            if [ ! -S "$NINJA_EMACS_SERVER_FILE" ]; then
+            if [ ! -S "$NINJA_EMACSD_SERVER_FILE" ]; then
                 echo "Error: Timeout waiting for emacs server socket"
                 exit 1
             fi
@@ -141,11 +141,11 @@ start_emacs() {
         # # Working but with GUI windows from all Ninjas
         # # Connect Ninjas to the Emacs server
         # echo "Connecting emacs client for $NINJA_USER"
-        # su -l "$NINJA_USER" -c "DISPLAY=:0 $NINJA_EMACS_CLIENT -s '$NINJA_EMACS_SERVER_FILE' -c '(message \"Client connected\")'" &
+        # su -l "$NINJA_USER" -c "DISPLAY=:0 $NINJA_EMACS_CLIENT -s '$NINJA_EMACSD_SERVER_FILE' -c '(message \"Client connected\")'" &
 
         # # Opens window but I cannot run any commands other than C-g; which disconnect users
         echo "Connecting emacs client for $NINJA_USER"
-        su -l "$NINJA_USER" -c "$NINJA_EMACS_CLIENT -nw --no-window-system -s '$NINJA_EMACS_SERVER_FILE' --eval '(progn (message \"Client connected\") (while t (sleep-for 1)))' </dev/null >/dev/null 2>&1" &
+        su -l "$NINJA_USER" -c "$NINJA_EMACS_CLIENT -nw --no-window-system -s '$NINJA_EMACSD_SERVER_FILE' --eval '(progn (message \"Client connected\") (while t (sleep-for 1)))' </dev/null >/dev/null 2>&1" &
 
         sleep 1
     done
@@ -155,7 +155,7 @@ start_emacs() {
     # GUI connection for root at the end with retry
     local max_retries=10
     local retry_count=0
-    while ! DISPLAY=:0 "$NINJA_EMACS_CLIENT" -s "$NINJA_EMACS_SERVER_FILE" -c -n 2>/dev/null && [ "$retry_count" -lt "$max_retries" ]; do
+    while ! DISPLAY=:0 "$NINJA_EMACS_CLIENT" -s "$NINJA_EMACSD_SERVER_FILE" -c -n 2>/dev/null && [ "$retry_count" -lt "$max_retries" ]; do
         echo "Waiting for emacs server to accept connections... (attempt $retry_count/$max_retries)"
         sleep 1
         retry_count=$((retry_count + 1))

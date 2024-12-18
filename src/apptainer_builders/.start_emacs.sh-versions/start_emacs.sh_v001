@@ -11,21 +11,21 @@ fi
 source "$(dirname $0)"/ENVS.sh.src
 
 correct_socket_dir_permissions() {
-    rm -rf $NINJA_EMACS_SERVER_DIR
-    mkdir -p $NINJA_EMACS_SERVER_DIR
-    chown root:$NINJAS_GROUP $NINJA_EMACS_SERVER_DIR
-    chmod 777 $NINJA_EMACS_SERVER_DIR
+    rm -rf $NINJA_EMACSD_SERVER_DIR
+    mkdir -p $NINJA_EMACSD_SERVER_DIR
+    chown root:$NINJAS_GROUP $NINJA_EMACSD_SERVER_DIR
+    chmod 777 $NINJA_EMACSD_SERVER_DIR
 
-    echo "Socket directory: $NINJA_EMACS_SERVER_DIR"
-    ls $NINJA_EMACS_SERVER_DIR -al
+    echo "Socket directory: $NINJA_EMACSD_SERVER_DIR"
+    ls $NINJA_EMACSD_SERVER_DIR -al
 }
 
 correct_socket_permissions() {
-    chown root:$NINJAS_GROUP $NINJA_EMACS_SERVER_FILE
-    chmod 777 $NINJA_EMACS_SERVER_FILE
+    chown root:$NINJAS_GROUP $NINJA_EMACSD_SERVER_FILE
+    chmod 777 $NINJA_EMACSD_SERVER_FILE
 
-    echo "Socket: $NINJA_EMACS_SERVER_SOCKE_DIR"
-    ls $NINJA_EMACS_SERVER_FILE -al
+    echo "Socket: $NINJA_EMACSD_SERVER_SOCKE_DIR"
+    ls $NINJA_EMACSD_SERVER_FILE -al
 }
 
 
@@ -39,14 +39,14 @@ start_emacs() {
 
         correct_socket_permissions
 
-        echo "$NINJA_USER is connecting to $NINJA_EMACS_SERVER_FILE"
-        if [ ! -S "$NINJA_EMACS_SERVER_FILE" ]; then
+        echo "$NINJA_USER is connecting to $NINJA_EMACSD_SERVER_FILE"
+        if [ ! -S "$NINJA_EMACSD_SERVER_FILE" ]; then
             ls $NINJA_HOME/.emacs.d/ -al
             exec su - $NINJA_USER -c "'$NINJA_EMACS_BIN'"
-            exec su - $NINJA_USER -c "'$NINJA_EMACS_BIN' --daemon='$NINJA_EMACS_SERVER_FILE' $@"
-            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_FILE -c -n $@"
+            exec su - $NINJA_USER -c "'$NINJA_EMACS_BIN' --daemon='$NINJA_EMACSD_SERVER_FILE' $@"
+            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACSD_SERVER_FILE -c -n $@"
         else
-            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACS_SERVER_FILE $@"
+            exec su - $NINJA_USER -c "$NINJA_EMACS_CLIENT -s $NINJA_EMACSD_SERVER_FILE $@"
         fi
     done
 }

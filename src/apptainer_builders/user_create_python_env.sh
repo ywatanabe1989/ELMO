@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-11 13:11:03 (ywatanabe)"
+# Time-stamp: "2024-12-18 19:43:30 (ywatanabe)"
 # File: ./ninja/src/apptainer_builders/install_python.sh
 
 # Check if running as root
@@ -22,21 +22,15 @@ create_ninja_python_env() {
     update_ninja_envs $ninja_id    
     
     # Set up Python virtual environment
-    python3 -m venv $NINJA_PYTHON_VIRTUAL_ENV >/dev/null
+    python3 -m venv $NINJA_HOME/.env >/dev/null
 
     # Install Python packages
-    . $NINJA_PYTHON_VIRTUAL_ENV/bin/activate && \
+    . $NINJA_HOME/.env/bin/activate && \
         pip install --upgrade pip && \
         pip install -r $THIS_DIR/requirements.txt &&
         >/dev/null
 }
 
 create_ninjas_python_envs
-# export -f create_ninja_python_env
-# export THIS_DIR NINJA_PYTHON_VIRTUAL_ENV
-
-# # Parallel execution
-# seq 1 $NINJA_N_AGENTS | parallel -j$(nproc) create_ninja_python_env {}
-
 
 # EOF

@@ -1,7 +1,11 @@
 #!/bin/bash
+# Time-stamp: "2024-12-18 17:55:23 (ywatanabe)"
+# File: ./Ninja/src/apptainer_builders/user_create_working_directories/setup_shared_workspace.sh
+
+THIS_DIR="$(dirname $0)"
 
 # Source all .sh.src files in the current directory
-for script in *.sh.src; do
+for script in "$THIS_DIR"/*.sh.src; do
     if [ -f "$script" ]; then #check if file exists before sourcing
         source "$script"
     fi
@@ -20,3 +24,6 @@ fi
 echo "Initial workspace and templates created in 'shared' directory."
 
 exit 0
+
+
+# EOF
