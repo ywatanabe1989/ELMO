@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-19 21:17:35
+!-- date: 2024-12-19 22:52:17
 !-- --- -->
 
 
@@ -27,3 +27,4 @@ pkill -f "emacs --daemon=/home/ninja"
 ```
 
 
+./src/apptainer_builders/rsync_from_sandbox.sh
