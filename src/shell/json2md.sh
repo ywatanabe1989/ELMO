@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 15:40:34 (ywatanabe)"
+# Time-stamp: "2024-12-19 16:23:52 (ywatanabe)"
 # File: ./Ninja/workspace/formats/json2md.sh
 # Function to print help message
 
@@ -79,31 +79,16 @@ json2md() {
     python "$JSON2MD_PYTHON" "$input" > "$output"
 }
 
-# json2md() {
-#     local input=$1
-#     local output=$2
-#     dir=$(dirname "$0")
-
-#     # Remove comment lines of the input file
-#     echo $input
-#     echo $output    
-
-#     python -c "from mngs.io._json2md import main; main()" "$input" > "$output"
-#     # python -m mngs.io._json2md "$input" > "$output"
-#     # python "$dir/json2md.py" "$input" > "$output"
-# }
-
-
 md2json() {
     local input=$1
     local output=$2
 
-    # Remove comment lines from markdown file
+    # Remove comment lines
     local input_cleaned=$(mktemp)
     sed -e '/<!--/,/-->/d' -e '/^;/d' "$input" > "$input_cleaned"
-    
+
+    # Apply md_to_json
     md_to_json "$input_cleaned" > "$output"
-    
     rm "$input_cleaned"
 }
 
