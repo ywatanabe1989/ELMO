@@ -1,0 +1,10 @@
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |

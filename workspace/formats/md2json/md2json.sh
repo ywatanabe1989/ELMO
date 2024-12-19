@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 12:44:32 (ywatanabe)"
+# Time-stamp: "2024-12-19 13:11:38 (ywatanabe)"
 # File: ./Ninja/workspace/formats/json2md.sh
 
 # Function to print help message
@@ -34,65 +34,11 @@ get_output_filename() {
     esac
 }
 
-# json_to_md() {
-#     local input=$1
-#     local output=$2
-
-#     {
-#         local section=""
-#         local max_key_width=12
-#         local in_array=false
-#         local array_key=""
-
-#         # First pass for key width
-#         while IFS= read -r line; do
-#             if [[ $line =~ \"([^\"]+)\":\ *\"([^\"]+)\" ]]; then
-#                 local key="${BASH_REMATCH[1]}"
-#                 [[ ${#key} -gt $max_key_width ]] && max_key_width=${#key}
-#             fi
-#         done < "$input"
-
-#         # Main processing
-#         while IFS= read -r line; do
-#             [[ -z "${line//[[:space:]]/}" || "$line" =~ ^[[:space:]]*[{}]$ ]] && continue
-
-#             line="${line%,}"
-
-#             if [[ $line =~ \"([^\"]+)\":\ *\{$ ]]; then
-#                 section="${BASH_REMATCH[1]}"
-#                 echo "## $section"
-#                 echo
-
-#             elif [[ $line =~ \"([^\"]+)\":\ *\[$ ]]; then
-#                 in_array=true
-#                 array_key="${BASH_REMATCH[1]}"
-
-#             elif [[ $in_array == true ]]; then
-#                 if [[ $line =~ \"([^\"]+)\" ]]; then
-#                     printf "| %-${max_key_width}s | %s |\n" "$array_key" "${BASH_REMATCH[1]}"
-#                 elif [[ $line =~ \] ]]; then
-#                     in_array=false
-#                 fi
-
-#             elif [[ $line =~ \"([^\"]+)\":\ *\"([^\"]+)\" ]]; then
-#                 printf "| %-${max_key_width}s | %s |\n" "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
-#             fi
-
-#         done < "$input"
-
-#     } > "${output:-/dev/stdout}"
-# }
-
-
-
 json_to_md() {
     local input=$1
     local output=$2
 
     {
-        # echo "# JSON Content"
-        # echo
-
         local section=""
         local max_key_width=12
         local in_array=false
@@ -148,35 +94,65 @@ json_to_md() {
 md_to_json() {
     local input=$1
     local output=$2
-    local depth=0
-    local in_section=""
+    local current_section=""
+    local first_section=true
     local first_item=true
+    local need_section_close=false
+    local no_section=true
 
+    if [[ ! -f "$input" ]]; then
+        return 1
+    fi
+    
     {
         echo "{"
         while IFS= read -r line; do
-            [[ -z "$line" ]] && continue
-
-            if [[ "$line" =~ ^#[[:space:]](.*)$ ]]; then
-                continue
-            elif [[ "$line" =~ ^##[[:space:]]([^[:space:]].*)$ ]]; then
-                [[ "$first_item" != true ]] && echo ","
-                echo "    \"${BASH_REMATCH[1]}\": {"
-                in_section="${BASH_REMATCH[1]}"
+            [[ -z "${line//[[:space:]]/}" ]] && continue
+            
+            if [[ "$line" =~ ^##[[:space:]]*([^[:space:]]+) ]]; then
+                if [[ "$current_section" != "" ]]; then
+                    echo "        }"
+                    echo -n "    "
+                    echo ","
+                fi
+                no_section=false
+                if [[ "$first_section" == true ]]; then
+                    first_section=false
+                fi
+                current_section="${BASH_REMATCH[1]}"
+                echo "    \"$current_section\": {"
+                first_item=true
+                need_section_close=true
+                
+            elif [[ "$line" =~ ^\|[[:space:]]*([^|]+)[[:space:]]*\|[[:space:]]*(.+)[[:space:]]*\| ]]; then
+                key="${BASH_REMATCH[1]}"
+                value="${BASH_REMATCH[2]}"
+                key="${key//[[:space:]]/}"
+                value="${value#"${value%%[![:space:]]*}"}"
+                value="${value%"${value##*[![:space:]]}"}"
+                
+                if [[ "$first_item" == false ]]; then
+                    echo ","
+                fi
+                
+                indent=$([ "$no_section" == true ] && echo "    " || echo "        ")
+                if [[ "$value" =~ ^\[(.*)\]$ ]]; then
+                    printf "%s\"%s\": %s" "$indent" "$key" "$value"
+                elif [[ "$value" =~ ^```.*```$ ]] || [[ "$value" =~ ^\(.*\)$ ]]; then
+                    printf "%s\"%s\": \"%s\"" "$indent" "$key" "${value//\"/\\\"}"
+                else
+                    printf "%s\"%s\": \"%s\"" "$indent" "$key" "$value"
+                fi
                 first_item=false
-            elif [[ "$line" =~ ^[[:space:]]*-[[:space:]]([^:]+):[[:space:]]*(.*)$ ]]; then
-                local key="${BASH_REMATCH[1]}"
-                local value="${BASH_REMATCH[2]}"
-                [[ -n "$value" ]] && echo "        \"$key\": $value,"
-            elif [[ "$line" =~ ^[[:space:]]*-[[:space:]]*(\[.*\])[[:space:]]*$ ]]; then
-                echo "        ${BASH_REMATCH[1]}"
-            elif [[ "$line" =~ ^[[:space:]]*-[[:space:]]*(.+)[[:space:]]*$ ]]; then
-                echo "        ${BASH_REMATCH[1]},"
             fi
         done < "$input"
+        
+        [[ "$need_section_close" == true ]] && echo -e "\n    }"
         echo "}"
+        
     } > "${output:-/dev/stdout}"
 }
+
 
 # Main function
 main() {
@@ -206,7 +182,7 @@ main() {
     # Process each input file
     for input in "$@"; do
         local output=$(get_output_filename "$input" "$cmd")
-
+        
         # Check if input file exists
         if [[ ! -f "$input" ]]; then
             echo "Error: Input file not found: $input" >&2
@@ -216,10 +192,10 @@ main() {
         # Execute appropriate conversion based on command name
         case "$cmd" in
             json2md)
-                json_to_md "$input" "$output"
+                json_to_md "$input" "$output" 2>/dev/null
                 ;;
             md2json)
-                md_to_json "$input" "$output"
+                md_to_json "$input" "$output" 2>/dev/null
                 ;;
             *)
                 echo "Error: Unknown command $cmd" >&2
@@ -227,19 +203,18 @@ main() {
                 ;;
         esac
 
-        echo ""
-        echo "========================================"
-        echo $input
-        echo "----------------------------------------"
-        cat $input
-        echo "----------------------------------------"
-        echo $output
-        echo "----------------------------------------"
-        cat $output
-        echo "========================================"
-        echo ""
+        # echo ""
+        # echo "========================================"
+        # echo $input
+        # echo "----------------------------------------"
+        # cat $input
+        # echo "----------------------------------------"
+        # echo $output
+        # echo "----------------------------------------"
+        # cat $output
+        # echo "========================================"
+        # echo ""
     done
 }
 
-# Execute main function
 main "$@"

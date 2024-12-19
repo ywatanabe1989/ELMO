@@ -1,0 +1,1190 @@
+(wsl) formats $ ./json2md.sh *.json
+./json2md.sh: line 199: .: ..: is a directory
+
+========================================
+agent-000.json
+----------------------------------------
+{
+    "agent_id": "ninja-000",
+    "status": ["ready", "running", "pending", "complete"]
+}
+----------------------------------------
+agent-000.md
+----------------------------------------
+# JSON Content
+
+|              | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+========================================
+
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+
+========================================
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"
+    },
+    "task": {
+        "id": "string",
+        "description": "string"
+    },
+    "process": {
+        "id": "string",
+        "description": "string"
+    },
+    "thread": {
+        "id": "string",
+        "description": "string"
+    },
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+----------------------------------------
+context-000.md
+----------------------------------------
+# JSON Content
+
+## project
+
+|              | string |
+|              | string |
+## task
+
+|              | string |
+|              | string |
+## process
+
+|              | string |
+|              | string |
+## thread
+
+|              | string |
+|              | string |
+## branch
+
+|              | string |
+|              | string |
+========================================
+
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+./json2md.sh: line 199: .: ..: is a directory
+
+========================================
+prompt-000.json
+----------------------------------------
+{
+    "role": "hello world agent",
+    "requests": ["print hello world"],
+    "tools": ["elisp"],
+    "workspace": ["/workspace"],
+    "authority": ["read", "write", "execute"],
+    "rules": [
+        "Write code in emacs lisp",
+        "Wrap code with ```elisp\nCODE\n```"
+    ],
+    "output_format": "```elisp\n(message \"Hello, World!\")\n```",
+(wsl) formats $ ./json2md.sh *.json
+
+========================================
+agent-000.json
+----------------------------------------
+{
+    "agent_id": "ninja-000",
+    "status": ["ready", "running", "pending", "complete"]
+}
+----------------------------------------
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+========================================
+
+
+========================================
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"
+    },
+    "task": {
+        "id": "string",
+        "description": "string"
+    },
+    "process": {
+        "id": "string",
+        "description": "string"
+    },
+    "thread": {
+        "id": "string",
+        "description": "string"
+    },
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+----------------------------------------
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+========================================
+
+
+========================================
+prompt-000.json
+----------------------------------------
+{
+    "role": "hello world agent",
+    "requests": ["print hello world"],
+    "tools": ["elisp"],
+    "workspace": ["/workspace"],
+    "authority": ["read", "write", "execute"],
+(wsl) md2json $ md2json.sh *.md
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000 ",
+        "status": "["ready", "running", "pending", "complete"] "}
+========================================
+
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string ",
+        "description": "string "    },
+    "task": {
+        "id": "string ",
+        "description": "string "    },
+    "process": {
+        "id": "string ",
+        "description": "string "    },
+    "thread": {
+        "id": "string ",
+        "description": "string "    },
+    "branch": {
+        "id": "string ",
+        "description": "string "
+    }
+}
+========================================
+
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+(wsl) md2json $ md2json.sh *.md
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": "[\"ready\","}
+========================================
+
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"    },
+    "task": {
+        "id": "string",
+        "description": "string"    },
+    "process": {
+        "id": "string",
+        "description": "string"    },
+    "thread": {
+        "id": "string",
+        "description": "string"    },
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+========================================
+
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+(wsl) md2json $ md2json.sh *.md | cb
+(wsl) md2json $ md2json.sh *.md | cb
+(wsl) md2json $ md2json.sh *.md 
+./md2json.sh: line 189: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": ["ready", "running", "pending", "complete"]}
+========================================
+
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"    },
+    "task": {
+        "id": "string",
+        "description": "string"    },
+    "process": {
+        "id": "string",
+        "description": "string"    },
+    "thread": {
+        "id": "string",
+        "description": "string"    },
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+========================================
+
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+./md2json.sh: line 189: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+(wsl) md2json $ md2json.sh *.md 
+./md2json.sh: line 194: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": []}
+========================================
+
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "task": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "process": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "thread": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "branch": {
+            "id": "string",
+            "description": "string"
+        }
+}
+========================================
+
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+{
+        "role": "hello world agent",
+        "requests": [],
+        "tools": [],
+        "workspace": [],
+        "authority": [],
+        "rules": "Write code in emacs lisp",
+        "rules": "Wrap code with ```elisp\nCODE\n```",
+        "output_format": "```elisp\n(message "Hello, World!")\n```",
+        "input_example": "print hello world",
+        "output_example": "```elisp\n(message "Hello, World!")\n```"}
+========================================
+
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+./md2json.sh: line 194: .: ..: is a directory
+
+========================================
+tool-000.md
+----------------------------------------
+## nj/function-001
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+## nj/function-002
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+----------------------------------------
+tool-000.json
+----------------------------------------
+{
+    "nj/function-001": {
+            "args": [],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"        }
+    ,
+    "nj/function-002": {
+            "args": [],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"
+        }
+}
+========================================
+
+(wsl) md2json $ md2json.sh *.md 2>&1 | cb
+(wsl) md2json $ md2json.sh *.md 2>&1 | cb
+(wsl) md2json $ md2json.sh *.md 2>&1 | cb
+(wsl) md2json $ md2json.sh *.md 2>&1
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": ["ready", "running", "pending", "complete"]}
+========================================
+
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "task": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "process": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "thread": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "branch": {
+            "id": "string",
+            "description": "string"
+        }
+}
+========================================
+
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+{
+        "role": "hello world agent",
+        "requests": ["print hello world"],
+        "tools": ["elisp"],
+        "workspace": ["/workspace"],
+(wsl) md2json $ md2json.sh *.md 2>&1
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": ["ready", "running", "pending", "complete"]}
+========================================
+
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "task": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "process": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "thread": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "branch": {
+            "id": "string",
+            "description": "string"
+        }
+}
+========================================
+
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+{
+        "role": "hello world agent",
+        "requests": ["print hello world"],
+        "tools": ["elisp"],
+        "workspace": ["/workspace"],
+        "authority": ["read", "write", "execute"],
+        "rules": "Write code in emacs lisp",
+        "rules": "Wrap code with ```elisp\nCODE\n```",
+        "output_format": "```elisp\n(message "Hello, World!")\n```",
+        "input_example": "print hello world",
+        "output_example": "```elisp\n(message "Hello, World!")\n```"}
+========================================
+
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+./md2json.sh: line 196: .: ..: is a directory
+
+========================================
+tool-000.md
+----------------------------------------
+## nj/function-001
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+## nj/function-002
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+----------------------------------------
+tool-000.json
+----------------------------------------
+{
+    "nj/function-001": {
+            "args": ["arg1", "arg2"],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"        }
+    ,
+    "nj/function-002": {
+            "args": ["arg1", "arg2"],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"
+        }
+}
+========================================
+
+(wsl) md2json $ md2json.sh *.md 2>&1 | cb
+(wsl) md2json $ md2json.sh *.md 2>&1 | cb
+(wsl) md2json $ md2json.sh *.md 2>&1 
+./md2json.sh: line 192: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": ["ready", "running", "pending", "complete"]}
+========================================
+
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "task": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "process": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "thread": {
+            "id": "string",
+            "description": "string"        }
+    ,
+    "branch": {
+            "id": "string",
+            "description": "string"
+        }
+}
+========================================
+
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+{
+        "role": "hello world agent",
+        "requests": ["print hello world"],
+        "tools": ["elisp"],
+        "workspace": ["/workspace"],
+        "authority": ["read", "write", "execute"],
+        "rules": "Write code in emacs lisp",
+        "rules": "Wrap code with ```elisp\nCODE\n```",
+        "output_format": "```elisp\n(message "Hello, World!")\n```",
+        "input_example": "print hello world",
+        "output_example": "```elisp\n(message "Hello, World!")\n```"}
+========================================
+
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+./md2json.sh: line 192: .: ..: is a directory
+
+========================================
+tool-000.md
+----------------------------------------
+## nj/function-001
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+## nj/function-002
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+----------------------------------------
+tool-000.json
+----------------------------------------
+{
+    "nj/function-001": {
+            "args": ["arg1", "arg2"],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"        }
+    ,
+    "nj/function-002": {
+            "args": ["arg1", "arg2"],
+            "help": "Docstring of the function",
+            "example": "(nj/function-name \"arg1\" \"arg2\")"
+        }
+}
+========================================
+
+(wsl) md2json $ md2json.sh *.md
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+        "agent_id": "ninja-000",
+        "status": "[\"ready\","}
+========================================
+
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"    },
+    "task": {
+        "id": "string",
+        "description": "string"    },
+    "process": {
+        "id": "string",
+        "description": "string"    },
+    "thread": {
+        "id": "string",
+        "description": "string"    },
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+========================================
+
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+(wsl) md2json $ md2json.sh *.md
+./md2json.sh: line 191: .: ..: is a directory
+
+========================================
+agent-000.md
+----------------------------------------
+| agent_id     | ninja-000 |
+| status       | ["ready", "running", "pending", "complete"] |
+----------------------------------------
+agent-000.json
+----------------------------------------
+{
+    "agent_id": "ninja-000",
+    "status": ["ready", "running", "pending", "complete"]}
+========================================
+
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+
+========================================
+context-000.md
+----------------------------------------
+## project
+
+| id           | string |
+| description  | string |
+## task
+
+| id           | string |
+| description  | string |
+## process
+
+| id           | string |
+| description  | string |
+## thread
+
+| id           | string |
+| description  | string |
+## branch
+
+| id           | string |
+| description  | string |
+----------------------------------------
+context-000.json
+----------------------------------------
+{
+    "project": {
+        "id": "string",
+        "description": "string"        }
+    ,
+    "task": {
+        "id": "string",
+        "description": "string"        }
+    ,
+    "process": {
+        "id": "string",
+        "description": "string"        }
+    ,
+    "thread": {
+        "id": "string",
+        "description": "string"        }
+    ,
+    "branch": {
+        "id": "string",
+        "description": "string"
+    }
+}
+========================================
+
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+
+========================================
+prompt-000.md
+----------------------------------------
+| role           | hello world agent |
+| requests       | ["print hello world"] |
+| tools          | ["elisp"] |
+| workspace      | ["/workspace"] |
+| authority      | ["read", "write", "execute"] |
+| rules          | Write code in emacs lisp |
+| rules          | Wrap code with ```elisp\nCODE\n``` |
+| output_format  | ```elisp\n(message "Hello, World!")\n``` |
+| input_example  | print hello world |
+| output_example | ```elisp\n(message "Hello, World!")\n``` |
+----------------------------------------
+prompt-000.json
+----------------------------------------
+{
+    "role": "hello world agent",
+    "requests": ["print hello world"],
+    "tools": ["elisp"],
+    "workspace": ["/workspace"],
+    "authority": ["read", "write", "execute"],
+    "rules": "Write code in emacs lisp",
+    "rules": "Wrap code with ```elisp\nCODE\n```",
+    "output_format": "```elisp\n(message "Hello, World!")\n```",
+    "input_example": "print hello world",
+    "output_example": "```elisp\n(message "Hello, World!")\n```"}
+========================================
+
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+./md2json.sh: line 191: .: ..: is a directory
+
+========================================
+tool-000.md
+----------------------------------------
+## nj/function-001
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+## nj/function-002
+
+| args         | ["arg1", "arg2"] |
+| help         | Docstring of the function |
+| example      | (nj/function-name "arg1" "arg2") |
+----------------------------------------
+tool-000.json
+----------------------------------------
+{
+    "nj/function-001": {
+        "args": ["arg1", "arg2"],
+        "help": "Docstring of the function",
+        "example": "(nj/function-name \"arg1\" \"arg2\")"        }
+    ,
+    "nj/function-002": {
+        "args": ["arg1", "arg2"],
+        "help": "Docstring of the function",
+        "example": "(nj/function-name \"arg1\" \"arg2\")"
+    }
+}
+========================================
+
+(wsl) md2json $ 
