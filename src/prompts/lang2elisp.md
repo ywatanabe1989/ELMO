@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/src/prompts/lang2elisp.md
 !-- author: ywatanabe
-!-- date: 2024-12-15 07:48:20
+!-- date: 2024-12-19 11:25:01
 !-- --- -->
 
 
