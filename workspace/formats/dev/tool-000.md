@@ -1,0 +1,20 @@
+# nj/function-001
+## args
+* arg1
+* arg2
+## help
+Docstring of the function
+
+## example
+(nj/function-name "arg1" "arg2")
+
+# nj/function-002
+## args
+* arg1
+* arg2
+## help
+Docstring of the function
+
+## example
+(nj/function-name "arg1" "arg2")
+

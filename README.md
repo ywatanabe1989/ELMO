@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: ./Ninja/README.md
 !-- author: ywatanabe
-!-- date: 2024-12-19 08:35:49
+!-- date: 2024-12-19 13:59:17
 !-- --- -->
 
 
@@ -17,7 +17,7 @@ git clone https://github.com/user/Ninja.git ~/.emacs.d/Ninja
 
 ``` bash
 ./run.sh -m build # May take >30 min
-./run.sh # Run Ninja System
+./run.sh # Run
 ```
 
 ## Contact
