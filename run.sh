@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 08:25:23 (ywatanabe)"
+# Time-stamp: "2024-12-19 19:41:10 (ywatanabe)"
 # File: ./Ninja/run.sh
 
 LOG_FILE="$0.log"
@@ -9,6 +9,7 @@ usage() {
     echo
     echo "Options:"
     echo "  -m, --mode   Operation mode (run|build|shell) (default: run)"
+    echo "  -i, --init   Kill existing emacs daemon servers"
     echo "  -h, --help   Display this help message"
     echo
     echo "Example:"
@@ -29,18 +30,28 @@ while [[ $# -gt 0 ]]; do
             mode="$2"
             shift 2
             ;;
+        -i|--init)
+            pkill -f "emacs --daemon=/home/ninja"
+            shift
+            ;;        
         -h|--help)
             usage
             ;;
         *)
-            echo "Unknown option: $1"
-            usage
+            # Store remaining args for exec mode
+            if [ "$mode" = "exec" ]; then
+                exec_args=("$@")
+                break
+            else
+                echo "Unknown option: $1"
+                usage
+            fi
             ;;
     esac
 done
 
-# Kill existing emacs daemon
-pkill -f "emacs --daemon=/home/ninja"
+# # Kill existing emacs daemon
+# pkill -f "emacs --daemon=/home/ninja"
 
 # Execute based on mode
 if [ "$mode" = "run" ]; then
@@ -60,39 +71,15 @@ elif [ "$mode" = "shell" ]; then
               --fakeroot \
               --writable \
               ./.apptainer/ninja/ninja.sandbox
+    # In the exec section, use the stored args
+elif [ "$mode" = "exec" ]; then
+    apptainer exec \
+              --fakeroot \
+              --writable \
+              ./.apptainer/ninja/ninja.sandbox "${exec_args[@]}"
 else
     echo "Invalid mode. Use run, build, or shell"
     usage
 fi
 
 # EOF
-
-# #!/bin/bash
-# # Time-stamp: "2024-12-19 08:21:10 (ywatanabe)"
-# # File: ./Ninja/run.sh
-
-# pkill -f "emacs --daemon=/home/ninja"
-
-# help
-# parse args
-
-# if mode="run"
-#    apptainer run \
-    #              --writable \
-    #              --fakeroot \
-    #              ./.apptainer/ninja/ninja.sandbox
-#    elif mode == "build"
-#         apptainer build \
-    #                   --sandbox \
-    #                   --fakeroot \
-    #                   ./.apptainer/ninja/ninja.sandbox \
-    #                   ./.apptainer/ninja/ninja.def \
-    #                   2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
-#    elif mode == "shell"
-#         apptainer shell \
-    #                   --fakeroot \
-    #                   --writable \
-    #                   ./.apptainer/ninja/ninja.sandbox
-
-#         # EOF
-
