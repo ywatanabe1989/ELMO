@@ -1,1 +1,1 @@
-start_emacs_parallel.sh
+start_emacs_single.sh

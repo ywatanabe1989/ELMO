@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 01:02:31 (ywatanabe)"
+# Time-stamp: "2024-12-19 21:24:30 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/start_emacs_independently.sh
 
 # Check if running as root
@@ -24,20 +24,11 @@ init_environment() {
     killall -9 "$NINJA_EMACS_BIN" 2>/dev/null || true
 }
 
-
 start_emacs_daemon() {
     local ninja_id="$1"
     update_ninja_envs $ninja_id
 
     local log_file=/tmp/emacs-$NINJA_USER.log
-    local max_attempts=10
-    local attempt=1
-
-    echo "Current DISPLAY: $DISPLAY"
-    if [ -z "$DISPLAY" ]; then
-        echo "Error: DISPLAY not set"
-        return 1
-    fi
 
     # Ensure directory exists and has correct permissions
     mkdir -p $(dirname $NINJA_EMACSD_SERVER_FILE)
@@ -51,9 +42,10 @@ start_emacs_daemon() {
     su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacs --daemon=$NINJA_EMACSD_SERVER_FILE -Q > $log_file 2>&1"
 
     # Connect
-    su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacsclient -s $NINJA_EMACSD_SERVER_FILE -c -n --eval '(load-file \"$NINJA_EMACSD_PRIVATE/init.el\")'" &
+    su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacsclient -s $NINJA_EMACSD_SERVER_FILE -c -n --eval '(load-file \"$NINJA_EMACSD_PRIVATE/init.el\")'" >/dev/null &
+    # su - $NINJA_USER -c "HOME=$NINJA_HOME DISPLAY=$DISPLAY emacsclient -s $NINJA_EMACSD_SERVER_FILE -c -n --eval '(progn (load-file \"$NINJA_EMACSD_PRIVATE/init.el\") nil)'" >/dev/null &
 
-    sleep 2
+    
 }
 
 
@@ -64,7 +56,7 @@ main() {
         start_emacs_daemon $ninja_id
     done
 
-    sleep 120
+    # sleep 120
 }
 
 main
