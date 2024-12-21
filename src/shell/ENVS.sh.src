@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 23:11:25 (ywatanabe)"
+# Time-stamp: "2024-12-19 21:07:20 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/ENVS.sh.src
 
 # Project
@@ -33,7 +33,7 @@ export NINJA_SHARED_SRC=${NINJA_SHARED_SRC:-$NINJA_SHARED_WORKSPACE/src}
 export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-emacs}
 export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-emacsclient}
 export NINJA_EMACSD_SHARED_RESOURCES="elpa init.el inits lisp custom.el"
-export NINJA_EMACSD_PRIVATE_RESOURCES="recentf history"
+export NINJA_EMACSD_PRIVATE_RESOURCES="recentf history abbrev_defs places transient auto-save-list"
 # export NINJA_EMACSD_PRIVATE
 export NINJA_EMACSD_SHARED=/opt/Ninja/src/apptainer_builders/shared_emacsd
 # export NINJA_EMACSD_SERVER_DIR

@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: ./Ninja/src/prompts/lang2elisp.md
-!-- author: ywatanabe
-!-- date: 2024-12-15 07:48:20
+!-- title: 2024-12-20 01:52:03
+!-- author: Yusuke Watanabe
+!-- date: /home/ywatanabe/.emacs.d/lisp/Ninja/src/prompts/lang2elisp.md
 !-- --- -->
 
 

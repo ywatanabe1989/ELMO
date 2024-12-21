@@ -1,0 +1,22 @@
+[user]
+	email = ywatanabe@alumni.u-tokyo.ac.jp
+	name = Yusuke Watanabe
+[core]
+	pager = more
+	editor = emacs
+[color]
+	ui = true
+[init]
+	templatedir = ~/.git-templates
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pull]
+	rebase = false
+[push]
+	autoSetupRemote = true
+	default = simple
+[safe]
+	directory = /mnt/ubuntu2004/.dotfiles

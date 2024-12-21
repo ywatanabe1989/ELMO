@@ -1,8 +1,7 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 01:04:39 (ywatanabe)"
-# File: ./Ninja/src/apptainer_builders/user_correct_permissions.sh
+# Time-stamp: "2024-12-19 21:14:19 (ywatanabe)"
+# File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/user_correct_permissions.sh
 
-# Check if running as root
 if [ "$(id -u)" != "0" ]; then
     echo "This script ($0) must be run as root" >&2
     exit 1
@@ -14,29 +13,31 @@ source "$THIS_DIR"/user_correct_permissions_emacsd.sh.src
 
 correct_permissions_home() {
     for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
-        update_ninja_envs $ninja_id
-
-        chmod -R 750 $NINJA_HOME >/dev/null
-        chown -R $NINJA_USER:$NINJAS_GROUP $NINJA_HOME >/dev/null        
+        update_ninja_envs "$ninja_id"
+        chmod -R 770 "$NINJA_HOME"
+        chown -R "$NINJA_USER:$NINJAS_GROUP" "$NINJA_HOME"
     done
 }
 
 correct_permissions_global(){
-    chown -R root:$NINJAS_GROUP /home
-    chown -R root:$NINJAS_GROUP /opt/Ninja
-    chmod -R 770 /opt/Ninja/src/apptainer_builders/shared_emacsd
+    chown -R root:"$NINJAS_GROUP" /home
+    chown -R root:"$NINJAS_GROUP" /opt/Ninja
+    chmod -R 775 /opt/Ninja/src/apptainer_builders/shared_emacsd
+
+    mkdir /workspace
+    chmod -R 777 /workspace
+    chown -R root:"$NINJAS_GROUP" /workspace
 }
 
 correct_permissions_shared() {
-    # Source
-    chmod -R 750 -R /opt/Ninja
-    chown -R root:$NINJAS_GROUP /opt/Ninja >/dev/null
+    chmod -R 775 /opt/Ninja
+    chown -R root:"$NINJAS_GROUP" /opt/Ninja
 }
 
 correct_permissions_home
 correct_permissions_shared
 correct_permissions_global
-# correct_permissions_emacsd
 emacsd_correct_permissions
+
 
 # EOF

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 19:46:42 (ywatanabe)"
+# Time-stamp: "2024-12-19 22:49:09 (ywatanabe)"
 # File: ./Ninja/src/shell/apptainer_builders/rsync_exclude_options.sh.src
 
 
