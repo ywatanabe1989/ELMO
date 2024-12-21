@@ -3,6 +3,7 @@
 # Please add files here
 .apptainer_builders
 .README.md
+README.md
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Secrets.gitignore ###
 .git-crypt/keys
@@ -632,3 +633,4 @@ src/sea-setup-sea.log
 **/*.sif
 **/build-temp-*
 .apptainer/ninja/definitions/build-temp-889387931/
+workspace/shared/configs/.ssh/
