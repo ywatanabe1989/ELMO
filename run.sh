@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 19:41:10 (ywatanabe)"
+# Time-stamp: "2024-12-20 17:53:42 (ywatanabe)"
 # File: ./Ninja/run.sh
 
 LOG_FILE="$0.log"
@@ -13,7 +13,7 @@ usage() {
     echo "  -h, --help   Display this help message"
     echo
     echo "Example:"
-    echo "  $0           # Run the container"    
+    echo "  $0           # Run the container"
     echo "  $0 -m run    # Run the container"
     echo "  $0 -m build  # Build the container"
     echo "  $0 -m shell  # Enter shell in the container"
@@ -33,7 +33,7 @@ while [[ $# -gt 0 ]]; do
         -i|--init)
             pkill -f "emacs --daemon=/home/ninja"
             shift
-            ;;        
+            ;;
         -h|--help)
             usage
             ;;
@@ -54,28 +54,38 @@ done
 # pkill -f "emacs --daemon=/home/ninja"
 
 # Execute based on mode
+if [ -n "$NINJA_BIND" ]; then
+    bind_opt="--bind $NINJA_BIND"
+else
+    bind_opt=""
+fi
+
 if [ "$mode" = "run" ]; then
     apptainer run \
               --writable \
               --fakeroot \
+              $bind_opt \
               ./.apptainer/ninja/ninja.sandbox
 elif [ "$mode" = "build" ]; then
     apptainer build \
               --sandbox \
               --fakeroot \
+              $bind_opt \
               ./.apptainer/ninja/ninja.sandbox \
               ./.apptainer/ninja/ninja.def \
               2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
 elif [ "$mode" = "shell" ]; then
     apptainer shell \
-              --fakeroot \
               --writable \
+              --fakeroot \
+              $bind_opt \
               ./.apptainer/ninja/ninja.sandbox
     # In the exec section, use the stored args
 elif [ "$mode" = "exec" ]; then
     apptainer exec \
-              --fakeroot \
               --writable \
+              --fakeroot \
+              $bind_opt \
               ./.apptainer/ninja/ninja.sandbox "${exec_args[@]}"
 else
     echo "Invalid mode. Use run, build, or shell"
