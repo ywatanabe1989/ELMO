@@ -1,0 +1,18 @@
+{
+    "git": {
+        "args": ["<command>"],
+        "workspace": [
+            "Repository at /workspace/<project-name>/",
+            "All git commands should be run from repository root"
+        ],
+        "environment": [
+            "/workspace/shared/configs/.gitconfig",
+            "/workspace/shared/configs/.gitignore",
+        ],
+        "note": [
+            "Ensure .gitignore is configured",
+        ],
+        "example": "(call-process \"git -C /workspace/project add .\")",
+        "version": "1.0.0",
+    }
+}

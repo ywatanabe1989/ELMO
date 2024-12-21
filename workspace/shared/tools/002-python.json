@@ -1,0 +1,21 @@
+{
+    "python": {
+        "args": [
+            "<script_path>",
+            "Use argparse for additional arguments"
+        ],
+        "workspace": [
+            "Workspace is /workspace/<project-name>/",
+            "All Python script should be organized under /workspace/<project-name>/scripts/",
+            "All Data should be organized under /workspace/<project-name>/data/"
+        ],
+        "environment": [
+            "Shared python env is: /workspace/.env",
+            "Add symlink to /workspace/<project-name>/.env from",
+            "/workspace/requirements.txt"
+        ],
+        "note": [],
+        "example": "(call-process \"python /workspace/scripts/example.py --key var\")",
+        "version": "1.0.0"
+    }
+}

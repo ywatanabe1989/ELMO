@@ -18,6 +18,7 @@
     "Write code in emacs lisp",
     "Wrap code with ```elisp\nCODE"
   ],
-  "input_example": "print hello world",
-  "output_example": "```\n(message \"Hello, World!\")\n```"
+    "input": "INPUT IS INSERTED HERE"
+    "input_example": "print hello world",
+    "output_example": "```\n(message \"Hello, World!\")\n```"
 }
