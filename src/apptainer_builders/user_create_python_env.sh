@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 01:05:03 (ywatanabe)"
+# Time-stamp: "2024-12-21 16:43:24 (ywatanabe)"
 # File: ./ninja/src/apptainer_builders/install_python.sh
 
 # Check if running as root
@@ -28,6 +28,9 @@ create_ninja_python_env() {
     . $NINJA_HOME/.env/bin/activate >/dev/null
     pip install --upgrade pip >/dev/null
     pip install -r $THIS_DIR/requirements.txt >/dev/null
+
+    chmod -R 770 $NINJA_HOME/.env
+    chown -R $NINJA_USER:$NINJA_GROUP $NINJA_HOME/.env    
 }
 
 create_ninjas_python_envs
