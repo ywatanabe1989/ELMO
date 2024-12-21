@@ -80,4 +80,3 @@ From: ubuntu:latest
     /opt/Ninja/src/apptainer_builders/inja_environments.txt
     
     # export HOME=$NINJA_HOME && cd $HOME
-    # exec sudo -u $NINJA_USER sh -c bash /opt/Ninja/src/apptainer_builders/start_emacs.sh
