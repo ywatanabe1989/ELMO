@@ -632,3 +632,4 @@ src/sea-setup-sea.log
 **/*.sif
 **/build-temp-*
 .apptainer/ninja/definitions/build-temp-889387931/
+workspace/shared/configs/.ssh/
