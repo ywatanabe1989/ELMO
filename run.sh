@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-20 17:53:42 (ywatanabe)"
+# Time-stamp: "2024-12-21 17:02:05 (ywatanabe)"
 # File: ./Ninja/run.sh
 
 LOG_FILE="$0.log"

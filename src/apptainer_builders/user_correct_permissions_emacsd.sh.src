@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 21:13:19 (ywatanabe)"
+# Time-stamp: "2024-12-21 16:31:06 (ywatanabe)"
 # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/user_correct_permissions_emacsd.sh.src
 
 # Check if running as root
@@ -42,14 +42,18 @@ _emacsd_correct_permissions_shared() {
     update_ninja_envs "$ninja_id"
 
     # Fix base directory
-    chown "$NINJA_USER:$NINJAS_GROUP" "$NINJA_EMACSD_PRIVATE"
-    chmod 770 "$NINJA_EMACSD_PRIVATE"
+    chown -R "$NINJA_USER:$NINJAS_GROUP" "$NINJA_EMACSD_SHARED"
+    chmod -R 770 "$NINJA_EMACSD_SHARED"
+    
+    # Fix base directory
+    chown -R "$NINJA_USER:$NINJAS_GROUP" "$NINJA_EMACSD_PRIVATE"
+    chmod -R 770 "$NINJA_EMACSD_PRIVATE"
 
     # Fix generated directories
     for dir in auto-save-list transient; do
         [ -d "$NINJA_EMACSD_PRIVATE/$dir" ] && {
-            chown "$NINJA_USER:$NINJAS_GROUP" "$NINJA_EMACSD_PRIVATE/$dir"
-            chmod 770 "$NINJA_EMACSD_PRIVATE/$dir"
+            chown -R "$NINJA_USER:$NINJAS_GROUP" "$NINJA_EMACSD_PRIVATE/$dir"
+            chmod -R 770 "$NINJA_EMACSD_PRIVATE/$dir"
         }
     done
 
@@ -60,19 +64,6 @@ _emacsd_correct_permissions_shared() {
         [ ! -L "$tgt" ] && chmod 775 "$tgt"
     done
 }
-
-# _emacsd_correct_permissions_shared() {
-#     local ninja_id="$1"
-#     update_ninja_envs "$ninja_id"
-
-#     for shared_resource in ${NINJA_EMACSD_SHARED_RESOURCES[@]}; do
-#         src="$NINJA_EMACSD_SHARED/$shared_resource"
-#         tgt="$NINJA_EMACSD_PRIVATE/$shared_resource"
-
-#         chown -R "$NINJA_USER:$NINJAS_GROUP" "$tgt"
-#         chmod -R 775 "$tgt"
-#     done
-# }
 
 _emacsd_correct_permissions_server_dir() {
     local ninja_id="$1"

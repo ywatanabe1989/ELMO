@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-18 04:32:51 (ywatanabe)"
+# Time-stamp: "2024-12-22 06:46:20 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/install_basic_apt_packages.sh
 
 # Check if running as root
@@ -48,6 +48,7 @@ apt-get install -y --no-install-recommends \
         dvipng \
         fonts-ipafont \
         fonts-ipaexfont \
+        rsync \
         > /dev/null
 
 # LANG
