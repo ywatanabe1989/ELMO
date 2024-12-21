@@ -634,4 +634,4 @@ src/sea-setup-sea.log
 **/*.sandbox/*
 **/*.sif
 **/build-temp-*
-.apptainer/ninja/definitions/build-temp-889387931/
+.apptainer/ninja/definitions/build-temp-889387931/.README.md-versions/
