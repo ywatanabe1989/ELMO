@@ -1,8 +1,10 @@
 <!-- ---
-!-- title: 2024-12-22 16:28:23
+!-- title: 2024-12-22 17:24:22
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/Ninja/README.md
 !-- --- -->
+
+tree --gitignore -L 3
 
 ## Dev Links
 
