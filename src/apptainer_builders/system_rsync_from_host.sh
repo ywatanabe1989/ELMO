@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 07:18:18 (ywatanabe)"
+# Time-stamp: "2024-12-22 12:56:58 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/system_copy_from_host.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,7 +10,7 @@ if [ "$APPNAME" = "Ninja" ]; then
 fi
 
 # Copy dotfiles to ninjas
-NINJA_FROM_HOST_DIR="./workspace/shared/from_host"
+NINJA_FROM_HOST_DIR="./workspace/private/from_host"
 
 # Mapping
 TGT_DIR=$NINJA_FROM_HOST_DIR/home

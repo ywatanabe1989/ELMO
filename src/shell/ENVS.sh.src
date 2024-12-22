@@ -1,103 +1,160 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 21:07:20 (ywatanabe)"
-# File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/ENVS.sh.src
+# Time-stamp: "2024-12-22 15:43:51 (ywatanabe)"
 
-# Project
-export APPNAME=${APPNAME:-Ninja}
+# Base Configuration
+export NINJA_ROOT=${NINJA_ROOT:-/opt/Ninja}
 
-# Host user
-export HOST_USER=${HOST_USER:-$USER}
-export HOST_UID=${HOST_UID:-1000}
-export HOST_GROUP=${HOST_GROUP:-$USER}
-export HOST_HOME=${HOST_HOME:-/home/$USER}
-export HOST_EMACSD=${HOST_EMACSD:-$HOST_HOME/.emacs.d}
+# Host Configuration
+export NINJA_HOST_USER=${NINJA_HOST_USER:-$USER}
+export NINJA_HOST_HOME=${NINJA_HOST_HOME:-/home/$USER}
+export NINJA_HOST_WORKSPACE=${NINJA_HOST_WORKSPACE:-$NINJA_HOST_HOME/Ninja/workspace}
 
-# Ninja user
-export NINJA_BASE_USER=${NINJA_BASE_USER:-ninja}
+# Workspace Configuration
+export NINJA_WORKSPACE_ROOT=${NINJA_WORKSPACE_ROOT:-/workspace}
+
+# Ninja User Configuration
 export NINJA_BASE_UID=${NINJA_BASE_UID:-9999}
-export NINJA_BASE_HOME=${NINJA_BASE_HOME:-/home/$NINJA_BASE_USER}
-# export NINJA_BASE_DOT_EMACS=${NINJA_BASE_DOT_EMACS:-$NINJA_BASE_HOME/.emacs.d}
+export NINJA_N_AGENTS=${NINJA_N_AGENTS:-2}
 
-# Ninja shared group
-export NINJAS_GROUP=${NINJAS_GROUP:-ninja}
-export NINJA_N_AGENTS=${NINJA_N_AGENTS:-4}
+# External Services
+export NINJA_LLM_API_KEY=${NINJA_LLM_API_KEY:-""}
+export NINJA_LLM_ENGINE=${NINJA_LLM_ENGINE:-""}
 
-# Ninja project
-export NINJA_BASE_OPT_DIR=${NINJA_BASE_OPT_DIR:-/opt}
-
-# Ninja workspaces
-export NINJA_SHARED_WORKSPACE=${NINJA_SHARED_WORKSPACE:-/workspace/shared}
-export NINJA_SHARED_SRC=${NINJA_SHARED_SRC:-$NINJA_SHARED_WORKSPACE/src}
-
-# Emacs Configuration
-export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-emacs}
-export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-emacsclient}
-export NINJA_EMACSD_SHARED_RESOURCES="elpa init.el inits lisp custom.el"
-export NINJA_EMACSD_PRIVATE_RESOURCES="recentf history abbrev_defs places transient auto-save-list"
-# export NINJA_EMACSD_PRIVATE
-export NINJA_EMACSD_SHARED=/opt/Ninja/src/apptainer_builders/shared_emacsd
-# export NINJA_EMACSD_SERVER_DIR
-# export NINJA_EMACSD_SERVER_FILE
-# export NINJA_EMACSD_SERVER_CHECK_INTERVAL=${NINJA_EMACSD_SERVER_CHECK_INTERVAL:-1}
-
-# Feedback Loop
-export NINJA_MAX_RETRIES=${NINJA_MAX_RETRIES:-5}
-export NINJA_API_TIMEOUT=${NINJA_API_TIMEOUT:-30}
-
-# LLM Configuration
-export LLM_API_KEY=${LLM_API_KEY:-""}
-export LLM_ENGINE=${LLM_ENGINE:-""}
-
-# Python Configuration
-# export PYTHON_BASE_VIRTUAL_ENV=${PYTHON_BASE_VIRTUAL_ENV:-$NINJA_BASE_WORKSPACE/.env}
-
-
-################################################################################
-# System
-################################################################################
+# System Configuration
 if [ -n "$APPTAINER_CONTAINER" ]; then
     export PS1="(A) \u $ "
 fi
-
-# Debian
 export DEBIAN_FRONTEND=noninteractive
-
-# PATH
 export PATH="/sbin:$PATH"
 
 update_ninja_envs() {
     local ninja_id="$1"
-
-    # Main
-    NINJA_ID=$ninja_id
-    NINJA_USER="${NINJA_BASE_USER}-$(printf "%03d" $ninja_id)"
-    NINJA_UID=$((NINJA_BASE_UID + ninja_id))
-    NINJA_GROUP=$NINJA_USER
-    NINJA_HOME="/home/${NINJA_USER}"
-
-    # Ninja workspaces
-    NINJA_WORKSPACE="/workspace/$NINJA_USER"
-
-    # Emacs Configuration
-    NINJA_EMACSD_PRIVATE="$NINJA_HOME/.emacs.d"
-    NINJA_EMACSD_SERVER_DIR="$NINJA_EMACSD_PRIVATE/emacs-server"
-    NINJA_EMACSD_SERVER_FILE="$NINJA_EMACSD_SERVER_DIR/server"
-
-    # Export all variables
-    export NINJA_ID \
-           NINJA_USER \
-           NINJA_UID \
-           NINJA_GROUP \
-           NINJA_HOME \
-           NINJA_WORKSPACE \
-           NINJA_EMACSD_PRIVATE \
-           NINJA_EMACSD_SERVER_DIR \
-           NINJA_EMACSD_SERVER_FILE
+    export NINJA_ID=$ninja_id
+    export NINJA_USER="ninja-$(printf "%03d" $ninja_id)"
+    export NINJA_UID=$((NINJA_BASE_UID + ninja_id))
+    export NINJA_USER_HOME="/home/${NINJA_USER}"
 }
 
-# Check if NINJA_ID is set
 if [ ! -z "${NINJA_ID+x}" ]; then
     update_ninja_envs $NINJA_ID
-    HOME=$NINJA_HOME
-    cd $NINJA_HOME
+    HOME=$NINJA_USER_HOME
+    cd $NINJA_USER_HOME
 fi
+
+# #!/bin/bash
+# # Time-stamp: "2024-12-22 13:19:02 (ywatanabe)"
+# # File: ./Ninja/.apptainer/ninja/ninja.sandbox/opt/Ninja/src/apptainer_builders/ENVS.sh.src
+
+# # Base Configuration
+# export APPNAME=${APPNAME:-Ninja}
+# export NINJA_ROOT=${NINJA_ROOT:-/opt/Ninja}
+
+# # Host user
+# export NINJA_HOST_USER=${NINJA_HOST_USER:-$USER}
+# export NINJA_HOST_UID=${NINJA_HOST_UID:-1000}
+# export NINJA_HOST_GROUP=${NINJA_HOST_GROUP:-$USER}
+# export NINJA_HOST_HOME=${NINJA_HOST_HOME:-/home/$USER}
+# export NINJA_HOST_EMACSD=${NINJA_HOST_EMACSD:-$NINJA_HOST_HOME/.emacs.d}
+# export NINJA_HOST_NINJA_DIR=${NINJA_HOST_NINJA_DIR:-$NINJA_HOST_HOME/Ninja}
+# export NINJA_HOST_WORKSPACE=${NINJA_HOST_WORKSPACE:-$NINJA_HOST_NINJA_DIR/workspace}
+
+# # Workspace Configuration
+# export NINJA_WORKSPACE_ROOT=${NINJA_WORKSPACE_ROOT:-/workspace}
+# export NINJA_WORKSPACE_PROJECTS=${NINJA_WORKSPACE_ROOT}/projects
+# export NINJA_WORKSPACE_RESOURCES=${NINJA_WORKSPACE_ROOT}/resources
+# export NINJA_WORKSPACE_RESOURCES_SHARED=${NINJA_WORKSPACE_RESOURCES}/shared
+# export NINJA_WORKSPACE_RESOURCES_PRIVATE=${NINJA_WORKSPACE_RESOURCES}/private
+# export NINJA_WORKSPACE_RESOURCES_FROM_HOST=${NINJA_WORKSPACE_RESOURCES_PRIVATE}/from_host
+
+# # Ninja User Configuration
+# export NINJA_BASE_UID=${NINJA_BASE_UID:-9999}
+# export NINJA_GROUP=${NINJA_GROUP:-ninja}
+# export NINJA_N_AGENTS=${NINJA_N_AGENTS:-2}
+
+
+# # Application Configuration
+# export NINJA_EMACS_BIN=${NINJA_EMACS_BIN:-emacs}
+# export NINJA_EMACS_CLIENT=${NINJA_EMACS_CLIENT:-emacsclient}
+# export NINJA_EMACSD_SHARED=/opt/Ninja/src/apptainer_builders/shared_emacsd
+# export NINJA_EMACSD_SHARED_RESOURCES="elpa init.el inits lisp custom.el"
+# export NINJA_EMACSD_PRIVATE_RESOURCES="recentf history abbrev_defs places transient auto-save-list"
+
+# # External Services
+# export NINJA_LLM_API_KEY=${NINJA_LLM_API_KEY:-""}
+# export NINJA_LLM_ENGINE=${NINJA_LLM_ENGINE:-""}
+
+# # Python Configuration
+# # export PYTHON_BASE_VIRTUAL_ENV=${PYTHON_BASE_VIRTUAL_ENV:-$NINJA_BASE_WORKSPACE/.env}
+
+
+# ################################################################################
+# # System
+# ################################################################################
+# if [ -n "$APPTAINER_CONTAINER" ]; then
+#     export PS1="(A) \u $ "
+# fi
+
+# # Debian
+# export DEBIAN_FRONTEND=noninteractive
+
+# # PATH
+# export PATH="/sbin:$PATH"
+
+# update_ninja_envs() {
+#     local ninja_id="$1"
+
+#     # Main
+#     export NINJA_ID=$ninja_id
+#     export NINJA_USER="ninja-$(printf "%03d" $ninja_id)"
+#     export NINJA_UID=$((NINJA_BASE_UID + ninja_id))
+#     export NINJA_USER_HOME="/home/${NINJA_USER}"
+
+#     # # Emacs Configuration
+#     # export NINJA_USER_EMACSD="${NINJA_USER_HOME}/.emacs.d"
+#     # export NINJA_USER_EMACSD_SERVER_DIR="${NINJA_USER_EMACSD}/emacs-server"
+#     # export NINJA_USER_EMACSD_SERVER_FILE="${NINJA_USER_EMACSD_SERVER_DIR}/server"
+# }
+
+# # Check if NINJA_ID is set
+# if [ ! -z "${NINJA_ID+x}" ]; then
+#     update_ninja_envs $NINJA_ID
+#     HOME=$NINJA_USER_HOME
+#     cd $NINJA_USER_HOME
+# fi
+
+# # update_ninja_envs() {
+# #     local ninja_id="$1"
+
+# #     # Main
+# #     NINJA_ID=$ninja_id
+# #     NINJA_USER="${NINJA_BASE_USER}-$(printf "%03d" $ninja_id)"
+# #     NINJA_UID=$((NINJA_BASE_UID + ninja_id))
+# #     NINJA_GROUP=$NINJA_USER
+# #     NINJA_HOME="/home/${NINJA_USER}"
+
+# #     # Ninja workspaces
+# #     NINJA_WORKSPACE="/workspace/$NINJA_USER"
+
+# #     # Emacs Configuration
+# #     NINJA_EMACSD_PRIVATE="$NINJA_HOME/.emacs.d"
+# #     NINJA_EMACSD_SERVER_DIR="$NINJA_EMACSD_PRIVATE/emacs-server"
+# #     NINJA_EMACSD_SERVER_FILE="$NINJA_EMACSD_SERVER_DIR/server"
+
+# #     # Export all variables
+# #     export NINJA_ID \
+    #     #            NINJA_USER \
+    #     #            NINJA_UID \
+    #     #            NINJA_GROUP \
+    #     #            NINJA_HOME \
+    #     #            NINJA_WORKSPACE \
+    #     #            NINJA_EMACSD_PRIVATE \
+    #     #            NINJA_EMACSD_SERVER_DIR \
+    #     #            NINJA_EMACSD_SERVER_FILE
+# # }
+
+# # Check if NINJA_ID is set
+# if [ ! -z "${NINJA_ID+x}" ]; then
+#     update_ninja_envs $NINJA_ID
+#     HOME=$NINJA_HOME
+#     cd $NINJA_HOME
+# fi
