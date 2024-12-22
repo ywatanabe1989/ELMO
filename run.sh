@@ -1,8 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 16:28:28 (ywatanabe)"
+# Time-stamp: "2024-12-23 02:13:02 (ywatanabe)"
 # File: ./Ninja/run.sh
 
-LOG_FILE="$0.log"
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 usage() {
     echo "Usage: $0 [-m|--mode <run|build|shell>] [-h|--help]"
@@ -22,6 +22,8 @@ usage() {
 
 # Set default mode
 mode="run"
+source $THIS_DIR/config/env/06_apptainerenv.env
+export NINJA_ROOT=${NINJA_ROOT:-$THIS_DIR}
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -50,9 +52,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# # Kill existing emacs daemon
-# pkill -f "emacs --daemon=/home/ninja"
-
 # Execute based on mode
 if [ -n "$NINJA_BIND" ]; then
     bind_opt="--bind $NINJA_BIND"
@@ -65,31 +64,37 @@ if [ "$mode" = "run" ]; then
               --writable \
               --fakeroot \
               $bind_opt \
-              ./.apptainer/ninja/ninja.sandbox
+              $NINJA_ROOT/apptainer/ninja.sandbox
+
 elif [ "$mode" = "build" ]; then
     apptainer build \
               --sandbox \
               --fakeroot \
               $bind_opt \
-              ./.apptainer/ninja/ninja.sandbox \
-              ./.apptainer/ninja/ninja.def \
-              2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
+              $NINJA_ROOT/apptainer/ninja.sandbox \
+              $NINJA_ROOT/apptainer/ninja.def \
+              2>&1 | tee $NINJA_ROOT/apptainer/ninja.sandbox.log
+    # --update \    
+
 elif [ "$mode" = "shell" ]; then
     apptainer shell \
               --writable \
               --fakeroot \
               $bind_opt \
-              ./.apptainer/ninja/ninja.sandbox
+              $NINJA_ROOT/apptainer/ninja.sandbox
+
     # In the exec section, use the stored args
 elif [ "$mode" = "exec" ]; then
     apptainer exec \
               --writable \
               --fakeroot \
               $bind_opt \
-              ./.apptainer/ninja/ninja.sandbox "${exec_args[@]}"
+              $NINJA_ROOT/apptainer/ninja.sandbox "${exec_args[@]}"
+
 else
     echo "Invalid mode. Use run, build, or shell"
     usage
+
 fi
 
 # EOF

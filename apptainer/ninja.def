@@ -2,73 +2,66 @@ Bootstrap: docker
 From: ubuntu:latest
 
 %labels
+    echo -e "\n==================== Label Section ===================="
     MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
     VERSION "v1.0.0"
-    BUILT_DATE \"`date`\"
-    DEFINITION_FILE_NAME \"`basename "$0"`\"
+    BUILT_DATE `date`
+    DEFINITION_FILE_NAME `basename "$0"`
 
-%setup
-    echo "========================================"
-    echo "Setup Section"
-    echo "========================================"
+%setup -c /bin/bash
+    echo -e "\n==================== Setup Section ===================="
+
+    # Workspace
+    mkdir -p ${SINGULARITY_ROOTFS}/workspace
 
     # Envs
-    . ./config/env/builders.env
+    source $NINJA_ROOT/config/env/00_all.env
+    
+    # Rsync options
+    export RSYNC_OPTIONS="-av \
+        --safe-links \
+        --exclude=**/.git \
+        --exclude=**/*.sandbox \
+        --exclude=**/*.sif \
+        --exclude=**/__pycache__ \
+        --exclude=**/*docker* \
+        --exclude=**/.* \
+        --exclude=**/*cache* \
+        --exclude='**/build-temp*' \
+        --exclude='**/*secret*'
+    "
 
-    # Copy source
-    mkdir -p ${APPTAINER_ROOTFS}/opt/Ninja/
-    rsync $RSYNC_OPTIONS . ${APPTAINER_ROOTFS}/opt/Ninja/
+    # Rsync Environmental Variables
+    mkdir -p ${SINGULARITY_ROOTFS}/opt/Ninja/config/env/
+    rsync $RSYNC_OPTIONS $NINJA_ROOT/config/env/ ${SINGULARITY_ROOTFS}/opt/Ninja/config/env/
+
+    # Rsync Building Files
+    mkdir -p ${SINGULARITY_ROOTFS}/opt/Ninja/apptainer/build/
+    rsync $RSYNC_OPTIONS $NINJA_ROOT/apptainer/build/ ${SINGULARITY_ROOTFS}/opt/Ninja/apptainer/build/
 
 %post -c /bin/bash
-    echo "========================================"
-    echo "Post Section"
-    echo "========================================"
+    echo -e "\n==================== Post Section ===================="
 
-    ########################################
     # Environmental Variables
-    ########################################
-    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+    source /opt/Ninja/config/env/00_all.env
 
-    ########################################
-    # Basic Setup
-    ########################################
-    /opt/Ninja/src/apptainer_builders/system_install_basic_apt_packages.sh
-    /opt/Ninja/src/apptainer_builders/system_install_emacs.sh
-    /opt/Ninja/src/apptainer_builders/system_install_python.sh
+    # Add environment sourcing to both bashrc and profile
+    echo '# Source Ninja environment' >> /etc/bash.bashrc
+    echo 'source /opt/Ninja/config/env/00_all.env' >> /etc/bash.bashrc
+    echo '# Source Ninja environment' >> /etc/profile
+    echo 'source /opt/Ninja/config/env/00_all.env' >> /etc/profile
 
+    # System
+    /opt/Ninja/apptainer/build/system-setup/00_apt_packages.sh
+    /opt/Ninja/apptainer/build/system-setup/01_emacs.sh
+    /opt/Ninja/apptainer/build/system-setup/02_python.sh
 
-    ########################################
-    # Ninja Users
-    ########################################
-    bash /opt/Ninja/src/apptainer_builders/user_create_ninja_users.sh
-    bash /opt/Ninja/src/apptainer_builders/user_create_working_directories.sh
-    bash /opt/Ninja/src/apptainer_builders/user_create_bashrc.sh
-    bash /opt/Ninja/src/apptainer_builders/user_create_emacsd.sh
-    bash /opt/Ninja/src/apptainer_builders/user_create_python_env.sh
+    # # Ninja Users
+    # /opt/Ninja/apptainer/build/user-setup/environment/01_ninja_users.sh
+    # /opt/Ninja/apptainer/build/user-setup/environment/02_bashrc.sh
+    # /opt/Ninja/apptainer/build/user-setup/environment/03_python_env.sh
+    # /opt/Ninja/apptainer/build/user-setup/emacs/01_emacsd.sh
+    # /opt/Ninja/apptainer/build/user-setup/permissions/00_all.sh
 
-    ########################################
-    # Permissions
-    ########################################
-    bash /opt/Ninja/src/apptainer_builders/user_correct_permissions.sh
-
-
-%runscript
-    # `/.singularity.d/runscript`
-    echo "========================================"
-    echo "Runscript Section"
-    echo "========================================"
-
-    . /opt/Ninja/src/apptainer_builders/ENVS.sh.src
-
-    # Check Ninja Environment
-    /opt/Ninja/src/apptainer_builders/check_ninja_environment.sh > \
-    /opt/Ninja/src/apptainer_builders/ninja_environments.txt
-
-    # Start Emacs
-    /opt/Ninja/src/apptainer_builders/start_emacs.sh
-
-%startscript
-    # `/.singularity.d/startscript`
-    echo "========================================"
-    echo "Startscript Section"
-    echo "========================================"
+    # env | grep ^NINJA_
+    # env | grep ^APPTAINERENV_NINJA_

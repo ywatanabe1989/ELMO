@@ -1,8 +1,33 @@
 <!-- ---
-!-- title: 2024-12-22 17:24:22
+!-- title: 2024-12-23 02:50:58
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/Ninja/README.md
 !-- --- -->
+
+## Apptainer
+
+``` bash
+export NINJA_ROOT="$(pwd)" && ./run.sh -m build
+
+./run.sh
+./run.sh -m shell
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 tree --gitignore -L 3
 

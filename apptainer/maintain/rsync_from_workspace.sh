@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 12:57:17 (ywatanabe)"
+# Time-stamp: "2024-12-22 22:39:03 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/system_copy_from_workspace.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
