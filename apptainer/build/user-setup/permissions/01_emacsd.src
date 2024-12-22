@@ -1,0 +1,88 @@
+#!/bin/bash
+# Time-stamp: "2024-12-22 20:22:44 (ywatanabe)"
+# File: /home/ywatanabe/.emacs.d/lisp/Ninja/apptainer/building/user-setup/permissions/01_emacsd.src
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "$(id -u)" != "0" ]; then
+    echo "This script ($0) must be run as root" >&2
+    exit 1
+fi
+
+source /opt/Ninja/config/env/00_all.env
+
+# Permission Scheme:
+# 1. Shared resources:
+#    - Owner: root
+#    - Group: ninja
+#    - Permissions: 775 (rwxrwxr-x)
+# 2. Private resources:
+#    - Owner: ninja-001
+#    - Group: ninja-001
+#    - Permissions: 700 (rwx------)
+# 3. Base .emacs.d:
+#    - Owner: ninja-001
+#    - Group: ninja
+#    - Permissions: 770 (rwxrwx---)
+# 4. Generated directories:
+#    - Match base directory permissions
+
+
+emacsd_correct_permissions() {
+    for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
+        _emacsd_correct_permissions_shared "$ninja_id"
+        _emacsd_correct_permissions_private "$ninja_id"
+        _emacsd_correct_permissions_server_dir "$ninja_id"
+    done
+}
+
+_emacsd_correct_permissions_shared() {
+    local ninja_id="$1"
+    update_ninja_envs "$ninja_id"
+
+    # Fix base directory
+    chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_SHARED"
+    chmod -R 770 "$NINJA_EMACSD_SHARED"
+    
+    # Fix base directory
+    chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_PRIVATE"
+    chmod -R 770 "$NINJA_EMACSD_PRIVATE"
+
+    # Fix generated directories
+    for dir in auto-save-list transient; do
+        [ -d "$NINJA_EMACSD_PRIVATE/$dir" ] && {
+            chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_PRIVATE/$dir"
+            chmod -R 770 "$NINJA_EMACSD_PRIVATE/$dir"
+        }
+    done
+
+    # Fix shared resources
+    for shared_resource in ${NINJA_EMACSD_SHARED_RESOURCES[@]}; do
+        tgt="$NINJA_EMACSD_PRIVATE/$shared_resource"
+        chown -h "$NINJA_USER:$NINJA_GROUP" "$tgt"
+        [ ! -L "$tgt" ] && chmod 775 "$tgt"
+    done
+}
+
+_emacsd_correct_permissions_server_dir() {
+    local ninja_id="$1"
+    update_ninja_envs "$ninja_id"
+
+    mkdir -p "$NINJA_EMACSD_SERVER_DIR"
+    chown -R "$NINJA_USER:$NINJA_USER" "$NINJA_EMACSD_SERVER_DIR"
+    chmod -R 700 "$NINJA_EMACSD_SERVER_DIR"
+}
+
+_emacsd_correct_permissions_private() {
+    local ninja_id="$1"
+    update_ninja_envs "$ninja_id"
+
+    for private_resource in ${NINJA_EMACSD_PRIVATE_RESOURCES[@]}; do
+        tgt="$NINJA_EMACSD_PRIVATE/$private_resource"
+        chown "$NINJA_USER:$NINJA_USER" "$tgt"
+        chmod 700 "$tgt"
+    done
+}
+
+
+# EOF
