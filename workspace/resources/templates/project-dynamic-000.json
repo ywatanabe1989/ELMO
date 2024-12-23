@@ -1,0 +1,28 @@
+{
+    "PROJECTNAME": {
+        "version": "0.0.0",
+        "objective": [
+            "Main objective of the project",
+            "Expected outcomes"
+        ],
+        "Success criteria": [
+            "Until the host user accepts"
+        ],
+        "requirements": [
+            "Technical requirements",
+            "Dependencies",
+            "Environment setup"
+        ],
+        "steps": [
+            "Step 1: Planning and setup",
+            "Step 2: Development",
+            "Step 3: Testing",
+            "Step 4: Documentation"
+        ],
+        "notes": [
+            "Important considerations",
+            "Constraints",
+            "Risks"
+        ]
+    }
+}

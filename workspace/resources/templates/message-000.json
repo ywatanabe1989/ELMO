@@ -1,0 +1,10 @@
+{
+    "message_id": "string",
+    "from": "string",
+    "to": "string",
+    "payload": {
+        "type": "string",
+        "content": "string | object"
+    },
+    "status": "sent | read | junk"
+}

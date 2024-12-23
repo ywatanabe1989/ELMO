@@ -1,22 +1,22 @@
 #!/bin/bash
 # Time-stamp: "2024-12-22 12:56:58 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/system_copy_from_host.sh
+# File: /home/ywatanabe/.emacs.d/lisp/ELMO/src/apptainer_builders/system_copy_from_host.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ "$APPNAME" = "Ninja" ]; then
-    echo "This script must be run outside of the Ninja Apptainer Container"
+if [ "$APPNAME" = "ELMO" ]; then
+    echo "This script must be run outside of the ELMO Apptainer Container"
     exit 1
 fi
 
-# Copy dotfiles to ninjas
-NINJA_FROM_HOST_DIR="./workspace/private/from_host"
+# Copy dotfiles to elmos
+ELMO_FROM_HOST_DIR="./workspace/private/from_host"
 
 # Mapping
-TGT_DIR=$NINJA_FROM_HOST_DIR/home
-NINJA_FROM_HOST_SOURCES=(
+TGT_DIR=$ELMO_FROM_HOST_DIR/home
+ELMO_FROM_HOST_SOURCES=(
     ~/.bashrc:$TGT_DIR/.bashrc
-    ~/.bash_profile:$NINJA_FROM_HOST_DIR/.bash_profile
+    ~/.bash_profile:$ELMO_FROM_HOST_DIR/.bash_profile
     ~/.bash.d/:$TGT_DIR/.bash.d/
     ~/.emacs.d/:$TGT_DIR/.emacs.d/
     ~/.ssh/:$TGT_DIR/.ssh/
@@ -46,7 +46,7 @@ RSYNC_OPTIONS="-av \
     --exclude=**/FINISHED
     "
 
-for mapping in "${NINJA_FROM_HOST_SOURCES[@]}"; do
+for mapping in "${ELMO_FROM_HOST_SOURCES[@]}"; do
     src="${mapping%%:*}"
     dst="${mapping#*:}"
     

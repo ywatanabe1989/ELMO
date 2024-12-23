@@ -1,0 +1,86 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    echo -e "\n==================== Label Section ===================="
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE `date`
+    DEFINITION_FILE_NAME `basename "$0"`
+
+%setup -c /bin/bash
+    echo -e "\n==================== Setup Section ===================="
+
+    # Workspace
+    mkdir -p ${SINGULARITY_ROOTFS}/workspace
+
+    # Envs
+    THIS_DIR="($dirname $0)"
+    ELMO_ROOT="${ELMO_ROOT:-$THIS_DIR/../..}"
+    source $ELMO_ROOT/config/env/00_all.env
+
+    # Rsync options
+    export RSYNC_OPTIONS="-arv \
+        --safe-links \
+        --exclude=**/.git \
+        --exclude=**/*.sandbox \
+        --exclude=**/*.sif \
+        --exclude=**/__pycache__ \
+        --exclude=**/*docker* \
+        --exclude=**/.* \
+        --exclude=**/*cache* \
+        --exclude='**/build-temp*' \
+        --exclude='**/*secret*'
+    "
+
+    # Config and building scripts
+    DIRS=(
+        "config/env"
+        "apptainer/build"
+    )
+    for dir in "${DIRS[@]}"; do
+        mkdir -p "${SINGULARITY_ROOTFS}/opt/elmo/${dir}"
+        rsync $RSYNC_OPTIONS "$ELMO_ROOT/${dir}/" "${SINGULARITY_ROOTFS}/opt/elmo/${dir}/"
+    done
+
+    # Workspace
+    dir="/workspace"
+    mkdir -p "${SINGULARITY_ROOTFS}/opt/elmo/${dir}"
+    rsync $RSYNC_OPTIONS $ELMO_ROOT/apptainer/build/initial_workspace/ "${SINGULARITY_ROOTFS}/${dir}/"
+
+%post -c /bin/bash
+    echo -e "\n==================== Post Section ===================="
+
+    # Environmental Variables
+    source /opt/elmo/config/env/00_all.env
+
+    # System
+    system_scripts=(
+        "/opt/elmo/apptainer/build/system-setup/00_apt_packages.sh"
+        "/opt/elmo/apptainer/build/system-setup/01_emacs.sh"
+        "/opt/elmo/apptainer/build/system-setup/02_python.sh"
+        "/opt/elmo/apptainer/build/system-setup/03_bashrc.sh"
+    )
+    for script in "${system_scripts[@]}"; do
+        if $script; then
+            echo "$(basename $script) succeeded"
+        else
+            echo "$(basename $script) failed"
+        fi
+    done
+
+    # User
+    user_scripts=(
+        /opt/elmo/apptainer/build/user-setup/environment/01_elmo_users.sh
+        /opt/elmo/apptainer/build/user-setup/environment/02_bashrc.sh
+        /opt/elmo/apptainer/build/user-setup/environment/03_python_env.sh
+        # /opt/elmo/apptainer/build/user-setup/emacs/01_emacsd.sh
+        /opt/elmo/apptainer/build/user-setup/permissions/00_all.sh
+    )
+    for script in "${user_scripts[@]}"; do
+        if $script; then
+            echo "$(basename $script) succeeded"
+        else
+            echo "$(basename $script) failed"
+        fi
+    done

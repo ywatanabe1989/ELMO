@@ -1,0 +1,24 @@
+{
+  "role": "hello world agent",
+  "requests": [
+    "print hello world"
+  ],
+  "tools": [
+    "elisp"
+  ],
+  "workspace": [
+    "/workspace"
+  ],
+  "authority": [
+    "read",
+    "write",
+    "execute"
+  ],
+  "rules": [
+    "Write code in emacs lisp",
+    "Wrap code with ```elisp\nCODE"
+  ],
+    "input": "INPUT IS INSERTED HERE"
+    "input_example": "print hello world",
+    "output_example": "```\n(message \"Hello, World!\")\n```"
+}

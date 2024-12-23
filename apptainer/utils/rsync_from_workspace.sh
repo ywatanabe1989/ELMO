@@ -1,11 +1,11 @@
 #!/bin/bash
 # Time-stamp: "2024-12-22 22:39:03 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/Ninja/src/apptainer_builders/system_copy_from_workspace.sh
+# File: /home/ywatanabe/.emacs.d/lisp/ELMO/src/apptainer_builders/system_copy_from_workspace.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ "$APPNAME" != "Ninja" ]; then
-    echo "This script must be run in the Ninja Apptainer Container"
+if [ "$APPNAME" != "ELMO" ]; then
+    echo "This script must be run in the ELMO Apptainer Container"
     exit 1
 fi
 
@@ -14,28 +14,28 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-# Copy dotfiles to ninjas
-NINJA_FROM_HOST_DIR="/workspace/private/from_host"
-ls $NINJA_FROM_HOST_DIR
+# Copy dotfiles to elmos
+ELMO_FROM_HOST_DIR="/workspace/private/from_host"
+ls $ELMO_FROM_HOST_DIR
 
 # Mapping
-SRC_DIR=$NINJA_FROM_HOST_DIR/home
+SRC_DIR=$ELMO_FROM_HOST_DIR/home
 
-source /opt/Ninja/src/apptainer_builders/ENVS.sh.src
+source /opt/elmo/src/apptainer_builders/ENVS.sh.src
 
-NINJA_FROM_HOST_SOURCES=(
-    $SRC_DIR/.bashrc:$NINJA_HOME/.bashrc:
-    $SRC_DIR/.bash_profile:$NINJA_HOME/.bash_profile
-    $SRC_DIR/.bash.d/:$NINJA_HOME/.bash.d/
-    $SRC_DIR/.ssh/:$NINJA_HOME/.ssh/
-    $SRC_DIR/.pythonrc:$NINJA_HOME/.pythonrc
-    $SRC_DIR/.pystartup:$NINJA_HOME/.pystartup
-    $SRC_DIR/.bin/:$NINJA_HOME/.bin/
-    $SRC_DIR/.gitconfig:$NINJA_HOME/.gitconfig
-    $SRC_DIR/.git-templates:$NINJA_HOME/.git-templates/
-    $SRC_DIR/.screenrc:$NINJA_HOME/.screenrc
+ELMO_FROM_HOST_SOURCES=(
+    $SRC_DIR/.bashrc:$ELMO_HOME/.bashrc:
+    $SRC_DIR/.bash_profile:$ELMO_HOME/.bash_profile
+    $SRC_DIR/.bash.d/:$ELMO_HOME/.bash.d/
+    $SRC_DIR/.ssh/:$ELMO_HOME/.ssh/
+    $SRC_DIR/.pythonrc:$ELMO_HOME/.pythonrc
+    $SRC_DIR/.pystartup:$ELMO_HOME/.pystartup
+    $SRC_DIR/.bin/:$ELMO_HOME/.bin/
+    $SRC_DIR/.gitconfig:$ELMO_HOME/.gitconfig
+    $SRC_DIR/.git-templates:$ELMO_HOME/.git-templates/
+    $SRC_DIR/.screenrc:$ELMO_HOME/.screenrc
 )
-# $SRC_DIR/.emacs.d/:$NINJA_HOME/.emacs.d/ # .emacs.d is copied from shared_emacsd
+# $SRC_DIR/.emacs.d/:$ELMO_HOME/.emacs.d/ # .emacs.d is copied from shared_emacsd
 
 # Copy from host to workspace
 RSYNC_OPTIONS="-av \
@@ -56,11 +56,11 @@ RSYNC_OPTIONS="-av \
     "
 
 # Deploy
-for i_ninja in $(seq -f "%03g" 1 $NINJA_N_AGENTS); do
-    update_ninja_envs $i_ninja
-    echo $NINJA_HOME
+for i_elmo in $(seq -f "%03g" 1 $ELMO_N_AGENTS); do
+    update_elmo_envs $i_elmo
+    echo $ELMO_HOME
 
-    for mapping in "${NINJA_FROM_HOST_SOURCES[@]}"; do
+    for mapping in "${ELMO_FROM_HOST_SOURCES[@]}"; do
         src="${mapping%%:*}"
         dst="${mapping#*:}"
 
@@ -78,11 +78,11 @@ for i_ninja in $(seq -f "%03g" 1 $NINJA_N_AGENTS); do
 done
 
 # # SSH setup
-# ssh-keygen -t ed25519 -f "${NINJA_HOME}/.ssh/id_ed25519" -N "" -C "ninja-${i}"
+# ssh-keygen -t ed25519 -f "${ELMO_HOME}/.ssh/id_ed25519" -N "" -C "elmo-${i}"
 
-# chown -R "ninja-${i}:ninja-${i}" "${NINJA_HOME}"
-# chmod 700 "${NINJA_HOME}/.ssh"
-# chmod 600 "${NINJA_HOME}/.ssh/"*
+# chown -R "elmo-${i}:elmo-${i}" "${ELMO_HOME}"
+# chmod 700 "${ELMO_HOME}/.ssh"
+# chmod 600 "${ELMO_HOME}/.ssh/"*
 
 
 # EOF

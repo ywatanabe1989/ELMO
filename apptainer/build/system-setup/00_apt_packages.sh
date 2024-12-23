@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 12:40:30 (ywatanabe)"
-# File: ./Ninja/src/apptainer_builders/install_basic_apt_packages.sh
+# File: ./ELMO/src/apptainer_builders/install_basic_apt_packages.sh
 
 echo "$0..."
 
@@ -11,7 +11,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 export PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
-source /opt/Ninja/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 # Initialization
 apt-get -y update >/dev/null

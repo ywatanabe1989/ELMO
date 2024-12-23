@@ -1,0 +1,8 @@
+{
+    "resource_id": "string",
+    "name": "string",
+    "type": "file | link | data",
+    "description": "string",
+    "path": "string",
+    "tags": ["string"]
+}

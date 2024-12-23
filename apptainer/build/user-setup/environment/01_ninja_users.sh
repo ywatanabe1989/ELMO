@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 16:49:20 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/Ninja/apptainer/building/user-setup/environment/01_ninja_users.sh
+# File: /home/ywatanabe/.emacs.d/lisp/ELMO/apptainer/building/user-setup/environment/01_elmo_users.sh
 
 echo "$0..."
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,60 +20,60 @@ delete_ubuntu_user() {
     /sbin/deluser ubuntu 2>/dev/null && echo "Deleted ubuntu user"
 }
 
-create_ninja_group() {
-    /sbin/groupadd -f $NINJA_GROUP >/dev/null && echo "Created ninja group: $NINJA_GROUP"
+create_elmo_group() {
+    /sbin/groupadd -f $ELMO_GROUP >/dev/null && echo "Created elmo group: $ELMO_GROUP"
 }
 
-create_ninja_users() {
-    echo "Creating $NINJA_N_AGENTS ninja users..."
-    for NINJA_ID in $(seq 1 $NINJA_N_AGENTS); do
-        create_ninja_user $NINJA_ID
+create_elmo_users() {
+    echo "Creating $ELMO_N_AGENTS elmo users..."
+    for ELMO_ID in $(seq 1 $ELMO_N_AGENTS); do
+        create_elmo_user $ELMO_ID
     done
-    echo "All ninja users created successfully"
+    echo "All elmo users created successfully"
 }
 
-create_ninja_user() {
-    local ninja_id="$1"
-    update_ninja_envs $ninja_id
+create_elmo_user() {
+    local elmo_id="$1"
+    update_elmo_envs $elmo_id
 
     # Cleanup if exists
-    /sbin/groupdel $NINJA_USER 2>/dev/null || true
-    /sbin/userdel $NINJA_USER 2>/dev/null || true
-    rm -rf $NINJA_USER_HOME 2>/dev/null || true
-    rm -rf /home/$NINJA_USER 2>/dev/null || true
-    mkdir -p "$NINJA_USER_HOME" >/dev/null
-    mkdir -p "$NINJA_USER_HOME/.emacs.d" >/dev/null
+    /sbin/groupdel $ELMO_USER 2>/dev/null || true
+    /sbin/userdel $ELMO_USER 2>/dev/null || true
+    rm -rf $ELMO_USER_HOME 2>/dev/null || true
+    rm -rf /home/$ELMO_USER 2>/dev/null || true
+    mkdir -p "$ELMO_USER_HOME" >/dev/null
+    mkdir -p "$ELMO_USER_HOME/.emacs.d" >/dev/null
     
     # Main
     /sbin/adduser \
-        --uid $NINJA_UID \
+        --uid $ELMO_UID \
         --shell /usr/bin/bash \
-        --home $NINJA_USER_HOME \
+        --home $ELMO_USER_HOME \
         --disabled-password \
         --gecos "" \
-        $NINJA_USER \
+        $ELMO_USER \
         >/dev/null
 
-    passwd -d $NINJA_USER >/dev/null
-    # chown -R "${NINJA_USER}:${NINJA_GROUP}" "$NINJA_USER_HOME" >/dev/null
+    passwd -d $ELMO_USER >/dev/null
+    # chown -R "${ELMO_USER}:${ELMO_GROUP}" "$ELMO_USER_HOME" >/dev/null
 
     # Group
-    /sbin/usermod -aG $NINJA_GROUP $NINJA_USER >/dev/null
+    /sbin/usermod -aG $ELMO_GROUP $ELMO_USER >/dev/null
 
-    # Symlink from /home/ninja-<id> to $NINJA_USER_HOME (/workspace/ninjas/ninja-<id>/home)
-    ln -sfn "$NINJA_USER_HOME" "/home/$NINJA_USER" >/dev/null
+    # Symlink from /home/elmo-<id> to $ELMO_USER_HOME (/workspace/elmos/elmo-<id>/home)
+    ln -sfn "$ELMO_USER_HOME" "/home/$ELMO_USER" >/dev/null
 
     echo ""
-    echo -e "\nCreated user: $NINJA_USER (uid: $NINJA_UID, home: $NINJA_USER_HOME)"
-    cmd="ls -al $NINJA_USER_HOME" && echo $cmd && eval $cmd
+    echo -e "\nCreated user: $ELMO_USER (uid: $ELMO_UID, home: $ELMO_USER_HOME)"
+    cmd="ls -al $ELMO_USER_HOME" && echo $cmd && eval $cmd
     echo ""
-    cmd="ls -al /home/$NINJA_USER" && echo $cmd && eval $cmd
+    cmd="ls -al /home/$ELMO_USER" && echo $cmd && eval $cmd
     echo ""    
 }
 
 # Main
 delete_ubuntu_user
-create_ninja_group
-create_ninja_users
+create_elmo_group
+create_elmo_users
 
 # EOF

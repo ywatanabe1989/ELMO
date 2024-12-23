@@ -1,7 +1,7 @@
 
 #!/bin/bash
 # Time-stamp: "2024-12-21 16:10:00 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/Ninja/src/shell/init_project.sh
+# File: /home/ywatanabe/.emacs.d/lisp/ELMO/src/shell/init_project.sh
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_DIR="$(cd "${THIS_DIR}/../../workspace" && pwd)"
 
