@@ -1,6 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 01:42:04 (ywatanabe)"
+# Time-stamp: "2024-12-23 12:40:30 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/install_basic_apt_packages.sh
+
+echo "$0..."
 
 # Check if running as root
 if [ "$(id -u)" != "0" ]; then

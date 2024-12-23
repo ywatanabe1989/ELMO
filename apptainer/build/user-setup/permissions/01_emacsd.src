@@ -1,7 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 20:22:44 (ywatanabe)"
+# Time-stamp: "2024-12-23 11:09:15 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/Ninja/apptainer/building/user-setup/permissions/01_emacsd.src
 
+echo "$0..."
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ "$(id -u)" != "0" ]; then

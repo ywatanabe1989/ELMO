@@ -1,18 +1,10 @@
 <!-- ---
-!-- title: ./Ninja/docs/dev_memo/blueprint.md
-!-- author: ywatanabe
-!-- date: 2024-12-18 14:41:49
+!-- title: 2024-12-23 20:01:32
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/.emacs.d/lisp/Ninja/docs/dev/blueprint.md
 !-- --- -->
 
-
-<!-- ---
-    !-- title: ./Ninja/docs/dev_memo/blueprint.md
-    !-- author: ywatanabe
-    !-- date: 2024-12-18 14:38:45
-    !-- --- -->
-
-
-    # Ninja — Neural Information Network of Journaling Agents
+    # Ninja — Networked Intelligence of Agents JASON
 
     (THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
 

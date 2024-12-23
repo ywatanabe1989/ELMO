@@ -1,6 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 20:52:54 (ywatanabe)"
+# Time-stamp: "2024-12-23 12:40:41 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/install_python.sh
+
+echo "$0..."
 
 # Check if running as root
 if [ "$(id -u)" != "0" ]; then
@@ -10,13 +12,26 @@ fi
 
 source /opt/Ninja/config/env/00_all.env
 
-apt install -y \
-    python3 \
-    python3-pip \
-    python3-venv \
-    >/dev/null
+install_python() {
+    echo "Installing Python and dependencies..."
+    apt install -y \
+        python3 \
+        python3-pip \
+        python3-venv \
+        >/dev/null
 
-ln -s /bin/python3 /bin/python
-ln -s /usr/bin/python3 /usr/bin/python
+    echo "Creating Python symlinks..."
+    ln -s /bin/python3 /bin/python 2>/dev/null
+    ln -s /usr/bin/python3 /usr/bin/python 2>/dev/null
+
+    # Check installation
+    python_path=$(which python)
+    python_version=$(python3 --version)
+    echo "Python path: ${python_path}"
+    echo "Python version: ${python_version}"
+    echo "Python installation completed successfully!"
+}
+
+install_python
 
 # EOF

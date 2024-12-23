@@ -15,10 +15,12 @@ From: ubuntu:latest
     mkdir -p ${SINGULARITY_ROOTFS}/workspace
 
     # Envs
+    THIS_DIR="($dirname $0)"
+    NINJA_ROOT="${NINJA_ROOT:-$THIS_DIR/../..}"
     source $NINJA_ROOT/config/env/00_all.env
-    
+
     # Rsync options
-    export RSYNC_OPTIONS="-av \
+    export RSYNC_OPTIONS="-arv \
         --safe-links \
         --exclude=**/.git \
         --exclude=**/*.sandbox \
@@ -31,13 +33,20 @@ From: ubuntu:latest
         --exclude='**/*secret*'
     "
 
-    # Rsync Environmental Variables
-    mkdir -p ${SINGULARITY_ROOTFS}/opt/Ninja/config/env/
-    rsync $RSYNC_OPTIONS $NINJA_ROOT/config/env/ ${SINGULARITY_ROOTFS}/opt/Ninja/config/env/
+    # Config and building scripts
+    DIRS=(
+        "config/env"
+        "apptainer/build"
+    )
+    for dir in "${DIRS[@]}"; do
+        mkdir -p "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}"
+        rsync $RSYNC_OPTIONS "$NINJA_ROOT/${dir}/" "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}/"
+    done
 
-    # Rsync Building Files
-    mkdir -p ${SINGULARITY_ROOTFS}/opt/Ninja/apptainer/build/
-    rsync $RSYNC_OPTIONS $NINJA_ROOT/apptainer/build/ ${SINGULARITY_ROOTFS}/opt/Ninja/apptainer/build/
+    # Workspace
+    dir="/workspace"
+    mkdir -p "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}"
+    rsync $RSYNC_OPTIONS $NINJA_ROOT/apptainer/build/initial_workspace/ "${SINGULARITY_ROOTFS}/${dir}/"
 
 %post -c /bin/bash
     echo -e "\n==================== Post Section ===================="
@@ -45,23 +54,35 @@ From: ubuntu:latest
     # Environmental Variables
     source /opt/Ninja/config/env/00_all.env
 
-    # Add environment sourcing to both bashrc and profile
-    echo '# Source Ninja environment' >> /etc/bash.bashrc
-    echo 'source /opt/Ninja/config/env/00_all.env' >> /etc/bash.bashrc
-    echo '# Source Ninja environment' >> /etc/profile
-    echo 'source /opt/Ninja/config/env/00_all.env' >> /etc/profile
-
     # System
-    /opt/Ninja/apptainer/build/system-setup/00_apt_packages.sh
-    /opt/Ninja/apptainer/build/system-setup/01_emacs.sh
-    /opt/Ninja/apptainer/build/system-setup/02_python.sh
+    system_scripts=(
+        "/opt/Ninja/apptainer/build/system-setup/00_apt_packages.sh"
+        "/opt/Ninja/apptainer/build/system-setup/01_emacs.sh"
+        "/opt/Ninja/apptainer/build/system-setup/02_python.sh"
+        "/opt/Ninja/apptainer/build/system-setup/03_bashrc.sh"
+    )
+    for script in "${system_scripts[@]}"; do
+        if $script; then
+            echo "$(basename $script) succeeded"
+        else
+            echo "$(basename $script) failed"
+        fi
+    done
 
-    # # Ninja Users
-    # /opt/Ninja/apptainer/build/user-setup/environment/01_ninja_users.sh
-    # /opt/Ninja/apptainer/build/user-setup/environment/02_bashrc.sh
-    # /opt/Ninja/apptainer/build/user-setup/environment/03_python_env.sh
-    # /opt/Ninja/apptainer/build/user-setup/emacs/01_emacsd.sh
-    # /opt/Ninja/apptainer/build/user-setup/permissions/00_all.sh
+    # User
+    user_scripts=(
+        /opt/Ninja/apptainer/build/user-setup/environment/01_ninja_users.sh
+        /opt/Ninja/apptainer/build/user-setup/environment/02_bashrc.sh
+        /opt/Ninja/apptainer/build/user-setup/environment/03_python_env.sh
+        # /opt/Ninja/apptainer/build/user-setup/emacs/01_emacsd.sh
+        /opt/Ninja/apptainer/build/user-setup/permissions/00_all.sh
+    )
+    for script in "${user_scripts[@]}"; do
+        if $script; then
+            echo "$(basename $script) succeeded"
+        else
+            echo "$(basename $script) failed"
+        fi
+    done
 
     # env | grep ^NINJA_
-    # env | grep ^APPTAINERENV_NINJA_

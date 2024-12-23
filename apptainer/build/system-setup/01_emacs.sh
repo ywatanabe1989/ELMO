@@ -1,6 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 01:46:13 (ywatanabe)"
+# Time-stamp: "2024-12-23 12:57:12 (ywatanabe)"
 # File: ./Ninja/src/apptainer_builders/install_emacs.sh
+
+echo "$0..."
 
 # Check if running as root
 if [ "$(id -u)" != "0" ]; then
@@ -12,6 +14,20 @@ source /opt/Ninja/config/env/00_all.env
 
 
 install_emacs_from_source() {
+    # Get latest version
+    local version=$(curl -s https://ftp.gnu.org/gnu/emacs/ | \
+                        grep -o 'emacs-[0-9.]*\.tar\.xz' | \
+                        sort -V | \
+                        tail -n1 | \
+                        sed 's/emacs-\(.*\)\.tar\.xz/\1/')
+
+
+    # Check if Emacs is already installed
+    if command -v emacs >/dev/null && emacs --version | grep -q "$version"; then
+        echo "Emacs $version is already installed"
+        return 0
+    fi
+
     # Remove apt-installed Emacs
     apt-get remove -y emacs emacs-common emacs-bin-common >/dev/null
     apt-get autoremove -y >/dev/null
@@ -64,18 +80,13 @@ install_emacs_from_source() {
     rm /tmp/emacs-"$version"* -rf 2>&1 >/dev/null
     rm /opt/emacs-"$version"* -rf 2>&1 >/dev/null
 
-    version=29.4
+    # Main
     cd /tmp
     wget -4 https://ftp.gnu.org/gnu/emacs/emacs-"$version".tar.xz || \
         wget -4 https://mirrors.kernel.org/gnu/emacs/emacs-"$version".tar.xz
     tar -xf emacs-"$version".tar.xz
-    echo "[DEBUG] -------------------------------------"
     chown -R root:root emacs-"$version"*
-    echo "[DEBUG] -------------------------------------"    
     cd emacs-"$version"
-
-    # Cleanup existing
-    rm /opt/emacs-"$version" -rf 2>&1 >/dev/null
 
     # Configure
     ./configure \
@@ -101,9 +112,9 @@ install_emacs_from_source() {
         > /dev/null
 
     # Make Install
-    make -j 8 > /dev/null
+    make -j 8 >/dev/null
     export INSTALL_OWNER=""
-    make install -j 8 > /dev/null
+    make install -j 8 >/dev/null
 
     # Links
     /opt/emacs-"$version"/bin/emacs --version
@@ -111,59 +122,112 @@ install_emacs_from_source() {
     /opt/emacs-"$version"/bin/emacsclient --version
     ln -sf /opt/emacs-"$version"/bin/emacsclient /usr/bin/emacsclient
 
-    # Verification
-    cmd='which emacs' && echo $cmd && echo && eval $cmd && echo
-    cmd='emacs --version' && echo $cmd && echo && eval $cmd && echo
-    cmd='which emacsclient' && echo $cmd && echo && eval $cmd && echo
-    cmd='emacsclient --version' && echo $cmd && echo && eval $cmd && echo
+    verify_emacs_installation $version
 }
 
-# install_nerd_fonts() {
-#     # Install Nerd Fonts Symbols
-#     cd /tmp
-#     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
-#     unzip NerdFontsSymbolsOnly.zip -d NerdFontsSymbolsOnly
-#     cd NerdFontsSymbolsOnly
-#     mkdir -p /root/.local/share/fonts > /dev/null
-#     cp *.ttf /root/.local/share/fonts/ > /dev/null
-#     fc-cache -f -v
+verify_emacs_installation() {
+    local version="$1"
+    local errors=0
+    local required_commands=("emacs" "emacsclient")
+    local binary_path
+    local version_output
 
-#     # Install all-the-icons fonts (non-interactive)
-#     emacs --batch --eval "(progn (require 'all-the-icons) (all-the-icons-install-fonts t))" > /dev/null
+    # Verification function
+    verify_emacs_installation() {
+        local errors=0
+        local required_commands=("emacs" "emacsclient")
+        local binary_path
+        local version_output
+        
+        # Check binaries exist and are executable
+        for cmd in "${required_commands[@]}"; do
+            binary_path=$(which $cmd 2>/dev/null)
+            if [ -z "$binary_path" ]; then
+                echo "ERROR: $cmd not found in PATH" >&2
+                ((errors++))
+                continue
+            fi
+            
+            if [ ! -x "$binary_path" ]; then
+                echo "ERROR: $cmd is not executable" >&2
+                ((errors++))
+                continue
+            fi
+            
+            echo "Found $cmd at: $binary_path"
+            
+            # Version check
+            version_output=$($cmd --version 2>&1)
+            if [ $? -ne 0 ]; then
+                echo "ERROR: Failed to get version for $cmd" >&2
+                ((errors++))
+                continue
+            fi
+            
+            # Verify version matches installed version
+            if ! echo "$version_output" | grep -q "$version"; then
+                echo "ERROR: Version mismatch for $cmd" >&2
+                ((errors++))
+                continue
+            fi
+            
+            echo "$version_output" | head -n 1
+        done
+        
+        # Check symlinks
+        for cmd in "${required_commands[@]}"; do
+            if [ ! -L "/usr/bin/$cmd" ]; then
+                echo "ERROR: Symlink missing for $cmd" >&2
+                ((errors++))
+            fi
+        done
+        
+        if [ $errors -gt 0 ]; then
+            echo "Verification failed with $errors errors" >&2
+            return 1
+        fi
+        
+        echo "Emacs installation verified successfully"
+        return 0
+    }
 
-#     # Cleanup
-#     cd /tmp
-#     rm -rf NerdFontsSymbolsOnly*
-# }
-
+    # Run verification
+    if ! verify_emacs_installation; then
+        echo "ERROR: Emacs installation verification failed" >&2
+        return 1
+    fi
+}
 
 install_nerd_fonts() {
+    # Verify installation
+    if fc-list | grep -q "Symbols"; then
+        echo "Nerd Fonts is already installed"
+        return 0
+    fi
+
+    ORIG_DIR="$(pwd)"
     # Install Nerd Fonts Symbols
     cd /tmp
-    wget --no-check-certificate https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip
-    unzip NerdFontsSymbolsOnly.zip -d NerdFontsSymbolsOnly
+    wget --no-check-certificate https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/NerdFontsSymbolsOnly.zip >/dev/null
+    unzip NerdFontsSymbolsOnly.zip -d NerdFontsSymbolsOnly >/dev/null
     cd NerdFontsSymbolsOnly
-    mkdir -p /root/.local/share/fonts > /dev/null
-    cp *.ttf /root/.local/share/fonts/ > /dev/null
-    fc-cache -f -v
-
-    # Remove existing .emacs.d if exists
-    rm -rf /root/.emacs.d
-
-    # Install all-the-icons package first
-    emacs --batch \
-          --eval "(require 'package)" \
-          --eval "(add-to-list 'package-archives '(\"melpa\" . \"https://melpa.org/packages/\") t)" \
-          --eval "(package-initialize)" \
-          --eval "(package-refresh-contents)" \
-          --eval "(package-install 'all-the-icons)"
-
-    # Now install the fonts
-    emacs --batch --eval "(progn (require 'all-the-icons) (all-the-icons-install-fonts t))" > /dev/null
-
+    mkdir -p /root/.local/share/fonts >/dev/null
+    cp *.ttf /root/.local/share/fonts/ >/dev/null
+    fc-cache -f -v >/dev/null
+    
     # Cleanup
     cd /tmp
-    rm -rf NerdFontsSymbolsOnly*
+    rm -rf NerdFontsSymbolsOnly* >/dev/null
+    cd $ORIG_DIR
+
+    # Verify installation
+    if fc-list | grep -q "Symbols"; then
+        echo "Nerd Fonts installation completed successfully"
+        return 0
+    else
+        echo "Nerd Fonts installation failed"
+        return 1
+    fi
 }
 
 install_emacs_from_source

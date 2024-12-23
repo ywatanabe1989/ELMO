@@ -1,7 +1,8 @@
 #!/bin/bash
-# Time-stamp: "2024-12-22 23:11:53 (ywatanabe)"
+# Time-stamp: "2024-12-23 11:08:38 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/Ninja/apptainer/build/init/start_emacs.sh
 
+echo "$0..."
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ "$(id -u)" != "0" ]; then

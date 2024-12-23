@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 02:13:02 (ywatanabe)"
+# Time-stamp: "2024-12-23 19:03:40 (ywatanabe)"
 # File: ./Ninja/run.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,8 +22,6 @@ usage() {
 
 # Set default mode
 mode="run"
-source $THIS_DIR/config/env/06_apptainerenv.env
-export NINJA_ROOT=${NINJA_ROOT:-$THIS_DIR}
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -59,37 +57,42 @@ else
     bind_opt=""
 fi
 
-if [ "$mode" = "run" ]; then
-    apptainer run \
-              --writable \
-              --fakeroot \
-              $bind_opt \
-              $NINJA_ROOT/apptainer/ninja.sandbox
-
-elif [ "$mode" = "build" ]; then
+if [ "$mode" = "build" ]; then
+    export NINJA_HOME=. && source ./config/env/00_all.env
     apptainer build \
               --sandbox \
               --fakeroot \
               $bind_opt \
-              $NINJA_ROOT/apptainer/ninja.sandbox \
-              $NINJA_ROOT/apptainer/ninja.def \
-              2>&1 | tee $NINJA_ROOT/apptainer/ninja.sandbox.log
-    # --update \    
+              ./apptainer/ninja.sandbox \
+              ./apptainer/ninja.def \
+              2>&1 | tee ./apptainer/ninja.sandbox.log
+
+elif [ "$mode" = "run" ]; then
+    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
+    apptainer run \
+              --writable \
+              --fakeroot \
+              $bind_opt \
+              ./apptainer/ninja.sandbox
+
 
 elif [ "$mode" = "shell" ]; then
+    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
     apptainer shell \
               --writable \
               --fakeroot \
+              --shell "/bin/bash --login" \
               $bind_opt \
-              $NINJA_ROOT/apptainer/ninja.sandbox
+              ./apptainer/ninja.sandbox
 
-    # In the exec section, use the stored args
 elif [ "$mode" = "exec" ]; then
+    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
     apptainer exec \
               --writable \
               --fakeroot \
+              --cleanenv \
               $bind_opt \
-              $NINJA_ROOT/apptainer/ninja.sandbox "${exec_args[@]}"
+              ./apptainer/ninja.sandbox "${exec_args[@]}"
 
 else
     echo "Invalid mode. Use run, build, or shell"
