@@ -4,4 +4,4 @@
 (setq savehist-minibuffer-history-variables '(extended-command-history buffer-name-history file-name-history))
 (setq extended-command-history '("load-file"))
 (setq buffer-name-history '(".apptainer"))
-(setq file-name-history '("/home/ywatanabe/.dotfiles/.emacs.d/lisp/ELMO/" "/opt/ELMO/"))
+(setq file-name-history '("/home/ywatanabe/.dotfiles/.emacs.d/lisp/ELMO/" "/opt/elmo/"))

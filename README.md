@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: 2024-12-23 22:11:18
+!-- title: 2024-12-23 22:25:13
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/ELMO/README.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/README.md
 !-- --- -->
 
 # Elmo: Emacs LLM Operations
@@ -11,6 +11,8 @@
 ``` bash
 ./main.sh -m build
 ./main.sh -m shell
+
+
 
 export ELMO_BIND="$HOME:/host:ro,$ELMO_ROOT_HOST/workspace:/workspace"
 
@@ -32,7 +34,7 @@ ln -sfr ~/.dotfiles/.emacs.d/lisp/ELMO/apptainer/elmo.sandbox/workspace
 ./main.sh -m exec env | grep ^ELMO_
 # ELMO_LLM_API_KEY=
 # ELMO_LLM_ENGINE=
-# ELMO_ROOT_APPTAINER=/opt/ELMO
+# ELMO_ROOT_APPTAINER=/opt/elmo
 # ELMO_BASE_UID=9999
 # ELMO_HOST_WORKSPACE=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../../workspace
 # ELMO_GROUP=elmo
@@ -41,7 +43,7 @@ ln -sfr ~/.dotfiles/.emacs.d/lisp/ELMO/apptainer/elmo.sandbox/workspace
 # ELMO_HOST_HOME=/home/ywatanabe
 # ELMO_N_AGENTS=2
 # ELMO_HOST_USER=ywatanabe
-# ELMO_HOME=/opt/ELMO
+# ELMO_HOME=/opt/elmo
 
 
 rm /workspace/*/*_backup*
@@ -55,7 +57,7 @@ export ELMO_BIND="$HOME:/host:ro,$PWD/workspace:/workspace"
 
 ``` bash
 ./src/apptainer_builders/rsync_from_sandbox.sh
-./.apptainer/elmo/elmo.sandbox/opt/ELMO/src/apptainer_builders
+./.apptainer/elmo/elmo.sandbox/opt/elmo/src/apptainer_builders
 ```
 
 

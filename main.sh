@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 22:07:59 (ywatanabe)"
+# Time-stamp: "2024-12-23 22:25:13 (ywatanabe)"
 # File: ./ELMO/run.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -68,7 +68,7 @@ if [ "$mode" = "build" ]; then
               2>&1 | tee ./apptainer/elmo.sandbox.log
 
 elif [ "$mode" = "run" ]; then
-    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer run \
               --writable \
               --fakeroot \
@@ -77,7 +77,7 @@ elif [ "$mode" = "run" ]; then
 
 
 elif [ "$mode" = "shell" ]; then
-    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer shell \
               --writable \
               --fakeroot \
@@ -86,7 +86,7 @@ elif [ "$mode" = "shell" ]; then
               ./apptainer/elmo.sandbox
 
 elif [ "$mode" = "exec" ]; then
-    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer exec \
               --writable \
               --fakeroot \

@@ -10,8 +10,8 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/ELMO/config/env/00_all.env
-source /opt/ELMO/apptainer/build/user-setup/permissions/01_emacsd.src
+source /opt/elmo/config/env/00_all.env
+source /opt/elmo/apptainer/build/user-setup/permissions/01_emacsd.src
 
 # Add at beginning of script
 xhost +local:root > /dev/null 2>&1

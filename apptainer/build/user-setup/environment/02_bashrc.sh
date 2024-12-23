@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 setup_elmos_bashrc() {
     for elmo_id in $(seq 1 $ELMO_N_AGENTS); do
@@ -43,7 +43,7 @@ setup_elmo_bashrc() {
 # $0
 # ----------------------------------------
 export ELMO_ID=$ELMO_ID
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 # ----------------------------------------
 EOF
 

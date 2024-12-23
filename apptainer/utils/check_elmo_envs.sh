@@ -4,13 +4,13 @@
 
 # Source environment variables
 THIS_DIR="$(dirname $0)"
-source "/opt/ELMO/config/env/00_all.env"
+source "/opt/elmo/config/env/00_all.env"
 
 
 check_elmo_envs() {
     # Set ELMO_ID before checking variables
     export ELMO_ID=1
-    source "/opt/ELMO/config/env/00_all.env"
+    source "/opt/elmo/config/env/00_all.env"
 
     echo "=== ELMO Environment Variables for $ELMO_USER==="
     compgen -v | grep '^ELMO\|^HOST' | while read var; do
@@ -53,7 +53,7 @@ check_user_environment() {
     echo -e "\n=== Checking User Environment for $test_user ==="
     su - $test_user -c "
         export ELMO_ID=1
-        source /opt/ELMO/config/env/00_all.env
+        source /opt/elmo/config/env/00_all.env
         env | grep '^ELMO'
         echo \"Python venv: \$ELMO_PYTHON_VIRTUAL_ENV\"
         which python
@@ -74,7 +74,7 @@ check_user_environment
 # HOSTTYPE=x86_64
 # ELMO_BASE_UID=9999
 # ELMO_GROUP=elmo
-# ELMO_HOME=/opt/ELMO
+# ELMO_HOME=/opt/elmo
 # ELMO_HOST_HOME=/home/ywatanabe
 # ELMO_HOST_USER=ywatanabe
 # ELMO_HOST_WORKSPACE=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../../workspace
@@ -82,10 +82,10 @@ check_user_environment
 # ELMO_LLM_API_KEY=
 # ELMO_LLM_ENGINE=
 # ELMO_N_AGENTS=2
-# ELMO_ROOT=/opt/ELMO
-# ELMO_ROOT_APPTAINER=/opt/ELMO
+# ELMO_ROOT=/opt/elmo
+# ELMO_ROOT_APPTAINER=/opt/elmo
 # ELMO_ROOT_HOST=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../..
-# bash: /opt/ELMO/config/env/ENVS.sh.src: No such file or directory
+# bash: /opt/elmo/config/env/ENVS.sh.src: No such file or directory
 # (A) root $ check_user_setup
 
 # === Checking User Setup ===
@@ -167,16 +167,16 @@ check_user_environment
 # (A) root $ check_user_environment
 
 # === Checking User Environment for elmo-001 ===
-# -bash: line 3: /opt/ELMO/src/shell/ENVS.sh.src: No such file or directory
+# -bash: line 3: /opt/elmo/src/shell/ENVS.sh.src: No such file or directory
 # ELMO_LLM_API_KEY=
 # ELMO_LLM_ENGINE=
-# ELMO_ROOT_APPTAINER=/opt/ELMO
+# ELMO_ROOT_APPTAINER=/opt/elmo
 # ELMO_BASE_UID=9999
-# ELMO_HOST_WORKSPACE=/opt/ELMO/config/env/../../workspace
+# ELMO_HOST_WORKSPACE=/opt/elmo/config/env/../../workspace
 # ELMO_GROUP=elmo
 # ELMO_ID=1
-# ELMO_ROOT_HOST=/opt/ELMO/config/env/../..
-# ELMO_ROOT=/opt/ELMO/config/env/../..
+# ELMO_ROOT_HOST=/opt/elmo/config/env/../..
+# ELMO_ROOT=/opt/elmo/config/env/../..
 # ELMO_HOST_HOME=/home/elmo-001
 # ELMO_N_AGENTS=2
 # ELMO_HOST_USER=elmo-001

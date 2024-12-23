@@ -11,7 +11,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 export PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 # Initialization
 apt-get -y update >/dev/null

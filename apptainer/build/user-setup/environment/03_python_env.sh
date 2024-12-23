@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 create_elmos_python_envs() {
     for elmo_id in $(seq 1 $ELMO_N_AGENTS); do
@@ -28,7 +28,7 @@ create_elmo_python_env() {
     # Install Python packages
     . $ELMO_USER_HOME/.env/bin/activate >/dev/null
     pip install --upgrade pip >/dev/null
-    pip install -r /opt/ELMO/config/env/requirements.txt >/dev/null
+    pip install -r /opt/elmo/config/env/requirements.txt >/dev/null
 }
 
 create_elmos_python_envs

@@ -21,7 +21,7 @@ ls $ELMO_FROM_HOST_DIR
 # Mapping
 SRC_DIR=$ELMO_FROM_HOST_DIR/home
 
-source /opt/ELMO/src/apptainer_builders/ENVS.sh.src
+source /opt/elmo/src/apptainer_builders/ENVS.sh.src
 
 ELMO_FROM_HOST_SOURCES=(
     $SRC_DIR/.bashrc:$ELMO_HOME/.bashrc:

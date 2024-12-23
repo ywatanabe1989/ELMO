@@ -41,7 +41,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 validate_environment
 
@@ -59,7 +59,7 @@ correct_root_777() {
 
 correct_root_775() {
     # System directories
-    DIRS="/usr/bin /bin /opt/ELMO"
+    DIRS="/usr/bin /bin /opt/elmo"
     for dir in $DIRS; do
         log_message "Setting 775 permissions for $dir"
         backup_directory "$dir"

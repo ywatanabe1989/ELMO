@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/ELMO/config/env/00_all.env
+source /opt/elmo/config/env/00_all.env
 
 
 install_emacs_from_source() {
