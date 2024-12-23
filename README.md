@@ -1,10 +1,10 @@
 <!-- ---
-!-- title: 2024-12-23 23:37:37
+!-- title: 2024-12-23 23:47:52
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/README.md
 !-- --- -->
 
-# Elmo — Emacs LLM Operations
+# Elmo — Emacs LLM Orchestra
 
 (THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
 
