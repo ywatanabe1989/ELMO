@@ -4,7 +4,9 @@
 .apptainer_builders
 .README.md
 README.md
-workspace/shared/from_host/*
+workspace/resources/private/from_host/*
+workspace/resources/shared/from_host/*
+
 
 
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Secrets.gitignore ###
@@ -634,4 +636,3 @@ src/sea-setup-sea.log
 **/*.sandbox/*
 **/*.sif
 **/build-temp-*
-.apptainer/ninja/definitions/build-temp-889387931/.README.md-versions/
