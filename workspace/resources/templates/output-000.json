@@ -1,0 +1,6 @@
+{
+    "execution_id": "string",
+    "stdout": "string",
+    "stderr": "string",
+    "exit_code": "integer",
+}

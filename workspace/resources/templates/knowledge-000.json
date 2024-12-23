@@ -1,0 +1,8 @@
+{
+    "knowledge_id": "string",
+    "type": "text | json | link",
+    "content": "string | object",
+    "summary": "string",
+    "tags": ["string"],
+    "source": "string"
+}

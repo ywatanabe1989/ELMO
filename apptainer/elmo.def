@@ -82,3 +82,5 @@ From: ubuntu:latest
             echo "$(basename $script) succeeded"
         else
             echo "$(basename $script) failed"
+        fi
+    done

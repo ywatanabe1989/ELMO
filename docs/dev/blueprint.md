@@ -1,10 +1,10 @@
 <!-- ---
-!-- title: 2024-12-23 20:01:32
+!-- title: 2024-12-23 23:28:19
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/ELMO/docs/dev/blueprint.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/docs/dev/blueprint.md
 !-- --- -->
 
-    # ELMO — Networked Intelligence of Agents JASON
+    # ELMO — Emacs LLM Operations
 
     (THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
 

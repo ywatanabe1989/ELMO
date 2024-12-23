@@ -1,115 +1,144 @@
 <!-- ---
-!-- title: 2024-12-23 22:25:13
+!-- title: 2024-12-23 23:37:37
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/README.md
 !-- --- -->
 
-# Elmo: Emacs LLM Operations
+# Elmo — Emacs LLM Operations
+
+(THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
+
+## Introduction
+Elmo is an LLM agent system run on Emacs.
+- Full CUI operations with rich GUI
+- Interfaces for hacking tools seasoned by history
+- Self-evolving potentials inherited from Emacs and Elisp
+
+Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a catalyst for AI agents.
 
 ## Apptainer
 
 ``` bash
 ./main.sh -m build
 ./main.sh -m shell
+./main.sh -m run
+```
 
+## Workspace
 
-
-export ELMO_BIND="$HOME:/host:ro,$ELMO_ROOT_HOST/workspace:/workspace"
-
-
-export ELMO_BIND="$PWD/workspace:/workspace"
-./main.sh -m shell
-
-
-export APPTAINER_BIND=
-
-TGT_DIR="/tmp"
-export ELMO_BIND="$PWD/apptainer/utils:$TGT_DIR"
-./main.sh -m exec $TGT_DIR/check_elmo_envs.sh
-
-ln -sfr ~/.dotfiles/.emacs.d/lisp/ELMO/apptainer/elmo.sandbox/workspace
-
-
-./main.sh -m exec ./apptainer/utils/check_elmo_envs.sh
-./main.sh -m exec env | grep ^ELMO_
-# ELMO_LLM_API_KEY=
-# ELMO_LLM_ENGINE=
-# ELMO_ROOT_APPTAINER=/opt/elmo
-# ELMO_BASE_UID=9999
-# ELMO_HOST_WORKSPACE=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../../workspace
-# ELMO_GROUP=elmo
-# ELMO_ROOT_HOST=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../..
-# ELMO_ROOT=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../..
-# ELMO_HOST_HOME=/home/ywatanabe
-# ELMO_N_AGENTS=2
-# ELMO_HOST_USER=ywatanabe
-# ELMO_HOME=/opt/elmo
-
-
-rm /workspace/*/*_backup*
-
-tree --gitignore -L 3 /workspace
-
-export ELMO_BIND="$HOME:/host:ro,$PWD/workspace:/workspace"
-./main.sh -m shell
-
-## Dev Links
-
-``` bash
-./src/apptainer_builders/rsync_from_sandbox.sh
-./.apptainer/elmo/elmo.sandbox/opt/elmo/src/apptainer_builders
+``` plaintext
+(wsl) Elmo $ tree workspace/
+workspace/
+├── elmos
+│   ├── elmo-000
+│   │   ├── home
+│   │   ├── memory
+│   │   ├── messages
+│   │   │   ├── inbox
+│   │   │   └── outbox
+│   │   ├── profile.json
+│   │   ├── projects
+│   │   │   └── messages
+│   │   │       ├── inbox
+│   │   │       └── outbox
+│   │   └── status.json
+│   ├── elmo-001
+│   │   ├── home
+│   │   ├── memory
+│   │   ├── messages
+│   │   │   ├── inbox
+│   │   │   └── outbox
+│   │   ├── profile.json
+│   │   ├── projects
+│   │   │   └── messages
+│   │   │       ├── inbox
+│   │   │       └── outbox
+│   │   └── status.json
+├── logs
+├── projects
+│   └── 000-PROJECTNAME
+│       ├── data
+│       ├── docs
+│       │   ├── project-dynamic.json
+│       │   └── project-static.json
+│       ├── forum.json
+│       ├── README.md
+│       ├── requirements.txt
+│       ├── results
+│       └── scripts
+└── resources
+    ├── agents
+    ├── prompts
+    │   └── 001-context-to-elisp-code.json
+    ├── scripts
+    │   └── json2md.sh
+    ├── templates
+    │   ├── agent-000.json
+    │   ├── context-000.json
+    │   ├── experience-000.json
+    │   ├── knowledge-000.json
+    │   ├── message-000.json
+    │   ├── output-000.json
+    │   ├── project-dynamic-000.json
+    │   ├── project-static-000.json
+    │   ├── prompt-000.json
+    │   ├── README.md
+    │   ├── resource-000.json
+    │   └── tool-000.json
+    └── tools
+        ├── 001-elisp.json
+        ├── 002-python.json
+        ├── 003-git.json
+        ├── 004-github.json
+        └── 005-tree.json
 ```
 
 
-## Apptainer
 
-``` bash
-pkill -f "emacs --daemon=/home/elmo"
-./src/shell/init_project.sh -p hello-world
-./run.sh -m shell
-./run.sh -m exec 
-```
+## Core Concepts
 
-./run.sh -m shell
-su elmo-001
-ls -al
-env | grep ELMO_
-unset ELMO_EMACS_SERVER_SOCKET_DIR
-unset ELMO_EMACS_SERVER_CHECK_INTERVAL
-unset ELMO_API_TIMEOUT
-unset ELMO_API_TIMEOUT
-unset ELMO_MAX_RETRIES
-unset ELMO_SHARED_BACKUPS
-unset ELMO_SHARED_CONFIG
-unset ELMO_BASE_DOT_EMACS
+| Unit          | Description                                       |
+|---------------|---------------------------------------------------|
+| **Context**   | Project, Milestone, Task, Process, Thread, Branch |
+| **LLM**       | Translates Context to Code                        |
+| **Execution** | Executes Code, generating Output                  |
+| **Feedback**  | Captures Stdout, Stderr, and Exit codes           |
 
+| Basic               | Description                                   |
+|---------------------|-----------------------------------------------|
+| **Permissions**     | Roles and access controls.                    |
+| **Validation**      | Data integrity checks, JSON Schema Validation |
+| **Version Control** | Tracked using Git.                            |
 
+| Journaling method | Description                                              |
+|-------------------|----------------------------------------------------------|
+| **Message**       | Interchangeable JSON and Markdown protocols for logging. |
 
+| Entity        | Description                                       |
+|---------------|---------------------------------------------------|
+| **Project**   | Top-level grouping of tasks and resources.        |
+| **Milestone** | Goal within a project.                            |
+| **Task**      | Atomic work unit within a milestone.              |
+| **Agent**     | Autonomous process using tools to complete tasks. |
 
-# 1 Apptainer 1 User
+| Pool            | Description                                      |
+|-----------------|--------------------------------------------------|
+| **Projects**    | List of all active/inactive projects.            |
+| **Agents**      | Available agent configurations and their status. |
+| **Prompts**     | Library of LLM prompt templates.                 |
+| **Tools**       | Definitions of available tools (Emacs, scripts). |
+| **Resources**   | Files, links, data (read/writable) for agents.   |
+| **Knowledge**   | Accumulated data from past experiences.          |
+| **Experiences** | Logs of past executions and agent behavior.      |
 
-``` bash
-# Set base permissions
-chmod 755 /workspace
-chmod 750 /workspace/elmos
-chmod 750 /workspace/projects
-chmod 750 /workspace/resources
-
-# Configure elmo homes
-chmod 700 /workspace/elmos/elmo-001/home
-chmod 700 /workspace/elmos/elmo-002/home
-
-# Project permissions
-chmod 770 /workspace/projects/000-PROJECTNAME
-
-# Resources with read-only binding
-# When launching containers:
-apptainer run \
-    --bind "/workspace/resources/private:/workspace/resources/private:ro" \
-    --bind "/workspace/resources/shared:/workspace/resources/shared:ro" \
-    --bind "/workspace/elmos/elmo-001/home:/home/elmo" \
-    --bind "/workspace:/workspace" \
-    instance1.sif
-    ```
-    
-    
+| Action                    | Description                                            |
+|---------------------------|--------------------------------------------------------|
+| **Project Understanding** | Analyzes project descriptions to plan tasks.           |
+| **Task Splitting**        | Divides projects/milestones into manageable tasks.     |
+| **Context Building**      | Generates task context from available resources.       |
+| **Code Generating**       | Creates Elisp/tool invocations based on task/context.  |
+| **Evaluating**            | Assesses execution success/failure using feedback.     |
+| **Git Managing**          | Handles version control for configuration, code, docs. |
+| **Reporting**             | Generates Markdown reports on progress.                |
+| **Maintaining**           | Keeps system up-to-date (Git, Apptainer, Elisp).       |
+| **Allocating**            | Assigns agents and resources to tasks.                 |
