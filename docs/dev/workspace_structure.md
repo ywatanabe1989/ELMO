@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/docs/dev_memo/workspace_structure.md
+!-- title: ./ELMO/docs/dev_memo/workspace_structure.md
 !-- author: ywatanabe
 !-- date: 2024-12-18 14:34:01
 !-- --- -->
@@ -59,10 +59,10 @@ workspace/
 │       │       └── report.pdf (tags: overview, methods, figures, tables)
 │       ├── issues/
 │       │   └── YYYY-MM-DD-<title>-<issue-id>.md (tags: )
-└── ninjas/
+└── elmos/
     ├── README.md
-    └── ninja-{id}/
-        ├── profile.json (tags: ninja name in project, role)
+    └── elmo-{id}/
+        ├── profile.json (tags: elmo name in project, role)
         ├── status.md (tags: todo, waiting, pending, done, canceled, reason)
         ├── memory/
         │   ├── README.md
@@ -101,13 +101,13 @@ workspace/
 
 #### **Maintainability**
 
-- **Modular Design:** Separating `shared`, `projects`, and `ninjas` allows for independent updates and maintenance without affecting other components.
-- **Scalable Naming Scheme:** The use of placeholders allows for easy addition of new projects, tools, agents, and ninjas.
+- **Modular Design:** Separating `shared`, `projects`, and `elmos` allows for independent updates and maintenance without affecting other components.
+- **Scalable Naming Scheme:** The use of placeholders allows for easy addition of new projects, tools, agents, and elmos.
 - **Centralized Configurations:** Storing configurations in `shared/agents/configs` and shared templates promotes consistency and simplifies updates.
 
 #### **Scalability**
 
-- **Expandable Structure:** New projects and ninjas can be added seamlessly by following the existing directory patterns.
+- **Expandable Structure:** New projects and elmos can be added seamlessly by following the existing directory patterns.
 - **Adaptable Tags System:** Tags can evolve over time to accommodate new metadata requirements without altering the directory layout.
 - **Symlinks for Data Management:** Using symlinks for data directories (`data/ (symlink)`) in reports ensures that large datasets are managed efficiently without duplication.
 
@@ -120,7 +120,7 @@ workspace/
 #### **Self-Evolving Potentials**
 
 - **Tag-Based Querying:** Incorporating tags facilitates advanced searching and filtering within Emacs, allowing the system to adapt to growing complexity.
-- **Agent (Ninja) Development:** Each ninja's directory can evolve independently, reflecting personal growth, learning, and contributions to projects.
+- **Agent (ELMO) Development:** Each elmo's directory can evolve independently, reflecting personal growth, learning, and contributions to projects.
 - **Project Evolution:** Projects can be expanded with additional scripts, data, and documentation as they progress, without restructuring.
 
 ---
@@ -158,11 +158,11 @@ workspace/
 
 - **Environment Files:** Including `.env` files allows for environment-specific configurations, aiding in reproducibility.
 
-#### **Ninjas (Agents)**
+#### **ELMOs (Agents)**
 
 - **Profile and Status:**
 
-- **`profile.json`:** Contains structured data about the ninja, such as `name`, `roles`, and `skills`.
+- **`profile.json`:** Contains structured data about the elmo, such as `name`, `roles`, and `skills`.
 - **`status.md`:** Uses tags to indicate current tasks (`todo`, `in-progress`, `done`), enhancing task tracking.
 
 - **Memory and Journals:**
@@ -177,7 +177,7 @@ workspace/
 
 - **Project-Specific README.md:** Tags cover comprehensive project details, aiding in personal project management.
 
-- **Forum and Collaboration:** `forum.md` can serve as a space for discussion and collaboration notes relevant to the ninja's involvement in the project.
+- **Forum and Collaboration:** `forum.md` can serve as a space for discussion and collaboration notes relevant to the elmo's involvement in the project.
 
 ---
 
@@ -361,16 +361,16 @@ available tags: [prompt, data-cleaning, dataset-123, CSV, pandas, expected-outpu
 
 ---
 
-## **3. `ninjas/ninja-{id}/profile.json`**
+## **3. `elmos/elmo-{id}/profile.json`**
 
 ```json
 {
-"ninja_id": "ninja-001",
+"elmo_id": "elmo-001",
 "nickname": "Nickname",
 "role": "[Role in the project]",
 "skills": ["Skill1", "Skill2", "Skill3"],
 "assigned_projects": ["project-001", "project-002"],
-"tags": ["ninja-profile", "agent", "expertise-area"]
+"tags": ["elmo-profile", "agent", "expertise-area"]
 }
 ```
 
@@ -378,7 +378,7 @@ available tags: [prompt, data-cleaning, dataset-123, CSV, pandas, expected-outpu
 
 ```json
 {
-"ninja_id": "ninja-001",
+"elmo_id": "elmo-001",
 "name": "Alex Smith",
 "role": "Data Scientist",
 "skills": ["Python", "Machine Learning", "Data Visualization"],
@@ -388,12 +388,12 @@ available tags: [prompt, data-cleaning, dataset-123, CSV, pandas, expected-outpu
 
 ---
 
-## **4. `ninjas/ninja-{id}/status.md`**
+## **4. `elmos/elmo-{id}/status.md`**
 
 ```markdown
 ---
 title: "Status Update"
-available tags: [ninja-status, todo, waiting, pending, done, canceled, reason]
+available tags: [elmo-status, todo, waiting, pending, done, canceled, reason]
 date: YYYY-MM-DD
 ---
 
@@ -447,11 +447,11 @@ available tags: [project description, aim, assignments, timeline, milestones, re
 ## **Assignments**
 
 - **Team Members:**
-- [Ninja 1](../../ninjas/ninja-001/profile.json)
-- [Ninja 2](../../ninjas/ninja-002/profile.json)
+- [ELMO 1](../../elmos/elmo-001/profile.json)
+- [ELMO 2](../../elmos/elmo-002/profile.json)
 - **Roles:**
-- Ninja 1: Data Collection
-- Ninja 2: Data Analysis
+- ELMO 1: Data Collection
+- ELMO 2: Data Analysis
 
 ## **Timeline**
 
@@ -490,8 +490,8 @@ To analyze customer purchasing behavior to improve product recommendations.
 ## **Assignments**
 
 - **Team Members:**
-- [Alex Smith](../../ninjas/ninja-001/profile.json)
-- [Jordan Lee](../../ninjas/ninja-002/profile.json)
+- [Alex Smith](../../elmos/elmo-001/profile.json)
+- [Jordan Lee](../../elmos/elmo-002/profile.json)
 - **Roles:**
 - Alex Smith: Data Extraction and Cleaning
 - Jordan Lee: Data Modeling and Visualization
@@ -517,7 +517,7 @@ To analyze customer purchasing behavior to improve product recommendations.
 
 ---
 
-## **6. `ninjas/ninja-{id}/memory/YYYY-MM-DD-<title>.md`**
+## **6. `elmos/elmo-{id}/memory/YYYY-MM-DD-<title>.md`**
 
 ```markdown
 ---
@@ -778,11 +778,11 @@ Yes, using JSON files more extensively could offer some advantages, but your cur
 **Potential Uses for JSON (Where It Can Improve):**
 
 1.  **Structured Data:**
-    *   **Agent Profiles:**  `ninjas/ninja-{id}/profile.json` is excellent for structured data. You could expand this.
+    *   **Agent Profiles:**  `elmos/elmo-{id}/profile.json` is excellent for structured data. You could expand this.
     *   **Tool Definitions:**  `shared/tools/tool-{id}.json` could hold structured information about tools, including required inputs, outputs, and elisp code snippets, and maybe add a JSON schema for validation.
     *   **Knowledge Base:** `shared/knowledge_base/knowledge.json` is a good place for structured information for agents.
     *   **Prompts**: `shared/prompts/prompt-{id}.json` can hold structured information about the prompt.
-    *    **Task Management**: Task lists for ninjas in `ninjas/ninja-{id}/tasks.json`
+    *    **Task Management**: Task lists for elmos in `elmos/elmo-{id}/tasks.json`
 
 2.  **Inter-Agent Communication:** Standardize message structure by using JSON format for inter-agent communication.
 
@@ -957,10 +957,10 @@ workspace/
 │       │       └── report.pdf (tags: overview, methods, figures, tables)
 │       ├── issues/
 │       │   └── YYYY-MM-DD-<title>-<issue-id>.md (tags: )
-└── ninjas/
+└── elmos/
     ├── README.md
-    └── ninja-{id}/
-        ├── profile.json (tags: ninja name in project, role)
+    └── elmo-{id}/
+        ├── profile.json (tags: elmo name in project, role)
         ├── status.md (tags: todo, waiting, pending, done, canceled, reason)
         ├── memory/
         │   ├── README.md

@@ -1,11 +1,11 @@
 <!-- ---
-!-- title: ./Ninja/README.md
+!-- title: ./ELMO/README.md
 !-- author: ywatanabe
 !-- date: 2024-12-19 08:34:20
 !-- --- -->
 
 
-# Ninja — Networked Intelligence of JASON Agents
+# ELMO — Networked Intelligence of JASON Agents
 
 ## Introduction
 An LLM agent system on Emacs, which offers unique characteristics:
@@ -17,7 +17,7 @@ Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a catalyst f
 
 ## Quick Start
 ```bash
-git clone https://github.com/user/Ninja.git ~/.emacs.d/Ninja
+git clone https://github.com/user/ELMO.git ~/.emacs.d/ELMO
 ```
 
 ## Apptainer
@@ -26,14 +26,14 @@ git clone https://github.com/user/Ninja.git ~/.emacs.d/Ninja
 apptainer build \
     --sandbox \
     --fakeroot \
-    ./.apptainer/ninja/ninja.sandbox \
-    ./.apptainer/ninja/ninja.def \
-    2>&1 | tee ./.apptainer/ninja/ninja.sandbox.log
+    ./.apptainer/elmo/elmo.sandbox \
+    ./.apptainer/elmo/elmo.def \
+    2>&1 | tee ./.apptainer/elmo/elmo.sandbox.log
     
 apptainer shell \
     --fakeroot \
     --writable \
-    ./.apptainer/ninja/ninja.sandbox
+    ./.apptainer/elmo/elmo.sandbox
 ```
 
 ## Usage

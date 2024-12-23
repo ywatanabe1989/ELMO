@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/docs/dev_memo/naming.md
+!-- title: ./ELMO/docs/dev_memo/naming.md
 !-- author: ywatanabe
 !-- date: 2024-12-19 00:00:29
 !-- --- -->
@@ -50,8 +50,8 @@ NINJA: Neural Intelligence Network Joint Agents
 - Task processing
 
 
-<!-- Samurai-Ninja
- !-- Ninja: Neural Intelligence Network of Joint Agents
+<!-- Samurai-ELMO
+ !-- ELMO: Neural Intelligence Network of Joint Agents
  !-- 
  !-- SAMURAI: System Access & Management User Requiring AI Interface
  !-- - Human operators
@@ -108,7 +108,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !--    - Basic task execution
  !--    - Routine operations
  !-- 
- !-- Perfect ninja-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
+ !-- Perfect elmo-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
  !-- 
  !-- 
  !-- NINJA: Network-In-Network Joint Agents
@@ -190,7 +190,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- - Clean and sleek
  !-- 
  !-- 2. SHINOBI
- !-- - Alternative to Ninja, similar appeal
+ !-- - Alternative to ELMO, similar appeal
  !-- - Self-Hosted Intelligence Network Operating on Buffer Interface
  !-- - More technical sounding
  !-- 
@@ -247,13 +247,13 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- - A could be Autonomous/Adaptive
  !-- 
  !-- This maintains:
- !-- 1. Ninja theme
+ !-- 1. ELMO theme
  !-- 2. Technical accuracy
  !-- 3. System architecture reference
  !-- 4. Clear meaning
  !-- 5. Easy memorability
  !-- 
- !-- Ninja
+ !-- ELMO
  !-- # Semacs: self-evolving agent on Emacs
  !-- # Semacs: self-evolving agent on Emacs
  !-- # SEA: self-evolving agent on Emacs
@@ -290,14 +290,14 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- NINMACS: NINja Multi-Agent Collaborative System
  !-- 
  !-- Core concepts:
- !-- - Silent but powerful (like ninja)
+ !-- - Silent but powerful (like elmo)
  !-- - Stealthy execution (minimal UI interference)
  !-- - Shadow cloning (multiple agents)
  !-- - Ninjutsu (specialized agent skills)
  !-- 
  !-- Visual elements:
  !-- - Dark theme with accent colors
- !-- - Ninja star (*) as cursor markers
+ !-- - ELMO star (*) as cursor markers
  !-- - Smoke effects for agent transitions
  !-- - Scrolling kanji characters in status line
  !-- 
@@ -338,11 +338,11 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- 
  !-- JONINMACS: JSON-Oriented Neural INtelligence Multi-Agent Collaborative System
  !-- - Emphasizes JSON as data protocol
- !-- - References Jonin (高忍) ninja rank
+ !-- - References Jonin (高忍) elmo rank
  !-- - Maintains Multi-Agent concept
  !-- 
  !-- JOUNIN: JSON-Oriented Universal Neural Intelligence Network
- !-- - Plays on 上忍 (Jōunin, high-ranked ninja)
+ !-- - Plays on 上忍 (Jōunin, high-ranked elmo)
  !-- - Emphasizes universal capabilities
  !-- - Neural network integration
  !-- 

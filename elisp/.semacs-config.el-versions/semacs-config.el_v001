@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-07 09:52:33
 ;;; Time-stamp: <2024-12-07 09:52:33 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/ninja-config.el
+;;; File: ./self-evolving-agent/src/elmo-config.el
 
 
 ;;; Code:
@@ -10,172 +10,172 @@
 (require 'request)
 (require 'w3m nil t)
 
-(defgroup ninja nil
+(defgroup elmo nil
   "Self-evolving agent configuration."
   :group 'applications)
 
-(defvar ninja--sudo-password nil
+(defvar elmo--sudo-password nil
   "Temporary storage for sudo password.")
 
-(defvar ninja-max-retries 5
+(defvar elmo-max-retries 5
   "Maximum number of retries for failed execution.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Base directories for the user; defined in ninja-config.el and thus commented-out here
+;; Base directories for the user; defined in elmo-config.el and thus commented-out here
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ;; User installation paths
-;; (defvar ninja-user-root-dir (file-name-directory (directory-file-name
+;; (defvar elmo-user-root-dir (file-name-directory (directory-file-name
 ;;                                               (file-name-directory
 ;;                                                (or load-file-name buffer-file-name))))
-;;   "User's NINJA installation root directory.")
+;;   "User's ELMO installation root directory.")
 
-;; (defvar ninja-user-source-dir (expand-file-name "src" ninja-user-root-dir)
-;;   "User's NINJA source directory.")
+;; (defvar elmo-user-source-dir (expand-file-name "src" elmo-user-root-dir)
+;;   "User's ELMO source directory.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Base directories for the NINJA user
+;; Base directories for the ELMO user
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom ninja-user "ninja"
-  "NINJA system user name."
+(defcustom elmo-user "elmo"
+  "ELMO system user name."
   :type 'string
-  :group 'ninja)
+  :group 'elmo)
 
-(defvar ninja-uid
-  (string-to-number (shell-command-to-string (format "id -u %s" ninja-user)))
-  "User ID of NINJA system user.")
+(defvar elmo-uid
+  (string-to-number (shell-command-to-string (format "id -u %s" elmo-user)))
+  "User ID of ELMO system user.")
 
-(defcustom ninja-work-dir (format "~/.%s" ninja-user)
-  "NINJA working directory."
+(defcustom elmo-work-dir (format "~/.%s" elmo-user)
+  "ELMO working directory."
   :type 'directory
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-home (format "/home/%s" ninja-user)
-  "NINJA user home directory."
+(defcustom elmo-home (format "/home/%s" elmo-user)
+  "ELMO user home directory."
   :type 'directory
-  :group 'ninja)
+  :group 'elmo)
 
-(defvar ninja-workspace-dir (expand-file-name "workspace" ninja-work-dir))
-(defvar ninja-source-dir (expand-file-name "self-evolving-agent/src" ninja-workspace-dir))
-(defvar ninja-backups-dir (expand-file-name "backups" ninja-work-dir))
-(defvar ninja-logs-dir (expand-file-name "logs" ninja-work-dir))
-(defvar ninja-log-file (expand-file-name "history.log" ninja-logs-dir))
-(defvar ninja-command-logs-dir (expand-file-name "command-logs" ninja-work-dir))
-(defvar ninja-log-command-file
+(defvar elmo-workspace-dir (expand-file-name "workspace" elmo-work-dir))
+(defvar elmo-source-dir (expand-file-name "self-evolving-agent/src" elmo-workspace-dir))
+(defvar elmo-backups-dir (expand-file-name "backups" elmo-work-dir))
+(defvar elmo-logs-dir (expand-file-name "logs" elmo-work-dir))
+(defvar elmo-log-file (expand-file-name "history.log" elmo-logs-dir))
+(defvar elmo-command-logs-dir (expand-file-name "command-logs" elmo-work-dir))
+(defvar elmo-log-command-file
   (expand-file-name
    (format "%s.log"
            (format-time-string "%Y%m%d-%H%M%S"))
-   ninja-command-logs-dir))
-(defvar ninja-requests-dir (expand-file-name "requests" ninja-work-dir))
-(defvar ninja-config-dir (expand-file-name "config" ninja-work-dir))
+   elmo-command-logs-dir))
+(defvar elmo-requests-dir (expand-file-name "requests" elmo-work-dir))
+(defvar elmo-config-dir (expand-file-name "config" elmo-work-dir))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Server
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom ninja-emacs-bin "/usr/bin/emacs"
+(defcustom elmo-emacs-bin "/usr/bin/emacs"
   "Path to Emacs binary."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-emacs-cli "/usr/bin/emacsclient"
+(defcustom elmo-emacs-cli "/usr/bin/emacsclient"
   "Path to emacsclient binary."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-server-script-path
-  (expand-file-name "ninja_server.sh" ninja-user-source-dir)
-  "Path to NINJA server control script."
+(defcustom elmo-server-script-path
+  (expand-file-name "elmo_server.sh" elmo-user-source-dir)
+  "Path to ELMO server control script."
   :type 'string
-  :group 'ninja)
+  :group 'elmo)
 ;; Its value is
-;; "/home/ywatanabe/.emacs.d/lisp/self-evolving-agent/src/ninja_server.sh"
+;; "/home/ywatanabe/.emacs.d/lisp/self-evolving-agent/src/elmo_server.sh"
 
-(defvar ninja-server-script-output nil
+(defvar elmo-server-script-output nil
   "Store output from server script calls.")
-;; ninja-server-script-output’s value is
+;; elmo-server-script-output’s value is
 
-(defvar ninja-log-file (expand-file-name "ninja.log" ninja-logs-dir)
+(defvar elmo-log-file (expand-file-name "elmo.log" elmo-logs-dir)
   "Store output from server script calls.")
-;; "/home/ywatanabe/.ninja/logs/ninja.log"
+;; "/home/ywatanabe/.elmo/logs/elmo.log"
 
-(defcustom ninja-server-socket-dir (format "/tmp/emacs%d" ninja-uid)
-  "Directory for NINJA Emacs server socket.")
+(defcustom elmo-server-socket-dir (format "/tmp/emacs%d" elmo-uid)
+  "Directory for ELMO Emacs server socket.")
 ;; Its value is "/tmp/emacs999"
 
-(defcustom ninja-server-socket-file (format "/tmp/emacs%d/server" ninja-uid)
-  "File path for NINJA Emacs server socket.")
+(defcustom elmo-server-socket-file (format "/tmp/emacs%d/server" elmo-uid)
+  "File path for ELMO Emacs server socket.")
 ;; Its value is "/tmp/emacs999/server"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GitHub
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom ninja-github-token-file (expand-file-name "github-token" ninja-config-dir)
+(defcustom elmo-github-token-file (expand-file-name "github-token" elmo-config-dir)
   "Path to GitHub token file. Requires 600 permissions."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; User Interaction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom ninja-prompts-dir (expand-file-name "prompts" ninja-user-source-dir)
+(defcustom elmo-prompts-dir (expand-file-name "prompts" elmo-user-source-dir)
   "File for user's improvement requests."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-user-request-file (expand-file-name "user-request.md" ninja-requests-dir)
+(defcustom elmo-user-request-file (expand-file-name "user-request.md" elmo-requests-dir)
   "File for user's improvement requests."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-request-file (expand-file-name "ninja-request.md" ninja-requests-dir)
-  "File for NINJA's improvement suggestions."
+(defcustom elmo-request-file (expand-file-name "elmo-request.md" elmo-requests-dir)
+  "File for ELMO's improvement suggestions."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-history-file (expand-file-name "history.log" ninja-logs-dir)
+(defcustom elmo-history-file (expand-file-name "history.log" elmo-logs-dir)
   "File to store agent history."
   :type 'file
-  :group 'ninja)
+  :group 'elmo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Operation modes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom ninja-readonly-mode t
+(defcustom elmo-readonly-mode t
   "When non-nil, prevent modifications to core agent files."
   :type 'boolean
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-require-approval t
+(defcustom elmo-require-approval t
   "When non-nil, require user approval for critical operations."
   :type 'boolean
-  :group 'ninja)
+  :group 'elmo)
 
-(defcustom ninja-api-timeout 30
+(defcustom elmo-api-timeout 30
   "Timeout in seconds for API calls."
   :type 'integer
-  :group 'ninja)
+  :group 'elmo)
 
-(defvar ninja-debug nil
+(defvar elmo-debug nil
   "Enable debug logging when non-nil.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LLM
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar ninja-anthropic-key (getenv "LLM_API_KEY")
+(defvar elmo-anthropic-key (getenv "LLM_API_KEY")
   "API key for Anthropic Claude.")
 
-(defvar ninja-anthropic-engine (getenv "LLM_ENGINE")
+(defvar elmo-anthropic-engine (getenv "LLM_ENGINE")
   "Model for Anthropic Claude.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar ninja-backup-limit 10
+(defvar elmo-backup-limit 10
   "Maximum number of backups to keep.")
 
-(defvar ninja--installation-log-file (expand-file-name "installation.log" ninja-logs-dir)
-  "Log file for NINJA installation.")
+(defvar elmo--installation-log-file (expand-file-name "installation.log" elmo-logs-dir)
+  "Log file for ELMO installation.")
 
-(provide 'ninja-config)
+(provide 'elmo-config)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

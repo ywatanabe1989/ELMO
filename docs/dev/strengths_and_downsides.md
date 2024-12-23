@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-23 21:35:44
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Ninja/docs/dev/strengths_and_downsides.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/ELMO/docs/dev/strengths_and_downsides.md
 !-- --- -->
 
 2. ELMO: Emacs LLM Organism
@@ -194,7 +194,7 @@ Conclusion: You can be a leader in Emacs-LLM integration niche, but focus on thi
 **Name Comparison**
 | Name  | Strengths                                                                 | Weaknesses                                                  |
 |-------|---------------------------------------------------------------------------|-------------------------------------------------------------|
-| Ninja | • Original vision clarity<br>• Network focus<br>• JASON emphasis          | • Less Emacs-specific<br>• Potentially overused in tech     |
+| ELMO | • Original vision clarity<br>• Network focus<br>• JASON emphasis          | • Less Emacs-specific<br>• Potentially overused in tech     |
 | EPIC  | • Strong plosive sound<br>• Clear Emacs connection<br>• Professional tone | • Potentially generic<br>• Multiple interpretations         |
 | ELMO  | • Memorable & friendly<br>• LLM focus<br>• Short & catchy                 | • Might seem less professional<br>• Pop culture association |
 
@@ -246,7 +246,7 @@ Key Advantages:
 
 
 ## Strengths:
-1. "Ninja" reflects key aspects:
+1. "ELMO" reflects key aspects:
    - Network-centric
    - Intelligence focus
    - Agent flexibility

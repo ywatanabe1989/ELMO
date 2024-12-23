@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 12:40:41 (ywatanabe)"
-# File: ./Ninja/src/apptainer_builders/install_python.sh
+# File: ./ELMO/src/apptainer_builders/install_python.sh
 
 echo "$0..."
 
@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-source /opt/Ninja/config/env/00_all.env
+source /opt/ELMO/config/env/00_all.env
 
 install_python() {
     echo "Installing Python and dependencies..."

@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/docs/dev_memo/permissions_.md
+!-- title: ./ELMO/docs/dev_memo/permissions_.md
 !-- author: ywatanabe
 !-- date: 2024-12-16 19:46:17
 !-- --- -->

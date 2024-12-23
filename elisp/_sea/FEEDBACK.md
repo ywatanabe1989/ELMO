@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/src/elisp/FEEDBACK.md
+!-- title: ./ELMO/src/elisp/FEEDBACK.md
 !-- author: ywatanabe
 !-- date: 2024-12-15 08:02:45
 !-- --- -->
@@ -7,7 +7,7 @@
 
 ### **Detailed Feedback and Suggestions**
 
-#### **1. Configuration Module (`ninja-config.el`)**
+#### **1. Configuration Module (`elmo-config.el`)**
 
 **Observations:**
 
@@ -17,13 +17,13 @@
 
 **Suggestions:**
 
-- **Use Namespaces Consistently**: Since you're using the `ninja-` prefix, ensure all custom variables and functions consistently use this prefix to avoid name collisions.
+- **Use Namespaces Consistently**: Since you're using the `elmo-` prefix, ensure all custom variables and functions consistently use this prefix to avoid name collisions.
   
-- **Sensitive Data Handling**: API keys and tokens (e.g., `ninja-anthropic-key`) are retrieved via `getenv`. Ensure that these environment variables are securely set and consider implementing a secure method for handling sensitive data, possibly integrating with Emacs's `auth-source` for encrypted storage.
+- **Sensitive Data Handling**: API keys and tokens (e.g., `elmo-anthropic-key`) are retrieved via `getenv`. Ensure that these environment variables are securely set and consider implementing a secure method for handling sensitive data, possibly integrating with Emacs's `auth-source` for encrypted storage.
 
 - **Grouping Variables**: Consider grouping related variables into defgroups to improve customization interfaces and readability.
 
-#### **2. Main Module (`ninja.el`)**
+#### **2. Main Module (`elmo.el`)**
 
 **Observations:**
 
@@ -37,13 +37,13 @@
   
 - **Error Handling during Requires**: Wrap `require` statements in `condition-case` to handle potential loading errors gracefully.
 
-- **Provide Feature**: You already have `(provide 'ninja)` at the end, which is good practice.
+- **Provide Feature**: You already have `(provide 'elmo)` at the end, which is good practice.
 
-#### **3. Execution Module (`ninja-exec.el`)**
+#### **3. Execution Module (`elmo-exec.el`)**
 
 **Observations:**
 
-- Contains functions for executing Elisp code within the NINJA server context.
+- Contains functions for executing Elisp code within the ELMO server context.
 - Handles code escaping and errors during execution.
 
 **Suggestions:**
@@ -54,7 +54,7 @@
 
 - **Asynchronous Execution**: If applicable, consider making execution asynchronous to prevent blocking the Emacs UI during long-running operations.
 
-#### **4. Logging Module (`ninja-logging.el`)**
+#### **4. Logging Module (`elmo-logging.el`)**
 
 **Observations:**
 
@@ -69,7 +69,7 @@
 
 - **Log Levels**: Implement configurable log levels to control the verbosity of logging output during runtime.
 
-#### **5. Prompts Module (`ninja-prompts.el`)**
+#### **5. Prompts Module (`elmo-prompts.el`)**
 
 **Observations:**
 
@@ -86,7 +86,7 @@
 
 **Observations:**
 
-- Functions like `ninja-self-evolve` suggest the system can update its own code based on AI suggestions.
+- Functions like `elmo-self-evolve` suggest the system can update its own code based on AI suggestions.
 
 **Suggestions:**
 
@@ -96,7 +96,7 @@
 
 - **Approval Workflow**: Since self-modifying code can be risky, consider requiring manual approval before applying changes, especially in production environments.
 
-#### **7. Server Management (`ninja-server.el`)**
+#### **7. Server Management (`elmo-server.el`)**
 
 **Observations:**
 
@@ -109,7 +109,7 @@
   
 - **Process Management**: Use Emacs's built-in process management functions to control the server process more gracefully.
 
-#### **8. Utilities and Helper Functions (`ninja-utils.el`)**
+#### **8. Utilities and Helper Functions (`elmo-utils.el`)**
 
 **Observations:**
 
@@ -131,7 +131,7 @@
 
 - **Modularity**: Continue to modularize code, separating concerns into different files and modules for clarity.
 
-- **Testing**: Implement a testing framework using ERT (Emacs Lisp Regression Testing) to write tests for your functions, as you've begun to do in `ninja-verify-installation.el`.
+- **Testing**: Implement a testing framework using ERT (Emacs Lisp Regression Testing) to write tests for your functions, as you've begun to do in `elmo-verify-installation.el`.
 
 - **Error Logging**: Centralize error logging to capture and handle exceptions uniformly across modules.
 

@@ -1,21 +1,21 @@
 <!-- ---
 !-- title: 2024-12-22 15:57:27
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/Ninja/docs/dev_memo/separation_of_repositories/ninja-core.md
+!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/ELMO/docs/dev_memo/separation_of_repositories/elmo-core.md
 !-- --- -->
 
-mkdir ~/proj/ninja
-cd ~/proj/ninja
-git clone https://github.com/yourusername/ninja-core.git
-git clone https://github.com/yourusername/ninja-builders.git
-git clone https://github.com/yourusername/ninja-workspace.git
+mkdir ~/proj/elmo
+cd ~/proj/elmo
+git clone https://github.com/yourusername/elmo-core.git
+git clone https://github.com/yourusername/elmo-builders.git
+git clone https://github.com/yourusername/elmo-workspace.git
 
-ninja-core/
+elmo-core/
 ├── src/
 │   ├── elisp/
-│   │   ├── ninja.el         # Main package file
-│   │   ├── ninja-config.el
-│   │   ├── ninja-exec.el
+│   │   ├── elmo.el         # Main package file
+│   │   ├── elmo-config.el
+│   │   ├── elmo-exec.el
 │   │   └── ...
 │   └── prompts/
 │       ├── lang2elisp.md
@@ -25,7 +25,7 @@ ninja-core/
 ├── LICENSE
 └── README.md
 
-ninja-builders/
+elmo-builders/
 ├── apptainer/
 │   ├── builders/
 │   ├── configs/
@@ -37,7 +37,7 @@ ninja-builders/
 ├── LICENSE
 └── README.md
 
-ninja-workspace/
+elmo-workspace/
 ├── templates/
 │   ├── projects/
 │   └── protocols/

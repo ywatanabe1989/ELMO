@@ -16,8 +16,8 @@ From: ubuntu:latest
 
     # Envs
     THIS_DIR="($dirname $0)"
-    NINJA_ROOT="${NINJA_ROOT:-$THIS_DIR/../..}"
-    source $NINJA_ROOT/config/env/00_all.env
+    ELMO_ROOT="${ELMO_ROOT:-$THIS_DIR/../..}"
+    source $ELMO_ROOT/config/env/00_all.env
 
     # Rsync options
     export RSYNC_OPTIONS="-arv \
@@ -39,27 +39,27 @@ From: ubuntu:latest
         "apptainer/build"
     )
     for dir in "${DIRS[@]}"; do
-        mkdir -p "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}"
-        rsync $RSYNC_OPTIONS "$NINJA_ROOT/${dir}/" "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}/"
+        mkdir -p "${SINGULARITY_ROOTFS}/opt/ELMO/${dir}"
+        rsync $RSYNC_OPTIONS "$ELMO_ROOT/${dir}/" "${SINGULARITY_ROOTFS}/opt/ELMO/${dir}/"
     done
 
     # Workspace
     dir="/workspace"
-    mkdir -p "${SINGULARITY_ROOTFS}/opt/Ninja/${dir}"
-    rsync $RSYNC_OPTIONS $NINJA_ROOT/apptainer/build/initial_workspace/ "${SINGULARITY_ROOTFS}/${dir}/"
+    mkdir -p "${SINGULARITY_ROOTFS}/opt/ELMO/${dir}"
+    rsync $RSYNC_OPTIONS $ELMO_ROOT/apptainer/build/initial_workspace/ "${SINGULARITY_ROOTFS}/${dir}/"
 
 %post -c /bin/bash
     echo -e "\n==================== Post Section ===================="
 
     # Environmental Variables
-    source /opt/Ninja/config/env/00_all.env
+    source /opt/ELMO/config/env/00_all.env
 
     # System
     system_scripts=(
-        "/opt/Ninja/apptainer/build/system-setup/00_apt_packages.sh"
-        "/opt/Ninja/apptainer/build/system-setup/01_emacs.sh"
-        "/opt/Ninja/apptainer/build/system-setup/02_python.sh"
-        "/opt/Ninja/apptainer/build/system-setup/03_bashrc.sh"
+        "/opt/ELMO/apptainer/build/system-setup/00_apt_packages.sh"
+        "/opt/ELMO/apptainer/build/system-setup/01_emacs.sh"
+        "/opt/ELMO/apptainer/build/system-setup/02_python.sh"
+        "/opt/ELMO/apptainer/build/system-setup/03_bashrc.sh"
     )
     for script in "${system_scripts[@]}"; do
         if $script; then
@@ -71,11 +71,11 @@ From: ubuntu:latest
 
     # User
     user_scripts=(
-        /opt/Ninja/apptainer/build/user-setup/environment/01_ninja_users.sh
-        /opt/Ninja/apptainer/build/user-setup/environment/02_bashrc.sh
-        /opt/Ninja/apptainer/build/user-setup/environment/03_python_env.sh
-        # /opt/Ninja/apptainer/build/user-setup/emacs/01_emacsd.sh
-        /opt/Ninja/apptainer/build/user-setup/permissions/00_all.sh
+        /opt/ELMO/apptainer/build/user-setup/environment/01_elmo_users.sh
+        /opt/ELMO/apptainer/build/user-setup/environment/02_bashrc.sh
+        /opt/ELMO/apptainer/build/user-setup/environment/03_python_env.sh
+        # /opt/ELMO/apptainer/build/user-setup/emacs/01_emacsd.sh
+        /opt/ELMO/apptainer/build/user-setup/permissions/00_all.sh
     )
     for script in "${user_scripts[@]}"; do
         if $script; then
@@ -84,5 +84,3 @@ From: ubuntu:latest
             echo "$(basename $script) failed"
         fi
     done
-
-    # env | grep ^NINJA_

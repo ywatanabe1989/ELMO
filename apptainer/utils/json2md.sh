@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-19 16:23:52 (ywatanabe)"
-# File: ./Ninja/workspace/formats/json2md.sh
+# File: ./ELMO/workspace/formats/json2md.sh
 # Function to print help message
 
 # Create temporary Python script

@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/docs/dev_memo/actions.md
+!-- title: ./ELMO/docs/dev_memo/actions.md
 !-- author: ywatanabe
 !-- date: 2024-12-18 12:01:44
 !-- --- -->

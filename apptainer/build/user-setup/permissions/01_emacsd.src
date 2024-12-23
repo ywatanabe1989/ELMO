@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 11:09:15 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/Ninja/apptainer/building/user-setup/permissions/01_emacsd.src
+# File: /home/ywatanabe/.emacs.d/lisp/ELMO/apptainer/building/user-setup/permissions/01_emacsd.src
 
 echo "$0..."
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,77 +10,77 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/Ninja/config/env/00_all.env
+source /opt/ELMO/config/env/00_all.env
 
 # Permission Scheme:
 # 1. Shared resources:
 #    - Owner: root
-#    - Group: ninja
+#    - Group: elmo
 #    - Permissions: 775 (rwxrwxr-x)
 # 2. Private resources:
-#    - Owner: ninja-001
-#    - Group: ninja-001
+#    - Owner: elmo-001
+#    - Group: elmo-001
 #    - Permissions: 700 (rwx------)
 # 3. Base .emacs.d:
-#    - Owner: ninja-001
-#    - Group: ninja
+#    - Owner: elmo-001
+#    - Group: elmo
 #    - Permissions: 770 (rwxrwx---)
 # 4. Generated directories:
 #    - Match base directory permissions
 
 
 emacsd_correct_permissions() {
-    for ninja_id in $(seq 1 $NINJA_N_AGENTS); do
-        _emacsd_correct_permissions_shared "$ninja_id"
-        _emacsd_correct_permissions_private "$ninja_id"
-        _emacsd_correct_permissions_server_dir "$ninja_id"
+    for elmo_id in $(seq 1 $ELMO_N_AGENTS); do
+        _emacsd_correct_permissions_shared "$elmo_id"
+        _emacsd_correct_permissions_private "$elmo_id"
+        _emacsd_correct_permissions_server_dir "$elmo_id"
     done
 }
 
 _emacsd_correct_permissions_shared() {
-    local ninja_id="$1"
-    update_ninja_envs "$ninja_id"
+    local elmo_id="$1"
+    update_elmo_envs "$elmo_id"
 
     # Fix base directory
-    chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_SHARED"
-    chmod -R 770 "$NINJA_EMACSD_SHARED"
+    chown -R "$ELMO_USER:$ELMO_GROUP" "$ELMO_EMACSD_SHARED"
+    chmod -R 770 "$ELMO_EMACSD_SHARED"
     
     # Fix base directory
-    chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_PRIVATE"
-    chmod -R 770 "$NINJA_EMACSD_PRIVATE"
+    chown -R "$ELMO_USER:$ELMO_GROUP" "$ELMO_EMACSD_PRIVATE"
+    chmod -R 770 "$ELMO_EMACSD_PRIVATE"
 
     # Fix generated directories
     for dir in auto-save-list transient; do
-        [ -d "$NINJA_EMACSD_PRIVATE/$dir" ] && {
-            chown -R "$NINJA_USER:$NINJA_GROUP" "$NINJA_EMACSD_PRIVATE/$dir"
-            chmod -R 770 "$NINJA_EMACSD_PRIVATE/$dir"
+        [ -d "$ELMO_EMACSD_PRIVATE/$dir" ] && {
+            chown -R "$ELMO_USER:$ELMO_GROUP" "$ELMO_EMACSD_PRIVATE/$dir"
+            chmod -R 770 "$ELMO_EMACSD_PRIVATE/$dir"
         }
     done
 
     # Fix shared resources
-    for shared_resource in ${NINJA_EMACSD_SHARED_RESOURCES[@]}; do
-        tgt="$NINJA_EMACSD_PRIVATE/$shared_resource"
-        chown -h "$NINJA_USER:$NINJA_GROUP" "$tgt"
+    for shared_resource in ${ELMO_EMACSD_SHARED_RESOURCES[@]}; do
+        tgt="$ELMO_EMACSD_PRIVATE/$shared_resource"
+        chown -h "$ELMO_USER:$ELMO_GROUP" "$tgt"
         [ ! -L "$tgt" ] && chmod 775 "$tgt"
     done
 }
 
 _emacsd_correct_permissions_server_dir() {
-    local ninja_id="$1"
-    update_ninja_envs "$ninja_id"
+    local elmo_id="$1"
+    update_elmo_envs "$elmo_id"
 
-    mkdir -p "$NINJA_EMACSD_SERVER_DIR"
-    chown -R "$NINJA_USER:$NINJA_USER" "$NINJA_EMACSD_SERVER_DIR"
-    chmod -R 700 "$NINJA_EMACSD_SERVER_DIR"
+    mkdir -p "$ELMO_EMACSD_SERVER_DIR"
+    chown -R "$ELMO_USER:$ELMO_USER" "$ELMO_EMACSD_SERVER_DIR"
+    chmod -R 700 "$ELMO_EMACSD_SERVER_DIR"
 }
 
 _emacsd_correct_permissions_private() {
-    local ninja_id="$1"
-    update_ninja_envs "$ninja_id"
+    local elmo_id="$1"
+    update_elmo_envs "$elmo_id"
 
-    for private_resource in ${NINJA_EMACSD_PRIVATE_RESOURCES[@]}; do
-        tgt="$NINJA_EMACSD_PRIVATE/$private_resource"
-        chown "$NINJA_USER:$NINJA_USER" "$tgt"
+    for private_resource in ${ELMO_EMACSD_PRIVATE_RESOURCES[@]}; do
+        tgt="$ELMO_EMACSD_PRIVATE/$private_resource"
+        chown "$ELMO_USER:$ELMO_USER" "$tgt"
         chmod 700 "$tgt"
     done
 }

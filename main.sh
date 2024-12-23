@@ -1,6 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 19:03:40 (ywatanabe)"
-# File: ./Ninja/run.sh
+# Time-stamp: "2024-12-23 22:07:59 (ywatanabe)"
+# File: ./ELMO/run.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -i|--init)
-            pkill -f "emacs --daemon=/home/ninja"
+            pkill -f "emacs --daemon=/home/elmo"
             shift
             ;;
         -h|--help)
@@ -51,48 +51,48 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Execute based on mode
-if [ -n "$NINJA_BIND" ]; then
-    bind_opt="--bind $NINJA_BIND"
+if [ -n "$ELMO_BIND" ]; then
+    bind_opt="--bind $ELMO_BIND"
 else
     bind_opt=""
 fi
 
 if [ "$mode" = "build" ]; then
-    export NINJA_HOME=. && source ./config/env/00_all.env
+    export ELMO_HOME=. && source ./config/env/00_all.env
     apptainer build \
               --sandbox \
               --fakeroot \
               $bind_opt \
-              ./apptainer/ninja.sandbox \
-              ./apptainer/ninja.def \
-              2>&1 | tee ./apptainer/ninja.sandbox.log
+              ./apptainer/elmo.sandbox \
+              ./apptainer/elmo.def \
+              2>&1 | tee ./apptainer/elmo.sandbox.log
 
 elif [ "$mode" = "run" ]; then
-    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
     apptainer run \
               --writable \
               --fakeroot \
               $bind_opt \
-              ./apptainer/ninja.sandbox
+              ./apptainer/elmo.sandbox
 
 
 elif [ "$mode" = "shell" ]; then
-    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
     apptainer shell \
               --writable \
               --fakeroot \
               --shell "/bin/bash --login" \
               $bind_opt \
-              ./apptainer/ninja.sandbox
+              ./apptainer/elmo.sandbox
 
 elif [ "$mode" = "exec" ]; then
-    export NINJA_HOME=/opt/Ninja && source ./config/env/00_all.env
+    export ELMO_HOME=/opt/ELMO && source ./config/env/00_all.env
     apptainer exec \
               --writable \
               --fakeroot \
               --cleanenv \
               $bind_opt \
-              ./apptainer/ninja.sandbox "${exec_args[@]}"
+              ./apptainer/elmo.sandbox "${exec_args[@]}"
 
 else
     echo "Invalid mode. Use run, build, or shell"

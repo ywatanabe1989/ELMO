@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./Ninja/docs/feedbacks/ninja_apptainer_llama_scitex.md
+!-- title: ./ELMO/docs/feedbacks/elmo_apptainer_llama_scitex.md
 !-- author: ywatanabe
 !-- date: 2024-12-15 08:28:58
 !-- --- -->
