@@ -1,10 +1,10 @@
 <!-- ---
-!-- title: 2024-12-23 22:03:32
+!-- title: 2024-12-23 22:11:18
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/ELMO/README.md
 !-- --- -->
 
-# ELMO: Emacs LLM Operations
+# Elmo: Emacs LLM Operations
 
 ## Apptainer
 
