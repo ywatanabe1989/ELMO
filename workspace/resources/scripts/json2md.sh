@@ -1,9 +1,10 @@
 #!/bin/bash
-# Time-stamp: "2024-12-19 16:23:52 (ywatanabe)"
-# File: ./ELMO/workspace/formats/json2md.sh
-# Function to print help message
+# Time-stamp: "2024-12-24 19:03:54 (ywatanabe)"
+# File: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/scripts/json2md.sh
 
-# Create temporary Python script
+
+THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 JSON2MD_PYTHON=$(mktemp)
 cat > "$JSON2MD_PYTHON" << 'EOF'
 import json
@@ -131,3 +132,6 @@ main() {
 }
 
 main "$@"
+
+
+# EOF

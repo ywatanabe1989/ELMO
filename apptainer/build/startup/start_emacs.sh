@@ -1,9 +1,9 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 11:08:38 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/ELMO/apptainer/build/init/start_emacs.sh
+# Time-stamp: "2024-12-24 14:38:44 (ywatanabe)"
+# File: /home/ywatanabe/.emacs.d/lisp/elmo/apptainer/elmo.sandbox/opt/elmo/apptainer/build/startup/start_emacs.sh
 
-echo "$0..."
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "$0..."
 
 if [ "$(id -u)" != "0" ]; then
     echo "This script ($0) must be run as root" >&2
@@ -11,14 +11,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 source /opt/elmo/config/env/00_all.env
-source /opt/elmo/apptainer/build/user-setup/permissions/01_emacsd.src
 
-# Add at beginning of script
+# Allow X server access
 xhost +local:root > /dev/null 2>&1
-
-# Generate and export CRDT password
-CRDT_PASSWORD=$(openssl rand -base64 12)
-export CRDT_PASSWORD
 
 init_environment() {
     killall -9 emacsclient 2>/dev/null || true
@@ -26,46 +21,55 @@ init_environment() {
 }
 
 start_emacs_daemon() {
-    local elmo_id="$1"
-    update_elmo_envs $elmo_id
+    local log_file=$(mktemp /tmp/emacs-${ELMO_USER_USER}.XXXXXX)
+    local elmo_user=$ELMO_USER-$ELMO_ID
+    local emacsd=$ELMO_HOME/.emacs.d
+    # local emacsd=$ELMO_WORKSPACE/elmos/$elmo_user/.emacs.d
+    local emacs_server_dir=$emacsd/emacs-server
+    local emacs_server_file=$emacs_server_dir/server
 
-    local log_file=$(mktemp /tmp/emacs-${ELMO_USER}.XXXXXX)
+    # Setup server directory
+    mkdir -p $emacsd/emacs-server
+    # chown $ELMO_USER:$ELMO_USER $emacs_server_dir
+    chmod 700 $emacs_server_dir
+    rm -f $emacs_server_dir/server* 2>/dev/null
 
-    # Ensure directory exists and has correct permissions
-    # mkdir -p $(dirname $ELMO_EMACSD_SERVER_FILE)
-    # chown -R $ELMO_USER:$ELMO_USER $(dirname $ELMO_EMACSD_SERVER_FILE)
-    # chmod 700 $(dirname $ELMO_EMACSD_SERVER_FILE)
+    # # Kill
+    pkill -f "emacs --daemon=$emacs_server_file"
 
-    mkdir -p $ELMO_HOME/.emacs.d/emacs-server
-    chown $ELMO_USER:$ELMO_USER $ELMO_HOME/.emacs.d/emacs-server
-    chmod 700 $ELMO_USER:$ELMO_USER $ELMO_HOME/.emacs.d/emacs-server
+    # Start server
+    cmd_start_server="HOME=$ELMO_HOME \
+        DISPLAY=$DISPLAY \
+        LOGNAME=$elmo_user \
+        USER=$elmo_user \
+        emacs \
+        --daemon=$emacs_server_file \
+        --init-directory=$emacsd \
+        -Q \
+        2>&1"
 
-    rm -f $ELMO_HOME/.emacs.d/emacs-server/server* 2>/dev/null
+    # Connect client
+    cmd_connect_client="HOME=$ELMO_HOME \
+        DISPLAY=$DISPLAY \
+        LOGNAME=$elmo_user \
+        USER=$elmo_user \
+        emacsclient \
+        -c \
+        -n \
+        -s $emacs_server_file \
+        --eval '(load-file \"$emacsd/init.el\")' \
+        >/dev/null &"
 
-    # Server start
-    su - $ELMO_USER -c "HOME=$ELMO_HOME DISPLAY=$DISPLAY emacs --daemon=$ELMO_EMACSD_SERVER_FILE -Q 2>&1"
-
-    # Connect
-    su - $ELMO_USER -c \
-       "HOME=$ELMO_HOME \
-       DISPLAY=$DISPLAY \
-       emacsclient -c -n -s $ELMO_EMACSD_SERVER_FILE \
-       --eval '(load-file \"$ELMO_EMACSD_PRIVATE/init.el\")'"\
-       >/dev/null &
+    echo $cmd_start_server && eval $cmd_start_server
+    echo $cmd_connect_client && eval $cmd_connect_client
 }
-
 
 main() {
     init_environment
-    emacsd_correct_permissions
-    for elmo_id in $(seq 1 $ELMO_N_AGENTS); do
-        start_emacs_daemon $elmo_id
-    done
+    start_emacs_daemon
 }
 
 main
-
-# EOF
 
 
 # EOF

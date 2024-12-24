@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 22:25:13 (ywatanabe)"
+# Time-stamp: "2024-12-24 14:07:26 (ywatanabe)"
 # File: ./ELMO/run.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -57,8 +57,12 @@ else
     bind_opt=""
 fi
 
+source ./config/env/00_all.env
+
 if [ "$mode" = "build" ]; then
-    export ELMO_HOME=. && source ./config/env/00_all.env
+    # export ELMO_HOME=. && source ./config/env/00_all.env
+    unset APPTAINER_BIND
+    bind_opt=""
     apptainer build \
               --sandbox \
               --fakeroot \
@@ -68,16 +72,19 @@ if [ "$mode" = "build" ]; then
               2>&1 | tee ./apptainer/elmo.sandbox.log
 
 elif [ "$mode" = "run" ]; then
-    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer run \
               --writable \
               --fakeroot \
               $bind_opt \
               ./apptainer/elmo.sandbox
 
+    # --userns \
+        #     --bind $HOME:/home/$USER \
+
 
 elif [ "$mode" = "shell" ]; then
-    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer shell \
               --writable \
               --fakeroot \
@@ -85,8 +92,10 @@ elif [ "$mode" = "shell" ]; then
               $bind_opt \
               ./apptainer/elmo.sandbox
 
+    # --bind $HOME:/home/$USER --userns
+
 elif [ "$mode" = "exec" ]; then
-    export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
     apptainer exec \
               --writable \
               --fakeroot \

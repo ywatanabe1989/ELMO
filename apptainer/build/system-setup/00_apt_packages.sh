@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 12:40:30 (ywatanabe)"
+# Time-stamp: "2024-12-24 11:41:07 (ywatanabe)"
 # File: ./ELMO/src/apptainer_builders/install_basic_apt_packages.sh
 
 echo "$0..."
@@ -17,8 +17,8 @@ source /opt/elmo/config/env/00_all.env
 apt-get -y update >/dev/null
 apt-get install -y apt-utils >/dev/null
 
-# Before any package installations
-export DEBIAN_FRONTEND=noninteractive
+# # Before any package installations
+# export DEBIAN_FRONTEND=noninteractive
 
 # Configure postfix to use 'No configuration' option
 echo "postfix postfix/main_mailer_type select No configuration" | debconf-set-selections
@@ -54,15 +54,18 @@ apt-get install -y --no-install-recommends \
         rsync \
         unzip \
         fontconfig \
+        xclip \
+        xsel \
+        autossh \
+        texlive-full \
         >/dev/null
 
-# texlive-full \
+
 
 # Language
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-locale-gen $LANG >/dev/null
-update-locale LANG=$LANG LC_ALL=$LC_ALL >/dev/null
+locale-gen $ELMO_LANG >/dev/null
+update-locale LANG=$ELMO_LANG
+LC_ALL=$ELMO_LC_ALL >/dev/null
 
 
 # EOF
