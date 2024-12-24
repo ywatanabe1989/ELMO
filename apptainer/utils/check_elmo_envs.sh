@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-23 18:35:17 (ywatanabe)"
+# Time-stamp: "2024-12-24 08:36:15 (ywatanabe)"
 # File: ./ELMO/src/apptainer_builders/check_elmo_environment.sh
 
 # Source environment variables

@@ -1,20 +1,10 @@
 <!-- ---
-!-- title: 2024-12-23 23:47:52
+!-- title: 2024-12-25 01:29:29
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/README.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/README.md
 !-- --- -->
 
-# Elmo — Emacs LLM Orchestra
-
-(THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
-
-## Introduction
-Elmo is an LLM agent system run on Emacs.
-- Full CUI operations with rich GUI
-- Interfaces for hacking tools seasoned by history
-- Self-evolving potentials inherited from Emacs and Elisp
-
-Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a catalyst for AI agents.
+# Elmo — Emacs LLM Orchestration
 
 ## Apptainer
 
@@ -23,6 +13,41 @@ Here, we reintroduce Emacs — born in MIT's AI Lab in 1970s — as a catalyst f
 ./main.sh -m shell
 ./main.sh -m run
 ```
+
+``` elisp
+(load-file "~/.emacs.d/lisp/elmo/elisp/elmo/elmo.el")
+(define-key global-map (kbd "C-M-e") 'elmo-run)
+
+(elmo-run "plot something. summarize everything as an org file. images should be displayed inlne. all files should be linked from the org file. Add the orgfile contents to the tail of \"*ELMO*\" buffer, which may be already opened")
+(elmo-run "to achieve a scientific project of epileptic seizure prediction, please write a plan for agents to orchestrate")
+```
+
+
+
+source /home/ywatanabe/.emacs.d/lisp/elmo/config/env/00_all.env
+
+
+for elmo_home in ./workspace/elmos/*/; do
+    echo $elmo_home
+    chmod 750 -R $elmo_home
+    touch "$elmo_home/.bashrc"
+    mkdir -p "$elmo_home/.emacs.d"
+    touch "$elmo_home/.emacs.d/init.el"
+    echo '(message "Hello world!")' > "$elmo_home/.emacs.d/init.el"
+    echo '(insert "Hello world!")' >> "$elmo_home/.emacs.d/init.el"
+    echo '(switch-to-buffer "*Messages*")' >> "$elmo_home/.emacs.d/init.el"
+    chmod 750 "$elmo_home/.emacs.d/init.el"
+done
+
+cat "$elmo_home/.emacs.d/init.el"
+
+export ELMO_BIND="$(pwd)/workspace:/workspace"
+main.sh
+
+main.sh -m shell
+/opt/elmo/apptainer/build/startup/start_emacs.sh
+
+/workspace/elmos/elmo-000/.emacs.d/init.el
 
 ## Workspace
 

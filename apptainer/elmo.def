@@ -11,16 +11,13 @@ From: ubuntu:latest
 %setup -c /bin/bash
     echo -e "\n==================== Setup Section ===================="
 
-    # Workspace
-    mkdir -p ${SINGULARITY_ROOTFS}/workspace
-
     # Envs
-    THIS_DIR="($dirname $0)"
-    ELMO_ROOT="${ELMO_ROOT:-$THIS_DIR/../..}"
-    source $ELMO_ROOT/config/env/00_all.env
+    THIS_DIR="$(dirname $0)"
+    ELMO_HOST_ROOT="${ELMO_HOST_ROOT:-$THIS_DIR/../..}"
+    ELMO_ROOT="${ELMO_ROOT:-/opt/elmo}"
 
     # Rsync options
-    export RSYNC_OPTIONS="-arv \
+    RSYNC_OPTIONS="-arv \
         --safe-links \
         --exclude=**/.git \
         --exclude=**/*.sandbox \
@@ -30,36 +27,35 @@ From: ubuntu:latest
         --exclude=**/.* \
         --exclude=**/*cache* \
         --exclude='**/build-temp*' \
-        --exclude='**/*secret*'
-    "
+        --exclude='**/*secret*'"
 
     # Config and building scripts
     DIRS=(
-        "config/env"
-        "apptainer/build"
+        "config/env/"
+        "apptainer/build/"
+        ".gitignore"
     )
+
     for dir in "${DIRS[@]}"; do
-        mkdir -p "${SINGULARITY_ROOTFS}/opt/elmo/${dir}"
-        rsync $RSYNC_OPTIONS "$ELMO_ROOT/${dir}/" "${SINGULARITY_ROOTFS}/opt/elmo/${dir}/"
+        src=$ELMO_HOST_ROOT/$dir
+        tgt=$SINGULARITY_ROOTFS/$ELMO_ROOT/$dir
+        mkdir -p $tgt
+        cmd="rsync $RSYNC_OPTIONS $src $tgt" && echo $cmd && eval $cmd
     done
 
-    # Workspace
-    dir="/workspace"
-    mkdir -p "${SINGULARITY_ROOTFS}/opt/elmo/${dir}"
-    rsync $RSYNC_OPTIONS $ELMO_ROOT/apptainer/build/initial_workspace/ "${SINGULARITY_ROOTFS}/${dir}/"
+    # cmd="ln -sf ${ELMO_ROOT}/workspace ${SINGULARITY_ROOTFS}/workspace" && echo $cmd && eval $cmd
 
 %post -c /bin/bash
     echo -e "\n==================== Post Section ===================="
 
-    # Environmental Variables
-    source /opt/elmo/config/env/00_all.env
+    cmd="ls /opt/elmo/apptainer/build" && echo $cmd && eval $cmd
 
     # System
     system_scripts=(
-        "/opt/elmo/apptainer/build/system-setup/00_apt_packages.sh"
-        "/opt/elmo/apptainer/build/system-setup/01_emacs.sh"
-        "/opt/elmo/apptainer/build/system-setup/02_python.sh"
-        "/opt/elmo/apptainer/build/system-setup/03_bashrc.sh"
+        "$ELMO_ROOT/apptainer/build/system-setup/00_apt_packages.sh"
+        "$ELMO_ROOT/apptainer/build/system-setup/01_emacs.sh"
+        "$ELMO_ROOT/apptainer/build/system-setup/02_python.sh"
+        "$ELMO_ROOT/apptainer/build/system-setup/03_bashrc.sh"
     )
     for script in "${system_scripts[@]}"; do
         if $script; then
@@ -69,18 +65,7 @@ From: ubuntu:latest
         fi
     done
 
-    # User
-    user_scripts=(
-        /opt/elmo/apptainer/build/user-setup/environment/01_elmo_users.sh
-        /opt/elmo/apptainer/build/user-setup/environment/02_bashrc.sh
-        /opt/elmo/apptainer/build/user-setup/environment/03_python_env.sh
-        # /opt/elmo/apptainer/build/user-setup/emacs/01_emacsd.sh
-        /opt/elmo/apptainer/build/user-setup/permissions/00_all.sh
-    )
-    for script in "${user_scripts[@]}"; do
-        if $script; then
-            echo "$(basename $script) succeeded"
-        else
-            echo "$(basename $script) failed"
-        fi
-    done
+%runscript
+    echo -e "\n==================== Runscript Section ===================="
+    
+    exec /bin/bash /opt/elmo/apptainer/build/startup/start_emacs.sh

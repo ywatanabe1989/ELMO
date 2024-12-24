@@ -16,14 +16,14 @@
 ;; (defun elmo-to-full-prompt (prompt)
 ;;   (condition-case err
 ;;       (let* ((template (elmo-get-prompt "lang2elisp" "authorities" "logging" "notes"))
-;;              (log-content (elmo--get-log)))
+;;              (log-content (elmo-get-log)))
 ;;         (when template
 ;;           (let ((prompt-with-template (replace-regexp-in-string "PLACEHOLDER" prompt template t t)))
 ;;             (if log-content
 ;;                 (concat prompt-with-template "\n\n" log-content)
 ;;               prompt-with-template))))
 ;;     (error
-;;      (elmo--log-error (format "Failed to create full prompt.\nError: %s\nPrompt: %s"
+;;      (elmo-log-error (format "Failed to create full prompt.\nError: %s\nPrompt: %s"
 ;;                            (error-message-string err) prompt))
 ;;      nil)))
 
@@ -33,12 +33,12 @@
       (let* ((template (condition-case err1
                           (elmo-get-prompt "lang2elisp" "authorities" "logging" "notes")
                         (error
-                         (elmo--log-error (format "Template fetch failed: %s" (error-message-string err1)))
+                         (elmo-log-error (format "Template fetch failed: %s" (error-message-string err1)))
                          nil)))
              (log-content (condition-case err2
-                             (elmo--get-log)
+                             (elmo-get-log)
                            (error
-                            (elmo--log-error (format "Log fetch failed: %s" (error-message-string err2)))
+                            (elmo-log-error (format "Log fetch failed: %s" (error-message-string err2)))
                             nil))))
         (when template
           (condition-case err3
@@ -47,10 +47,10 @@
                     (concat prompt-with-template "\n\n" log-content)
                   prompt-with-template))
             (error
-             (elmo--log-error (format "Template substitution failed: %s" (error-message-string err3)))
+             (elmo-log-error (format "Template substitution failed: %s" (error-message-string err3)))
              nil))))
     (error
-     (elmo--log-error (format "Full prompt creation failed: %s" (error-message-string err)))
+     (elmo-log-error (format "Full prompt creation failed: %s" (error-message-string err)))
      nil)))
 
  ;; "authorities" "logging" "notes"
@@ -79,7 +79,7 @@
         (when resp-data
           (alist-get 'text (aref (alist-get 'content resp-data) 0))))
     (error
-     (elmo--log-error (format "API request failed.\nError: %s\nPrompt: %s"
+     (elmo-log-error (format "API request failed.\nError: %s\nPrompt: %s"
                            (error-message-string err) prompt))
      nil)))
 ;; (elmo-prompt2response "hello world")
@@ -113,7 +113,7 @@
                        commands))))
           progn-form))
     (error
-     (elmo--log-error
+     (elmo-log-error
       (format "JSON to Elisp conversion failed.\nError: %s\nInput JSON: %s"
               (error-message-string err)
               json-data))
@@ -129,7 +129,7 @@
 ;;                  (json-data (json-read-from-string json-str-clean)))
 ;;             (elmo--json-elisp-commands-to-elisp json-data)))
 ;;       (error
-;;        (elmo--log-error
+;;        (elmo-log-error
 ;;         (format "Failed to convert prompt to elisp.\nError: %s\nPrompt: %s\nResponse: %s"
 ;;                 (error-message-string err) prompt response-text))
 ;;        nil))))
@@ -166,7 +166,7 @@
     (condition-case err
         (setq response-text (elmo-prompt2response prompt))
       (error
-       (elmo--log-error
+       (elmo-log-error
         (format "API request failed.\nError: %s\nPrompt: %s"
                 (error-message-string err) prompt))
        (signal 'elmo-api-error err)))
@@ -175,7 +175,7 @@
       (condition-case err
           (setq json-blocks (elmo--extract-json-blocks response-text))
         (error
-         (elmo--log-error
+         (elmo-log-error
           (format "JSON extraction failed.\nError: %s\nResponse: %s"
                   (error-message-string err) response-text))
          (signal 'elmo-json-cleanup-error err)))
@@ -187,7 +187,7 @@
                            (elmo--json-elisp-commands-to-elisp json-data)))
                        json-blocks))
         (error
-         (elmo--log-error
+         (elmo-log-error
           (format "JSON parsing/conversion failed.\nError: %s\nBlocks: %s"
                   (error-message-string err) json-blocks))
          (signal 'elmo-json-parse-error err)))
