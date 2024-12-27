@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2024-12-27 15:22:55
+!-- title: 2024-12-27 20:56:33
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/000-context-to-elisp.md
 !-- --- -->

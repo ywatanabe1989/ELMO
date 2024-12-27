@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 08:59:06
-;;; Time-stamp: <2024-12-27 08:59:06 (ywatanabe)>
+;;; Author: 2024-12-27 21:28:38
+;;; Time-stamp: <2024-12-27 21:28:38 (ywatanabe)>
 ;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/06-elmo-json-md.el
 
 (require '02-elmo-logging-core)

@@ -14,7 +14,7 @@
 (require '04-elmo-utils)
 (require '06-elmo-json-md)
 (require '07-elmo-exec)
-(require '08-elmo-prompt-templates)
+(require '08-elmo-prompt)
 (require '09-elmo-lang2elisp)
 (require '10-elmo-run)
 (require '11-elmo-project-handler.el)

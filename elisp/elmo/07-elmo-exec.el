@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 11:32:06
-;;; Time-stamp: <2024-12-25 11:32:06 (ywatanabe)>
-;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/07-elmo-exec.el
+;;; Author: 2024-12-27 20:08:45
+;;; Time-stamp: <2024-12-27 20:08:45 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/07-elmo-exec.el
 
 (require '01-elmo-config)
 
@@ -13,7 +13,7 @@
      (elmo-log-error (format "Code escaping failed: %s" (error-message-string err)))
      nil)))
 
-(defun elmo-exec-escaped-elisp-code-local (escaped-elisp-code)
+(defun elmo-exec-local (escaped-elisp-code)
   "Execute elisp code in local Emacs."
   (interactive)
   (condition-case err
@@ -23,11 +23,11 @@
      nil)))
 
 ;; ;; Working
-;; (elmo-exec-escaped-elisp-code-local '(message "hi"))
-;; (elmo-exec-escaped-elisp-code-local '(message "hello!!!!!"))
-;; (elmo-exec-escaped-elisp-code-local '(load-file "/home/ywatanabe/.emacs.d/init.el"))
+;; (elmo-exec-local '(message "hi"))
+;; (elmo-exec-local '(message "hello!!!!!"))
+;; (elmo-exec-local '(load-file "/home/ywatanabe/.emacs.d/init.el"))
 
-(defun elmo-exec-escaped-elisp-code-server (escaped-elisp-code &optional emacs-server-file)
+(defun elmo-exec-server (escaped-elisp-code &optional emacs-server-file)
   "Execute elisp code in remote Emacs server specified by EMACS-SERVER-FILE.
 ESCAPED-ELISP-CODE is the elisp code to execute."
   (interactive)
@@ -50,52 +50,9 @@ ESCAPED-ELISP-CODE is the elisp code to execute."
 
 ;; ;; Working
 ;; Example usage:
-;; (elmo-exec-escaped-elisp-code-server '(+ 1 2))
+;; (elmo-exec-server '(+ 1 2))
 
-;; ;; python error is not captured
-;; (defun elmo-exec-escaped-elisp-code (escaped-elisp-code)
-;;   "Execute elisp code in the ELMO server process."
-;;   (interactive)
-;;   (condition-case err
-;;       (progn
-;;         (condition-case err2
-;;             (elmo-init-or-connect)
-;;           (error
-;;            (elmo-log-error (format "Server connection failed: %s" (error-message-string err2)))
-;;            (signal 'elmo-error (list "Server connection failed"))))
-;;         (let ((cmd (condition-case err3
-;;                       (format "echo %s | sudo -S %s execute %s"
-;;                              (shell-quote-argument (elmo-sudo-get-password))
-;;                              (shell-quote-argument elmo-server-script-path)
-;;                              escaped-elisp-code)
-;;                     (error
-;;                      (elmo-log-error (format "Command formatting failed: %s" (error-message-string err3)))
-;;                      (signal 'elmo-error (list "Command formatting failed"))))))
-;;           (shell-command cmd)))
-;;     (error
-;;      (elmo-log-error (format "Code execution failed: %s" (error-message-string err)))
-;;      nil)))
-
-;; (defun elmo-exec-elisp-code (elisp-code)
-;;   "Execute ELISP-CODE in ELMO server process."
-;;   (interactive "xLisp expression: ")
-;;   (condition-case err
-;;       (let* ((code (if (stringp elisp-code)
-;;                        (condition-case err2
-;;                            (read elisp-code)
-;;                          (error
-;;                           (elmo-log-error (format "Code parsing failed: %s" (error-message-string err2)))
-;;                           nil))
-;;                      elisp-code))
-;;              (escaped-elisp-code (when code (elmo-escape-elisp-code code))))
-;;         (when (and code escaped-elisp-code)
-;;           (elmo-exec-escaped-elisp-code escaped-elisp-code)))
-;;     (error
-;;      (elmo-log-error (format "Code execution preparation failed: %s" (error-message-string err)))
-;;      nil)))
-
-
-(defun elmo-exec-escaped-elisp-code (escaped-elisp-code)
+(defun elmo-exec-server-or-local (escaped-elisp-code)
   "Execute elisp code, trying server first then falling back to local."
   (interactive)
   (condition-case err
@@ -104,47 +61,17 @@ ESCAPED-ELISP-CODE is the elisp code to execute."
                  (file-exists-p server-file)
                  (file-readable-p server-file))
             ;; Try server first
-            (elmo-exec-escaped-elisp-code-server escaped-elisp-code server-file)
+            (elmo-exec-server escaped-elisp-code server-file)
           ;; Fall back to local if server unavailable
-          (elmo-exec-escaped-elisp-code-local escaped-elisp-code)))
+          (elmo-exec-local escaped-elisp-code)))
     (error
      (elmo-log-error (format "Code execution failed: %s" (error-message-string err)))
      nil)))
 
-
-
-;; (defun elmo-exec-elisp-code (code)
-;;   "Execute elisp CODE safely with proper error handling."
-;;   (interactive "xLisp expression: ")
-;;   (condition-case err
-;;       (let ((parsed-code (cond
-;;                           ((stringp code)
-;;                            (condition-case err
-;;                                (read code)
-;;                              (error
-;;                               (elmo-log-error (format "Failed to parse string code: %s" err))
-;;                               nil)))
-;;                           ((listp code) code)
-;;                           (t (error "Invalid code type: %s" (type-of code))))))
-;;         (when parsed-code
-;;           (condition-case err
-;;               (elmo-exec-escaped-elisp-code parsed-code)
-;;             (error
-;;              (elmo-log-error (format "Failed to execute code: %s" err))
-;;              nil))))
-;;     (error
-;;      (elmo-log-error (format "Top-level execution error: %s" err))
-;;      nil)))
-
-
 ;; ;; Working
-;; (elmo-exec-escaped-elisp-code-local '(load-file "/home/ywatanabe/.emacs.d/init.el"))
-;; (elmo-exec-escaped-elisp-code-local '(message "hi"))
-;; (elmo-exec-escaped-elisp-code-local '(message "hello!!!!!"))
-
-
-(defalias 'elmo-exec-local 'elmo-exec-escaped-elisp-code-local)
-(defalias 'elmo-exec-server 'elmo-exec-escaped-elisp-code-server)
+;; (elmo-exec-local '(load-file "/home/ywatanabe/.emacs.d/init.el"))
+;; (elmo-exec-local '(message "hi"))
+;; (elmo-exec-local '(message "hello!!!!!"))
 
 (provide '07-elmo-exec)
 

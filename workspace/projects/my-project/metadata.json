@@ -2,15 +2,15 @@
   "version": "0.0.0",
   "objective": [
     "Develop a mimal unit of an agent system on Emacs",
-    "Expected outcomes are to create a repository and upload it to GitHub"
+    "Expected outcomes: Create a repository and upload it to GitHub"
   ],
   "success-criteria": [
     "Until GitHub repository is created"
   ],
   "requirements": [
-    "Technical requirements",
-    "Dependencies",
-    "Environment setup"
+    "Technical requirements: not specified",
+    "Dependencies: not specified",
+    "Environment setup: not specified"
   ],
   "steps": [
     "Step 1: Planning and setup",

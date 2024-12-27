@@ -1,11 +1,10 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 19:29:10
-;;; Time-stamp: <2024-12-27 19:29:10 (ywatanabe)>
+;;; Author: 2024-12-27 19:36:43
+;;; Time-stamp: <2024-12-27 19:36:43 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/10-elmo-run.el
 
 (require '01-elmo-config)
 (require '02-elmo-logging-core)
-;; (require '03-elmo-logging-utils)
 (require '04-elmo-utils)
 (require '09-elmo-lang2elisp)
 
@@ -57,23 +56,6 @@ Elmo-run called.
        (elmo-log-prompt prompt-text)
        (elmo-log-error (format "Failed to run prompt:\n%s" err))
        (error "ELMO failed: %s" err)))))
-
-;; (defun elmo-run (&optional prompt)
-;;   "Run ELMO operations with given PROMPT."
-;;   (interactive)
-;;   (let ((prompt-text (or prompt (read-string "ELMO prompt: ") "")))
-;;     (elmo-before-run-hook prompt-text)
-;;     (condition-case err
-;;         (let ((elisp-code (elmo-lang2elisp prompt-text)))
-;;           (unless elisp-code
-;;             (signal 'error '("No valid elisp code generated")))
-;;           (elmo-get-main-buffer)
-;;           (elmo-exec-local elisp-code)
-;;           (message "DEBUG %s" (format "%s" elisp-code))
-;;       (error
-;;        (elmo-log-prompt prompt-text)
-;;        (elmo-log-error (format "Failed to run prompt:\n%s" err))
-;;        (error "ELMO failed: %s" err)))))
 
 (defun elmo-after-run-hook-error (error prompt-text)
   "Hook for failed ELMO operation."
