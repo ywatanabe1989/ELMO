@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-24 23:06:23
-;;; Time-stamp: <2024-12-24 23:06:23 (ywatanabe)>
-;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/01-elmo-config.el
+;;; Author: 2024-12-27 14:06:22
+;;; Time-stamp: <2024-12-27 14:06:22 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/01-elmo-config.el
 
 (require 'json)
 (require 'request)
@@ -32,6 +32,16 @@
 (defcustom elmo-server
   (expand-file-name ".emacs.d/emacs-server/server" elmo-home)
   "ELMO emacs server."
+  :type 'directory
+  :group 'elmo)
+
+(defcustom elmo-main-buffer-name "*ELMO*"
+  "ELMO buffer name."
+  :type 'directory
+  :group 'elmo)
+
+(defcustom elmo-log-buffer-name "*ELMO-log*"
+  "ELMO logging buffer name."
   :type 'directory
   :group 'elmo)
 

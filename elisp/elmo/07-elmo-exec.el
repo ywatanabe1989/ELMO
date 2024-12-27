@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 00:49:03
-;;; Time-stamp: <2024-12-25 00:49:03 (ywatanabe)>
+;;; Author: 2024-12-25 11:32:06
+;;; Time-stamp: <2024-12-25 11:32:06 (ywatanabe)>
 ;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/07-elmo-exec.el
 
 (require '01-elmo-config)
@@ -143,7 +143,7 @@ ESCAPED-ELISP-CODE is the elisp code to execute."
 ;; (elmo-exec-escaped-elisp-code-local '(message "hello!!!!!"))
 
 
-(defalias 'elmo-exec 'elmo-exec-escaped-elisp-code-local)
+(defalias 'elmo-exec-local 'elmo-exec-escaped-elisp-code-local)
 (defalias 'elmo-exec-server 'elmo-exec-escaped-elisp-code-server)
 
 (provide '07-elmo-exec)

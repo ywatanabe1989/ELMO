@@ -1,0 +1,10 @@
+{
+  "version": "0.0.0",
+  "id": "006",
+  "name": "my-first-project",
+  "status": "planning",
+    "objective": "Create a 'hello world project' and push it into GitHub",
+    "criteria": "If pull request is accepted.",
+    "steps": "not specified yet",
+    "notes": "not specified yet"
+}

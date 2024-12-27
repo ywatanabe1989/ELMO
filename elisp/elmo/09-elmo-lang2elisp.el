@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 00:54:44
-;;; Time-stamp: <2024-12-25 00:54:44 (ywatanabe)>
-;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/09-elmo-lang2elisp.el
+;;; Author: 2024-12-27 14:19:39
+;;; Time-stamp: <2024-12-27 14:19:39 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/09-elmo-lang2elisp.el
 
 (require 'request)
 (require '01-elmo-config)
@@ -10,72 +10,101 @@
 (require '03-elmo-logging-utils)
 (require '08-elmo-prompt-templates)
 
+(defcustom elmo-pyscripts-dir (expand-file-name "resources/scripts/" elmo-workspace-dir)
+  "Path to the Python binary used by elmo.el."
+  :type 'string)
+
+(defcustom elmo-gemini-script (expand-file-name "gemini_call.py" elmo-pyscripts-dir)
+  "Path to the Python binary used by elmo.el."
+  :type 'string)
+
 (defvar elmo-anthropic-key (getenv "ANTHROPIC_API_KEY")
   "API key for Anthropic Claude.")
 
 (defvar elmo-anthropic-engine (getenv "ANTHROPIC_ENGINE")
   "Model for Anthropic Claude.")
 
-;; (elmo-to-full-prompt "001-context-to-elisp-code" "hello")
+(defvar elmo-google-key (getenv "GOOGLE_API_KEY")
+  "API key for Google Claude.")
 
-;; ;; working
-;; (defun elmo-to-full-prompt (prompt)
-;;   (condition-case err
-;;       (let* ((template (condition-case err1
-;;                            (elmo-get-prompt "lang2elisp" "authorities" "logging" "notes")
-;;                          (error
-;;                           (elmo-log-error (format "Template fetch failed: %s" (error-message-string err1)))
-;;                           nil)))
-;;              (log-content (condition-case err2
-;;                               (elmo-get-log)
-;;                             (error
-;;                              (elmo-log-error (format "Log fetch failed: %s" (error-message-string err2)))
-;;                              nil))))
-;;         (when template
-;;           (condition-case err3
-;;               (let ((prompt-with-template (replace-regexp-in-string "PLACEHOLDER" prompt template t t)))
-;;                 (if log-content
-;;                     (concat prompt-with-template "\n\n" log-content)
-;;                   prompt-with-template))
-;;             (error
-;;              (elmo-log-error (format "Template substitution failed: %s" (error-message-string err3)))
-;;              nil))))
-;;     (error
-;;      (elmo-log-error (format "Full prompt creation failed: %s" (error-message-string err)))
-;;      nil)))
+(defvar elmo-google-engine (getenv "GOOGLE_ENGINE")
+  "Model for Google Claude.")
 
-;; "authorities" "logging" "notes"
-;; (elmo-to-full-prompt "Hello")
-
+(defvar elmo-llm-provider "anthropic"
+  "Switcher for LLM provider")
 
 (defun elmo-prompt-to-elisp-including-response (prompt)
+  (pcase elmo-llm-provider
+    ("anthropic" (elmo-prompt-to-elisp-including-response-claude prompt))
+    ("google" (elmo-prompt-to-elisp-including-response-gemini prompt))
+    (_ (error "Unknown LLM provider: %s" elmo-llm-provider))))
+
+(defun elmo-prompt-to-elisp-including-response-gemini (prompt)
   (interactive)
   (condition-case err
       (let* ((full-prompt (elmo-to-full-prompt "001-context-to-elisp-code" prompt))
-             (response (request
-                         "https://api.anthropic.com/v1/messages"
-                         :type "POST"
-                         :headers `(("content-type" . "application/json")
-                                    ("x-api-key" . ,elmo-anthropic-key)
-                                    ("anthropic-version" . "2023-06-01"))
-                         :data (json-encode
-                                `(("model" . ,elmo-anthropic-engine)
-                                  ("max_tokens" . 8192)
-                                  ("system" . "Return only raw Elisp code without any markup or comments.")
-                                  ("messages" . [,(list (cons "role" "user")
-                                                        (cons "content" full-prompt))])))
-                         :parser 'json-read
-                         :sync t
-                         :silent t))
-             (resp-data (request-response-data response)))
-        (when resp-data
-          (alist-get 'text (aref (alist-get 'content resp-data) 0))))
+             (temp-file (make-temp-file "gemini-response")))
+        (unwind-protect
+            (progn
+              (unless (= 0 (shell-command
+                            (format "source /workspace/.env/bin/activate && python3 %s \"%s\" \"%s\""
+                                    elmo-gemini-script
+                                    (replace-regexp-in-string "\"" "\\\\\"" full-prompt)
+                                    temp-file)))
+                (error "Python script execution failed"))
+              (with-temp-buffer
+                (insert-file-contents temp-file)
+                (buffer-string)))
+          (ignore-errors
+            (delete-file temp-file))))
     (error
-     (elmo-log-error (format "API request failed.\nError: %s\nPrompt: %s"
-                             (error-message-string err) prompt))
+     (elmo-log-prompt prompt)
+     (elmo-log-error (format "Gemini API request failed.\n%s"
+                             (error-message-string err)))
      nil)))
 
-;; (elmo-prompt-to-elisp-including-response "plot a figure, save, and show on emacs")
+(defun elmo-prompt-to-elisp-including-response-claude (prompt)
+  (interactive)
+  (condition-case err
+      (let* ((full-prompt (elmo-to-full-prompt "001-context-to-elisp-code" prompt))
+             (url-request-method "POST")
+             (url-request-extra-headers
+              `(("Content-Type" . "application/json")
+                ("x-api-key" . ,elmo-anthropic-key)
+                ("anthropic-version" . "2023-06-01")))
+             (url-request-data
+              (encode-coding-string
+               (json-encode
+                `(("model" . ,elmo-anthropic-engine)
+                  ("max_tokens" . 8192)
+                  ("system" . "Return only raw Elisp code without any markup or comments.")
+                  ("messages" . [,(list (cons "role" "user")
+                                        (cons "content" full-prompt))])))
+               'utf-8))
+             (buffer (url-retrieve-synchronously
+                      "https://api.anthropic.com/v1/messages" t)))
+
+        (if buffer
+            (with-current-buffer buffer
+              (goto-char (point-min))
+              (let ((status-line (buffer-substring (point) (line-end-position))))
+                (if (string-match "200 OK" status-line)
+                    (progn
+                      (re-search-forward "^$")
+                      (let ((json-object-type 'alist)
+                            (json-array-type 'vector))
+                        (condition-case nil
+                            (let ((resp-data (json-read)))
+                              (when resp-data
+                                (alist-get 'text (aref (alist-get 'content resp-data) 0))))
+                          (error nil))))
+                  (error "API request failed with status: %s" status-line))))
+          (error "Failed to retrieve response")))
+    (error
+     (elmo-log-prompt prompt)
+     (elmo-log-error (format "API request failed.\n%s"
+                             (error-message-string err)))
+     nil)))
 
 (defun elmo-extract-elisp-blocks (text)
   "Extract all ELISP blocks between ```elisp and ``` markers from TEXT."
@@ -88,58 +117,55 @@
     (if blocks
         (nreverse blocks)
       (error "No ELISP blocks found in response"))))
-;; (elmo-extract-elisp-blocks (elmo-prompt-to-elisp-including-response "plot a figure, save, and show on emacs"))
 
-;; (defun test-elisp-extraction ()
-;;   (with-temp-buffer
-;;     (insert-file-contents "/tmp/elispfile.elisp")
-;;     (let ((content (buffer-string)))
-;;       (elmo-extract-elisp-blocks content))))
-
-;; ; (test-elisp-extraction)
-
-
-
-;; (defun elmo-prompt-to-elisp (prompt)
 (defun elmo-lang2elisp (prompt)
   (interactive)
   (let ((elisp-including-response nil)
         (elisp-blocks nil)
         (commands nil))
     (condition-case err
-        (setq elisp-including-response (elmo-prompt-to-elisp-including-response prompt))
+        (progn
+          (setq elisp-including-response (elmo-prompt-to-elisp-including-response prompt))
+          (unless elisp-including-response
+            (signal 'elmo-api-error "No response received from API")))
       (error
+       (elmo-log-prompt prompt)
        (elmo-log-error
-        (format "API request failed.\nError: %s\nPrompt: %s"
-                (error-message-string err) prompt))
+        (format "API request failed.\n%s"
+                (error-message-string err)))
        (signal 'elmo-api-error err)))
 
     (when elisp-including-response
       (condition-case err
-          (setq elisp-blocks (elmo-extract-elisp-blocks elisp-including-response))
+          (progn
+            (setq elisp-blocks (elmo-extract-elisp-blocks elisp-including-response))
+            (unless elisp-blocks
+              (signal 'elmo-elisp-cleanup-error "No elisp blocks found in response")))
         (error
          (elmo-log-error
-          (format "Elisp extraction failed.\nError: %s\nResponse: %s"
+          (format "Elisp extraction failed.\n%s\n%s"
                   (error-message-string err) elisp-including-response))
          (signal 'elmo-elisp-cleanup-error err)))
 
       (condition-case err
-          (setq commands
-                (mapcar (lambda (block)
-                          (read (concat "(progn " block ")")))
-                        elisp-blocks))
+          (progn
+            (setq commands
+                  (mapcar (lambda (block)
+                            (read (concat "(progn " block ")")))
+                          elisp-blocks))
+            (unless commands
+              (signal 'elmo-elisp-parse-error "No valid elisp code generated")))
         (error
          (elmo-log-error
           (format "Elisp parsing failed.\nError: %s\nBlocks: %s"
                   (error-message-string err) elisp-blocks))
-         (signal 'elmo-elisp-parse-error err)))
+         (signal 'elmo-elisp-parse-error err))))
+    (if commands
+        (cons 'progn commands)
+      (signal 'elmo-elisp-parse-error "No valid elisp code generated"))))
 
-      (cons 'progn commands))))
-
-
-
-;; (insert (format "%s" (elmo-lang2elisp "plot a figure, save, and show on emacs")))
-
+;; (defalias 'elmo-prompt-to-elisp-including-response
+;;   'elmo-prompt-to-elisp-including-response-gemini)
 
 (provide '09-elmo-lang2elisp)
 

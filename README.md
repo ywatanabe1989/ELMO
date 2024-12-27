@@ -1,9 +1,10 @@
 <!-- ---
-!-- title: 2024-12-25 01:29:29
-!-- author: ywata-note-win
+!-- title: 2024-12-27 13:24:34
+!-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/.emacs.d/lisp/elmo/README.md
 !-- --- -->
 
+# LLeMacs
 # Elmo — Emacs LLM Orchestration
 
 ## Apptainer
@@ -15,13 +16,10 @@
 ```
 
 ``` elisp
-(load-file "~/.emacs.d/lisp/elmo/elisp/elmo/elmo.el")
-(define-key global-map (kbd "C-M-e") 'elmo-run)
-
-(elmo-run "plot something. summarize everything as an org file. images should be displayed inlne. all files should be linked from the org file. Add the orgfile contents to the tail of \"*ELMO*\" buffer, which may be already opened")
-(elmo-run "to achieve a scientific project of epileptic seizure prediction, please write a plan for agents to orchestrate")
+(elmo-run "make a simple plot")
+(elmo-run "make a simple gif")
+(elmo-run "make a simple audio")
 ```
-
 
 
 source /home/ywatanabe/.emacs.d/lisp/elmo/config/env/00_all.env

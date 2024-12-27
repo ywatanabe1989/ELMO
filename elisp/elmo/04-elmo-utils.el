@@ -1,7 +1,24 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-24 18:00:35
-;;; Time-stamp: <2024-12-24 18:00:35 (ywatanabe)>
-;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/elmo-utils.el
+;;; Author: 2024-12-27 08:20:12
+;;; Time-stamp: <2024-12-27 08:20:12 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/04-elmo-utils.el
+
+(defun elmo-get-main-buffer ()
+  "Initialize *ELMO* buffer if it doesn't exist."
+  (let ((buf (get-buffer-create elmo-main-buffer-name)))
+    (with-current-buffer buf
+      (unless (eq major-mode 'org-mode)
+        (org-mode)))
+    (display-buffer buf)
+    buf))
+
+(defun elmo-get-log-buffer ()
+  "Initialize *ELMO* buffer if it doesn't exist."
+  (let ((buf (get-buffer-create elmo-log-buffer-name)))
+    (display-buffer buf)
+    buf))
+
+;; (elmo-get-main-buffer)
 
 (defun elmo-shell-command (command)
   "Execute shell COMMAND and return output or nil on error."
@@ -18,16 +35,24 @@
   (or (elmo-shell-command (format "diff -u %s %s" file1 file2))
       "No differences found"))
 
-(defun elmo-show-progress (message)
-  "Show progress MESSAGE in dedicated window."
-  (let ((buffer (get-buffer-create "*elmo-progress*")))
-    (with-current-buffer buffer
-      (goto-char (point-max))
-      (let ((inhibit-read-only t))
-        (insert (format "[%s] %s\n"
-                        (format-time-string "%H:%M:%S")
-                        message)))
-      (display-buffer buffer))))
+
+(defun elmo-ensure-workspace (dir-path)
+  "Ensure workspace directory exists and is accessible."
+  (unless (file-exists-p dir-path)
+    (make-directory dir-path t))
+  (cd dir-path))
+
+
+;; (defun elmo-show-progress (message)
+;;   "Show progress MESSAGE in dedicated window."
+;;   (let ((buffer (get-buffer-create "*elmo-progress*")))
+;;     (with-current-buffer buffer
+;;       (goto-char (point-max))
+;;       (let ((inhibit-read-only t))
+;;         (insert (format "[%s] %s\n"
+;;                         (format-time-string "%H:%M:%S")
+;;                         message)))
+;;       (display-buffer buffer))))
 
 ;; (defun elmo-create-backup (file)
 ;;   "Create backup of FILE with timestamp."

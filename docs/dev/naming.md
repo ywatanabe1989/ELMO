@@ -1,8 +1,17 @@
 <!-- ---
-!-- title: 2024-12-23 22:59:36
+!-- title: 2024-12-25 02:34:38
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/docs/dev/naming.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/docs/dev/naming.md
 !-- --- -->
+
+LLeMacs [liːmæks]
+
+
+
+ELMO, Lemacs, LLeMacs, NINJA
+
+
+LLeMacs: LLM meats Emacs
 
 ELMO: Emacs LLM Operations
 **Name Comparison**

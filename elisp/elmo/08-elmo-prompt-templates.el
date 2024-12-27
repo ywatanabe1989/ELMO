@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 00:26:24
-;;; Time-stamp: <2024-12-25 00:26:24 (ywatanabe)>
+;;; Author: 2024-12-25 11:59:49
+;;; Time-stamp: <2024-12-25 11:59:49 (ywatanabe)>
 ;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/08-elmo-prompt-templates.el
 
 (require '01-elmo-config)
@@ -12,6 +12,7 @@
   "Directory for prompt templates."
   :type 'file
   :group 'elmo)
+;; ~/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/001-context-to-elisp-code.json
 
 (defun elmo-get-available-prompt-templates ()
   "Get list of available prompt-template by scanning prompt-template directory."
@@ -41,7 +42,7 @@
                   (time-less-p md-time json-time))
           (elmo-json-to-markdown json-file))))))
 
-
+                                        ; (elmo-prompt-templates-ensure-markdown-files)
 
 (defun elmo-get-prompt-template (prompt-template-name)
   "Get content of PROMPT-TEMPLATE-NAME markdown file."
@@ -52,12 +53,12 @@
           (elmo-log-error "Template name required")
           (error "Template name required"))
         (unless (member prompt-template-name elmo-available-prompt-templates)
-          (elmo-log-error (format "Invalid prompt-template name: %s" prompt-template-name))
+          (elmo-log-error (format "Invalid prompt-template name:\n%s" prompt-template-name))
           (error "Invalid prompt-template name"))
         (elmo-load-markdown-file
          (expand-file-name (format "%s.md" prompt-template-name) elmo-prompt-templates-dir)))
     (error
-     (elmo-log-error (format "Error getting prompt-template: %s" err))
+     (elmo-log-error (format "Error getting prompt-template:\n%s" err))
      nil)))
 
 (defun elmo-get-prompt-templates (&rest prompt-template-names)
@@ -74,15 +75,15 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
           (let ((contents ""))
             (dolist (name prompt-template-names)
               (unless (member name elmo-available-prompt-templates)
-                (elmo-log-message (format "Invalid prompt-template name: %s" name))
-                (error "Invalid prompt-template name: %s" name))
+                (elmo-log-error (format "Invalid prompt-template name:\n%s" name))
+                (error "Invalid prompt-template name:\n%s" name))
               (let ((content (elmo-load-markdown-file
                               (expand-file-name (format "%s.md" name) elmo-prompt-templates-dir))))
                 (when content
                   (setq contents (concat contents "\n" content)))))
             (string-trim contents))))
     (error
-     (elmo-log-message (format "Error getting prompt-templates: %s" err))
+     (elmo-log-error (format "Error getting prompt-templates:\n%s" err))
      nil)))
 
 
@@ -93,7 +94,7 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
         (when template
           (replace-regexp-in-string "PLACEHOLDER" prompt-text template t t)))
     (error
-     (elmo-log-error (format "Failed to embed prompt: %s" err))
+     (elmo-log-error (format "Failed to embed prompt:\n%s" err))
      nil)))
 
 ;; (elmo-get-prompt-templates)

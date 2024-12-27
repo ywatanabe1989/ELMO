@@ -1,0 +1,13 @@
+# Project: new-project
+## Overview
+- ID: 011-my-first-project
+- Version: 0.0.0
+- Status: planning
+## Objective
+Write main objective here...
+## Success Criteria
+List success criteria here...
+## Implementation
+Describe implementation steps here...
+## Notes
+Add any additional notes, risks, or dependencies here...

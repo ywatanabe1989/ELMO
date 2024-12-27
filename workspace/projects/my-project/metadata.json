@@ -1,0 +1,28 @@
+{
+  "version": "0.0.0",
+  "objective": [
+    "Develop a mimal unit of an agent system on Emacs",
+    "Expected outcomes are to create a repository and upload it to GitHub"
+  ],
+  "success-criteria": [
+    "Until GitHub repository is created"
+  ],
+  "requirements": [
+    "Technical requirements",
+    "Dependencies",
+    "Environment setup"
+  ],
+  "steps": [
+    "Step 1: Planning and setup",
+    "Step 2: Development",
+    "Step 3: Testing",
+    "Step 4: Documentation"
+  ],
+  "notes": [
+    "Important considerations",
+    "Constraints",
+    "Risks"
+  ],
+  "name": "my-project",
+  "id": "my-project"
+}

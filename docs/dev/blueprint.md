@@ -1,6 +1,6 @@
 <!-- ---
-!-- title: 2024-12-24 23:00:31
-!-- author: Yusuke Watanabe
+!-- title: 2024-12-25 13:33:29
+!-- author: ywata-note-win
 !-- date: /home/ywatanabe/.emacs.d/lisp/elmo/docs/dev/blueprint.md
 !-- --- -->
 

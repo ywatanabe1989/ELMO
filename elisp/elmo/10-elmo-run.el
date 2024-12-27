@@ -1,77 +1,85 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 01:44:42
-;;; Time-stamp: <2024-12-25 01:44:42 (ywatanabe)>
-;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/10-elmo-run.el
+;;; Author: 2024-12-27 13:45:07
+;;; Time-stamp: <2024-12-27 13:45:07 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/10-elmo-run.el
 
 (require '01-elmo-config)
 (require '02-elmo-logging-core)
 (require '03-elmo-logging-utils)
+(require '04-elmo-utils)
 (require '09-elmo-lang2elisp)
 
 (defvar elmo-tab-counter 0
   "Counter for ELMO tab numbering.")
 
+(defvar elmo-tab-counter 0
+  "Counter for ELMO tab numbering.
 
-;; (defun elmo-before-run-hook ()
-;;   "Prepare environment before running ELMO operations."
-;;   (interactive)
-;;   (condition-case err
-;;       (progn
-;;         (let ((current-buf (current-buffer))
-;;               (buffer (get-buffer-create "*ELMO*")))
-;;           (display-buffer buffer
-;;                           '((display-buffer-in-side-window)
-;;                             (side . right)
-;;                             (window-width . 80)))
-;;           (set-buffer buffer))
-;;         (elmo-exec
-;;          `(progn
-;;             (setq default-directory "/workspace")
-;;             (setq shell-file-name "/bin/bash"
-;;                   python-shell-virtualenv-root "/workspace.env"
-;;                   python-shell-interpreter "/workspace/.env/bin/python3"))))
-;;     (error
-;;      (elmo-log-error (format "Failed in before-run hook: %s" err))
-;;      nil)))
-(defun elmo-before-run-hook ()
+Example:
+  (setq elmo-tab-counter 0)
+  (1+ elmo-tab-counter) ;; => 1")
+
+(defun elmo-before-run-hook (prompt)
   "Prepare environment before running ELMO operations."
-  (interactive)
   (condition-case err
-      (progn
-        (let ((current-buf (current-buffer))
-              (buffer (get-buffer-create "*ELMO*")))
-          ;; (delete-other-windows)
-          (split-window-right)
-          (other-window 1)
-          (switch-to-buffer buffer)
-          (set-buffer buffer))
-        (elmo-exec
-         `(progn
-            (setq default-directory "/workspace")
-            (setq shell-file-name "/bin/bash"
-                  python-shell-virtualenv-root "/workspace.env"
-                  python-shell-interpreter "/workspace/.env/bin/python3"))))
+      (elmo-exec-local
+       `(progn
+          (elmo-log-note "
+================================================================================
+Elmo-run called.
+================================================================================")
+          (elmo-get-main-buffer)
+          (setq elmo-original-directory default-directory)
+          (setq shell-file-name "/bin/bash")
+          (setq python-shell-virtualenv-root "/workspace/.env")
+          (setq python-shell-interpreter "/workspace/.env/bin/python3")))
     (error
      (elmo-log-error (format "Failed in before-run hook: %s" err))
      nil)))
 
+
 (defun elmo-run (&optional prompt)
+  "Run ELMO operations with given PROMPT."
   (interactive)
-  (let ((prompt-text (or prompt (read-string "ELMO prompt: "))))
-    (elmo-before-run-hook)
+  (let ((prompt-text (or prompt (read-string "ELMO prompt: ") ""))
+        (original-dir default-directory))
+    (elmo-before-run-hook prompt-text)
     (condition-case err
         (let ((elisp-code (elmo-lang2elisp prompt-text)))
-          (if elisp-code
-              (progn
-                (elmo-exec elisp-code)
-                (elmo-log-success "Successfully executed prompt")
-                (elmo-log-del-errors))
-            (progn
-              (elmo-log-error "No valid elisp code generated from prompt")
-              (elmo-log-command-error elisp-code))))
+          (unless elisp-code
+            (signal 'error '("No valid elisp code generated")))
+          (elmo-get-main-buffer)
+          (elmo-exec-local elisp-code)
+          (cd original-dir)
+          (message "DEBUG %s" (format "%s" elisp-code)))
       (error
-       (elmo-log-error (format "Failed to run prompt: %s" err))
-       nil))))
+       (cd original-dir)
+       (elmo-log-prompt prompt-text)
+       (elmo-log-error (format "Failed to run prompt:\n%s" err))
+       (error "ELMO failed: %s" err)))))
+
+;; (defun elmo-run (&optional prompt)
+;;   "Run ELMO operations with given PROMPT."
+;;   (interactive)
+;;   (let ((prompt-text (or prompt (read-string "ELMO prompt: ") "")))
+;;     (elmo-before-run-hook prompt-text)
+;;     (condition-case err
+;;         (let ((elisp-code (elmo-lang2elisp prompt-text)))
+;;           (unless elisp-code
+;;             (signal 'error '("No valid elisp code generated")))
+;;           (elmo-get-main-buffer)
+;;           (elmo-exec-local elisp-code)
+;;           (message "DEBUG %s" (format "%s" elisp-code))
+;;       (error
+;;        (elmo-log-prompt prompt-text)
+;;        (elmo-log-error (format "Failed to run prompt:\n%s" err))
+;;        (error "ELMO failed: %s" err)))))
+
+(defun elmo-after-run-hook-error (error prompt-text)
+  "Hook for failed ELMO operation."
+  (elmo-log-error (format "Elmo-run failed.\n%s\n%s" erro elisp-code))
+  (elmo-log-open))
+
 
 (defalias 'er 'elmo-run)
 

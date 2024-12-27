@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-24 19:03:54 (ywatanabe)"
+# Time-stamp: "2024-12-27 08:58:09 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/scripts/json2md.sh
 
 
@@ -77,13 +77,53 @@ get_output_filename() {
 json2md() {
     local input=$1
     local output=$2
+
+    touch $output
+    echo $input
+    echo $output
+    ls $input
+    ls $output
+    
     python "$JSON2MD_PYTHON" "$input" > "$output"
 }
+
+md_to_json() {
+    local input=$1
+    python -c "
+import sys
+import json
+
+def md_to_json(md_content):
+    lines = md_content.split('\n')
+    result = {}
+    current_section = None
+    current_content = []
+    
+    for line in lines:
+        if line.startswith('#'):
+            if current_section:
+                result[current_section] = '\n'.join(current_content).strip()
+                current_content = []
+            current_section = line.lstrip('#').strip()
+        elif line.strip():
+            current_content.append(line)
+    
+    if current_section:
+        result[current_section] = '\n'.join(current_content).strip()
+    
+    return result
+
+with open('$input', 'r') as f:
+    content = f.read()
+print(json.dumps(md_to_json(content), indent=2))
+"
+}
+
 
 md2json() {
     local input=$1
     local output=$2
-
+   
     # Remove comment lines
     local input_cleaned=$(mktemp)
     sed -e '/<!--/,/-->/d' -e '/^;/d' "$input" > "$input_cleaned"
