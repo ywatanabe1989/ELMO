@@ -4,7 +4,7 @@
 ;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/06-elmo-json-md.el
 
 (require '02-elmo-logging-core)
-(require '03-elmo-logging-utils)
+;; (require '03-elmo-logging-utils)
 
 (defcustom elmo-format-script
   (expand-file-name "resources/scripts/json2md_or_md2json.sh" elmo-workspace-dir)

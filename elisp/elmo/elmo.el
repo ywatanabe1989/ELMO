@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 15:43:33
-;;; Time-stamp: <2024-12-27 15:43:33 (ywatanabe)>
+;;; Author: 2024-12-27 19:29:49
+;;; Time-stamp: <2024-12-27 19:29:49 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/elmo.el
 
 (defvar elmo-lisp-dir
@@ -11,16 +11,15 @@
 
 (require '01-elmo-config)
 (require '02-elmo-logging-core)
-(require '03-elmo-logging-utils)
 (require '04-elmo-utils)
-(require '05-elmo-image)
 (require '06-elmo-json-md)
 (require '07-elmo-exec)
 (require '08-elmo-prompt-templates)
 (require '09-elmo-lang2elisp)
 (require '10-elmo-run)
 (require '11-elmo-project-handler.el)
-(require '12-elmo-step.el)
+(require '11-elmo-context-handler.el)
+(require '13-elmo-step.el)
 
 (provide 'elmo)
 

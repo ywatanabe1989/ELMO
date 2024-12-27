@@ -1,11 +1,11 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-25 11:59:49
-;;; Time-stamp: <2024-12-25 11:59:49 (ywatanabe)>
+;;; Author: 2024-12-27 18:36:03
+;;; Time-stamp: <2024-12-27 18:36:03 (ywatanabe)>
 ;;; File: /home/ywatanabe/.emacs.d/lisp/elmo/elisp/elmo/08-elmo-prompt-templates.el
 
 (require '01-elmo-config)
 (require '02-elmo-logging-core)
-(require '03-elmo-logging-utils)
+;; (require '03-elmo-logging-utils)
 
 (defcustom elmo-prompt-templates-dir
   (expand-file-name "resources/prompt-templates" elmo-workspace-dir)
@@ -41,8 +41,6 @@
         (when (or (not md-exists)
                   (time-less-p md-time json-time))
           (elmo-json-to-markdown json-file))))))
-
-                                        ; (elmo-prompt-templates-ensure-markdown-files)
 
 (defun elmo-get-prompt-template (prompt-template-name)
   "Get content of PROMPT-TEMPLATE-NAME markdown file."
@@ -85,7 +83,6 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
     (error
      (elmo-log-error (format "Error getting prompt-templates:\n%s" err))
      nil)))
-
 
 (defun elmo-to-full-prompt (template-name prompt-text)
   "Embed PROMPT-TEXT into template specified by TEMPLATE-NAME."

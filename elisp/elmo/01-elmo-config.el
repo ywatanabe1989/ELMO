@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 14:06:22
-;;; Time-stamp: <2024-12-27 14:06:22 (ywatanabe)>
+;;; Author: 2024-12-27 19:25:48
+;;; Time-stamp: <2024-12-27 19:25:48 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/01-elmo-config.el
 
 (require 'json)
@@ -44,6 +44,9 @@
   "ELMO logging buffer name."
   :type 'directory
   :group 'elmo)
+
+
+;; (custom-group-members 'elmo nil)
 
 (provide '01-elmo-config)
 

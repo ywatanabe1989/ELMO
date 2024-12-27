@@ -1,13 +1,13 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 14:19:39
-;;; Time-stamp: <2024-12-27 14:19:39 (ywatanabe)>
+;;; Author: 2024-12-27 19:29:10
+;;; Time-stamp: <2024-12-27 19:29:10 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/09-elmo-lang2elisp.el
 
 (require 'request)
 (require '01-elmo-config)
 (require '04-elmo-utils)
 (require '02-elmo-logging-core)
-(require '03-elmo-logging-utils)
+;; (require '03-elmo-logging-utils)
 (require '08-elmo-prompt-templates)
 
 (defcustom elmo-pyscripts-dir (expand-file-name "resources/scripts/" elmo-workspace-dir)
@@ -39,10 +39,12 @@
     ("google" (elmo-prompt-to-elisp-including-response-gemini prompt))
     (_ (error "Unknown LLM provider: %s" elmo-llm-provider))))
 
+;; (elmo-prompt-to-elisp-including-response "hello")
+
 (defun elmo-prompt-to-elisp-including-response-gemini (prompt)
   (interactive)
   (condition-case err
-      (let* ((full-prompt (elmo-to-full-prompt "001-context-to-elisp-code" prompt))
+      (let* ((full-prompt (elmo-to-full-prompt "001-context-to-report" prompt))
              (temp-file (make-temp-file "gemini-response")))
         (unwind-protect
             (progn
@@ -66,7 +68,7 @@
 (defun elmo-prompt-to-elisp-including-response-claude (prompt)
   (interactive)
   (condition-case err
-      (let* ((full-prompt (elmo-to-full-prompt "001-context-to-elisp-code" prompt))
+      (let* ((full-prompt (elmo-to-full-prompt "001-context-to-report" prompt))
              (url-request-method "POST")
              (url-request-extra-headers
               `(("Content-Type" . "application/json")
@@ -105,6 +107,8 @@
      (elmo-log-error (format "API request failed.\n%s"
                              (error-message-string err)))
      nil)))
+
+;; (elmo-prompt-to-elisp-including-response-claude "hello")
 
 (defun elmo-extract-elisp-blocks (text)
   "Extract all ELISP blocks between ```elisp and ``` markers from TEXT."
@@ -164,8 +168,7 @@
         (cons 'progn commands)
       (signal 'elmo-elisp-parse-error "No valid elisp code generated"))))
 
-;; (defalias 'elmo-prompt-to-elisp-including-response
-;;   'elmo-prompt-to-elisp-including-response-gemini)
+;; (elmo-lang2elisp "hello")
 
 (provide '09-elmo-lang2elisp)
 

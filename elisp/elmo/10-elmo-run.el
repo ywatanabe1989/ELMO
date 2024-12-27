@@ -1,11 +1,11 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 13:45:07
-;;; Time-stamp: <2024-12-27 13:45:07 (ywatanabe)>
+;;; Author: 2024-12-27 19:29:10
+;;; Time-stamp: <2024-12-27 19:29:10 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/10-elmo-run.el
 
 (require '01-elmo-config)
 (require '02-elmo-logging-core)
-(require '03-elmo-logging-utils)
+;; (require '03-elmo-logging-utils)
 (require '04-elmo-utils)
 (require '09-elmo-lang2elisp)
 

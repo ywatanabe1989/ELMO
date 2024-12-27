@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 08:45:50
-;;; Time-stamp: <2024-12-27 08:45:50 (ywatanabe)>
+;;; Author: 2024-12-27 19:27:17
+;;; Time-stamp: <2024-12-27 19:27:17 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/02-elmo-logging-core.el
 
 (require '01-elmo-config)
@@ -15,10 +15,10 @@
 (defvar elmo-log-level 'info
   "Current logging level: 'debug, 'info, 'warn, or 'error.")
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Log File Management
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun elmo-init-log ()
+(defvar elmo-backup-limit 5
+  "Maximum number of backup files to keep.")
+
+(defun elmo-log-init ()
   "Initialize the log file if it doesn't exist."
   (interactive)
   (unless (file-exists-p elmo-logs-dir)
@@ -44,7 +44,7 @@
 
 (defun elmo-log-to-file (message log-file &optional level)
   "Log MESSAGE to LOG-FILE with optional LEVEL."
-  (elmo-init-log)
+  (elmo-log-init)
   (let* ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
          (level-str (if level (format "[%s]" (upcase (symbol-name level))) ""))
          (formatted-msg (format "[%s]%s %s - @%s\n%s\n"
@@ -62,6 +62,7 @@
       (write-region (point-min) (point-max) log-file nil 'quiet)
       (elmo-rotate-logs-if-needed log-file))))
 
+;; how can i use this?
 (defun elmo-rotate-logs-if-needed (log-file)
   "Rotate LOG-FILE if it exceeds size limit."
   (when (and (file-exists-p log-file)
@@ -97,7 +98,6 @@
   "Log general MESSAGE."
   (elmo-log 'info message))
 
-
 (defun elmo-log-error (message)
   "Log error MESSAGE and open the log file."
   (elmo-log 'error message)
@@ -121,78 +121,6 @@
   (interactive)
   (elmo-log 'info (concat "[SUCCESS] " _message)))
 
-;; (defun elmo-log-prompt (_message)
-;;   "Log prompt MESSAGE."
-;;   (interactive)
-;;   (elmo-log-message (concat "[PROMPT] " _message)))
-
-;; (defun elmo-log-success (_message)
-;;   "Log success MESSAGE."
-;;   (interactive)
-;;   (elmo-log-message (concat "[SUCCESS] " _message)))
-
-;; (defun elmo-log-warning (_message)
-;;   "Log warning MESSAGE."
-;;   (interactive)
-;;   (elmo-log-message (concat "[WARNING] " _message)))
-
-;; (defun elmo-log-error (_message)
-;;   "Log error MESSAGE and run diagnostic command."
-;;   (interactive)
-;;   (elmo-log-message (concat "[ERROR] " _message))
-;;   (elmo-log-open))
-
-;; (defun elmo-log-note (_message)
-;;   "Note MESSAGE to the ELMO."
-;;   (interactive)
-;;   (elmo-log-message (concat "[NOTE] " _message)))
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; Command
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun elmo-log-command (_message)
-;;   "Log command _MESSAGE to the command log file."
-;;   (interactive)
-;;   (elmo-log-to-file (concat "[COMMAND] " _message) elmo-log-command-file))
-
-;; (defun elmo-log-command-success (_message)
-;;   "Log command _MESSAGE to the command log file."
-;;   (interactive)
-;;   (elmo-log-to-file (concat "[COMMAND SUCCESS] " _message) elmo-log-command-file))
-
-;; (defun elmo-log-command-error (_message)
-;;   "Log command _MESSAGE to the command log file."
-;;   (interactive)
-;;   (elmo-log-to-file (concat "[COMMAND ERROR] " _message) elmo-log-command-file))
-
-;; (defun elmo-log-command-note (_message)
-;;   "Log command _MESSAGE to the command log file."
-;;   (interactive)
-;;   (elmo-log-to-file (concat "[COMMAND NOTE] " _message) elmo-log-command-file))
-
-
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ;; Log File Management
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun elmo-init-log ()
-;;   "Initialize the log file if it doesn't exist."
-;;   (interactive)
-;;   (unless (file-exists-p elmo-logs-dir)
-;;     (make-directory elmo-logs-dir t))
-;;   (unless (file-exists-p elmo-log-file)
-;;     (with-temp-file elmo-log-file
-;;       (insert (format "=== ELMO Log Log Created: %s ===\n\n"
-;;                       (format-time-string "%Y-%m-%d %H:%M:%S"))))))
-
-;; (defun elmo-log-open ()
-;;   "Open the ELMO log file in a buffer."
-;;   (interactive)
-;;   (if (file-exists-p elmo-log-file)
-;;       (progn
-;;         (sleep-for 0.5)
-;;         (find-file-noselect elmo-log-file))
-;;     (message "Log file does not exist: %s" elmo-log-file)))
-
-;; (provide '02-elmo-logging-core)
+(provide '02-elmo-logging-core)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
