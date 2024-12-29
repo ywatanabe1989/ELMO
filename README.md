@@ -1,12 +1,12 @@
 <!-- ---
-!-- title: 2024-12-29 22:13:49
+!-- title: 2024-12-29 22:16:51
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/README.md
 !-- --- -->
 
 # Llemacs
 
-![LLeMacs Logo](./docs/llemacs.gif){width=100}
+<img src="./docs/llemacs.gif" width="100" alt="Llemacs logo">
 
 ## Apptainer
 
