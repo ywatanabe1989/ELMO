@@ -1,11 +1,12 @@
 <!-- ---
-!-- title: 2024-12-27 13:24:34
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/README.md
+!-- title: 2024-12-29 21:41:40
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/README.md
 !-- --- -->
 
-# LLeMacs
-# Elmo — Emacs LLM Orchestration
+# Llemacs
+
+![LLeMacs Logo](./docs/llemacs.gif)
 
 ## Apptainer
 
@@ -21,21 +22,21 @@
 (elmo-run "make a simple audio")
 ```
 
+Context
+(wsl) elmo $ tree workspace/projects/000-PROJECTNAME/
+workspace/projects/000-PROJECTNAME/
+├── data
+├── docs
+│   ├── project-dynamic.json
+│   └── project-static.json
+├── forum.json
+├── README.md
+├── requirements.txt
+├── results
+└── scripts
 
-source /home/ywatanabe/.emacs.d/lisp/elmo/config/env/00_all.env
-
-
-for elmo_home in ./workspace/elmos/*/; do
-    echo $elmo_home
-    chmod 750 -R $elmo_home
-    touch "$elmo_home/.bashrc"
-    mkdir -p "$elmo_home/.emacs.d"
-    touch "$elmo_home/.emacs.d/init.el"
-    echo '(message "Hello world!")' > "$elmo_home/.emacs.d/init.el"
-    echo '(insert "Hello world!")' >> "$elmo_home/.emacs.d/init.el"
-    echo '(switch-to-buffer "*Messages*")' >> "$elmo_home/.emacs.d/init.el"
-    chmod 750 "$elmo_home/.emacs.d/init.el"
-done
+5 directories, 5 files
+(wsl) elmo $ 
 
 cat "$elmo_home/.emacs.d/init.el"
 
