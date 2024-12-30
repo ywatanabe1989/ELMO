@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2024-12-24 14:07:26 (ywatanabe)"
+# Time-stamp: "2024-12-30 17:10:24 (ywatanabe)"
 # File: ./ELMO/run.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -31,7 +31,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -i|--init)
-            pkill -f "emacs --daemon=/home/elmo"
+            pkill -f "emacs --daemon=/home/llemacs"
             shift
             ;;
         -h|--help)
@@ -51,8 +51,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Execute based on mode
-if [ -n "$ELMO_BIND" ]; then
-    bind_opt="--bind $ELMO_BIND"
+if [ -n "$LLEMACS_BIND" ]; then
+    bind_opt="--bind $LLEMACS_BIND"
 else
     bind_opt=""
 fi
@@ -60,48 +60,48 @@ fi
 source ./config/env/00_all.env
 
 if [ "$mode" = "build" ]; then
-    # export ELMO_HOME=. && source ./config/env/00_all.env
+    # export LLEMACS_HOME=. && source ./config/env/00_all.env
     unset APPTAINER_BIND
     bind_opt=""
     apptainer build \
               --sandbox \
               --fakeroot \
               $bind_opt \
-              ./apptainer/elmo.sandbox \
-              ./apptainer/elmo.def \
-              2>&1 | tee ./apptainer/elmo.sandbox.log
+              ./apptainer/llemacs.sandbox \
+              ./apptainer/llemacs.def \
+              2>&1 | tee ./apptainer/llemacs.sandbox.log
 
 elif [ "$mode" = "run" ]; then
-    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export LLEMACS_HOME=/opt/llemacs && source ./config/env/00_all.env
     apptainer run \
               --writable \
               --fakeroot \
               $bind_opt \
-              ./apptainer/elmo.sandbox
+              ./apptainer/llemacs.sandbox
 
     # --userns \
         #     --bind $HOME:/home/$USER \
 
 
 elif [ "$mode" = "shell" ]; then
-    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export LLEMACS_HOME=/opt/llemacs && source ./config/env/00_all.env
     apptainer shell \
               --writable \
               --fakeroot \
               --shell "/bin/bash --login" \
               $bind_opt \
-              ./apptainer/elmo.sandbox
+              ./apptainer/llemacs.sandbox
 
     # --bind $HOME:/home/$USER --userns
 
 elif [ "$mode" = "exec" ]; then
-    # export ELMO_HOME=/opt/elmo && source ./config/env/00_all.env
+    # export LLEMACS_HOME=/opt/llemacs && source ./config/env/00_all.env
     apptainer exec \
               --writable \
               --fakeroot \
               --cleanenv \
               $bind_opt \
-              ./apptainer/elmo.sandbox "${exec_args[@]}"
+              ./apptainer/llemacs.sandbox "${exec_args[@]}"
 
 else
     echo "Invalid mode. Use run, build, or shell"

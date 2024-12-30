@@ -1,16 +1,16 @@
 <!-- ---
-!-- title: 2024-12-31 02:24:41
+!-- title: 2024-12-31 02:26:47
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/README.md
 !-- --- -->
 
 # Llemacs — LLM Agents on Emacs
 <img src="./docs/llemacs.gif" width="100" alt="Llemacs Logo">
-LLEMACS is an file-based LLM agent system written in Elisp
+Llemacs is a file-based LLM agent system written in Elisp
 
 # Architecture
 ![Project Flow](./docs/charts/project_flow.png)
-<img src="./docs/charts/project_flow.gif" alt="Project Flow">
+<img src="./docs/charts/project_flow.gif" alt="Project Flow" width="800">
 
 # Disclaimer
 - THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT
