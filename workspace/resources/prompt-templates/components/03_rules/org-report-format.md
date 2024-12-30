@@ -6,7 +6,7 @@
 
 # Rule: report-format
 * Summarize all the outputs (e.g., code, data, images...) as an org file
-* Append the org file contents to the end of "*ELMO*" buffer.
+* Append the org file contents to the end of "*LLEMACS*" buffer.
 * All results, including code, media, report, should be linked in the org content.
 * Also, convert the org file to pdf
 * Add links to all the data produced in the org and pdf files.

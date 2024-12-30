@@ -40,7 +40,7 @@ plt.savefig('plot.jpg', bbox_inches='tight')
     (sleep-for 1)
     (with-temp-file org-file
 
-      (insert (format "#+TITLE: ELMO Report\n"))
+      (insert (format "#+TITLE: LLEMACS Report\n"))
       (insert (format "#+DATE: %s\n\n" timestamp))
       (insert (format "* Working Directory\n%s\n\n" work-dir))
       (insert "* Scripts\n")

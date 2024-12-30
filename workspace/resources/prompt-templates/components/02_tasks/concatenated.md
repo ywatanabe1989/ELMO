@@ -87,11 +87,11 @@
 
 # Task: llemacs-code-generation
 * Generate ONE BLOCK OF ELISP CODE for given context
-* Ensure compatibility with ELMO system
-* Follow ELMO coding conventions
-* Use appropriate ELMO functions/variables
-* Handle ELMO-specific error cases
-* Document dependencies on ELMO components
+* Ensure compatibility with LLEMACS system
+* Follow LLEMACS coding conventions
+* Use appropriate LLEMACS functions/variables
+* Handle LLEMACS-specific error cases
+* Document dependencies on LLEMACS components
 ;; llemacs-code-planning.md
 <!-- ---
 !-- title: 2024-12-27 23:36:55
@@ -100,7 +100,7 @@
 !-- --- -->
 
 # Task: llemacs-code-planning
-* Design ELMO-compatible components
+* Design LLEMACS-compatible components
 * Plan integration points
 * Consider system dependencies
 * Document architecture decisions
@@ -161,7 +161,7 @@
 
 # Task: llemacs-prompt-compilation
 * Compile prompt templates from components
-* Follow ELMO prompt structure
+* Follow LLEMACS prompt structure
 * Include necessary context information
 * Add system role definitions
 * Integrate task-specific instructions

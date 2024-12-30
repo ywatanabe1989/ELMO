@@ -5,7 +5,7 @@
 !-- --- -->
 
 # Task: llemacs-code-planning
-* Design ELMO-compatible components
+* Design LLEMACS-compatible components
 * Plan integration points
 * Consider system dependencies
 * Document architecture decisions
