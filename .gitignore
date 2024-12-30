@@ -2,7 +2,6 @@
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Specific.gitignore ###
 # Please add files here
 .apptainer_builders
-.README.md
 README.md
 workspace/resources/private/from_host/*
 workspace/resources/shared/from_host/*
@@ -634,5 +633,5 @@ src/sea-setup-sea.log
 ### Source: /home/ywatanabe/.git-templates/.gitignore-templates/Custom/Apptainer.gitignore ###
 **/*.log
 **/*.sandbox/*
-**/*.sif
-**/build-temp-*
+**/*.sif.README.md
+.README.md
