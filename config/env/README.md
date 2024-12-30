@@ -12,7 +12,7 @@ Environment configuration files for the ELMO project:
 2. `01_path.env`: Project paths and directory structure
 3. `02_base.env`: Basic system configuration and user settings
 4. `03_container.env`: Container runtime and rsync configuration
-5. `04_elmo_user.env`: ELMO agent user management and permissions
+5. `04_llemacs_user.env`: ELMO agent user management and permissions
 6. `05_external.env`: External API keys and service configurations
 
 ## Usage
