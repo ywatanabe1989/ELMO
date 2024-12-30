@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./ELMO/docs/feedbacks/llemacs_apptainer_llama_scitex.md
+!-- title: ./LLEMACS/docs/feedbacks/llemacs_apptainer_llama_scitex.md
 !-- author: ywatanabe
 !-- date: 2024-12-15 08:28:58
 !-- --- -->

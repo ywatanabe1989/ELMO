@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-24 08:30:53
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/docs/dev/interface.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/Llemacs/docs/dev/interface.md
 !-- --- -->
 
 | Interface      | Tier      | Pros                                                                                    | Cons                                                               | Best For         |

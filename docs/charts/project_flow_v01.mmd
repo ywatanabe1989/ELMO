@@ -1,0 +1,26 @@
+graph TD
+    subgraph Project Lifecycle
+        A[Create Project] --> B[Initialize Git Repo]
+        B --> C[Set Project Metadata]
+    end
+
+    subgraph Step Processing
+        D[Context Generation] --> E[LLM Processing]
+        E --> F[Elisp Generation]
+        F --> G[Execution]
+        G --> H{Success?}
+        H -->|Yes| I[Log Success]
+        H -->|No| J[Log Error]
+    end
+
+    subgraph Logging & Version Control
+        I --> K{Is Milestone?}
+        K -->|Yes| L[Git Commit]
+        K -->|No| M[Only Log]
+        J --> M
+        L --> N[Update Project State]
+        M --> N
+    end
+
+    C --> D
+    N --> D

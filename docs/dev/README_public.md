@@ -1,15 +1,15 @@
 <!-- ---
-!-- title: 2024-12-28 17:38:48
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/docs/dev/README_public.md
+!-- title: 2024-12-31 02:19:09
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/docs/dev/README_public.md
 !-- --- -->
 
-# ELMO — Emacs LLM Operations
+# LLEMACS — Emacs LLM Operations
 
 (THIS REPOSITORY IS CURRENTLY UNDER ACTIVE DEVELOPMENT)
 
 ## Introduction
-ELMO is an LLM agent system run on Emacs, which offers unique characteristics:
+LLEMACS is an LLM agent system run on Emacs, which offers unique characteristics:
 - Full CUI operations with rich GUI
 - Interfaces for hacking tools seasoned by history
 - Self-evolving potentials inherited from Emacs and Elisp
