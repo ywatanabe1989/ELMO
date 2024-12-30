@@ -14,14 +14,14 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-# Copy dotfiles to elmos
+# Copy dotfiles to llemacss
 ELMO_FROM_HOST_DIR="/workspace/private/from_host"
 ls $ELMO_FROM_HOST_DIR
 
 # Mapping
 SRC_DIR=$ELMO_FROM_HOST_DIR/home
 
-source /opt/elmo/src/apptainer_builders/ENVS.sh.src
+source /opt/llemacs/src/apptainer_builders/ENVS.sh.src
 
 ELMO_FROM_HOST_SOURCES=(
     $SRC_DIR/.bashrc:$ELMO_HOME/.bashrc:
@@ -56,8 +56,8 @@ RSYNC_OPTIONS="-av \
     "
 
 # Deploy
-for i_elmo in $(seq -f "%03g" 1 $ELMO_N_AGENTS); do
-    update_elmo_envs $i_elmo
+for i_llemacs in $(seq -f "%03g" 1 $ELMO_N_AGENTS); do
+    update_llemacs_envs $i_llemacs
     echo $ELMO_HOME
 
     for mapping in "${ELMO_FROM_HOST_SOURCES[@]}"; do
@@ -78,9 +78,9 @@ for i_elmo in $(seq -f "%03g" 1 $ELMO_N_AGENTS); do
 done
 
 # # SSH setup
-# ssh-keygen -t ed25519 -f "${ELMO_HOME}/.ssh/id_ed25519" -N "" -C "elmo-${i}"
+# ssh-keygen -t ed25519 -f "${ELMO_HOME}/.ssh/id_ed25519" -N "" -C "llemacs-${i}"
 
-# chown -R "elmo-${i}:elmo-${i}" "${ELMO_HOME}"
+# chown -R "llemacs-${i}:llemacs-${i}" "${ELMO_HOME}"
 # chmod 700 "${ELMO_HOME}/.ssh"
 # chmod 600 "${ELMO_HOME}/.ssh/"*
 

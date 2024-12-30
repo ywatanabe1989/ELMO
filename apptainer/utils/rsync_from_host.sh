@@ -9,7 +9,7 @@ if [ "$APPNAME" = "ELMO" ]; then
     exit 1
 fi
 
-# Copy dotfiles to elmos
+# Copy dotfiles to llemacss
 ELMO_FROM_HOST_DIR="./workspace/private/from_host"
 
 # Mapping

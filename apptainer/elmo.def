@@ -14,7 +14,7 @@ From: ubuntu:latest
     # Envs
     THIS_DIR="$(dirname $0)"
     ELMO_HOST_ROOT="${ELMO_HOST_ROOT:-$THIS_DIR/../..}"
-    ELMO_ROOT="${ELMO_ROOT:-/opt/elmo}"
+    ELMO_ROOT="${ELMO_ROOT:-/opt/llemacs}"
 
     # Rsync options
     RSYNC_OPTIONS="-arv \
@@ -48,7 +48,7 @@ From: ubuntu:latest
 %post -c /bin/bash
     echo -e "\n==================== Post Section ===================="
 
-    cmd="ls /opt/elmo/apptainer/build" && echo $cmd && eval $cmd
+    cmd="ls /opt/llemacs/apptainer/build" && echo $cmd && eval $cmd
 
     # System
     system_scripts=(
@@ -68,4 +68,4 @@ From: ubuntu:latest
 %runscript
     echo -e "\n==================== Runscript Section ===================="
     
-    exec /bin/bash /opt/elmo/apptainer/build/startup/start_emacs.sh
+    exec /bin/bash /opt/llemacs/apptainer/build/startup/start_emacs.sh

@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-source /opt/elmo/config/env/00_all.env
+source /opt/llemacs/config/env/00_all.env
 
 install_python() {
     echo "Installing Python and dependencies..."
