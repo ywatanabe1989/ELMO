@@ -3,7 +3,7 @@
 ;;; Time-stamp: <2024-12-28 09:53:32 (ywatanabe)>
 ;;; File: /home/ywatanabe/.emacs.d/lisp/llemacs/elisp/llemacs/06-llemacs-json-md.el
 
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 ;; (require '03-llemacs--logging-utils)
 
 (defcustom llemacs-format-script

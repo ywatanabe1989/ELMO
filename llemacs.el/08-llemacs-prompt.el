@@ -4,7 +4,7 @@
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/08-llemacs-prompt.el
 
 (require '01-llemacs-config)
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 (require '06-llemacs-json-md)
 (require '08-llemacs-prompt-recipes)
 

@@ -4,28 +4,28 @@
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/10-llemacs-run.el
 
 (require '01-llemacs-config)
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 (require '04-llemacs-utils)
 (require '09-llemacs-lang2elisp)
 
 (defvar llemacs-tab-counter 0
-  "Counter for ELMO tab numbering.")
+  "Counter for LLEMACS tab numbering.")
 
 (defvar llemacs-tab-counter 0
-  "Counter for ELMO tab numbering.
+  "Counter for LLEMACS tab numbering.
 
 Example:
   (setq llemacs-tab-counter 0)
   (1+ llemacs-tab-counter) ;; => 1")
 
 (defun llemacs-before-run-hook (prompt)
-  "Prepare environment before running ELMO operations."
+  "Prepare environment before running LLEMACS operations."
   (condition-case err
       (llemacs-exec-local
        `(progn
           (llemacs--log-note "
 ================================================================================
-Elmo-run called.
+Llemacs-run called.
 ================================================================================")
           (llemacs-get-main-buffer)
           (setq llemacs-original-directory default-directory)
@@ -38,9 +38,9 @@ Elmo-run called.
 
 
 (defun llemacs-run (&optional prompt)
-  "Run ELMO operations with given PROMPT."
+  "Run LLEMACS operations with given PROMPT."
   (interactive)
-  (let ((prompt-text (or prompt (read-string "ELMO prompt: ") ""))
+  (let ((prompt-text (or prompt (read-string "LLEMACS prompt: ") ""))
         (original-dir default-directory))
     (llemacs-before-run-hook prompt-text)
     (condition-case err
@@ -55,23 +55,23 @@ Elmo-run called.
       (error
        (cd original-dir)
        (llemacs-after-run-hook-error err prompt-text)
-       (error "ELMO failed: %s" err)))))
+       (error "LLEMACS failed: %s" err)))))
 
 (defun llemacs-after-run-hook-success (elisp-code prompt-text)
-  "Hook for successful ELMO operation."
+  "Hook for successful LLEMACS operation."
   (llemacs--log-prompt prompt-text)
   (llemacs--log-success (format "Successfully executed:\n%s" elisp-code)))
 
 (defun llemacs-after-run-hook-error (error prompt-text)
-  "Hook for failed ELMO operation."
+  "Hook for failed LLEMACS operation."
   (llemacs--log-prompt prompt-text)
-  (llemacs--log-error (format "Elmo-run failed.\n%s" error))
+  (llemacs--log-error (format "Llemacs-run failed.\n%s" error))
   (llemacs--log-open))
 
 ;; (defun llemacs-run (&optional prompt)
-;;   "Run ELMO operations with given PROMPT."
+;;   "Run LLEMACS operations with given PROMPT."
 ;;   (interactive)
-;;   (let ((prompt-text (or prompt (read-string "ELMO prompt: ") ""))
+;;   (let ((prompt-text (or prompt (read-string "LLEMACS prompt: ") ""))
 ;;         (original-dir default-directory))
 ;;     (llemacs-before-run-hook prompt-text)
 ;;     (condition-case err
@@ -86,11 +86,11 @@ Elmo-run called.
 ;;        (cd original-dir)
 ;;        (llemacs--log-prompt prompt-text)
 ;;        (llemacs--log-error (format "Failed to run prompt:\n%s" err))
-;;        (error "ELMO failed: %s" err)))))
+;;        (error "LLEMACS failed: %s" err)))))
 
 ;; (defun llemacs-after-run-hook-error (error prompt-text)
-;;   "Hook for failed ELMO operation."
-;;   (llemacs--log-error (format "Elmo-run failed.\n%s\n%s" erro elisp-code))
+;;   "Hook for failed LLEMACS operation."
+;;   (llemacs--log-error (format "Llemacs-run failed.\n%s\n%s" erro elisp-code))
 ;;   (llemacs--log-open))
 
 

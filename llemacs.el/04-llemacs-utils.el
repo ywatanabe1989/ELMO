@@ -4,7 +4,7 @@
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/04-llemacs-utils.el
 
 (defun llemacs-get-main-buffer ()
-  "Initialize *ELMO* buffer if it doesn't exist."
+  "Initialize *LLEMACS* buffer if it doesn't exist."
   (let ((buf (get-buffer-create llemacs--buffer-name-main)))
     (with-current-buffer buf
       (unless (eq major-mode 'org-mode)
@@ -13,7 +13,7 @@
     buf))
 
 (defun llemacs-get-log-buffer ()
-  "Initialize *ELMO* buffer if it doesn't exist."
+  "Initialize *LLEMACS* buffer if it doesn't exist."
   (let ((buf (get-buffer-create llemacs--buffer-name-log)))
     (display-buffer buf)
     buf))

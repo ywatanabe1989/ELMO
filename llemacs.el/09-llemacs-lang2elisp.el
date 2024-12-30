@@ -6,9 +6,9 @@
 (require 'request)
 (require '01-llemacs-config)
 (require '04-llemacs-utils)
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 (require '08-llemacs-prompt)
-(require '09-llemacs-llm)
+(require '03-llemacs-llm)
 
 ;; (llemacs-llm "hello" "001-context-to-report")
 ;; (llemacs-lang2elisp "hello" "001-context-to-report")

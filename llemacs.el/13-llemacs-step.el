@@ -4,15 +4,15 @@
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/13-llemacs-step.el
 
 (require '01-llemacs-config)
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 (require '04-llemacs-utils)
 (require '09-llemacs-lang2elisp)
 (require '10-llemacs-run)
-(require '11-llemacs-project-handler)
+(require '11-llemacs-project)
 (require '10-llemacs-compressor)
 
 (defvar llemacs-step-context nil
-  "Current context for ELMO step execution.")
+  "Current context for LLEMACS step execution.")
 
 (defun llemacs-step-generate-context (project-id)
   "Generate context from PROJECT-ID workspace state."
@@ -75,7 +75,7 @@
     log-entry))
 
 (defun llemacs-step (project-id)
-  "Execute one step of ELMO's think-act cycle for PROJECT-ID."
+  "Execute one step of LLEMACS's think-act cycle for PROJECT-ID."
   (interactive "sProject ID: ")
   (let* ((context (llemacs-step-generate-context project-id))
          (code (llemacs-step-generate-elisp context))

@@ -18,7 +18,7 @@
 ;; ----------------------------------------
 (defcustom llemacs--timestamp
   (format-time-string "%Y-%m-%d-%H:%M:%S")
-  "Timestamp references by ELMO"
+  "Timestamp references by LLEMACS"
   :type 'string
   :group 'llemacs)
 
@@ -35,37 +35,37 @@
 ;; ----------------------------------------
 (defcustom llemacs-path-workspace
   "/home/ywatanabe/.emacs.d/lisp/llemacs/workspace"
-  "Base directory for ELMO workspace."
+  "Base directory for LLEMACS workspace."
   :type 'string
   :group 'llemacs)
 
 (defcustom llemacs-path-home
   (expand-file-name (format "llemacss/%s" (user-login-name)) llemacs-path-workspace)
-  "User-specific ELMO home directory."
+  "User-specific LLEMACS home directory."
   :type 'string
   :group 'llemacs)
 
 (defcustom llemacs-path-emacs-server
   (expand-file-name ".emacs.d/emacs-server/server" llemacs-path-home)
-  "Path to ELMO's Emacs server socket."
+  "Path to LLEMACS's Emacs server socket."
   :type 'string
   :group 'llemacs)
 
 (defcustom llemacs--path-logs
   (expand-file-name "logs" llemacs-path-workspace)
-  "Directory for ELMO log files."
+  "Directory for LLEMACS log files."
   :type 'directory
   :group 'llemacs)
 
 (defcustom llemacs--path-log-backups
   (expand-file-name "logs/backup" llemacs-path-workspace)
-  "Directory for ELMO log backups."
+  "Directory for LLEMACS log backups."
   :type 'directory
   :group 'llemacs)
 
 (defcustom llemacs--path-log-system
   (expand-file-name "logs/system.log" llemacs-path-workspace)
-  "Path to ELMO system log file."
+  "Path to LLEMACS system log file."
   :type 'file
   :group 'llemacs)
 
@@ -73,14 +73,14 @@
 ;; Buffer name
 ;; ----------------------------------------
 (defcustom llemacs--buffer-name-main
-  "*ELMO*"
-  "Name of main ELMO interaction buffer."
+  "*LLEMACS*"
+  "Name of main LLEMACS interaction buffer."
   :type 'string
   :group 'llemacs)
 
 (defcustom llemacs--buffer-name-log
   "*llemacs--log*"
-  "Name of ELMO log buffer."
+  "Name of LLEMACS log buffer."
   :type 'string
   :group 'llemacs)
 
@@ -108,19 +108,19 @@
 
 ;; (defcustom llemacs-path-workspace
 ;;   "/home/ywatanabe/.emacs.d/lisp/llemacs/workspace"
-;;   "ELMO working directory."
+;;   "LLEMACS working directory."
 ;;   :type 'directory
 ;;   :group 'llemacs)
 
 ;; (defcustom llemacs-path-home
 ;;   (expand-file-name (format "llemacss/%s" (user-login-name)) llemacs-path-workspace)
-;;   "ELMO user home directory."
+;;   "LLEMACS user home directory."
 ;;   :type 'directory
 ;;   :group 'llemacs)
 
 ;; (defcustom llemacs-path-emacs-server
 ;;   (expand-file-name ".emacs.d/emacs-server/server" llemacs-path-home)
-;;   "ELMO emacs server."
+;;   "LLEMACS emacs server."
 ;;   :type 'directory
 ;;   :group 'llemacs)
 
@@ -133,13 +133,13 @@
 ;; (defvar llemacs--path-log-system
 ;;   (expand-file-name "logs/system.log" llemacs-path-workspace))
 
-;; (defcustom llemacs--buffer-name-main "*ELMO*"
-;;   "ELMO buffer name."
+;; (defcustom llemacs--buffer-name-main "*LLEMACS*"
+;;   "LLEMACS buffer name."
 ;;   :type 'directory
 ;;   :group 'llemacs)
 
 ;; (defcustom llemacs--buffer-name-log "*llemacs--log*"
-;;   "ELMO logging buffer name."
+;;   "LLEMACS logging buffer name."
 ;;   :type 'directory
 ;;   :group 'llemacs)
 

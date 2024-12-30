@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-29 17:26:19
-;;; Time-stamp: <2024-12-29 17:26:19 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/02-llemacs-logging-core.el
+;;; Author: 2024-12-30 23:08:38
+;;; Time-stamp: <2024-12-30 23:08:38 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging.el
 
 (require '01-llemacs-config)
 (require '04-llemacs-utils)
@@ -23,11 +23,11 @@
     (make-directory llemacs--path-logs t))
   (unless (file-exists-p llemacs--path-log-system)
     (with-temp-file llemacs--path-log-system
-      (insert (format "=== ELMO log initialized: %s ==="
+      (insert (format "=== LLEMACS log initialized: %s ==="
                       (format-time-string "%Y-%m-%d %H:%M:%S"))))))
 
 (defun llemacs--log-open ()
-  "Open the ELMO log file in a buffer."
+  "Open the LLEMACS log file in a buffer."
   (interactive)
   (if (file-exists-p llemacs--path-log-system)
       (progn
@@ -140,6 +140,6 @@
       (llemacs--log-remove-old backup-dir))))
 
 
-(provide '02-llemacs-logging-core)
+(provide '02-llemacs-logging)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

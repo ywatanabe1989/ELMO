@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-29 16:45:41
-;;; Time-stamp: <2024-12-29 16:45:41 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/14-llemacs-search.el
+;;; Author: 2024-12-30 17:23:00
+;;; Time-stamp: <2024-12-30 17:23:00 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/14-llemacs-search.el
 
 (require 'json)
 (require 'url)
@@ -32,6 +32,8 @@
             (alist-get 'results (alist-get 'web results)))))
 
 ;; Example usage
-(llemacs-search-brave-results "latest LLM models deepseek")
+(insert (llemacs-search-brave-results "latest LLM models deepseek"))
+
+(provide '14-llemacs-search)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

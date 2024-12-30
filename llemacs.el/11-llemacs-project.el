@@ -1,15 +1,15 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-29 08:33:35
-;;; Time-stamp: <2024-12-29 08:33:35 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/11-llemacs-project.el
+;;; Author: 2024-12-30 17:19:52
+;;; Time-stamp: <2024-12-30 17:19:52 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/11-llemacs-project.el
 
 (defvar llemacs-project-dir
   (expand-file-name "projects" llemacs-path-workspace)
-  "Directory for ELMO projects.")
+  "Directory for LLEMACS projects.")
 
 (defvar llemacs-project-status-options
   '("planning" "in-progress" "review" "completed" "archived")
-  "Available status options for ELMO projects.")
+  "Available status options for LLEMACS projects.")
 
 (defvar llemacs-project-markdown-template
   "# Project: {name}
@@ -159,7 +159,7 @@
                         (expand-file-name (format "%s-%s" project-id project-name) llemacs-project-dir)))
          (metadata-json (expand-file-name "metadata.json" project-dir))
          (metadata-md (expand-file-name "metadata.md" project-dir))
-         (buf (get-buffer-create (format "*ELMO Project %s*" project-id))))
+         (buf (get-buffer-create (format "*LLEMACS Project %s*" project-id))))
     (unless (file-exists-p metadata-json)
       (llemacs-project-ensure-structure project-id project-name))
     (with-current-buffer buf
@@ -208,7 +208,7 @@
 
 
 (defun llemacs-project-create ()
-  "Create new ELMO project."
+  "Create new LLEMACS project."
   (interactive)
   (let* ((project-name (read-string "Project Name: "))
          (project-id (llemacs-project-next-id)))
@@ -220,6 +220,6 @@
 ;; (llemacs-project-create)
 ;; (llemacs-project-edit-metadata)
 
-(provide '11-llemacs-project-handler)
+(provide '11-llemacs-project)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-28 18:57:37
-;;; Time-stamp: <2024-12-28 18:57:37 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/12-llemacs-context.el
+;;; Author: 2024-12-30 17:20:06
+;;; Time-stamp: <2024-12-30 17:20:06 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/12-llemacs-context.el
 
 (require '10-llemacs-compressor)
 
@@ -27,5 +27,7 @@
                   (insert-file-contents file)
                   (buffer-string)))
               (directory-files compressed-dir t "comp-.*\\.json$")))))
+
+(provide '12-llemacs-context)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

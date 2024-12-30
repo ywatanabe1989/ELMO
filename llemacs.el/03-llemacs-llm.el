@@ -6,7 +6,7 @@
 (require 'request)
 (require '01-llemacs-config)
 (require '04-llemacs-utils)
-(require '02-llemacs-logging-core)
+(require '02-llemacs-logging)
 (require '08-llemacs-prompt)
 
 (defvar llemacs-llm-provider "deepseek"
@@ -168,6 +168,6 @@ Optional TEMPLATE is used to combine with prompt."
 ;; (llemacs-llm-deepseek "hello")
 ;; (llemacs-llm "hello" "001-context-to-report")
 
-(provide '09-llemacs-llm)
+(provide '03-llemacs-llm)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
