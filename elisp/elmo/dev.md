@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 22:36:34
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/dev.md
+!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/dev.md
 !-- --- -->
 
 # Step - a minimum working unit of an agent
@@ -19,7 +19,7 @@
 # Agent roles example
 - planning
 
-# Task: elmo-agent-interaction
+# Task: llemacs-agent-interaction
 * Handle agent communication protocols
 * Process agent state transitions
 * Manage task delegation
@@ -28,7 +28,7 @@
 * Handle agent feedback loops
 * Maintain agent context
 
-# Task: elmo-workflow-management
+# Task: llemacs-workflow-management
 * Define task sequences
 * Manage workspace resources
 * Handle task dependencies
@@ -37,9 +37,9 @@
 * Manage error recovery
 * Update workflow state
 
-5. `elmo-context-update.md`
+5. `llemacs-context-update.md`
 ```markdown
-# Task: elmo-context-update
+# Task: llemacs-context-update
 * Integrate new information
 * Maintain context consistency
 * Update relevant details

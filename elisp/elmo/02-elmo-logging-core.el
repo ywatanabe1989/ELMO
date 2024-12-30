@@ -1,57 +1,76 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-27 19:27:17
-;;; Time-stamp: <2024-12-27 19:27:17 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/elmo/elisp/elmo/02-elmo-logging-core.el
+;;; Author: 2024-12-29 17:26:19
+;;; Time-stamp: <2024-12-29 17:26:19 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/02-llemacs-logging-core.el
 
-(require '01-elmo-config)
-(require '04-elmo-utils)
-
-(defvar elmo-logs-dir
-  (expand-file-name "logs" elmo-workspace-dir))
-
-(defvar elmo-log-file
-  (expand-file-name "global.log" elmo-logs-dir))
-
-(defvar elmo-log-level 'info
+(require '01-llemacs-config)
+(require '04-llemacs-utils)
+;; ----------------------------------------
+;; Logging variables
+;; ----------------------------------------
+(defvar llemacs--log-level 'info
   "Current logging level: 'debug, 'info, 'warn, or 'error.")
 
-(defvar elmo-backup-limit 5
-  "Maximum number of backup files to keep.")
+;; (defvar llemacs--log-backup-limit 5
+;;   "Maximum number of backup files to keep.")
 
-(defun elmo-log-init ()
+;; -------------------------------------
+;; Log file handlers
+;; -------------------------------------
+(defun llemacs--log-init ()
   "Initialize the log file if it doesn't exist."
-  (interactive)
-  (unless (file-exists-p elmo-logs-dir)
-    (make-directory elmo-logs-dir t))
-  (unless (file-exists-p elmo-log-file)
-    (with-temp-file elmo-log-file
-      (insert (format "=== ELMO Log Log Created: %s ===\n\n"
+  (unless (file-exists-p llemacs--path-logs)
+    (make-directory llemacs--path-logs t))
+  (unless (file-exists-p llemacs--path-log-system)
+    (with-temp-file llemacs--path-log-system
+      (insert (format "=== ELMO log initialized: %s ==="
                       (format-time-string "%Y-%m-%d %H:%M:%S"))))))
 
-(defun elmo-log-open ()
+(defun llemacs--log-open ()
   "Open the ELMO log file in a buffer."
   (interactive)
-  (if (file-exists-p elmo-log-file)
+  (if (file-exists-p llemacs--path-log-system)
       (progn
-        (elmo-get-log-buffer)
-        (with-current-buffer elmo-log-buffer-name
-          (let ((inhibit-read-only t))
-            (erase-buffer)
-            (insert-file-contents elmo-log-file)
-            (goto-char (point-max))
-            (display-buffer (current-buffer)))))
-    (message "Log file does not exist: %s" elmo-log-file)))
+        (find-file-read-only llemacs--path-log-system)
+        (goto-char (point-min)))
+    (message "Log file does not exist: %s" llemacs--path-log-system)))
 
-(defun elmo-log-to-file (message log-file &optional level)
+(defun llemacs-log-backup ()
+  "Backup current log file and create new one."
+  (interactive)
+  (when (file-exists-p llemacs--path-log-system)
+    (unless (file-exists-p llemacs--path-log-backups)
+      (make-directory llemacs--path-log-backups t))
+    (let ((backup-name (format "system-%s.log"
+                               (format-time-string "%Y%m%d-%H%M%S"))))
+      (rename-file llemacs--path-log-system
+                   (expand-file-name backup-name llemacs--path-log-backups))
+      (llemacs--log-init))))
+
+;; -------------------------------------
+;; Loggers
+;; -------------------------------------
+(defun llemacs--log-get-caller-info ()
+  "Get caller's file and line info."
+  (let* ((frames (backtrace-frames))
+         (frame (nth 4 frames)))
+    (when frame
+      (format "%s:%s"
+              (or load-file-name buffer-file-name "unknown")
+              (line-number-at-pos)))))
+
+(defun llemacs--log-to-file (message log-file &optional level)
   "Log MESSAGE to LOG-FILE with optional LEVEL."
-  (elmo-log-init)
-  (let* ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
-         (level-str (if level (format "[%s]" (upcase (symbol-name level))) ""))
-         (formatted-msg (format "[%s]%s %s - @%s\n%s\n"
-                                timestamp
+  (llemacs--log-init)
+  (let* (;; (timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
+         (level-str (if level (format "%s" (upcase (symbol-name level))) ""))
+         (caller-info (llemacs--log-get-caller-info))
+         (formatted-msg (format "[%s %s %s]\n=> %s\n%s\n"
                                 level-str
+                                llemacs--timestamp
                                 (user-login-name)
-                                (system-name)
+
+                                (or caller-info "unknown")
                                 message)))
     (with-temp-buffer
       (when (file-exists-p log-file)
@@ -60,10 +79,50 @@
       (insert "--------------------------------------------------------------------------------\n")
       (insert formatted-msg)
       (write-region (point-min) (point-max) log-file nil 'quiet)
-      (elmo-rotate-logs-if-needed log-file))))
+      (llemacs-rotate-logs-if-needed log-file))))
 
-;; how can i use this?
-(defun elmo-rotate-logs-if-needed (log-file)
+(defun llemacs--log (level message)
+  "Log MESSAGE with LEVEL if it meets current log-level threshold."
+  (when (or (eq llemacs--log-level 'debug)
+            (memq level '(error warn)))
+    (llemacs--log-to-file message llemacs--path-log-system level)))
+
+(defun llemacs--log-message (message)
+  "Log general MESSAGE."
+  (llemacs--log 'info message))
+
+(defun llemacs--log-error (message)
+  "Log error MESSAGE and open the log file."
+  (llemacs--log 'error
+             (if (stringp message)
+                 message
+               (error-message-string message)))
+  (llemacs--log-open))
+
+(defun llemacs--log-warning (message)
+  "Log warning MESSAGE."
+  (llemacs--log 'warn message))
+
+(defun llemacs--log-debug (message)
+  "Log debug MESSAGE."
+  (llemacs--log 'debug message))
+
+(defun llemacs--log-prompt (_message)
+  "Log prompt MESSAGE."
+  (llemacs--log 'info (concat "[PROMPT] " _message)))
+
+(defun llemacs--log-success (_message)
+  "Log success MESSAGE."
+  (llemacs--log 'info (concat "[SUCCESS] " _message)))
+
+(defun llemacs--log-system (_message)
+  "Log system MESSAGE."
+  (llemacs--log 'info (concat "[SYSTEM] " _message)))
+
+;; -------------------------------------
+;; I don't understand
+;; -------------------------------------
+(defun llemacs-rotate-logs-if-needed (log-file)
   "Rotate LOG-FILE if it exceeds size limit."
   (when (and (file-exists-p log-file)
              (> (file-attribute-size (file-attributes log-file))
@@ -78,49 +137,9 @@
       (rename-file log-file
                    (expand-file-name (file-name-nondirectory backup-name)
                                      backup-dir))
-      (elmo-cleanup-old-logs backup-dir))))
+      (llemacs--log-remove-old backup-dir))))
 
-(defun elmo-cleanup-old-logs (backup-dir)
-  "Remove old logs from BACKUP-DIR keeping only last elmo-backup-limit files."
-  (let* ((backup-files (directory-files backup-dir t "\\.log\\."))
-         (sorted-files (sort backup-files #'string>)))
-    (while (> (length sorted-files) elmo-backup-limit)
-      (delete-file (car (last sorted-files)))
-      (setq sorted-files (butlast sorted-files)))))
 
-(defun elmo-log (level message)
-  "Log MESSAGE with LEVEL if it meets current log-level threshold."
-  (when (or (eq elmo-log-level 'debug)
-            (memq level '(error warn)))
-    (elmo-log-to-file message elmo-log-file level)))
-
-(defun elmo-log-message (message)
-  "Log general MESSAGE."
-  (elmo-log 'info message))
-
-(defun elmo-log-error (message)
-  "Log error MESSAGE and open the log file."
-  (elmo-log 'error message)
-  (elmo-log-open))
-
-(defun elmo-log-warning (message)
-  "Log warning MESSAGE."
-  (elmo-log 'warn message))
-
-(defun elmo-log-debug (message)
-  "Log debug MESSAGE."
-  (elmo-log 'debug message))
-
-(defun elmo-log-prompt (_message)
-  "Log prompt MESSAGE."
-  (interactive)
-  (elmo-log 'info (concat "[PROMPT] " _message)))
-
-(defun elmo-log-success (_message)
-  "Log success MESSAGE."
-  (interactive)
-  (elmo-log 'info (concat "[SUCCESS] " _message)))
-
-(provide '02-elmo-logging-core)
+(provide '02-llemacs-logging-core)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

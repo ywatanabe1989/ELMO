@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-04 08:58:01
 ;;; Time-stamp: <2024-12-04 08:58:01 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/elmo-version-control.el
+;;; File: ./self-evolving-agent/src/llemacs-version-control.el
 
 
 ;;; Commentary:
@@ -9,32 +9,32 @@
 
 ;;; Code:
 
-(require 'elmo-utils)
-(require 'elmo-prompts)
+(require 'llemacs-utils)
+(require 'llemacs-prompts)
 
-(defgroup elmo-git nil
+(defgroup llemacs-git nil
   "Git configuration for Self-Evolving Agent."
-  :group 'elmo)
+  :group 'llemacs)
 
-(defcustom elmo-git-user-name "elmo"
+(defcustom llemacs-git-user-name "llemacs"
   "Git user name for ELMO commits."
   :type 'string
-  :group 'elmo-git)
+  :group 'llemacs-git)
 
-(defcustom elmo-git-user-email "elmo@example.com"
+(defcustom llemacs-git-user-email "llemacs@example.com"
   "Git email for ELMO commits."
   :type 'string
-  :group 'elmo-git)
+  :group 'llemacs-git)
 
-(defcustom elmo-github-token-file "~/.config/elmo/github-token"
+(defcustom llemacs-github-token-file "~/.config/llemacs/github-token"
   "Path to file containing GitHub token."
   :type 'string
-  :group 'elmo-git)
+  :group 'llemacs-git)
 
-(defvar elmo-github-token-cache nil
+(defvar llemacs-github-token-cache nil
   "Cached GitHub token to avoid frequent file reads.")
 
-;; (defun elmo-validate-github-token (token)
+;; (defun llemacs-validate-github-token (token)
 ;;   "Validate TOKEN format and basic structure."
 ;;   (when (or (null token)
 ;;             (not (stringp token))
@@ -42,19 +42,19 @@
 ;;             (< (length token) 40))
 ;;     (error "Invalid GitHub token format")))
 
-(defun elmo-validate-github-token (token)
+(defun llemacs-validate-github-token (token)
   "Validate TOKEN format and basic structure."
   (when (or (null token)
             (not (stringp token))
             (string-empty-p token)
             (< (length token) 40))
-    (elmo-log-message "Invalid GitHub token format")
+    (llemacs-log-message "Invalid GitHub token format")
     (error "Invalid GitHub token format")))
 
-;; (defun elmo-load-github-token ()
+;; (defun llemacs-load-github-token ()
 ;;   "Load GitHub token from file with validation and error handling."
 ;;   (condition-case err
-;;       (let* ((token-file (expand-file-name elmo-github-token-file))
+;;       (let* ((token-file (expand-file-name llemacs-github-token-file))
 ;;              (real-file (file-truename token-file)))
 ;;         (unless (file-exists-p real-file)
 ;;           (error "GitHub token file not found: %s" real-file))
@@ -63,105 +63,105 @@
 ;;         (let ((token (with-temp-buffer
 ;;                       (insert-file-contents real-file)
 ;;                       (string-trim (buffer-string)))))
-;;           (elmo-validate-github-token token)
+;;           (llemacs-validate-github-token token)
 ;;           token))
 ;;     (error
 ;;      (message "Failed to load GitHub token: %s" (error-message-string err))
 ;;      nil)))
 
-(defun elmo-load-github-token ()
+(defun llemacs-load-github-token ()
   "Load GitHub token from file with validation and error handling."
   (condition-case err
-      (let* ((token-file (expand-file-name elmo-github-token-file))
+      (let* ((token-file (expand-file-name llemacs-github-token-file))
              (real-file (file-truename token-file)))
         (unless (file-exists-p real-file)
-          (elmo-log-message (format "GitHub token file not found: %s" real-file))
+          (llemacs-log-message (format "GitHub token file not found: %s" real-file))
           (error "GitHub token file not found: %s" real-file))
         (unless (file-readable-p real-file)
-          (elmo-log-message (format "GitHub token file not readable: %s" real-file))
+          (llemacs-log-message (format "GitHub token file not readable: %s" real-file))
           (error "GitHub token file not readable: %s" real-file))
         (let ((token (with-temp-buffer
                       (insert-file-contents real-file)
                       (string-trim (buffer-string)))))
-          (elmo-validate-github-token token)
+          (llemacs-validate-github-token token)
           token))
     (error
-     (elmo-log-message (format "Failed to load GitHub token: %s" err))
+     (llemacs-log-message (format "Failed to load GitHub token: %s" err))
      nil)))
 
-(defun elmo-get-github-token ()
+(defun llemacs-get-github-token ()
   "Get GitHub token, using cache if available."
-  (or elmo-github-token-cache
-      (setq elmo-github-token-cache (elmo-load-github-token))))
+  (or llemacs-github-token-cache
+      (setq llemacs-github-token-cache (llemacs-load-github-token))))
 
 ;; Replace existing initialization with:
-(elmo-get-github-token)
+(llemacs-get-github-token)
 
-;; (defun elmo-ensure-not-main ()
+;; (defun llemacs-ensure-not-main ()
 ;;   "Ensure we're not on main branch."
 ;;   (let ((current-branch
 ;;          (string-trim
 ;;           (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
 ;;     (when (string= current-branch "main")
 ;;       (error "Cannot modify main branch directly"))))
-(defun elmo-ensure-not-main ()
+(defun llemacs-ensure-not-main ()
   "Ensure we're not on main branch."
   (let ((current-branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
     (when (string= current-branch "main")
-      (elmo-log-message "Cannot modify main branch directly")
+      (llemacs-log-message "Cannot modify main branch directly")
       (error "Cannot modify main branch directly"))))
 
-;; (defun elmo-commit-changes (file msg)
+;; (defun llemacs-commit-changes (file msg)
 ;;   "Commit changes to FILE with commit MSG."
-;;   (elmo-ensure-not-main)
+;;   (llemacs-ensure-not-main)
 ;;   (let ((default-directory (file-name-directory file)))
-;;     (elmo-shell-command
+;;     (llemacs-shell-command
 ;;      (format "git -c user.name='%s' -c user.email='%s' add %s && git -c user.name='%s' -c user.email='%s' commit -m '%s'"
-;;              elmo-git-user-name
-;;              elmo-git-user-email
+;;              llemacs-git-user-name
+;;              llemacs-git-user-email
 ;;              (file-name-nondirectory file)
-;;              elmo-git-user-name
-;;              elmo-git-user-email
+;;              llemacs-git-user-name
+;;              llemacs-git-user-email
 ;;              msg))))
-(defun elmo-commit-changes (file msg)
+(defun llemacs-commit-changes (file msg)
   "Commit changes to FILE with commit MSG."
   (condition-case err
       (progn
-        (elmo-ensure-not-main)
+        (llemacs-ensure-not-main)
         (let ((default-directory (file-name-directory file)))
-          (elmo-shell-command
+          (llemacs-shell-command
            (format "git -c user.name='%s' -c user.email='%s' add %s && git -c user.name='%s' -c user.email='%s' commit -m '%s'"
-                   elmo-git-user-name elmo-git-user-email
+                   llemacs-git-user-name llemacs-git-user-email
                    (file-name-nondirectory file)
-                   elmo-git-user-name elmo-git-user-email msg))
-          (elmo-log-message (format "Committed changes to %s" file))))
+                   llemacs-git-user-name llemacs-git-user-email msg))
+          (llemacs-log-message (format "Committed changes to %s" file))))
     (error
-     (elmo-log-message (format "Failed to commit changes: %s" err))
+     (llemacs-log-message (format "Failed to commit changes: %s" err))
      nil)))
 
-;; (defun elmo-push-changes ()
-;;   "Push changes to elmo-develop branch."
-;;   (elmo-ensure-not-main)
-;;   (elmo-shell-command
+;; (defun llemacs-push-changes ()
+;;   "Push changes to llemacs-develop branch."
+;;   (llemacs-ensure-not-main)
+;;   (llemacs-shell-command
 ;;    (concat
-;;     "git checkout -b elmo-develop 2>/dev/null || git checkout elmo-develop && "
-;;     "git push -u origin elmo-develop")))
-(defun elmo-push-changes ()
-  "Push changes to elmo-develop branch."
+;;     "git checkout -b llemacs-develop 2>/dev/null || git checkout llemacs-develop && "
+;;     "git push -u origin llemacs-develop")))
+(defun llemacs-push-changes ()
+  "Push changes to llemacs-develop branch."
   (condition-case err
       (progn
-        (elmo-ensure-not-main)
-        (elmo-shell-command
-         (concat "git checkout -b elmo-develop 2>/dev/null || git checkout elmo-develop && "
-                "git push -u origin elmo-develop"))
-        (elmo-log-message "Pushed changes to elmo-develop branch"))
+        (llemacs-ensure-not-main)
+        (llemacs-shell-command
+         (concat "git checkout -b llemacs-develop 2>/dev/null || git checkout llemacs-develop && "
+                "git push -u origin llemacs-develop"))
+        (llemacs-log-message "Pushed changes to llemacs-develop branch"))
     (error
-     (elmo-log-message (format "Failed to push changes: %s" err))
+     (llemacs-log-message (format "Failed to push changes: %s" err))
      nil)))
 
-;; (defun elmo-create-pr (title body)
-;;   "Create pull request with TITLE and BODY from elmo-develop to main."
-;;   (let ((token (elmo-get-github-token)))
+;; (defun llemacs-create-pr (title body)
+;;   "Create pull request with TITLE and BODY from llemacs-develop to main."
+;;   (let ((token (llemacs-get-github-token)))
 ;;     (unless token
 ;;       (error "GitHub token not available"))
 ;;     (let ((url "https://api.github.com/repos/owner/repo/pulls")
@@ -170,7 +170,7 @@
 ;;           (data (json-encode
 ;;                  `((title . ,title)
 ;;                    (body . ,body)
-;;                    (head . "elmo-develop")
+;;                    (head . "llemacs-develop")
 ;;                    (base . "main")))))
 ;;       (condition-case err
 ;;           (request url
@@ -181,15 +181,15 @@
 ;;                    :error (lambda (&rest args)
 ;;                            (error "PR creation failed: %S" args)))
 ;;         (error
-;;          (setq elmo-github-token-cache nil)
+;;          (setq llemacs-github-token-cache nil)
 ;;          (error "Failed to create PR: %s" (error-message-string err)))))))
 
-(defun elmo-create-pr (title body)
-  "Create pull request with TITLE and BODY from elmo-develop to main."
+(defun llemacs-create-pr (title body)
+  "Create pull request with TITLE and BODY from llemacs-develop to main."
   (condition-case err
-      (let ((token (elmo-get-github-token)))
+      (let ((token (llemacs-get-github-token)))
         (unless token
-          (elmo-log-message "GitHub token not available")
+          (llemacs-log-message "GitHub token not available")
           (error "GitHub token not available"))
         (request "https://api.github.com/repos/owner/repo/pulls"
                  :type "POST"
@@ -198,19 +198,19 @@
                  :data (json-encode
                        `((title . ,title)
                          (body . ,body)
-                         (head . "elmo-develop")
+                         (head . "llemacs-develop")
                          (base . "main")))
                  :parser 'json-read
                  :success (lambda (&rest _)
-                           (elmo-log-message "Pull request created successfully"))
+                           (llemacs-log-message "Pull request created successfully"))
                  :error (lambda (&rest args)
-                         (elmo-log-message (format "PR creation failed: %S" args))
+                         (llemacs-log-message (format "PR creation failed: %S" args))
                          (error "PR creation failed: %S" args))))
     (error
-     (elmo-log-message (format "Failed to create PR: %s" err))
-     (setq elmo-github-token-cache nil)
+     (llemacs-log-message (format "Failed to create PR: %s" err))
+     (setq llemacs-github-token-cache nil)
      nil)))
 
-(provide 'elmo-version-control)
+(provide 'llemacs-version-control)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

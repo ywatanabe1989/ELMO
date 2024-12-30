@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-03 16:42:33
 ;;; Time-stamp: <2024-12-03 16:42:33 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/elmo-network.el
+;;; File: ./self-evolving-agent/src/llemacs-network.el
 
 
 ;;; Commentary:
@@ -9,29 +9,29 @@
 
 ;;; Code:
 
-(require 'elmo-run)
+(require 'llemacs-run)
 
-(defvar elmo-server-port 8080
+(defvar llemacs-server-port 8080
   "Port for agent server.")
 
-(defvar elmo-agents nil
+(defvar llemacs-agents nil
   "List of active agents.")
 
-(cl-defstruct elmo-agent
+(cl-defstruct llemacs-agent
   id task status)
 
-(defun elmo-start-server ()
+(defun llemacs-start-server ()
   "Start agent server."
   (interactive)
   (make-network-process
-   :name "elmo-server"
-   :buffer "*elmo-server*"
-   :service elmo-server-port
+   :name "llemacs-server"
+   :buffer "*llemacs-server*"
+   :service llemacs-server-port
    :family 'ipv4
    :server t
-   :filter 'elmo-server-filter))
+   :filter 'llemacs-server-filter))
 
-(defun elmo-server-filter (proc string)
+(defun llemacs-server-filter (proc string)
   "Filter function for server process PROC with STRING input."
   (with-current-buffer (process-buffer proc)
     (goto-char (point-max))
@@ -39,27 +39,27 @@
     (when (string-match "\n" string)
       (let ((command (buffer-substring (point-min) (point-max))))
         (erase-buffer)
-        (elmo-run command)))))
+        (llemacs-run command)))))
 
-(defun elmo-spawn-agents (tasks)
+(defun llemacs-spawn-agents (tasks)
   "Spawn multiple agents for TASKS."
   (dolist (task tasks)
-    (push (make-elmo-agent :id (cl-gensym)
+    (push (make-llemacs-agent :id (cl-gensym)
                          :task task
                          :status 'pending)
-          elmo-agents))
-  (elmo-coordinate-agents))
+          llemacs-agents))
+  (llemacs-coordinate-agents))
 
-(defun elmo-coordinate-agents ()
+(defun llemacs-coordinate-agents ()
   "Coordinate multiple agents' activities."
-  (while elmo-agents
-    (let ((agent (pop elmo-agents)))
-      (elmo-show-progress
+  (while llemacs-agents
+    (let ((agent (pop llemacs-agents)))
+      (llemacs-show-progress
        (format "Agent %s processing: %s"
-               (elmo-agent-id agent)
-               (elmo-agent-task agent)))
-      (elmo-run (elmo-agent-task agent)))))
+               (llemacs-agent-id agent)
+               (llemacs-agent-task agent)))
+      (llemacs-run (llemacs-agent-task agent)))))
 
-(provide 'elmo-network)
+(provide 'llemacs-network)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

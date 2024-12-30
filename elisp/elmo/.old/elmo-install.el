@@ -1,25 +1,25 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 01:23:22
 ;;; Time-stamp: <2024-12-06 01:23:22 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/elmo-install.el
+;;; File: ./self-evolving-agent/src/llemacs-install.el
 
 
-(require 'elmo-config)
+(require 'llemacs-config)
 (require 'cl-lib)
 (require 'auth-source)
-(require 'elmo-verify-installation)
-(require 'elmo-logging)
+(require 'llemacs-verify-installation)
+(require 'llemacs-logging)
 
 
-(defun elmo-setup-sudo ()
+(defun llemacs-setup-sudo ()
   "Setup sudo configuration for ELMO."
   (interactive)
-  (let ((sudo-file "/etc/sudoers.d/elmo-emacs")
-        (temp-file (make-temp-file "elmo-sudo"))
+  (let ((sudo-file "/etc/sudoers.d/llemacs-emacs")
+        (temp-file (make-temp-file "llemacs-sudo"))
         (content (format "%s ALL=(%s) NOPASSWD: %s\n"
                         (user-login-name)
-                        elmo-user
-                        elmo-emacs-cli)))
+                        llemacs-user
+                        llemacs-emacs-cli)))
     (write-region content nil temp-file)
     (call-process "sudo" nil nil nil
                  "cp" temp-file sudo-file)
@@ -29,13 +29,13 @@
                  "chmod" "440" sudo-file)
     (delete-file temp-file)))
 
-;; (elmo-setup-sudo)
+;; (llemacs-setup-sudo)
 
-;; # /etc/sudoers.d/elmo-emacs
-;; ywatanabe ALL=(elmo) NOPASSWD: /usr/bin/emacsclient
+;; # /etc/sudoers.d/llemacs-emacs
+;; ywatanabe ALL=(llemacs) NOPASSWD: /usr/bin/emacsclient
 
 
-(defun elmo--check-dependencies ()
+(defun llemacs--check-dependencies ()
   "Check if required system dependencies are available."
   (let ((required-commands '("git" "sudo" "python3"))
         (missing-commands '()))
@@ -48,7 +48,7 @@
       (error "Missing required commands: %s"
              (string-join missing-commands ", ")))))
 
-;; (defun elmo--create-user (username)
+;; (defun llemacs--create-user (username)
 ;;   "Create a new system user for ELMO."
 ;;   (unless (zerop (shell-command
 ;;                   (format "id %s >/dev/null 2>&1" username)))
@@ -57,34 +57,34 @@
 ;;     (shell-command
 ;;      (format "sudo usermod -aG sudo %s" username))))
 
-(defun elmo--setup-workspace ()
+(defun llemacs--setup-workspace ()
   "Initialize ELMO workspace with symbolic links."
   (interactive)
   (let* ((user-name (user-login-name))
-         (source-dir (directory-file-name elmo-user-root-dir))
-         (workspace-dir (directory-file-name elmo-workspace-dir))
+         (source-dir (directory-file-name llemacs-user-root-dir))
+         (workspace-dir (directory-file-name llemacs-workspace-dir))
          (target-link (expand-file-name "self-evolving-agent" workspace-dir)))
 
-    ;; Verify user is in elmo group
-    (unless (member "elmo" (split-string (shell-command-to-string
+    ;; Verify user is in llemacs group
+    (unless (member "llemacs" (split-string (shell-command-to-string
                                        (format "groups %s" user-name))))
-      (error "Current user must be in 'elmo' group. Run install.sh first"))
+      (error "Current user must be in 'llemacs' group. Run install.sh first"))
 
     ;; Create base directories
-    (dolist (dir (list elmo-work-dir
-                      elmo-workspace-dir
-                      elmo-backups-dir
-                      elmo-logs-dir
-                      elmo-command-logs-dir
-                      elmo-requests-dir
-                      elmo-config-dir))
+    (dolist (dir (list llemacs-work-dir
+                      llemacs-workspace-dir
+                      llemacs-backups-dir
+                      llemacs-logs-dir
+                      llemacs-command-logs-dir
+                      llemacs-requests-dir
+                      llemacs-config-dir))
       (unless (file-exists-p dir)
         (make-directory dir t)
         (set-file-modes dir #o700)))
 
     ;; Touch request files
-    (dolist (file (list elmo-user-request-file
-                       elmo-request-file))
+    (dolist (file (list llemacs-user-request-file
+                       llemacs-request-file))
       (unless (file-exists-p file)
         (write-region "" nil file)))
 
@@ -93,53 +93,53 @@
       (delete-file target-link))
     (make-symbolic-link source-dir target-link)))
 
-(defun elmo--user-exists-p (username)
+(defun llemacs--user-exists-p (username)
   "Check if USERNAME exists in the system."
   (zerop (shell-command
           (format "id %s >/dev/null 2>&1" username))))
 
-(defun elmo--setup-user (main-user)
+(defun llemacs--setup-user (main-user)
   "Set up ELMO user and configure permissions for MAIN-USER."
-  (unless (elmo--user-exists-p main-user)
+  (unless (llemacs--user-exists-p main-user)
     (error "User %s does not exist" main-user))
 
-  (unless (elmo--user-exists-p "elmo")
-    (elmo--log-message "Creating elmo user...")
-    (unless (zerop (shell-command "sudo useradd -r -m -d /home/elmo elmo"))
-      (error "Failed to create elmo user"))
-    (shell-command "sudo chmod 755 /home/elmo"))
+  (unless (llemacs--user-exists-p "llemacs")
+    (llemacs--log-message "Creating llemacs user...")
+    (unless (zerop (shell-command "sudo useradd -r -m -d /home/llemacs llemacs"))
+      (error "Failed to create llemacs user"))
+    (shell-command "sudo chmod 755 /home/llemacs"))
 
-  (elmo--log-message "Configuring groups...")
-  (shell-command (format "sudo usermod -aG elmo %s" main-user))
-  (shell-command (format "sudo usermod -aG %s elmo" main-user))
+  (llemacs--log-message "Configuring groups...")
+  (shell-command (format "sudo usermod -aG llemacs %s" main-user))
+  (shell-command (format "sudo usermod -aG %s llemacs" main-user))
   )
 
-(defun elmo--setup-git-config ()
+(defun llemacs--setup-git-config ()
   "Configure git settings for ELMO user."
-  (elmo--log-message "Setting up git configuration for elmo user...")
+  (llemacs--log-message "Setting up git configuration for llemacs user...")
 
   (let ((git-commands
-         '("git config --global user.name \"elmo-bot\""
-           "git config --global user.email \"elmo-bot@example.com\""
+         '("git config --global user.name \"llemacs-bot\""
+           "git config --global user.email \"llemacs-bot@example.com\""
            "git config --global core.editor \"gedit\""
            "git config --global init.defaultBranch \"main\"")))
     (dolist (cmd git-commands)
-      (shell-command (format "sudo -u elmo %s" cmd))))
+      (shell-command (format "sudo -u llemacs %s" cmd))))
 
-  (let ((gitignore (expand-file-name ".gitignore_global" elmo-config-dir)))
+  (let ((gitignore (expand-file-name ".gitignore_global" llemacs-config-dir)))
     (with-temp-file gitignore
       (insert "*~\n.DS_Store\n.env\n*.log\n"))
-    (shell-command (format "sudo -u elmo git config --global core.excludesfile %s" gitignore))
+    (shell-command (format "sudo -u llemacs git config --global core.excludesfile %s" gitignore))
     (shell-command (format "sudo chmod 600 %s" gitignore))
-    (elmo--log-message "Git configuration completed")))
+    (llemacs--log-message "Git configuration completed")))
 
-;; (defun elmo--setup-github-token ()
+;; (defun llemacs--setup-github-token ()
 ;;   "Set up GitHub token interactively."
-;;   (elmo--log-message "Setting up GitHub token...")
+;;   (llemacs--log-message "Setting up GitHub token...")
 
-;;   (when (file-exists-p elmo-github-token-file)
+;;   (when (file-exists-p llemacs-github-token-file)
 ;;     (let* ((default-token (with-temp-buffer
-;;                            (insert-file-contents elmo-github-token-file)
+;;                            (insert-file-contents llemacs-github-token-file)
 ;;                            (buffer-string)))
 ;;            (masked-token (concat (substring default-token 0 4)
 ;;                                "..."
@@ -148,33 +148,33 @@
 ;;                    (format "Enter GitHub Token (Enter for %s, s to skip): "
 ;;                           masked-token))))
 ;;         (cond ((string-empty-p input)
-;;                (elmo--log-message "Keeping existing token")
-;;                (cl-return-from elmo--setup-github-token t))
+;;                (llemacs--log-message "Keeping existing token")
+;;                (cl-return-from llemacs--setup-github-token t))
 ;;               ((string= input "s")
-;;                (elmo--log-message "Skipping token setup")
-;;                (cl-return-from elmo--setup-github-token t))))))
+;;                (llemacs--log-message "Skipping token setup")
+;;                (cl-return-from llemacs--setup-github-token t))))))
 
 ;;   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
 ;;     (when (string= token "s")
-;;       (elmo--log-message "Skipping token setup")
-;;       (cl-return-from elmo--setup-github-token t))
+;;       (llemacs--log-message "Skipping token setup")
+;;       (cl-return-from llemacs--setup-github-token t))
 
 ;;     (when (< (length token) 40)
-;;       (elmo--log-message "Error: Invalid token length")
-;;       (cl-return-from elmo--setup-github-token nil))
+;;       (llemacs--log-message "Error: Invalid token length")
+;;       (cl-return-from llemacs--setup-github-token nil))
 
-;;     (with-temp-file elmo-github-token-file
+;;     (with-temp-file llemacs-github-token-file
 ;;       (insert token))
-;;     (shell-command (format "sudo chmod 600 %s" elmo-github-token-file))
-;;     (elmo--log-message "GitHub token saved")))
+;;     (shell-command (format "sudo chmod 600 %s" llemacs-github-token-file))
+;;     (llemacs--log-message "GitHub token saved")))
 
-(cl-defun elmo--setup-github-token ()
+(cl-defun llemacs--setup-github-token ()
   "Set up GitHub token interactively."
-  (elmo--log-message "Setting up GitHub token...")
+  (llemacs--log-message "Setting up GitHub token...")
 
-  (when (file-exists-p elmo-github-token-file)
+  (when (file-exists-p llemacs-github-token-file)
     (let* ((default-token (with-temp-buffer
-                           (insert-file-contents elmo-github-token-file)
+                           (insert-file-contents llemacs-github-token-file)
                            (buffer-string)))
            (masked-token (concat (substring default-token 0 4)
                                "..."
@@ -183,44 +183,44 @@
                    (format "Enter GitHub Token (Enter for %s, s to skip): "
                           masked-token))))
         (cond ((string-empty-p input)
-               (elmo--log-message "Keeping existing token")
-               (cl-return-from elmo--setup-github-token t))
+               (llemacs--log-message "Keeping existing token")
+               (cl-return-from llemacs--setup-github-token t))
               ((string= input "s")
-               (elmo--log-message "Skipping token setup")
-               (cl-return-from elmo--setup-github-token t))))))
+               (llemacs--log-message "Skipping token setup")
+               (cl-return-from llemacs--setup-github-token t))))))
 
   (let ((token (read-string "Enter GitHub Personal Access Token (s to skip): ")))
     (when (string= token "s")
-      (elmo--log-message "Skipping token setup")
-      (cl-return-from elmo--setup-github-token t))
+      (llemacs--log-message "Skipping token setup")
+      (cl-return-from llemacs--setup-github-token t))
 
     (when (< (length token) 40)
-      (elmo--log-message "Error: Invalid token length")
-      (cl-return-from elmo--setup-github-token nil))
+      (llemacs--log-message "Error: Invalid token length")
+      (cl-return-from llemacs--setup-github-token nil))
 
-    (with-temp-file elmo-github-token-file
+    (with-temp-file llemacs-github-token-file
       (insert token))
-    (shell-command (format "sudo chmod 600 %s" elmo-github-token-file))
-    (elmo--log-message "GitHub token saved")))
+    (shell-command (format "sudo chmod 600 %s" llemacs-github-token-file))
+    (llemacs--log-message "GitHub token saved")))
 
 
 
-(defun elmo--install-dependencies ()
+(defun llemacs--install-dependencies ()
   "Install required system packages and Emacs packages."
-  (elmo--log-message "Installing dependencies...")
+  (llemacs--log-message "Installing dependencies...")
 
   ;; System packages
   (let ((packages '("python3" "curl" "wget")))
     (dolist (pkg packages)
       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
-        (elmo--log-message (format "Installing %s..." pkg))
+        (llemacs--log-message (format "Installing %s..." pkg))
         (let ((result (shell-command (format "sudo apt-get install -y %s" pkg))))
           (unless (zerop result)
-            (display-warning 'elmo (format "Failed to install %s" pkg) :error))))))
+            (display-warning 'llemacs (format "Failed to install %s" pkg) :error))))))
 
   ;; Python packages
-  (let* ((default-directory elmo-workspace-dir)
-         (venv-dir (expand-file-name ".env" elmo-workspace-dir)))
+  (let* ((default-directory llemacs-workspace-dir)
+         (venv-dir (expand-file-name ".env" llemacs-workspace-dir)))
     ;; Create and activate virtual environment
     (unless (file-exists-p venv-dir)
       (shell-command "python3 -m venv .env"))
@@ -228,11 +228,11 @@
     (let ((commands
            `(,(format "bash -c 'source %s/bin/activate && pip install --upgrade pip'" venv-dir)
              ,(format "bash -c 'source %s/bin/activate && pip install -r %s/requirements.txt'"
-                     venv-dir elmo-user-root-dir))))
+                     venv-dir llemacs-user-root-dir))))
       (dolist (cmd commands)
         (let ((result (shell-command cmd)))
           (unless (zerop result)
-            (display-warning 'elmo
+            (display-warning 'llemacs
                            (format "Failed to execute command: %s" cmd)
                            :error))))))
 
@@ -249,32 +249,32 @@
             (condition-case nil
                 (package-install pkg)
               (error
-               (display-warning 'elmo
+               (display-warning 'llemacs
                               (format "Failed to install package: %s" pkg)
                               :error))))))
     (error
-     (display-warning 'elmo
+     (display-warning 'llemacs
                      (format "Error during Emacs package setup: %s" (error-message-string err))
                      :error))))
 
-;; (defun elmo--install-dependencies ()
+;; (defun llemacs--install-dependencies ()
 ;;   "Install required system packages and Emacs packages."
-;;   (elmo--log-message "Installing dependencies...")
+;;   (llemacs--log-message "Installing dependencies...")
 
 ;;   ;; System packages
 ;;   (let ((packages '("python3" "curl" "wget")))
 ;;     (dolist (pkg packages)
 ;;       (unless (zerop (shell-command (format "which %s >/dev/null 2>&1" pkg)))
-;;         (elmo--log-message (format "Installing %s..." pkg))
+;;         (llemacs--log-message (format "Installing %s..." pkg))
 ;;         (shell-command (format "sudo apt-get install -y %s" pkg)))))
 
 ;;   ;; Python packages
-;;   (shell-command "cd elmo-workspace-dir")
+;;   (shell-command "cd llemacs-workspace-dir")
 ;;   (shell-command "python -m pip install -U pip")
 ;;   (shell-command "python -m venv .env")
 ;;   (shell-command "source .env/bin/activate")
 ;;   (shell-command "python -m pip install -U pip")
-;;   (shell-command (concat "python -m pip install -r " elmo-user-root-dir "requirements.txt"))
+;;   (shell-command (concat "python -m pip install -r " llemacs-user-root-dir "requirements.txt"))
 
 ;;   ;; Emacs packages
 ;;   (require 'package)
@@ -286,66 +286,66 @@
 ;;     (unless (package-installed-p pkg)
 ;;       (package-install pkg))))
 
-(defun elmo--setup-permissions ()
+(defun llemacs--setup-permissions ()
   "Set correct permissions for ELMO directories and files."
-  (elmo--log-message "Setting up permissions...")
+  (llemacs--log-message "Setting up permissions...")
 
   ;; Directory permissions
   (mapc (lambda (dir)
           (set-file-modes dir #o755)
-          (shell-command (format "sudo chown -R elmo:elmo %s" dir)))
-        (list elmo-work-dir
-              elmo-workspace-dir
-              elmo-source-dir
-              elmo-backups-dir
-              elmo-logs-dir
-              elmo-requests-dir
-              elmo-config-dir))
+          (shell-command (format "sudo chown -R llemacs:llemacs %s" dir)))
+        (list llemacs-work-dir
+              llemacs-workspace-dir
+              llemacs-source-dir
+              llemacs-backups-dir
+              llemacs-logs-dir
+              llemacs-requests-dir
+              llemacs-config-dir))
 
   ;; Special file permissions
-  (when (file-exists-p elmo-github-token-file)
-    (set-file-modes elmo-github-token-file #o600))
+  (when (file-exists-p llemacs-github-token-file)
+    (set-file-modes llemacs-github-token-file #o600))
 
-  (dolist (file (directory-files-recursively elmo-logs-dir ".*\\.log$"))
+  (dolist (file (directory-files-recursively llemacs-logs-dir ".*\\.log$"))
     (set-file-modes file #o644)))
 
-(defun elmo--backup-existing-files ()
+(defun llemacs--backup-existing-files ()
   "Backup existing ELMO files if they exist."
-  (when (file-exists-p elmo-work-dir)
-    (let ((backup-dir (format "%s/elmo-backup-%s"
+  (when (file-exists-p llemacs-work-dir)
+    (let ((backup-dir (format "%s/llemacs-backup-%s"
                              temporary-file-directory
                              (format-time-string "%Y%m%d-%H%M%S"))))
       (make-directory backup-dir t)
-      (copy-directory elmo-work-dir backup-dir t t t)
-      (elmo--log-message
+      (copy-directory llemacs-work-dir backup-dir t t t)
+      (llemacs--log-message
        (format "Existing files backed up to %s" backup-dir)))))
 
-;; (defun elmo--create-directories ()
+;; (defun llemacs--create-directories ()
 ;;   "Create all necessary directories for ELMO."
 ;;   (mapc (lambda (dir)
 ;;           (unless (file-exists-p dir)
 ;;             (make-directory dir t)))
-;;         (list elmo-work-dir
-;;               elmo-workspace-dir
-;;               elmo-source-dir
-;;               elmo-backups-dir
-;;               elmo-logs-dir
-;;               elmo-requests-dir
-;;               elmo-config-dir)))
+;;         (list llemacs-work-dir
+;;               llemacs-workspace-dir
+;;               llemacs-source-dir
+;;               llemacs-backups-dir
+;;               llemacs-logs-dir
+;;               llemacs-requests-dir
+;;               llemacs-config-dir)))
 
-(defun elmo--create-initial-files ()
+(defun llemacs--create-initial-files ()
   "Create initial files and templates."
-  (elmo--log-message "Creating initial files...")
+  (llemacs--log-message "Creating initial files...")
 
   ;; Create user request template
-  (with-temp-file elmo-user-request-file
+  (with-temp-file llemacs-user-request-file
     (insert "# Improvement Request\n\n"
             "## Description\n\n"
             "## Expected Outcome\n\n"
             "## Additional Notes\n"))
 
   ;; Create ELMO request template
-  (with-temp-file elmo-request-file
+  (with-temp-file llemacs-request-file
     (insert "# Self-Improvement Proposal\n\n"
             "## Current Limitation\n\n"
             "## Proposed Changes\n\n"
@@ -353,45 +353,45 @@
             "## Testing Strategy\n"))
 
   ;; Initialize history log
-  (unless (file-exists-p elmo-history-file)
-    (with-temp-file elmo-history-file
+  (unless (file-exists-p llemacs-history-file)
+    (with-temp-file llemacs-history-file
       (insert (format-time-string "# ELMO History Log\nInitialized on %Y-%m-%d %H:%M:%S\n\n")))))
 
-;; (defun elmo--verify-installation ()
+;; (defun llemacs--verify-installation ()
 ;;   "Verify that all components are properly installed and configured."
-;;   (elmo--log-message "Verifying installation...")
+;;   (llemacs--log-message "Verifying installation...")
 
 ;;   (let ((checks
-;;          `((,elmo-work-dir "Main working directory")
-;;            (,elmo-workspace-dir "Workspace directory")
-;;            (,elmo-source-dir "Source directory")
-;;            (,elmo-logs-dir "Logs directory")
-;;            (,elmo-config-dir "Config directory")
-;;            (,elmo-github-token-file "GitHub token file")
-;;            (,elmo-user-request-file "User request template")
-;;            (,elmo-request-file "ELMO request template")
-;;            (,elmo-history-file "History log"))))
+;;          `((,llemacs-work-dir "Main working directory")
+;;            (,llemacs-workspace-dir "Workspace directory")
+;;            (,llemacs-source-dir "Source directory")
+;;            (,llemacs-logs-dir "Logs directory")
+;;            (,llemacs-config-dir "Config directory")
+;;            (,llemacs-github-token-file "GitHub token file")
+;;            (,llemacs-user-request-file "User request template")
+;;            (,llemacs-request-file "ELMO request template")
+;;            (,llemacs-history-file "History log"))))
 
 ;;     (cl-loop for (path desc) in checks
 ;;              do (unless (file-exists-p path)
 ;;                   (error "Missing %s at %s" desc path))))
 
-;;   (elmo--log-message "Installation verified successfully"))
+;;   (llemacs--log-message "Installation verified successfully"))
 
-(defun elmo--setup-environment ()
+(defun llemacs--setup-environment ()
   "Set up ELMO environment variables and shell configuration."
-  (elmo--log-message "Setting up environment...")
+  (llemacs--log-message "Setting up environment...")
 
-  (let ((env-file (expand-file-name ".env" elmo-config-dir)))
+  (let ((env-file (expand-file-name ".env" llemacs-config-dir)))
     (with-temp-file env-file
-      (insert (format "ELMO_ROOT=%s\n" elmo-work-dir)
-              (format "ELMO_WORKSPACE=%s\n" elmo-workspace-dir)
-              (format "ELMO_SOURCE=%s\n" elmo-source-dir)
-              (format "ELMO_LOGS=%s\n" elmo-logs-dir)
-              (format "ELMO_CONFIG=%s\n" elmo-config-dir)))
+      (insert (format "ELMO_ROOT=%s\n" llemacs-work-dir)
+              (format "ELMO_WORKSPACE=%s\n" llemacs-workspace-dir)
+              (format "ELMO_SOURCE=%s\n" llemacs-source-dir)
+              (format "ELMO_LOGS=%s\n" llemacs-logs-dir)
+              (format "ELMO_CONFIG=%s\n" llemacs-config-dir)))
     (shell-command (format "sudo chmod 644 %s" env-file))))
 
-(defun elmo-install (&optional main-user)
+(defun llemacs-install (&optional main-user)
   "Install ELMO system with MAIN-USER as primary user.
 If MAIN-USER is nil, use current user."
   (interactive)
@@ -399,45 +399,45 @@ If MAIN-USER is nil, use current user."
   (let ((main-user (or main-user (user-login-name))))
     (condition-case err
         (progn
-          (elmo--log-message "Starting ELMO installation...")
+          (llemacs--log-message "Starting ELMO installation...")
 
           ;; Core setup
-          (elmo--setup-user main-user)
+          (llemacs--setup-user main-user)
           ;; Directories and files
-          (elmo--setup-workspace)
+          (llemacs--setup-workspace)
 
           ;; Pre-installation checks
-          (elmo--check-dependencies)
+          (llemacs--check-dependencies)
 
           ;; Git/GitHub
-          (elmo--setup-git-config)
-          (elmo--setup-github-token)
+          (llemacs--setup-git-config)
+          (llemacs--setup-github-token)
 
           ;; Repository and dependencies
-          (elmo--install-dependencies)
+          (llemacs--install-dependencies)
 
           ;; Configuration and files
-          (elmo--setup-permissions)
-          (elmo--create-initial-files)
-          (elmo--setup-environment)
+          (llemacs--setup-permissions)
+          (llemacs--create-initial-files)
+          (llemacs--setup-environment)
 
           ;; Final verification
-          (elmo-verify-installation)
+          (llemacs-verify-installation)
 
-          (elmo-setup-sudo)
+          (llemacs-setup-sudo)
 
-          (elmo--log-message "ELMO installation completed successfully!")
+          (llemacs--log-message "ELMO installation completed successfully!")
           t)
 
       (error
-       (elmo--log-message (format "Installation failed: %s" (error-message-string err)))
+       (llemacs--log-message (format "Installation failed: %s" (error-message-string err)))
        nil))))
 
-(provide 'elmo-install)
+(provide 'llemacs-install)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
-;; (require 'elmo)
+;; (require 'llemacs)
 
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

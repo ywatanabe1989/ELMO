@@ -1,86 +1,86 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-06 04:34:52
 ;;; Time-stamp: <2024-12-06 04:34:52 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/elmo-server.el
+;;; File: ./self-evolving-agent/src/llemacs-server.el
 
 
 (require 'cl-lib)
-(require 'elmo-config)
-(require 'elmo-sudo)
+(require 'llemacs-config)
+(require 'llemacs-sudo)
 
-(defcustom elmo-server-check-interval 1
+(defcustom llemacs-server-check-interval 1
   "Interval in seconds to check server status."
   :type 'integer
-  :group 'elmo-server)
+  :group 'llemacs-server)
 
-(defun elmo-server-running-p ()
+(defun llemacs-server-running-p ()
   "Check if ELMO server is running."
   (interactive)
-  (elmo-run-sudo-server-script "status"))
-;; (elmo-server-running-p)
+  (llemacs-run-sudo-server-script "status"))
+;; (llemacs-server-running-p)
 
-(defun elmo-kill-server ()
+(defun llemacs-kill-server ()
   "Stop ELMO server."
   (interactive)
-  (elmo-run-sudo-server-script "stop"))
-;; (elmo-kill-server)
+  (llemacs-run-sudo-server-script "stop"))
+;; (llemacs-kill-server)
 
-(defun elmo-init-server ()
+(defun llemacs-init-server ()
   "Start ELMO server."
   (interactive)
-  (elmo-run-sudo-server-script "start"))
+  (llemacs-run-sudo-server-script "start"))
 
-(defun elmo-restart-server ()
+(defun llemacs-restart-server ()
   "Restart ELMO server."
   (interactive)
-  (elmo-run-sudo-server-script "restart"))
+  (llemacs-run-sudo-server-script "restart"))
 
-(defun elmo-reload-server ()
+(defun llemacs-reload-server ()
   "Restart ELMO server."
   (interactive)
-  (elmo-run-sudo-server-script "execute '(load-file /home/elmo/.emacs.d/init.el)"))
+  (llemacs-run-sudo-server-script "execute '(load-file /home/llemacs/.emacs.d/init.el)"))
 
-(defun elmo-ensure-server ()
+(defun llemacs-ensure-server ()
   "Ensure ELMO server is running."
   (interactive)
   (let ((was-started nil))
-    (unless (elmo-server-running-p)
-      (elmo-init-server)
+    (unless (llemacs-server-running-p)
+      (llemacs-init-server)
       (let ((attempts 0))
-        (while (and (not (elmo-server-running-p))
+        (while (and (not (llemacs-server-running-p))
                     (< attempts 5))
-          (message "Waiting for server... (%s)" elmo-server-script-output)
-          (sleep-for elmo-server-check-interval)
+          (message "Waiting for server... (%s)" llemacs-server-script-output)
+          (sleep-for llemacs-server-check-interval)
           (cl-incf attempts))
         (setq was-started t)))
     was-started))
-;; (elmo-ensure-server)
+;; (llemacs-ensure-server)
 
-(defun elmo-init-or-connect ()
+(defun llemacs-init-or-connect ()
   "Initialize server if not running, then connect."
   (interactive)
-  (let ((result (elmo-ensure-server)))
-    (when (or result (elmo-server-running-p))
+  (let ((result (llemacs-ensure-server)))
+    (when (or result (llemacs-server-running-p))
       t)))
-;; (elmo-init-or-connect)
+;; (llemacs-init-or-connect)
 
 
 
-(provide 'elmo-server)
+(provide 'llemacs-server)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
-;; (elmo-kill-server)
-;; (elmo-server-running-p) ; nil
-;; (elmo-init-server) # works
-;; (elmo-server-running-p) ; t
-;; (elmo-kill-server)
-;; (elmo-server-running-p) ; nil
-;; (elmo-restart-server)
-;; (elmo-server-running-p) ; t
-;; (elmo-ensure-server)
-;; (elmo-init-or-connect)
-;; (elmo-exec-elisp-code "'\(message \"Hello ELMO!!!\"\)'")
+;; (llemacs-kill-server)
+;; (llemacs-server-running-p) ; nil
+;; (llemacs-init-server) # works
+;; (llemacs-server-running-p) ; t
+;; (llemacs-kill-server)
+;; (llemacs-server-running-p) ; nil
+;; (llemacs-restart-server)
+;; (llemacs-server-running-p) ; t
+;; (llemacs-ensure-server)
+;; (llemacs-init-or-connect)
+;; (llemacs-exec-elisp-code "'\(message \"Hello ELMO!!!\"\)'")
 
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

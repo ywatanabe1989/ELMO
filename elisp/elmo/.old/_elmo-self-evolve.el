@@ -1,48 +1,48 @@
 ;;; -*- lexical-binding: t -*-
 ;;; Author: 2024-12-04 08:56:43
 ;;; Time-stamp: <2024-12-04 08:56:43 (ywatanabe)>
-;;; File: ./self-evolving-agent/src/elmo-self-evolve.el
+;;; File: ./self-evolving-agent/src/llemacs-self-evolve.el
 
 
-(require 'elmo-config)
-(require 'elmo-utils)
-(require 'elmo-run)
+(require 'llemacs-config)
+(require 'llemacs-utils)
+(require 'llemacs-run)
 
 
-;; (defun elmo-self-evolve (&optional file)
+;; (defun llemacs-self-evolve (&optional file)
 ;;   "Update FILE with improvements suggested by LLM.
-;; If FILE is nil, use elmo source directory."
+;; If FILE is nil, use llemacs source directory."
 ;;   (interactive)
 ;;   (message "Starting self-evolution...")
-;;   (elmo-init-workspace)
-;;   (let* ((github-token (elmo-get-github-token))
-;;          (file (or file (expand-file-name "elmo.el" elmo-source-dir)))
-;;          (request-file elmo-user-request-file)
+;;   (llemacs-init-workspace)
+;;   (let* ((github-token (llemacs-get-github-token))
+;;          (file (or file (expand-file-name "llemacs.el" llemacs-source-dir)))
+;;          (request-file llemacs-user-request-file)
 ;;          (aspects (if (file-exists-p request-file)
 ;;                      (with-temp-buffer
 ;;                        (insert-file-contents request-file)
 ;;                        (buffer-string))
 ;;                    (read-string "Aspects to improve (empty for general review): ")))
-;;          (workspace-dir elmo-workspace-dir)
-;;          (elmo-load-path (file-name-directory (locate-library "elmo"))))
+;;          (workspace-dir llemacs-workspace-dir)
+;;          (llemacs-load-path (file-name-directory (locate-library "llemacs"))))
 
 ;;     (unless github-token
-;;       (error "GitHub token not available. Check %s" elmo-github-token-file))
+;;       (error "GitHub token not available. Check %s" llemacs-github-token-file))
 
 ;;     (unless (file-exists-p file)
 ;;       (error "Source file not found: %s" file))
 
 ;;     (let* ((work-file (expand-file-name (file-name-nondirectory file) workspace-dir))
-;;            (backup-file (elmo-create-backup work-file)))
+;;            (backup-file (llemacs-create-backup work-file)))
 
 ;;       (copy-file file work-file t)
 
 ;;       (async-start
 ;;        `(lambda ()
-;;           (add-to-list 'load-path ,elmo-load-path)
-;;           (require 'elmo)
+;;           (add-to-list 'load-path ,llemacs-load-path)
+;;           (require 'llemacs)
 ;;           (let ((default-directory ,default-directory))
-;;             (elmo-run
+;;             (llemacs-run
 ;;              (format "Review and improve %s\nFocus on these aspects:\n%s"
 ;;                      ,work-file
 ;;                      ,(if (string-empty-p aspects)
@@ -50,42 +50,42 @@
 ;;                         aspects)))))
 ;;        `(lambda (_)
 ;;           (with-current-buffer (find-file-noselect ,work-file)
-;;             (elmo-update-timestamp)
+;;             (llemacs-update-timestamp)
 ;;             (save-buffer))
 
 ;;           (when (file-exists-p ,backup-file)
-;;             (let ((changes (elmo-diff-files ,backup-file ,work-file)))
-;;               (elmo-log-change ,work-file ,backup-file changes)))
+;;             (let ((changes (llemacs-diff-files ,backup-file ,work-file)))
+;;               (llemacs-log-change ,work-file ,backup-file changes)))
 
 ;;           (message "Self-evolution completed"))))))
 
-;; ;; (defun elmo-self-evolve (&optional file)
+;; ;; (defun llemacs-self-evolve (&optional file)
 ;; ;;   "Update FILE with improvements suggested by LLM.
-;; ;; If FILE is nil, use elmo source directory."
+;; ;; If FILE is nil, use llemacs source directory."
 ;; ;;   (interactive)
-;; ;;   (elmo-init-workspace)
-;; ;;   (let* ((github-token (elmo-get-github-token))
-;; ;;          (file (or file (expand-file-name "elmo.el" elmo-source-dir)))
-;; ;;          (request-file elmo-user-request-file)
+;; ;;   (llemacs-init-workspace)
+;; ;;   (let* ((github-token (llemacs-get-github-token))
+;; ;;          (file (or file (expand-file-name "llemacs.el" llemacs-source-dir)))
+;; ;;          (request-file llemacs-user-request-file)
 ;; ;;          (aspects (if (file-exists-p request-file)
 ;; ;;                      (with-temp-buffer
 ;; ;;                        (insert-file-contents request-file)
 ;; ;;                        (buffer-string))
 ;; ;;                    (read-string "Aspects to improve (empty for general review): ")))
-;; ;;          (workspace-dir elmo-workspace-dir))
+;; ;;          (workspace-dir llemacs-workspace-dir))
 
 ;; ;;     (unless github-token
-;; ;;       (error "GitHub token not available. Check %s" elmo-github-token-file))
+;; ;;       (error "GitHub token not available. Check %s" llemacs-github-token-file))
 
 ;; ;;     (unless (file-exists-p file)
 ;; ;;       (error "Source file not found: %s" file))
 
 ;; ;;     (let* ((work-file (expand-file-name (file-name-nondirectory file) workspace-dir))
-;; ;;            (backup-file (elmo-create-backup work-file)))
+;; ;;            (backup-file (llemacs-create-backup work-file)))
 
 ;; ;;       (copy-file file work-file t)
 
-;; ;;       (elmo-run
+;; ;;       (llemacs-run
 ;; ;;        (format "Review and improve %s\nFocus on these aspects:\n%s"
 ;; ;;                work-file
 ;; ;;                (if (string-empty-p aspects)
@@ -93,14 +93,14 @@
 ;; ;;                  aspects)))
 
 ;; ;;       (with-current-buffer (find-file-noselect work-file)
-;; ;;         (elmo-update-timestamp)
+;; ;;         (llemacs-update-timestamp)
 ;; ;;         (save-buffer))
 
 ;; ;;       (when (file-exists-p backup-file)
-;; ;;         (let ((changes (elmo-diff-files backup-file work-file)))
-;; ;;           (elmo-log-change work-file backup-file changes))))))
-;; ; (elmo-self-evolve)
+;; ;;         (let ((changes (llemacs-diff-files backup-file work-file)))
+;; ;;           (llemacs-log-change work-file backup-file changes))))))
+;; ; (llemacs-self-evolve)
 
-(provide 'elmo-self-evolve)
+(provide 'llemacs-self-evolve)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
