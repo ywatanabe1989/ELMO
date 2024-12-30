@@ -5,7 +5,7 @@ Template compilation failed: Failed to load component ’workspace/workspace’
 --------------------------------------------------------------------------------
 [ERROR 2024-12-28 23:30:09 ywatanabe]
 => /home/ywatanabe/.emacs.d/lisp/llemacs/elisp/llemacs/08-llemacs-prompt.el:109
-Failed to load component 'workspace/workspace': Wrong type argument: char-or-string-p, #<window 359 on *ELMO-log*>
+Failed to load component 'workspace/workspace': Wrong type argument: char-or-string-p, #<window 359 on *LLEMACS-log*>
 --------------------------------------------------------------------------------
 [ERROR 2024-12-28 23:30:09 ywatanabe]
 => unknown:1
@@ -54,5 +54,5 @@ ywatanabe
 (/home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/02-llemacs-logging-core.el:78)
 
 aaa
-=== ELMO Log Log Created: 2024-12-28 19:18:16 ===
+=== LLEMACS Log Log Created: 2024-12-28 19:18:16 ===
 

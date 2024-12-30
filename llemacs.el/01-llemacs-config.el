@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-29 14:47:14
-;;; Time-stamp: <2024-12-29 14:47:14 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/01-llemacs-config.el
+;;; Author: 2024-12-30 23:49:04
+;;; Time-stamp: <2024-12-30 23:49:04 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-config.el
 
 (require 'json)
 (require 'request)
@@ -66,6 +66,12 @@
 (defcustom llemacs--path-log-system
   (expand-file-name "logs/system.log" llemacs-path-workspace)
   "Path to LLEMACS system log file."
+  :type 'file
+  :group 'llemacs)
+
+(defcustom llemacs--path-log-db
+  (expand-file-name "elmo-logs.db" llemacs-path-workspace)
+  "Path to SQLite database for structured logging."
   :type 'file
   :group 'llemacs)
 

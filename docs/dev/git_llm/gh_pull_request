@@ -1,0 +1,239 @@
+#!/bin/bash
+# Time-stamp: "2024-12-31 10:08:56 (ywatanabe)"
+# File: gh_pull_request
+
+LOG_PATH="$0.log"
+TEMP_PROMPT_FILE=$(mktemp)
+TEMP_AI_RESPONSE_FILE=$(mktemp)
+trap 'rm -f $TEMP_PROMPT_FILE' EXIT
+
+
+# Help message
+usage() {
+    echo "Usage: $0 [source_branch] [target_branch]"
+    echo "Default: source=current branch, target=main"
+    exit 1
+}
+
+# Parse arguments
+SRC_BRANCH=${1:-$(git rev-parse --abbrev-ref HEAD)}
+TGT_BRANCH=${2:-main}
+
+[[ "$1" == "-h" || "$1" == "--help" ]] && usage
+
+# UI elements
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local chars='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        for (( i=0; i<${#chars}; i++ )); do
+            echo -en "\r ${chars:$i:1}"
+            sleep $delay
+        done
+    done
+    echo -en "\r    \r"
+}
+
+# AI configuration
+get_ai_config() {
+    if [ -n "$GOOGLE_API_KEY" ]; then
+        echo "$GOOGLE_ENGINE" "$GOOGLE_API_KEY"
+        return 0
+    fi
+    if [ -n "$ANTHROPIC_API_KEY" ]; then
+        echo "claude-3-haiku-20240307" "$ANTHROPIC_API_KEY"
+        return 0
+    fi
+    if [ -n "$OPENAI_API_KEY" ]; then
+        echo "gpt-4o-mini" "$OPENAI_API_KEY"
+        return 0
+    fi
+    return 1
+}
+
+
+parse_ai_response() {
+    local ai_response_file=$1
+
+    # Extract JSON content from file
+    local json_content
+    json_content=$(sed -e '1s/^.*```json\s*//' -e '$s/\s*```.*$//' "$ai_response_file")
+
+    # Create temp file for JSON processing
+    local tmp_json
+    tmp_json=$(mktemp)
+    echo "$json_content" > "$tmp_json"
+
+    if ! jq . "$tmp_json" >/dev/null 2>&1; then
+        echo "JSON validation error:" >&2
+        jq . "$tmp_json" 2>&1 >&2
+        rm -f "$tmp_json"
+        return 1
+    fi
+
+    # Extract data from JSON
+    IFS='' read -r title < <(jq -r '.title' "$tmp_json")
+    IFS='' read -r detail < <(jq -r '.body.detail[]' "$tmp_json")
+    local major_list=$(jq -r '.body.major_list[]' "$tmp_json" | sed 's/^/- /')
+    local breaking=$(jq -r '.body.breaking[]' "$tmp_json" | sed 's/^/- /')
+    local note=$(jq -r '.body.note[]' "$tmp_json" | sed 's/^/- /')
+
+    rm -f "$tmp_json"
+
+    # Output title and body with a special delimiter
+    echo "TITLE_START"
+    echo "$title"
+    echo "TITLE_END"
+    echo "BODY_START"
+    echo "$major_list"
+    echo "$breaking"
+    echo "$note"
+    echo "BODY_END"
+}
+
+
+create_temp_prompt_file() {
+    # Get changed files
+    local changed_files=$(git diff --name-status ${TGT_BRANCH}...${SRC_BRANCH})
+
+    # Get commit messages
+    local commit_messages=$(git log --pretty=format:"%s" ${TGT_BRANCH}..${SRC_BRANCH})
+
+    cat > "$TEMP_PROMPT_FILE" << 'EOF'
+Based on the changes below, generate a pull request description with five highlights organized with bullet points.
+Include a JSON code block response in your response, following exactly this format:
+\`\`\`json
+{
+"title": "<concise title describing changes>",
+"body": {
+"detail": ["<detailed description of changes>"],
+"major_list": [
+              "<1st bullet point of major changes in a simple sentence>"
+              "<2nd bullet point of major changes in a simple sentence>"
+              "<3rd bullet point of major changes in a simple sentence>"
+              "<4th bullet point of major changes in a simple sentence>"
+              "<5th bullet point of major changes in a simple sentence>"
+              ],
+"breaking": ["<bullet points of breaking changes, or 'None'>"],
+"note": ["<any important notes, or 'None'>"]
+}
+}
+\`\`\`
+Changed files:
+--------------------------------------------------------------------------------
+EOF
+    echo "${changed_files}" >> "$TEMP_PROMPT_FILE"
+    echo -e "\nCommit messages:\n--------------------------------------------------------------------------------" >> "$TEMP_PROMPT_FILE"
+    echo "${commit_messages}" >> "$TEMP_PROMPT_FILE"
+    echo "--------------------------------------------------------------------------------" >> "$TEMP_PROMPT_FILE"
+
+    # # Count and show number of lines
+    # local line_count=$(wc -l < "$TEMP_PROMPT_FILE")
+    # echo "Prompt contains $line_count lines"
+}
+
+gh_pull_request() {
+    # Activate Python virtual environment
+    if ! source "$HOME/.env/bin/activate"; then
+        echo "Error: Failed to activate Python virtual environment" >&2
+        return 1
+    fi
+
+    # Authenticate
+    unset GITHUB_TOKEN
+    gh auth login --with-token < $HOME/.bash.d/secrets/access_tokens/github.txt || {
+        echo "Failed to authenticate with GitHub"
+        return 1
+    }
+
+    # Generate AI response
+    read -r model api_key < <(get_ai_config) || {
+        echo "Error: Failed to read AI configuration" >&2
+        return 1
+    }
+
+    if [ -z "$model" ] || [ -z "$api_key" ]; then
+        echo "Failed to get AI configuration"
+        return 1
+    fi
+
+    printf "$model generating PR description ($SRC_BRANCH -> $TGT_BRANCH)...\n"
+
+    local ai_response
+    create_temp_prompt_file "$diff_output"
+
+    if ! ai_response=$($HOME/.bin/genai \
+                           -m "$model" \
+                           -k "$api_key" \
+                           -i "$TEMP_PROMPT_FILE" 2>&1); then
+        echo "Error: AI request failed" >&2
+        return 1
+    fi
+
+    echo -en "\r\033[2K"
+    printf "${YELLOW}✓ Generated description${NC}\n"
+
+    if [ -z "$ai_response" ]; then
+        echo "Error: Empty response from AI" >&2
+        return 1
+    fi
+
+    echo $ai_response > "$TEMP_AI_RESPONSE_FILE"
+    local parsed="$(parse_ai_response $TEMP_AI_RESPONSE_FILE)"
+
+    # In gh_pull_request(), modify the read part:
+    local pr_title pr_body
+    pr_title=$(echo $parsed | sed -n '/TITLE_START/,/TITLE_END/p')
+    pr_body=$(echo $parsed | sed -n '/BODY_START/,/BODY_END/p')
+
+    pr_title_cleaned="$(echo "$pr_title" | sed -e '1s/^.*TITLE_START\s*//' -e '$s/\s*TITLE_END.*$//')"
+    pr_body_cleaned="$(echo "$pr_body" | sed -e '1s/^.*BODY_START\s*//' -e '$s/\s*BODY_END.*$//' | sed "s/\s\+\(-\)/\n\1/g")"
+    
+    echo "Pull Request Details:"
+    echo "From: ${SRC_BRANCH}"
+    echo "To: ${TGT_BRANCH}"
+    echo "Title: ${pr_title_cleaned}"
+    echo "Body:"
+    echo "${pr_body_cleaned}"
+
+    # Ask for comment preference
+    echo -n "Use AI description (y/N), manual (m), or timestamp (t)? (y/n/m/t) "
+    read -r response
+    case "$response" in
+        [Yy])
+        ;;
+        [Mm])
+            read -p "Enter PR title: " pr_title_cleaned
+            read -p "Enter PR body: " pr_body_cleaned
+            ;;
+        [Tt])
+            pr_title="Merge $SRC_BRANCH into $TGT_BRANCH ($(date +'%Y-%m-%d'))"
+            pr_body="Automated PR created on $(date +'%Y-%m-%d-%H-%M-%S')"
+            ;;
+        *)
+            echo "Pull request cancelled"
+            return 1
+            ;;
+    esac
+
+    # Create PR (removed --draft flag)
+    if [ $(git rev-list --count ${TGT_BRANCH}..${SRC_BRANCH}) -gt 0 ]; then
+        local PR_URL=$(gh pr create \
+                          --base "${TGT_BRANCH}" \
+                          --head "${SRC_BRANCH}" \
+                          --title "${pr_title_cleaned}" \
+                          --body "${pr_body_cleaned}")
+        if [ $? -eq 0 ]; then
+            echo "Created PR: $PR_URL"
+        else
+            echo "Failed to create pull request"
+        fi
+    else
+        echo "No differences between main and develop"
+    fi
+}
+
+gh_pull_request "$@"
+
+# EOF

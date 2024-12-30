@@ -6,7 +6,7 @@
 
 # Task: llemacs-prompt-compilation
 * Compile prompt templates from components
-* Follow ELMO prompt structure
+* Follow LLEMACS prompt structure
 * Include necessary context information
 * Add system role definitions
 * Integrate task-specific instructions

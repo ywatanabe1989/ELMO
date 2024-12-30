@@ -6,8 +6,8 @@
 
 # Task: llemacs-code-generation
 * Generate ONE BLOCK OF ELISP CODE for given context
-* Ensure compatibility with ELMO system
-* Follow ELMO coding conventions
-* Use appropriate ELMO functions/variables
-* Handle ELMO-specific error cases
-* Document dependencies on ELMO components
+* Ensure compatibility with LLEMACS system
+* Follow LLEMACS coding conventions
+* Use appropriate LLEMACS functions/variables
+* Handle LLEMACS-specific error cases
+* Document dependencies on LLEMACS components
