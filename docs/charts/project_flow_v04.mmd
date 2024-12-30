@@ -1,0 +1,66 @@
+
+graph TB
+    subgraph Project Setup
+    subgraph Project Description (Static)
+        A1["Title"]
+        A2["Goal"]
+    subgraph Project Description (Dynamic)
+        A3["Milestones"]
+        A4["Tasks"]
+        A5["Workspace"]
+        A6["Resources"]
+    end
+    end
+    A[Project Creation]
+        B[Git Repository Initialization]
+    end
+
+    subgraph Main Process
+    subgraph Dyanmic Elements
+        D2[Milestone]
+        D3[Current Task]
+        D4[Workspace]
+        D5[Resource]
+    end
+
+    subgraph Step Processing
+        D["Context Compilation"]
+        E["Elisp Generation (by LLM)"]
+        F[Elisp Execution]
+        G{Success?}
+    end
+
+    subgraph Logging & Version Control
+        H[Log Success]
+        I[Log Error]
+        J{Is Milestone?}
+        K[Git Commit]
+        L[Only Log]
+        M[Update]
+    end
+    end
+
+    A1 --> A
+    A2 --> A
+    A3 --> A
+    A --> B
+    B --> D
+    D2 --> D
+    D3 --> D
+    D4 --> D
+    D5 --> D
+    D --> E
+    E --> F
+    F --> G
+    G -- Yes --> H
+    G -- No --> I
+    H --> J
+    J -- Yes --> K
+    J -- No --> L
+    K --> M
+    I --> L
+    L --> M
+    M --> D2
+    M --> D3
+    M --> D4
+    M --> D5

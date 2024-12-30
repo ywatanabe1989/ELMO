@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-19 15:15:50 (ywatanabe)"
-# File: ./ELMO/workspace/formats/verify.sh
+# File: ./LLEMACS/workspace/formats/verify.sh
 
 # 1) .json_orig -> .json -> .md -> .json
 # 2) check if .json_orig and .json are identical

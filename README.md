@@ -1,10 +1,21 @@
 <!-- ---
-!-- title: 2024-12-25 01:29:29
+!-- title: 2024-12-31 02:30:49
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/README.md
+!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/README.md
 !-- --- -->
 
-# Elmo — Emacs LLM Orchestration
+# Llemacs — LLM Agents on Emacs
+<img src="./docs/llemacs.gif" width="100" alt="Llemacs Logo">
+Llemacs is a file-based LLM agent system written in Elisp
+
+# Disclaimer
+- This repository is currently under active development.
+- We do not have any responsibility for unintended file changes created by this system.
+
+# Architecture
+<a href="./docs/charts/project_flow.png">
+    <img src="./docs/charts/project_flow.gif" alt="Project Flow" width="800">
+</a>
 
 ## Apptainer
 
@@ -14,156 +25,5 @@
 ./main.sh -m run
 ```
 
-``` elisp
-(load-file "~/.emacs.d/lisp/elmo/elisp/elmo/elmo.el")
-(define-key global-map (kbd "C-M-e") 'elmo-run)
-
-(elmo-run "plot something. summarize everything as an org file. images should be displayed inlne. all files should be linked from the org file. Add the orgfile contents to the tail of \"*ELMO*\" buffer, which may be already opened")
-(elmo-run "to achieve a scientific project of epileptic seizure prediction, please write a plan for agents to orchestrate")
-```
-
-
-
-source /home/ywatanabe/.emacs.d/lisp/elmo/config/env/00_all.env
-
-
-for elmo_home in ./workspace/elmos/*/; do
-    echo $elmo_home
-    chmod 750 -R $elmo_home
-    touch "$elmo_home/.bashrc"
-    mkdir -p "$elmo_home/.emacs.d"
-    touch "$elmo_home/.emacs.d/init.el"
-    echo '(message "Hello world!")' > "$elmo_home/.emacs.d/init.el"
-    echo '(insert "Hello world!")' >> "$elmo_home/.emacs.d/init.el"
-    echo '(switch-to-buffer "*Messages*")' >> "$elmo_home/.emacs.d/init.el"
-    chmod 750 "$elmo_home/.emacs.d/init.el"
-done
-
-cat "$elmo_home/.emacs.d/init.el"
-
-export ELMO_BIND="$(pwd)/workspace:/workspace"
-main.sh
-
-main.sh -m shell
-/opt/elmo/apptainer/build/startup/start_emacs.sh
-
-/workspace/elmos/elmo-000/.emacs.d/init.el
-
-## Workspace
-
-``` plaintext
-(wsl) Elmo $ tree workspace/
-workspace/
-├── elmos
-│   ├── elmo-000
-│   │   ├── home
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-001
-│   │   ├── home
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-├── logs
-├── projects
-│   └── 000-PROJECTNAME
-│       ├── data
-│       ├── docs
-│       │   ├── project-dynamic.json
-│       │   └── project-static.json
-│       ├── forum.json
-│       ├── README.md
-│       ├── requirements.txt
-│       ├── results
-│       └── scripts
-└── resources
-    ├── agents
-    ├── prompts
-    │   └── 001-context-to-elisp-code.json
-    ├── scripts
-    │   └── json2md.sh
-    ├── templates
-    │   ├── agent-000.json
-    │   ├── context-000.json
-    │   ├── experience-000.json
-    │   ├── knowledge-000.json
-    │   ├── message-000.json
-    │   ├── output-000.json
-    │   ├── project-dynamic-000.json
-    │   ├── project-static-000.json
-    │   ├── prompt-000.json
-    │   ├── README.md
-    │   ├── resource-000.json
-    │   └── tool-000.json
-    └── tools
-        ├── 001-elisp.json
-        ├── 002-python.json
-        ├── 003-git.json
-        ├── 004-github.json
-        └── 005-tree.json
-```
-
-
-
-## Core Concepts
-
-| Unit          | Description                                       |
-|---------------|---------------------------------------------------|
-| **Context**   | Project, Milestone, Task, Process, Thread, Branch |
-| **LLM**       | Translates Context to Code                        |
-| **Execution** | Executes Code, generating Output                  |
-| **Feedback**  | Captures Stdout, Stderr, and Exit codes           |
-
-| Basic               | Description                                   |
-|---------------------|-----------------------------------------------|
-| **Permissions**     | Roles and access controls.                    |
-| **Validation**      | Data integrity checks, JSON Schema Validation |
-| **Version Control** | Tracked using Git.                            |
-
-| Journaling method | Description                                              |
-|-------------------|----------------------------------------------------------|
-| **Message**       | Interchangeable JSON and Markdown protocols for logging. |
-
-| Entity        | Description                                       |
-|---------------|---------------------------------------------------|
-| **Project**   | Top-level grouping of tasks and resources.        |
-| **Milestone** | Goal within a project.                            |
-| **Task**      | Atomic work unit within a milestone.              |
-| **Agent**     | Autonomous process using tools to complete tasks. |
-
-| Pool            | Description                                      |
-|-----------------|--------------------------------------------------|
-| **Projects**    | List of all active/inactive projects.            |
-| **Agents**      | Available agent configurations and their status. |
-| **Prompts**     | Library of LLM prompt templates.                 |
-| **Tools**       | Definitions of available tools (Emacs, scripts). |
-| **Resources**   | Files, links, data (read/writable) for agents.   |
-| **Knowledge**   | Accumulated data from past experiences.          |
-| **Experiences** | Logs of past executions and agent behavior.      |
-
-| Action                    | Description                                            |
-|---------------------------|--------------------------------------------------------|
-| **Project Understanding** | Analyzes project descriptions to plan tasks.           |
-| **Task Splitting**        | Divides projects/milestones into manageable tasks.     |
-| **Context Building**      | Generates task context from available resources.       |
-| **Code Generating**       | Creates Elisp/tool invocations based on task/context.  |
-| **Evaluating**            | Assesses execution success/failure using feedback.     |
-| **Git Managing**          | Handles version control for configuration, code, docs. |
-| **Reporting**             | Generates Markdown reports on progress.                |
-| **Maintaining**           | Keeps system up-to-date (Git, Apptainer, Elisp).       |
-| **Allocating**            | Assigns agents and resources to tasks.                 |
+## Workspace Organization
+[./docs/workspace_tree.txt](./docs/workspace_tree.txt)

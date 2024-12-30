@@ -1,0 +1,58 @@
+graph TD
+    subgraph Project Lifecycle
+        A[Create Project]
+        B[Initialize Git Repo]
+        C[Set Project Metadata]
+    end
+    subgraph AI agent allocation
+        AI-1[aaa]
+        AI-2[bbb]
+        AI-3[ccc]
+    end
+    subgraph Step Processing
+        D["Context Generation
+        (= Prompt Compilation)"]
+    subgraph Context Elements
+        D1[Project Details]
+        D2[Milestone Details]
+        D3[Current Task Details]
+        D4[Workspace Info]
+        D5[Resource Info]
+    end
+    E["Elisp Generation (by LLM)"]
+    F[Elisp Execution]
+    G{Success?}
+    end
+    subgraph Logging & Version Control
+        H[Log Success]
+        I[Log Error]
+        J{Is Milestone?}
+        K[Git Commit]
+        L[Only Log]
+        M[Update]
+    end
+    A --> B
+    B --> C
+    C --> D
+    C --> AI-1
+    D1 --> D
+    D2 --> D
+    D3 --> D
+    D4 --> D
+    D5 --> D
+    D --> E
+    E --> F
+    F --> G
+    G -- Yes --> H
+    G -- No --> I
+    H --> J
+    J -- Yes --> K
+    J -- No --> L
+    K --> M
+    I --> L
+    L --> M
+    M --> D1
+    M --> D2
+    M --> D3
+    M --> D4
+    M --> D5

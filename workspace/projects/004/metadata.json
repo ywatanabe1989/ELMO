@@ -1,0 +1,10 @@
+{
+  "version": "0.0.0",
+  "id": "004",
+  "name": "my-first-project",
+  "status": "planning",
+  "objective": "Write main objective here...",
+  "criteria": "List success criteria here...",
+  "steps": "Describe implementation steps here...",
+  "notes": "Add any additional notes, risks, or dependencies here..."
+}

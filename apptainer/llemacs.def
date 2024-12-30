@@ -1,0 +1,71 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%labels
+    echo -e "\n==================== Label Section ===================="
+    MAINTENER "Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)"
+    VERSION "v1.0.0"
+    BUILT_DATE `date`
+    DEFINITION_FILE_NAME `basename "$0"`
+
+%setup -c /bin/bash
+    echo -e "\n==================== Setup Section ===================="
+
+    # Envs
+    THIS_DIR="$(dirname $0)"
+    LLEMACS_HOST_ROOT="${LLEMACS_HOST_ROOT:-$THIS_DIR/../..}"
+    LLEMACS_ROOT="${LLEMACS_ROOT:-/opt/llemacs}"
+
+    # Rsync options
+    RSYNC_OPTIONS="-arv \
+        --safe-links \
+        --exclude=**/.git \
+        --exclude=**/*.sandbox \
+        --exclude=**/*.sif \
+        --exclude=**/__pycache__ \
+        --exclude=**/*docker* \
+        --exclude=**/.* \
+        --exclude=**/*cache* \
+        --exclude='**/build-temp*' \
+        --exclude='**/*secret*'"
+
+    # Config and building scripts
+    DIRS=(
+        "config/env/"
+        "apptainer/build/"
+        ".gitignore"
+    )
+
+    for dir in "${DIRS[@]}"; do
+        src=$LLEMACS_HOST_ROOT/$dir
+        tgt=$SINGULARITY_ROOTFS/$LLEMACS_ROOT/$dir
+        mkdir -p $tgt
+        cmd="rsync $RSYNC_OPTIONS $src $tgt" && echo $cmd && eval $cmd
+    done
+
+    # cmd="ln -sf ${LLEMACS_ROOT}/workspace ${SINGULARITY_ROOTFS}/workspace" && echo $cmd && eval $cmd
+
+%post -c /bin/bash
+    echo -e "\n==================== Post Section ===================="
+
+    cmd="ls /opt/llemacs/apptainer/build" && echo $cmd && eval $cmd
+
+    # System
+    system_scripts=(
+        "$LLEMACS_ROOT/apptainer/build/system-setup/00_apt_packages.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/01_emacs.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/02_python.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/03_bashrc.sh"
+    )
+    for script in "${system_scripts[@]}"; do
+        if $script; then
+            echo "$(basename $script) succeeded"
+        else
+            echo "$(basename $script) failed"
+        fi
+    done
+
+%runscript
+    echo -e "\n==================== Runscript Section ===================="
+    
+    exec /bin/bash /opt/llemacs/apptainer/build/startup/start_emacs.sh

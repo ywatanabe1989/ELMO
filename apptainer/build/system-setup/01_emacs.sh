@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 12:57:12 (ywatanabe)"
-# File: ./ELMO/src/apptainer_builders/install_emacs.sh
+# File: ./LLEMACS/src/apptainer_builders/install_emacs.sh
 
 echo "$0..."
 
@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-source /opt/elmo/config/env/00_all.env
+source /opt/llemacs/config/env/00_all.env
 
 
 install_emacs_from_source() {

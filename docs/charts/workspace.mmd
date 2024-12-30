@@ -1,0 +1,39 @@
+graph TD
+    subgraph Workspace
+        W[workspace/]
+        E[llemacss/]
+        P[projects/]
+        R[resources/]
+        L[logs/]
+    end
+
+    subgraph Agent_Structure
+        A[LLEMACS Agent] --> M[Memory]
+        A --> Msg[Messages]
+        A --> Proj[Projects]
+        A --> S[Status]
+    end
+
+    subgraph Workflow
+        C[Context Compilation] --> G[Code Generation]
+        G --> X[Code Execution]
+        X --> O[Output & Logs]
+        O --> U[Context Update]
+        U --> C
+    end
+
+    subgraph Components
+        PT[Prompt Templates]
+        T[Tools]
+        AG[Agents]
+        TMP[Templates]
+    end
+
+    W --> E
+    W --> P
+    W --> R
+    W --> L
+    R --> PT
+    R --> T
+    R --> AG
+    R --> TMP

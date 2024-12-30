@@ -1,16 +1,25 @@
 <!-- ---
-!-- title: 2024-12-23 22:59:36
+!-- title: 2024-12-25 02:34:38
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/docs/dev/naming.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/docs/dev/naming.md
 !-- --- -->
 
-ELMO: Emacs LLM Operations
+LLeMacs [liːmæks]
+
+
+
+LLEMACS, Lemacs, LLeMacs, NINJA
+
+
+LLeMacs: LLM meats Emacs
+
+LLEMACS: Emacs LLM Operations
 **Name Comparison**
 | Name  | Strengths                                                                 | Weaknesses                                                  |
 |-------|---------------------------------------------------------------------------|-------------------------------------------------------------|
-| ELMO | • Original vision clarity<br>• Network focus<br>• JASON emphasis          | • Less Emacs-specific<br>• Potentially overused in tech     |
+| LLEMACS | • Original vision clarity<br>• Network focus<br>• JASON emphasis          | • Less Emacs-specific<br>• Potentially overused in tech     |
 | EPIC  | • Strong plosive sound<br>• Clear Emacs connection<br>• Professional tone | • Potentially generic<br>• Multiple interpretations         |
-| ELMO  | • Memorable & friendly<br>• LLM focus<br>• Short & catchy                 | • Might seem less professional<br>• Pop culture association |
+| LLEMACS  | • Memorable & friendly<br>• LLM focus<br>• Short & catchy                 | • Might seem less professional<br>• Pop culture association |
 
 **Architecture Analysis**
 | Aspect      | Strengths                                                                      | Challenges                                                                     |
@@ -19,14 +28,14 @@ ELMO: Emacs LLM Operations
 | Development | • Clear single vision<br>• Flexible architecture<br>• No API dependencies      | • Limited developer resources<br>• Testing coverage<br>• Documentation needs   |
 | Future      | • Unlimited local inference<br>• Full model control<br>• HPC potential         | • Scalability concerns<br>• File system bottlenecks<br>• Concurrent operations |
 
-**Recommendation**: ELMO (Emacs LLM Organism)
-**Recommendation**: ELMO (Emacs LLM Operations)
+**Recommendation**: LLEMACS (Emacs LLM Organism)
+**Recommendation**: LLEMACS (Emacs LLM Operations)
 - Best balance of technical accuracy and memorability
 - Clearly indicates both Emacs and LLM focus
 - Simple yet professional
 
 
-ELMO (Emacs LLM Organism) is an excellent choice:
+LLEMACS (Emacs LLM Organism) is an excellent choice:
 
 1. Technical Merit
 - Direct reference to Emacs and LLM
@@ -60,7 +69,7 @@ Key Advantages:
 
 
 ## Strengths:
-1. "ELMO" reflects key aspects:
+1. "LLEMACS" reflects key aspects:
    - Network-centric
    - Intelligence focus
    - Agent flexibility
@@ -205,9 +214,9 @@ EPIC - Emacs Platform for Intelligent LLM Computing
 - Clear technical purpose
 - Memorable acronym
 
-Elmo?
+Llemacs?
 
-ELMO potential acronyms:
+LLEMACS potential acronyms:
 
 1. Technical Focus:
 - Emacs LLM Operations
@@ -219,7 +228,7 @@ ELMO potential acronyms:
 - Emacs Language Model Optimizer
 - Elisp LLM Module Orchestrator
 
-Advantages of ELMO:
+Advantages of LLEMACS:
 - Memorable and friendly
 - Easy to pronounce
 - Contains 'LM' (Language Model)
@@ -227,7 +236,7 @@ Advantages of ELMO:
 - Short and impactful
 
 Top recommendation:
-ELMO - Emacs LLM Operations
+LLEMACS - Emacs LLM Operations
 - Simple yet descriptive
 - Technically accurate
 - Easy to remember
@@ -278,8 +287,8 @@ NINJA: Neural Intelligence Network Joint Agents
 - Task processing
 
 
-<!-- Samurai-ELMO
- !-- ELMO: Neural Intelligence Network of Joint Agents
+<!-- Samurai-LLEMACS
+ !-- LLEMACS: Neural Intelligence Network of Joint Agents
  !-- 
  !-- SAMURAI: System Access & Management User Requiring AI Interface
  !-- - Human operators
@@ -336,7 +345,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !--    - Basic task execution
  !--    - Routine operations
  !-- 
- !-- Perfect elmo-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
+ !-- Perfect llemacs-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
  !-- 
  !-- 
  !-- NINJA: Network-In-Network Joint Agents
@@ -418,7 +427,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- - Clean and sleek
  !-- 
  !-- 2. SHINOBI
- !-- - Alternative to ELMO, similar appeal
+ !-- - Alternative to LLEMACS, similar appeal
  !-- - Self-Hosted Intelligence Network Operating on Buffer Interface
  !-- - More technical sounding
  !-- 
@@ -475,13 +484,13 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- - A could be Autonomous/Adaptive
  !-- 
  !-- This maintains:
- !-- 1. ELMO theme
+ !-- 1. LLEMACS theme
  !-- 2. Technical accuracy
  !-- 3. System architecture reference
  !-- 4. Clear meaning
  !-- 5. Easy memorability
  !-- 
- !-- ELMO
+ !-- LLEMACS
  !-- # Semacs: self-evolving agent on Emacs
  !-- # Semacs: self-evolving agent on Emacs
  !-- # SEA: self-evolving agent on Emacs
@@ -518,14 +527,14 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- NINMACS: NINja Multi-Agent Collaborative System
  !-- 
  !-- Core concepts:
- !-- - Silent but powerful (like elmo)
+ !-- - Silent but powerful (like llemacs)
  !-- - Stealthy execution (minimal UI interference)
  !-- - Shadow cloning (multiple agents)
  !-- - Ninjutsu (specialized agent skills)
  !-- 
  !-- Visual elements:
  !-- - Dark theme with accent colors
- !-- - ELMO star (*) as cursor markers
+ !-- - LLEMACS star (*) as cursor markers
  !-- - Smoke effects for agent transitions
  !-- - Scrolling kanji characters in status line
  !-- 
@@ -566,11 +575,11 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- 
  !-- JONINMACS: JSON-Oriented Neural INtelligence Multi-Agent Collaborative System
  !-- - Emphasizes JSON as data protocol
- !-- - References Jonin (高忍) elmo rank
+ !-- - References Jonin (高忍) llemacs rank
  !-- - Maintains Multi-Agent concept
  !-- 
  !-- JOUNIN: JSON-Oriented Universal Neural Intelligence Network
- !-- - Plays on 上忍 (Jōunin, high-ranked elmo)
+ !-- - Plays on 上忍 (Jōunin, high-ranked llemacs)
  !-- - Emphasizes universal capabilities
  !-- - Neural network integration
  !-- 

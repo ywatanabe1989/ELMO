@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-24 11:41:07 (ywatanabe)"
-# File: ./ELMO/src/apptainer_builders/install_basic_apt_packages.sh
+# File: ./LLEMACS/src/apptainer_builders/install_basic_apt_packages.sh
 
 echo "$0..."
 
@@ -11,7 +11,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 export PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
-source /opt/elmo/config/env/00_all.env
+source /opt/llemacs/config/env/00_all.env
 
 # Initialization
 apt-get -y update >/dev/null
@@ -63,9 +63,9 @@ apt-get install -y --no-install-recommends \
 
 
 # Language
-locale-gen $ELMO_LANG >/dev/null
-update-locale LANG=$ELMO_LANG
-LC_ALL=$ELMO_LC_ALL >/dev/null
+locale-gen $LLEMACS_LANG >/dev/null
+update-locale LANG=$LLEMACS_LANG
+LC_ALL=$LLEMACS_LC_ALL >/dev/null
 
 
 # EOF

@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: ./ELMO/docs/dev_memo/crdt.md
+!-- title: ./LLEMACS/docs/dev_memo/crdt.md
 !-- author: ywatanabe
 !-- date: 2024-12-18 09:15:18
 !-- --- -->

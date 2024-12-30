@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-23 22:59:29
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/Elmo/docs/dev/strengths_and_downsides.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/Llemacs/docs/dev/strengths_and_downsides.md
 !-- --- -->
 
 VSCode and others have different expansion limitations:
@@ -154,7 +154,7 @@ Proposed Roadmap:
 Focus on solving core technical challenges before expanding features.
 
 
-ELMO is promising, not trivial:
+LLEMACS is promising, not trivial:
 
 | Strength                 | Impact                                                                                                                                 |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------------------|

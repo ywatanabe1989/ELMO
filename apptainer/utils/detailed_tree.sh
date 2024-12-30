@@ -1,8 +1,8 @@
 # owner, group, permssions
 
 
-tree -pugD --gitignore --gitfile=~/.emacs.d/lisp/elmo/.gitignore
+tree -pugD --gitignore --gitfile=~/.emacs.d/lisp/llemacs/.gitignore
 
 
 
-tree /workspace -pugD --gitignore ~/.emacs.d/lisp/elmo/.gitignore | xclip -selection clipboard
+tree /workspace -pugD --gitignore ~/.emacs.d/lisp/llemacs/.gitignore | xclip -selection clipboard
