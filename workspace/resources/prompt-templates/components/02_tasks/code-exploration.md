@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:16:44
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/code-exploration.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-exploration.md
 !-- --- -->
 
 # Task: code-exploration

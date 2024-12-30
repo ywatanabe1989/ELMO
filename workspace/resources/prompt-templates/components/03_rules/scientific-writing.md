@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:18:28
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/03_rules/scientific-writing.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/scientific-writing.md
 !-- --- -->
 
 # Rules: scientific-writing

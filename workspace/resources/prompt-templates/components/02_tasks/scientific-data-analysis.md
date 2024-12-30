@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:05
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-data-analysis.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-data-analysis.md
 !-- --- -->
 
 # Task: scientific-data-analysis

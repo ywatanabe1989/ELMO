@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:18:26
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/03_rules/code-format-python.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/code-format-python.md
 !-- --- -->
 
 # Rules: code-format-python

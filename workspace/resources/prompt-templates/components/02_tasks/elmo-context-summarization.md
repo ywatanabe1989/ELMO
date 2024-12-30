@@ -1,10 +1,10 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:03
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-context-summarization.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-context-summarization.md
 !-- --- -->
 
-# Task: elmo-context-summarization
+# Task: llemacs-context-summarization
 * Extract key information
 * Identify main topics
 * Compress context data

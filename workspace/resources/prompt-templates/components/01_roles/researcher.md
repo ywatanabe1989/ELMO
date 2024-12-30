@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:35:47
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/01_roles/researcher.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/01_roles/researcher.md
 !-- --- -->
 
 # Role: researcher

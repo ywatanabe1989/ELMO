@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:42:06
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/concatenated.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/concatenated.md
 !-- --- -->
 
 # Task: code-exploration
@@ -35,7 +35,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:01
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/code-refactoring.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-refactoring.md
 !-- --- -->
 
 # Task: code-refactoring
@@ -49,7 +49,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:02
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/code-revision.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-revision.md
 !-- --- -->
 
 # Task: code-revision
@@ -62,7 +62,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:02
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/code-testing.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-testing.md
 !-- --- -->
 
 # Task: code-testing
@@ -76,42 +76,42 @@
 <!-- ---
 !-- title: 2024-12-27 23:42:06
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/concatenated.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/concatenated.md
 !-- --- -->
-;; elmo-code-generation.md
+;; llemacs-code-generation.md
 <!-- ---
 !-- title: 2024-12-27 23:17:02
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-code-generation.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-code-generation.md
 !-- --- -->
 
-# Task: elmo-code-generation
+# Task: llemacs-code-generation
 * Generate ONE BLOCK OF ELISP CODE for given context
 * Ensure compatibility with ELMO system
 * Follow ELMO coding conventions
 * Use appropriate ELMO functions/variables
 * Handle ELMO-specific error cases
 * Document dependencies on ELMO components
-;; elmo-code-planning.md
+;; llemacs-code-planning.md
 <!-- ---
 !-- title: 2024-12-27 23:36:55
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-code-planning.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-code-planning.md
 !-- --- -->
 
-# Task: elmo-code-planning
+# Task: llemacs-code-planning
 * Design ELMO-compatible components
 * Plan integration points
 * Consider system dependencies
 * Document architecture decisions
-;; elmo-context-composing.md
+;; llemacs-context-composing.md
 <!-- ---
 !-- title: 2024-12-27 23:17:03
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-context-composing.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-context-composing.md
 !-- --- -->
 
-# Task: elmo-context-composing
+# Task: llemacs-context-composing
 * Compose new context from inputs
 * Structure context hierarchy
 * Include relevant metadata
@@ -120,14 +120,14 @@
 * Format context data
 * Validate context structure
 * Set context scope
-;; elmo-context-summarization.md
+;; llemacs-context-summarization.md
 <!-- ---
 !-- title: 2024-12-27 23:17:03
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-context-summarization.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-context-summarization.md
 !-- --- -->
 
-# Task: elmo-context-summarization
+# Task: llemacs-context-summarization
 * Extract key information
 * Identify main topics
 * Compress context data
@@ -136,14 +136,14 @@
 * Preserve context links
 * Generate concise overview
 * Include reference markers
-;; elmo-context-udpate.md
+;; llemacs-context-udpate.md
 <!-- ---
 !-- title: 2024-12-27 23:17:04
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-context-udpate.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-context-udpate.md
 !-- --- -->
 
-# Task: elmo-context-update
+# Task: llemacs-context-update
 * Merge new information
 * Resolve conflicts
 * Maintain version history
@@ -152,14 +152,14 @@
 * Preserve context integrity
 * Handle dependencies
 * Track modifications
-;; elmo-prompt-compilation.md
+;; llemacs-prompt-compilation.md
 <!-- ---
 !-- title: 2024-12-27 23:17:04
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-prompt-compilation.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-prompt-compilation.md
 !-- --- -->
 
-# Task: elmo-prompt-compilation
+# Task: llemacs-prompt-compilation
 * Compile prompt templates from components
 * Follow ELMO prompt structure
 * Include necessary context information
@@ -171,7 +171,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:04
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/language-correction.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/language-correction.md
 !-- --- -->
 
 # Task: language-correction
@@ -184,7 +184,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:05
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/language-translation.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/language-translation.md
 !-- --- -->
 
 # Task: language-translation
@@ -196,7 +196,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:05
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/README.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/README.md
 !-- --- -->
 
 # What is Task?
@@ -206,7 +206,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:05
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-data-analysis.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-data-analysis.md
 !-- --- -->
 
 # Task: scientific-data-analysis
@@ -220,7 +220,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:06
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-grant-writing.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-grant-writing.md
 !-- --- -->
 
 # Task: scientific-grant-writing
@@ -234,7 +234,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:06
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-literature-review.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-literature-review.md
 !-- --- -->
 
 # Task: scientific-literature-review
@@ -249,7 +249,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:06
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-peer-review.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-peer-review.md
 !-- --- -->
 
 # Task: scientific-peer-review
@@ -263,7 +263,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:07
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-presentation.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-presentation.md
 !-- --- -->
 
 # Task: scientific-presentation
@@ -277,7 +277,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:07
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-reporting.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-reporting.md
 !-- --- -->
 
 # Task: documentation-reporting
@@ -290,7 +290,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:08
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-abstract.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-abstract.md
 !-- --- -->
 
 # Task: scientific-writing-abstract
@@ -303,7 +303,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:08
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-discussion.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-discussion.md
 !-- --- -->
 
 # Task: scientific-writing-discussion
@@ -316,7 +316,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:08
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-introduction.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-introduction.md
 !-- --- -->
 
 # Task: scientific-writing-introduction
@@ -329,7 +329,7 @@ Task is a component for prompt, which aims for an agent to:
 <!-- ---
 !-- title: 2024-12-27 23:17:09
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-methods.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-methods.md
 !-- --- -->
 
 # Task: scientific-writing-methods

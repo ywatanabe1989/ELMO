@@ -1,10 +1,10 @@
 <!-- ---
 !-- title: 2024-12-27 23:36:55
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/elmo-code-planning.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/llemacs-code-planning.md
 !-- --- -->
 
-# Task: elmo-code-planning
+# Task: llemacs-code-planning
 * Design ELMO-compatible components
 * Plan integration points
 * Consider system dependencies

@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 23:17:08
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-abstract.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/scientific-writing-abstract.md
 !-- --- -->
 
 # Task: scientific-writing-abstract

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-27 08:58:09 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/elmo/workspace/resources/scripts/json2md.sh
+# File: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/scripts/json2md.sh
 
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
