@@ -1,43 +1,42 @@
 graph TD
-    subgraph Project Init
-    subgraph Config
-        A1[Title]
+    subgraph Project
+    subgraph PC[Project Config]
+        A1[Project Name]
         A2[Goal]
     end
-    subgraph States
+    subgraph PS[Project States]
         A3[Milestones]
         A4[Tasks]
         A5[Workspace]
-        A6[Resources]
     end
     A[Setup Project]
-    B[Init Git Repo]
+    B[Initialize Git Repository]
     end
 
     subgraph Main Flow
-    subgraph Processing
+    subgraph Step
         D[Compile Context]
         E[Generate Elisp]
         F[Execute Elisp]
         G{Success?}
     end
 
-    subgraph Version Control
+    subgraph "Logging, Version Control, and State Update"
         H[Log Success]
         I[Log Error]
         J{Milestone?}
         K[Git Commit]
         L[Log Only]
         M{Goal Met?}
-        N[Update States]
+        N[Update Project_States]
     end
     end
 
-    Config --> A
-    States --> A
+    PC --> A
+    PS --> A
     A --> B
     B --> D
-    States --> D
+    PS --> D
     D --> E --> F --> G
     G -- Yes --> H
     G -- No --> I
@@ -48,5 +47,5 @@ graph TD
     I --> L
     L --> M
     M -- No --> N
-    N --> States
+    N --> PS
     M -- Yes --> Z[End]
