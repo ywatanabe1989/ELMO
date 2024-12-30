@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 12:57:12 (ywatanabe)"
-# File: ./ELMO/src/apptainer_builders/install_emacs.sh
+# File: ./LLEMACS/src/apptainer_builders/install_emacs.sh
 
 echo "$0..."
 

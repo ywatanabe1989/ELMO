@@ -13,8 +13,8 @@ From: ubuntu:latest
 
     # Envs
     THIS_DIR="$(dirname $0)"
-    ELMO_HOST_ROOT="${ELMO_HOST_ROOT:-$THIS_DIR/../..}"
-    ELMO_ROOT="${ELMO_ROOT:-/opt/llemacs}"
+    LLEMACS_HOST_ROOT="${LLEMACS_HOST_ROOT:-$THIS_DIR/../..}"
+    LLEMACS_ROOT="${LLEMACS_ROOT:-/opt/llemacs}"
 
     # Rsync options
     RSYNC_OPTIONS="-arv \
@@ -37,13 +37,13 @@ From: ubuntu:latest
     )
 
     for dir in "${DIRS[@]}"; do
-        src=$ELMO_HOST_ROOT/$dir
-        tgt=$SINGULARITY_ROOTFS/$ELMO_ROOT/$dir
+        src=$LLEMACS_HOST_ROOT/$dir
+        tgt=$SINGULARITY_ROOTFS/$LLEMACS_ROOT/$dir
         mkdir -p $tgt
         cmd="rsync $RSYNC_OPTIONS $src $tgt" && echo $cmd && eval $cmd
     done
 
-    # cmd="ln -sf ${ELMO_ROOT}/workspace ${SINGULARITY_ROOTFS}/workspace" && echo $cmd && eval $cmd
+    # cmd="ln -sf ${LLEMACS_ROOT}/workspace ${SINGULARITY_ROOTFS}/workspace" && echo $cmd && eval $cmd
 
 %post -c /bin/bash
     echo -e "\n==================== Post Section ===================="
@@ -52,10 +52,10 @@ From: ubuntu:latest
 
     # System
     system_scripts=(
-        "$ELMO_ROOT/apptainer/build/system-setup/00_apt_packages.sh"
-        "$ELMO_ROOT/apptainer/build/system-setup/01_emacs.sh"
-        "$ELMO_ROOT/apptainer/build/system-setup/02_python.sh"
-        "$ELMO_ROOT/apptainer/build/system-setup/03_bashrc.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/00_apt_packages.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/01_emacs.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/02_python.sh"
+        "$LLEMACS_ROOT/apptainer/build/system-setup/03_bashrc.sh"
     )
     for script in "${system_scripts[@]}"; do
         if $script; then

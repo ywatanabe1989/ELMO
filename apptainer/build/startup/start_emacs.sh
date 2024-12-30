@@ -21,16 +21,16 @@ init_environment() {
 }
 
 start_emacs_daemon() {
-    local log_file=$(mktemp /tmp/emacs-${ELMO_USER_USER}.XXXXXX)
-    local llemacs_user=$ELMO_USER-$ELMO_ID
-    local emacsd=$ELMO_HOME/.emacs.d
-    # local emacsd=$ELMO_WORKSPACE/llemacss/$llemacs_user/.emacs.d
+    local log_file=$(mktemp /tmp/emacs-${LLEMACS_USER_USER}.XXXXXX)
+    local llemacs_user=$LLEMACS_USER-$LLEMACS_ID
+    local emacsd=$LLEMACS_HOME/.emacs.d
+    # local emacsd=$LLEMACS_WORKSPACE/llemacss/$llemacs_user/.emacs.d
     local emacs_server_dir=$emacsd/emacs-server
     local emacs_server_file=$emacs_server_dir/server
 
     # Setup server directory
     mkdir -p $emacsd/emacs-server
-    # chown $ELMO_USER:$ELMO_USER $emacs_server_dir
+    # chown $LLEMACS_USER:$LLEMACS_USER $emacs_server_dir
     chmod 700 $emacs_server_dir
     rm -f $emacs_server_dir/server* 2>/dev/null
 
@@ -38,7 +38,7 @@ start_emacs_daemon() {
     pkill -f "emacs --daemon=$emacs_server_file"
 
     # Start server
-    cmd_start_server="HOME=$ELMO_HOME \
+    cmd_start_server="HOME=$LLEMACS_HOME \
         DISPLAY=$DISPLAY \
         LOGNAME=$llemacs_user \
         USER=$llemacs_user \
@@ -49,7 +49,7 @@ start_emacs_daemon() {
         2>&1"
 
     # Connect client
-    cmd_connect_client="HOME=$ELMO_HOME \
+    cmd_connect_client="HOME=$LLEMACS_HOME \
         DISPLAY=$DISPLAY \
         LOGNAME=$llemacs_user \
         USER=$llemacs_user \

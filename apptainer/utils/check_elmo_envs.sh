@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-24 08:36:15 (ywatanabe)"
-# File: ./ELMO/src/apptainer_builders/check_llemacs_environment.sh
+# File: ./LLEMACS/src/apptainer_builders/check_llemacs_environment.sh
 
 # Source environment variables
 THIS_DIR="$(dirname $0)"
@@ -8,19 +8,19 @@ source "/opt/llemacs/config/env/00_all.env"
 
 
 check_llemacs_envs() {
-    # Set ELMO_ID before checking variables
-    export ELMO_ID=1
+    # Set LLEMACS_ID before checking variables
+    export LLEMACS_ID=1
     source "/opt/llemacs/config/env/00_all.env"
 
-    echo "=== ELMO Environment Variables for $ELMO_USER==="
-    compgen -v | grep '^ELMO\|^HOST' | while read var; do
+    echo "=== LLEMACS Environment Variables for $LLEMACS_USER==="
+    compgen -v | grep '^LLEMACS\|^HOST' | while read var; do
         echo "$var=${!var}"
     done
 }
 
 check_user_setup() {
     echo -e "\n=== Checking User Setup ==="
-    for i in $(seq 1 $ELMO_N_AGENTS); do
+    for i in $(seq 1 $LLEMACS_N_AGENTS); do
         local user="llemacs-$(printf "%03d" $i)"
         echo "Checking $user..."
         id $user 2>/dev/null || echo "User $user not found!"
@@ -37,7 +37,7 @@ check_workspace_structure() {
 
 check_permissions() {
     echo -e "\n=== Checking Permissions ==="
-    for i in $(seq 1 $ELMO_N_AGENTS); do
+    for i in $(seq 1 $LLEMACS_N_AGENTS); do
         local user="llemacs-$(printf "%03d" $i)"
         local workspace="/workspace/$user"
         echo "Checking $workspace permissions..."
@@ -52,10 +52,10 @@ check_user_environment() {
     local test_user="llemacs-001"
     echo -e "\n=== Checking User Environment for $test_user ==="
     su - $test_user -c "
-        export ELMO_ID=1
+        export LLEMACS_ID=1
         source /opt/llemacs/config/env/00_all.env
-        env | grep '^ELMO'
-        echo \"Python venv: \$ELMO_PYTHON_VIRTUAL_ENV\"
+        env | grep '^LLEMACS'
+        echo \"Python venv: \$LLEMACS_PYTHON_VIRTUAL_ENV\"
         which python
     "
 }
@@ -69,22 +69,22 @@ check_permissions
 check_user_environment
 
 
-# === ELMO Environment Variables for ===
+# === LLEMACS Environment Variables for ===
 # HOSTNAME=ywata-note-win
 # HOSTTYPE=x86_64
-# ELMO_BASE_UID=9999
-# ELMO_GROUP=llemacs
-# ELMO_HOME=/opt/llemacs
-# ELMO_HOST_HOME=/home/ywatanabe
-# ELMO_HOST_USER=ywatanabe
-# ELMO_HOST_WORKSPACE=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../../workspace
-# ELMO_ID=1
-# ELMO_LLM_API_KEY=
-# ELMO_LLM_ENGINE=
-# ELMO_N_AGENTS=2
-# ELMO_ROOT=/opt/llemacs
-# ELMO_ROOT_APPTAINER=/opt/llemacs
-# ELMO_ROOT_HOST=/home/ywatanabe/.emacs.d/lisp/ELMO/config/env/../..
+# LLEMACS_BASE_UID=9999
+# LLEMACS_GROUP=llemacs
+# LLEMACS_HOME=/opt/llemacs
+# LLEMACS_HOST_HOME=/home/ywatanabe
+# LLEMACS_HOST_USER=ywatanabe
+# LLEMACS_HOST_WORKSPACE=/home/ywatanabe/.emacs.d/lisp/LLEMACS/config/env/../../workspace
+# LLEMACS_ID=1
+# LLEMACS_LLM_API_KEY=
+# LLEMACS_LLM_ENGINE=
+# LLEMACS_N_AGENTS=2
+# LLEMACS_ROOT=/opt/llemacs
+# LLEMACS_ROOT_APPTAINER=/opt/llemacs
+# LLEMACS_ROOT_HOST=/home/ywatanabe/.emacs.d/lisp/LLEMACS/config/env/../..
 # bash: /opt/llemacs/config/env/ENVS.sh.src: No such file or directory
 # (A) root $ check_user_setup
 
@@ -168,18 +168,18 @@ check_user_environment
 
 # === Checking User Environment for llemacs-001 ===
 # -bash: line 3: /opt/llemacs/src/shell/ENVS.sh.src: No such file or directory
-# ELMO_LLM_API_KEY=
-# ELMO_LLM_ENGINE=
-# ELMO_ROOT_APPTAINER=/opt/llemacs
-# ELMO_BASE_UID=9999
-# ELMO_HOST_WORKSPACE=/opt/llemacs/config/env/../../workspace
-# ELMO_GROUP=llemacs
-# ELMO_ID=1
-# ELMO_ROOT_HOST=/opt/llemacs/config/env/../..
-# ELMO_ROOT=/opt/llemacs/config/env/../..
-# ELMO_HOST_HOME=/home/llemacs-001
-# ELMO_N_AGENTS=2
-# ELMO_HOST_USER=llemacs-001
+# LLEMACS_LLM_API_KEY=
+# LLEMACS_LLM_ENGINE=
+# LLEMACS_ROOT_APPTAINER=/opt/llemacs
+# LLEMACS_BASE_UID=9999
+# LLEMACS_HOST_WORKSPACE=/opt/llemacs/config/env/../../workspace
+# LLEMACS_GROUP=llemacs
+# LLEMACS_ID=1
+# LLEMACS_ROOT_HOST=/opt/llemacs/config/env/../..
+# LLEMACS_ROOT=/opt/llemacs/config/env/../..
+# LLEMACS_HOST_HOME=/home/llemacs-001
+# LLEMACS_N_AGENTS=2
+# LLEMACS_HOST_USER=llemacs-001
 # Python venv: 
 # /usr/bin/python
 # (A) root $ 

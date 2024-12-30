@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-23 12:40:41 (ywatanabe)"
-# File: ./ELMO/src/apptainer_builders/install_python.sh
+# File: ./LLEMACS/src/apptainer_builders/install_python.sh
 
 echo "$0..."
 
