@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2024-12-31 02:29:24
+!-- title: 2024-12-31 02:30:49
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/README.md
 !-- --- -->
@@ -25,5 +25,5 @@ Llemacs is a file-based LLM agent system written in Elisp
 ./main.sh -m run
 ```
 
-## Workspace
-[./docs/tree_workspace.txt](./docs/tree_workspace.txt)
+## Workspace Organization
+[./docs/workspace_tree.txt](./docs/workspace_tree.txt)
