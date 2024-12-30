@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-25 02:46:15
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/docs/dev/LLeMacs_is_natural_revolution.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/docs/dev/LLeMacs_is_natural_revolution.md
 !-- --- -->
 
 Yes, Emacs's historical evolution makes it perfect for LLM integration because:

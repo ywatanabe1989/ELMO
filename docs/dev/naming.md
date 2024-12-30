@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-25 02:34:38
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/docs/dev/naming.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/docs/dev/naming.md
 !-- --- -->
 
 LLeMacs [liːmæks]
@@ -345,7 +345,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !--    - Basic task execution
  !--    - Routine operations
  !-- 
- !-- Perfect elmo-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
+ !-- Perfect llemacs-themed agent hierarchy that maps to traditional ranks while maintaining technical relevance.
  !-- 
  !-- 
  !-- NINJA: Network-In-Network Joint Agents
@@ -527,7 +527,7 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- NINMACS: NINja Multi-Agent Collaborative System
  !-- 
  !-- Core concepts:
- !-- - Silent but powerful (like elmo)
+ !-- - Silent but powerful (like llemacs)
  !-- - Stealthy execution (minimal UI interference)
  !-- - Shadow cloning (multiple agents)
  !-- - Ninjutsu (specialized agent skills)
@@ -575,11 +575,11 @@ NINJA: Neural Intelligence Network Joint Agents
  !-- 
  !-- JONINMACS: JSON-Oriented Neural INtelligence Multi-Agent Collaborative System
  !-- - Emphasizes JSON as data protocol
- !-- - References Jonin (高忍) elmo rank
+ !-- - References Jonin (高忍) llemacs rank
  !-- - Maintains Multi-Agent concept
  !-- 
  !-- JOUNIN: JSON-Oriented Universal Neural Intelligence Network
- !-- - Plays on 上忍 (Jōunin, high-ranked elmo)
+ !-- - Plays on 上忍 (Jōunin, high-ranked llemacs)
  !-- - Emphasizes universal capabilities
  !-- - Neural network integration
  !-- 

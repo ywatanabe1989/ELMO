@@ -1,7 +1,7 @@
 <!-- ---
 !-- title: 2024-12-27 15:03:14
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/elmo/docs/dev/step.md
+!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/docs/dev/step.md
 !-- --- -->
 
 Project-based, file-based agent communication

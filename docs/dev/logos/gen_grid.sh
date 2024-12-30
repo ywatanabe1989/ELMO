@@ -1,6 +1,6 @@
 #!/bin/bash
 # Time-stamp: "2024-12-10 10:10:07 (ywatanabe)"
-# File: ./elmo/docs/logos/gen_grid.sh
+# File: ./llemacs/docs/logos/gen_grid.sh
 
 echo '<p align="center"><table>' > grid.html
 for ((i=0; i<8; i++)); do
