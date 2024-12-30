@@ -1,144 +1,232 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-30 23:08:38
-;;; Time-stamp: <2024-12-30 23:08:38 (ywatanabe)>
+;;; Author: 2024-12-31 00:09:04
+;;; Time-stamp: <2024-12-31 00:09:04 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging.el
 
 (require '01-llemacs-config)
-(require '04-llemacs-utils)
-;; ----------------------------------------
-;; Logging variables
-;; ----------------------------------------
-(defvar llemacs--log-level 'info
-  "Current logging level: 'debug, 'info, 'warn, or 'error.")
+(require '01-llemacs-config)
+(require 'emacsql)
+(require 'emacsql-sqlite)
 
-;; (defvar llemacs--log-backup-limit 5
-;;   "Maximum number of backup files to keep.")
+;; Note that in this system, llm + emacs;
+;; Logs are history of processes and source for context generation.
+;; Agents are volatile for minimal processing unit (step; context generation -> elisp generation -> elisp execution -> logging
+;; Agents will find waiting state of project and tasks
+;; Step should be thread safe for the task
+;; I am not sure that agent info should be logged
+;; Also, I am thinking that git management is crutial
 
-;; -------------------------------------
-;; Log file handlers
-;; -------------------------------------
-(defun llemacs--log-init ()
-  "Initialize the log file if it doesn't exist."
-  (unless (file-exists-p llemacs--path-logs)
-    (make-directory llemacs--path-logs t))
-  (unless (file-exists-p llemacs--path-log-system)
-    (with-temp-file llemacs--path-log-system
-      (insert (format "=== LLEMACS log initialized: %s ==="
-                      (format-time-string "%Y-%m-%d %H:%M:%S"))))))
 
-(defun llemacs--log-open ()
-  "Open the LLEMACS log file in a buffer."
-  (interactive)
-  (if (file-exists-p llemacs--path-log-system)
-      (progn
-        (find-file-read-only llemacs--path-log-system)
-        (goto-char (point-min)))
-    (message "Log file does not exist: %s" llemacs--path-log-system)))
+(defvar llemacs--log-level-threshold 'info
+  "Minimum log level to record.")
 
-(defun llemacs-log-backup ()
-  "Backup current log file and create new one."
-  (interactive)
-  (when (file-exists-p llemacs--path-log-system)
-    (unless (file-exists-p llemacs--path-log-backups)
-      (make-directory llemacs--path-log-backups t))
-    (let ((backup-name (format "system-%s.log"
-                               (format-time-string "%Y%m%d-%H%M%S"))))
-      (rename-file llemacs--path-log-system
-                   (expand-file-name backup-name llemacs--path-log-backups))
-      (llemacs--log-init))))
+(defun llemacs--log-level-value (level)
+  "Convert log LEVEL to numeric value for comparison."
+  (pcase level
+    ('debug 0)
+    ('info  1)
+    ('warn  2)
+    ('error 3)
+    (_      1)))
 
-;; -------------------------------------
+(defvar llemacs--db nil
+  "Database connection for logging.")
+
+(defvar llemacs--log-structure
+  '(timestamp
+    level
+    project_id
+    task_id
+    agent_id
+    message
+    context
+    input
+    output
+    dependencies
+    state_changes
+    caller_info
+    user)
+  "Required fields for structured logging.")
+
+(defun llemacs--db-init ()
+  "Initialize logging database with structured schema."
+  (unless (file-exists-p (file-name-directory llemacs--path-log-db))
+    (make-directory (file-name-directory llemacs--path-log-db) t))
+  (setq llemacs--db (emacsql-sqlite-open llemacs--path-log-db))
+  (emacsql llemacs--db
+           [:create-table-if-not-exists logs
+                                        ([timestamp
+                                          level
+                                          project_id
+                                          task_id
+                                          agent_id
+                                          message
+                                          context
+                                          input
+                                          output
+                                          dependencies
+                                          state_changes
+                                          caller_info
+                                          user])])
+  (message "Log database initialized at %s" llemacs--path-log-db))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loggers
-;; -------------------------------------
-(defun llemacs--log-get-caller-info ()
-  "Get caller's file and line info."
-  (let* ((frames (backtrace-frames))
-         (frame (nth 4 frames)))
-    (when frame
-      (format "%s:%s"
-              (or load-file-name buffer-file-name "unknown")
-              (line-number-at-pos)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun llemacs--log-to-db (level msg metadata)
+  "Write structured log entry to database."
+  (unless llemacs--db (llemacs--db-init))
+  (emacsql llemacs--db
+           [:insert :into logs
+                    :values $v1]
+           (vector llemacs--timestamp
+                   level
+                   (alist-get 'project_id metadata)
+                   (alist-get 'task_id metadata)
+                   (alist-get 'agent_id metadata)
+                   msg
+                   (alist-get 'context metadata)
+                   (alist-get 'input metadata)
+                   (alist-get 'output metadata)
+                   (alist-get 'dependencies metadata)
+                   (alist-get 'state_changes metadata)
+                   (llemacs--log-get-caller-info)
+                   (user-login-name))))
 
-(defun llemacs--log-to-file (message log-file &optional level)
-  "Log MESSAGE to LOG-FILE with optional LEVEL."
-  (llemacs--log-init)
-  (let* (;; (timestamp (format-time-string "%Y-%m-%d %H:%M:%S"))
-         (level-str (if level (format "%s" (upcase (symbol-name level))) ""))
-         (caller-info (llemacs--log-get-caller-info))
-         (formatted-msg (format "[%s %s %s]\n=> %s\n%s\n"
-                                level-str
-                                llemacs--timestamp
-                                (user-login-name)
-
-                                (or caller-info "unknown")
-                                message)))
-    (with-temp-buffer
-      (when (file-exists-p log-file)
-        (insert-file-contents log-file))
+(defun llemacs--log-to-file (msg file &optional level metadata)
+  "Write structured log entry to file."
+  (let* ((log-entry `(("timestamp" . ,llemacs--timestamp)
+                      ("level" . ,(or level 'info))
+                      ("message" . ,msg)
+                      ("metadata" . ,metadata)
+                      ("caller" . ,(llemacs--log-get-caller-info))
+                      ("user" . ,(user-login-name))))
+         (log-dir (file-name-directory file)))
+    (unless (file-exists-p log-dir)
+      (make-directory log-dir t))
+    (with-temp-file file
+      (when (file-exists-p file)
+        (insert-file-contents file))
       (goto-char (point-min))
-      (insert "--------------------------------------------------------------------------------\n")
-      (insert formatted-msg)
-      (write-region (point-min) (point-max) log-file nil 'quiet)
-      (llemacs-rotate-logs-if-needed log-file))))
+      (insert (concat (json-encode log-entry) "\n")))))
 
-(defun llemacs--log (level message)
-  "Log MESSAGE with LEVEL if it meets current log-level threshold."
-  (when (or (eq llemacs--log-level 'debug)
-            (memq level '(error warn)))
-    (llemacs--log-to-file message llemacs--path-log-system level)))
+(defun llemacs--log (level msg &optional metadata)
+  "Log with both file and database backends."
+  (llemacs--log-to-db level msg metadata)
+  (llemacs--log-to-file msg llemacs--path-log-system level metadata))
 
-(defun llemacs--log-message (message)
-  "Log general MESSAGE."
-  (llemacs--log 'info message))
+(defun llemacs-log-action (msg &optional metadata)
+  "Log user/system action with context."
+  (llemacs--log 'info msg metadata))
 
-(defun llemacs--log-error (message)
-  "Log error MESSAGE and open the log file."
-  (llemacs--log 'error
-             (if (stringp message)
-                 message
-               (error-message-string message)))
-  (llemacs--log-open))
+(defun llemacs-log-error (msg &optional metadata)
+  "Log error with context."
+  (llemacs--log 'error msg metadata))
 
-(defun llemacs--log-warning (message)
-  "Log warning MESSAGE."
-  (llemacs--log 'warn message))
+(defun llemacs-log-debug (msg &optional metadata)
+  "Log debug message with context."
+  (llemacs--log 'debug msg metadata))
 
-(defun llemacs--log-debug (message)
-  "Log debug MESSAGE."
-  (llemacs--log 'debug message))
+(defun llemacs-log-info (msg &optional metadata)
+  "Log info message with context."
+  (llemacs--log 'info msg metadata))
 
-(defun llemacs--log-prompt (_message)
-  "Log prompt MESSAGE."
-  (llemacs--log 'info (concat "[PROMPT] " _message)))
+(defun llemacs-log-warning (msg &optional metadata)
+  "Log warning message with context."
+  (llemacs--log 'warn msg metadata))
 
-(defun llemacs--log-success (_message)
-  "Log success MESSAGE."
-  (llemacs--log 'info (concat "[SUCCESS] " _message)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Getters
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun llemacs-logs-get-by-level (level &optional limit)
+  "Get logs with specific level."
+  (emacsql llemacs--db
+           [:select *
+                    :from logs
+                    :where (= level $s1)
+                    :order-by [(desc timestamp)]
+                    :limit $s2]
+           level (or limit 50)))
 
-(defun llemacs--log-system (_message)
-  "Log system MESSAGE."
-  (llemacs--log 'info (concat "[SYSTEM] " _message)))
+(defun llemacs-logs-get-by-project (project-id &optional limit)
+  "Get logs for specific project."
+  (emacsql llemacs--db
+           [:select *
+                    :from logs
+                    :where (= project_id $s1)
+                    :order-by [(desc timestamp)]
+                    :limit $s2]
+           project-id (or limit 50)))
 
-;; -------------------------------------
-;; I don't understand
-;; -------------------------------------
-(defun llemacs-rotate-logs-if-needed (log-file)
-  "Rotate LOG-FILE if it exceeds size limit."
-  (when (and (file-exists-p log-file)
-             (> (file-attribute-size (file-attributes log-file))
-                (* 1024 1024)))
-    (let* ((backup-name (format "%s.%s"
-                                log-file
-                                (format-time-string "%Y%m%d-%H%M%S")))
-           (backup-dir (expand-file-name "backups"
-                                         (file-name-directory log-file))))
-      (unless (file-exists-p backup-dir)
-        (make-directory backup-dir t))
-      (rename-file log-file
-                   (expand-file-name (file-name-nondirectory backup-name)
-                                     backup-dir))
-      (llemacs--log-remove-old backup-dir))))
+(defun llemacs-logs-get-by-agent (agent-id &optional limit)
+  "Get logs for specific agent."
+  (emacsql llemacs--db
+           [:select *
+                    :from logs
+                    :where (= agent_id $s1)
+                    :order-by [(desc timestamp)]
+                    :limit $s2]
+           agent-id (or limit 50)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Viewers
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun llemacs-log-view-by-level (level)
+  "View logs filtered by LEVEL in a dedicated buffer."
+  (interactive (list (completing-read "Level: " '(debug info warn error))))
+  (let ((buf (get-buffer-create "*LLEMACS Logs*"))
+        (logs (llemacs-logs-get-by-level level)))
+    (with-current-buffer buf
+      (erase-buffer)
+      (dolist (log logs)
+        (insert (format "%s [%s] %s\n"
+                        (elt log 0) ; timestamp
+                        (elt log 1) ; level
+                        (elt log 5)))) ; message
+      (display-buffer buf))))
+
+(defun llemacs-log-view-by-project (project-id)
+  "View logs filtered by PROJECT-ID in a dedicated buffer."
+  (interactive "sProject ID: ")
+  (let ((buf (get-buffer-create "*LLEMACS Logs*"))
+        (logs (llemacs-logs-get-by-project project-id)))
+    (with-current-buffer buf
+      (erase-buffer)
+      (dolist (log logs)
+        (insert (format "%s [%s] %s\n"
+                        (elt log 0)
+                        (elt log 1)
+                        (elt log 5))))
+      (display-buffer buf))))
+
+(defun llemacs--log-example ()
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Examples
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Basic logging
+  (llemacs-log-debug "Starting function X")
+  (llemacs-log-info "Process completed")
+  (llemacs-log-warning "Resource usage high")
+  (llemacs-log-error "Connection failed")
+
+  ;; Logging with metadata
+  (llemacs-log-info "Task started"
+                    '((project_id . "PROJ-001")
+                      (task_id . "TASK-123")
+                      (agent_id . "AGENT-007")
+                      (context . "Data processing pipeline")
+                      (input . "raw_data.csv")
+                      (dependencies . ["db" "api"])))
+
+  ;; View logs
+  (llemacs-log-view-by-level 'error)
+  (llemacs-log-view-by-project "PROJ-001")
+
+  ;; Query logs
+  (let ((error-logs (llemacs-logs-get-by-level 'error 10)))
+    (dolist (log error-logs)
+      (message "Error: %s at %s" (elt log 5) (elt log 0))))
+  )
 
 (provide '02-llemacs-logging)
 
