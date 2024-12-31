@@ -1,9 +1,9 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 20:17:35
-;;; Time-stamp: <2024-12-31 20:17:35 (ywatanabe)>
+;;; Author: 2024-12-31 22:42:18
+;;; Time-stamp: <2024-12-31 22:42:18 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging.el
 
-(defun load-logging-components ()
+(defun llemacs--load-logging-components ()
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
     ;; Core components
     (load (expand-file-name "02-llemacs-logging/core/02-llemacs-logging-core-db.el" dir))
@@ -25,7 +25,7 @@
     (load (expand-file-name "02-llemacs-logging/file/02-llemacs-logging-file-viewers.el" dir))))
 
 ;; Initialize components
-(load-logging-components)
+(llemacs--load-logging-components)
 
 ;; Initialize both logging systems
 (llemacs--logging-init-db)
