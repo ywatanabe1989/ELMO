@@ -1,10 +1,35 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 19:18:25
-;;; Time-stamp: <2024-12-31 19:18:25 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-buffer.el
+;;; Author: 2024-12-31 23:06:23
+;;; Time-stamp: <2024-12-31 23:06:23 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/02-llemacs-base-buffer.el
 
-(require '01-llemacs-config)
 (require 'org)
+
+(defcustom llemacs--buffer-main "*LLEMACS*"
+  "Name of main buffer."
+  :type 'string
+  :group 'llemacs-buffer)
+
+(defcustom llemacs--buffer-log "*LLEMACS-LOGGING*"
+  "Name of log buffer."
+  :type 'string
+  :group 'llemacs-buffer)
+
+(defcustom llemacs--buffer-debug "*LLEMACS-DEBUG*"
+  "Buffer for debug output when debug mode enabled."
+  :type 'string
+  :group 'llemacs-buffer)
+
+;; Feature-specific Buffers
+(defcustom llemacs--buffer-project "*LLEMACS-PROJECT*"
+  "Buffer for project operations."
+  :type 'string
+  :group 'llemacs-buffer)
+
+(defcustom llemacs--buffer-search "*LLEMACS-SEARCH*"
+  "Buffer for search results."
+  :type 'string
+  :group 'llemacs-buffer)
 
 ;; Buffer initialization helper
 (defun llemacs--buffer-init-org-buffer (buffer-name title &optional sections)

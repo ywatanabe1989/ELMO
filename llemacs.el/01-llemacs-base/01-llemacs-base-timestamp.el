@@ -1,11 +1,8 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 20:15:23
-;;; Time-stamp: <2024-12-31 20:15:23 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-config/01-llemacs-config-timestamp.el
+;;; Author: 2024-12-31 23:06:38
+;;; Time-stamp: <2024-12-31 23:06:38 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/01-llemacs-base-timestamp.el
 
-;; ----------------------------------------
-;; Reference timestamp
-;; ----------------------------------------
 (defcustom llemacs--timestamp
   (format-time-string "%Y-%m-%d-%H:%M:%S")
   "Timestamp references by LLEMACS"
@@ -19,6 +16,5 @@
 (defun llemacs-timestamp-update ()
   "Updates the reference timestamp."
   (setq llemacs--timestamp (llemacs--timestamp-get)))
-
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
