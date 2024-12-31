@@ -1,172 +1,25 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-29 17:17:33
-;;; Time-stamp: <2024-12-29 17:17:33 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/elisp/llemacs/03-llemacs-llm.el
+;;; Author: 2024-12-31 22:40:19
+;;; Time-stamp: <2024-12-31 22:40:19 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm.el
 
-(require 'request)
-(require '01-llemacs-config)
-(require '04-llemacs-utils)
-(require '02-llemacs-logging)
-(require '08-llemacs-prompt)
+(defun llemacs--load-llm-components ()
+  "Load LLM component files."
+  (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
+    ;; Core components
+    (load (expand-file-name "03-llemacs-llm/core/03-llemacs-llm-api-configs.el" dir))
+    (load (expand-file-name "03-llemacs-llm/core/03-llemacs-llm-api-keys-and-engines.el" dir))
+    (load (expand-file-name "03-llemacs-llm/core/03-llemacs-llm-call.el" dir))
+    (load (expand-file-name "03-llemacs-llm/core/03-llemacs-llm-call-providers.el" dir))
+    (load (expand-file-name "03-llemacs-llm/core/03-llemacs-llm-helper-functions.el" dir))
 
-(defvar llemacs-llm-provider "deepseek"
-  "Switcher for LLM provider")
+    ;; Prompt components
+    (load (expand-file-name "03-llemacs-llm/prompt/03-llemacs-llm-prompt-compiler.el" dir))
+    (load (expand-file-name "03-llemacs-llm/prompt/03-llemacs-llm-prompt-recipe-helper-functions.el" dir))
+    (load (expand-file-name "03-llemacs-llm/prompt/03-llemacs-llm-prompt-recipes.el" dir))))
 
-(defcustom llemacs-pyscripts-dir (expand-file-name "resources/scripts/" llemacs-path-workspace)
-  "Path to the Python binary used by llemacs.el."
-  :type 'string)
-
-(defcustom llemacs-gemini-script (expand-file-name "gemini_call.py" llemacs-pyscripts-dir)
-  "Path to the Python binary used by llemacs.el."
-  :type 'string)
-
-(defvar llemacs-anthropic-key (getenv "ANTHROPIC_API_KEY")
-  "API key for Anthropic Claude.")
-
-(defvar llemacs-anthropic-engine (getenv "ANTHROPIC_ENGINE")
-  "Model for Anthropic Claude.")
-
-(defvar llemacs-google-key (getenv "GOOGLE_API_KEY")
-  "API key for Google Claude.")
-
-(defvar llemacs-google-engine (getenv "GOOGLE_ENGINE")
-  "Model for Google Claude.")
-
-(defvar llemacs-deepseek-key (getenv "DEEPSEEK_API_KEY")
-  "API key for DeepSeek.")
-
-(defvar llemacs-deepseek-engine (getenv "DEEPSEEK_ENGINE")
-  "Model for DeepSeek.")
-
-(defun llemacs-llm-switch-provider (provider)
-  "Switch the LLM provider."
-  (interactive
-   (list (completing-read "Select LLM provider: "
-                          '("deepseek" "openai" "anthropic" "google")
-                          nil t)))
-  (setq llemacs-llm-provider provider)
-  (message "Switched LLM provider to: %s" provider))
-
-(defun llemacs-llm-gemini (text)
-  "Simple text to text processing using Gemini API."
-  (condition-case err
-      (let ((temp-file (make-temp-file "gemini-response")))
-        (unwind-protect
-            (progn
-              (unless (= 0 (shell-command
-                            (format "source /workspace/.env/bin/activate && python3 %s \"%s\" \"%s\""
-                                    llemacs-gemini-script
-                                    (replace-regexp-in-string "\"" "\\\\\"" text)
-                                    temp-file)))
-                (error "Python script execution failed"))
-              (with-temp-buffer
-                (insert-file-contents temp-file)
-                (buffer-string)))
-          (ignore-errors (delete-file temp-file))))
-    (error
-     (llemacs--log-error (format "Gemini API request failed.\n%s"
-                              (error-message-string err)))
-     nil)))
-
-(defun llemacs-llm-claude (text)
-  "Simple text to text processing using Claude API."
-  (condition-case err
-      (let* ((url-request-method "POST")
-             (url-request-extra-headers
-              `(("Content-Type" . "application/json")
-                ("x-api-key" . ,llemacs-anthropic-key)
-                ("anthropic-version" . "2023-06-01")))
-             (url-request-data
-              (encode-coding-string
-               (json-encode
-                `(("model" . ,llemacs-anthropic-engine)
-                  ("max_tokens" . 8192)
-                  ("messages" . [,(list (cons "role" "user")
-                                        (cons "content" text))])))
-               'utf-8))
-             (buffer (url-retrieve-synchronously
-                      "https://api.anthropic.com/v1/messages" t)))
-        (if buffer
-            (with-current-buffer buffer
-              (goto-char (point-min))
-              (let ((status-line (buffer-substring (point) (line-end-position))))
-                (if (string-match "200 OK" status-line)
-                    (progn
-                      (re-search-forward "^$")
-                      (let ((json-object-type 'alist)
-                            (json-array-type 'vector))
-                        (let ((resp-data (json-read)))
-                          (when resp-data
-                            (alist-get 'text (aref (alist-get 'content resp-data) 0))))))
-                  (error "API request failed with status: %s" status-line))))
-          (error "Failed to retrieve response")))
-    (error
-     (llemacs--log-error (format "Claude API request failed.\n%s"
-                              (error-message-string err)))
-     nil)))
-
-
-(defun llemacs-llm-deepseek (text)
-  "Simple text to text processing using DeepSeek API."
-  (condition-case err
-      (let* ((url-request-method "POST")
-             (url-request-extra-headers
-              `(("Content-Type" . "application/json")
-                ("Authorization" . ,(concat "Bearer " llemacs-deepseek-key))))
-             (url-request-data
-              (encode-coding-string
-               (json-encode
-                `(("model" . ,llemacs-deepseek-engine)
-                  ("messages" . [,(list (cons "role" "system")
-                                        (cons "content" "You are a helpful assistant."))
-                                 ,(list (cons "role" "user")
-                                        (cons "content" text))])
-                  ("stream" . :json-false)))
-               'utf-8))
-             (buffer (url-retrieve-synchronously
-                      "https://api.deepseek.com/chat/completions" t)))
-        (if buffer
-            (with-current-buffer buffer
-              (goto-char (point-min))
-              (let ((status-line (buffer-substring (point) (line-end-position))))
-                (if (string-match "200 OK" status-line)
-                    (progn
-                      (re-search-forward "^$")
-                      (let ((json-object-type 'alist)
-                            (json-array-type 'vector))
-                        (let ((resp-data (json-read)))
-                          (when resp-data
-                            (let* ((choices (alist-get 'choices resp-data))
-                                   (first-choice (aref choices 0))
-                                   (message (alist-get 'message first-choice))
-                                   (content (alist-get 'content message)))
-                              (if (stringp content)
-                                  (decode-coding-string content 'utf-8)
-                                (error "Invalid content in API response")))))))
-                  (error "API request failed with status: %s" status-line))))
-          (error "Failed to retrieve response")))
-    (error
-     (llemacs--log-error (format "DeepSeek API request failed.\n%s"
-                              (error-message-string err)))
-     nil)))
-
-
-(defun llemacs-llm (prompt &optional template)
-  "Process PROMPT using configured LLM provider.
-Optional TEMPLATE is used to combine with prompt."
-  (let ((text (if template
-                  (llemacs-to-full-prompt template prompt)
-                prompt)))
-    (pcase llemacs-llm-provider
-      ("anthropic" (llemacs-llm-claude text))
-      ("google" (llemacs-llm-gemini text))
-      ("deepseek" (llemacs-llm-deepseek text))
-      (_ (error "Unknown LLM provider: %s" llemacs-llm-provider)))))
-
-
-;; (llemacs-llm "hello")
-;; (llemacs-llm-deepseek "hello")
-;; (llemacs-llm "hello" "001-context-to-report")
+;; Initialize LLM components
+(llemacs--load-llm-components)
 
 (provide '03-llemacs-llm)
 
