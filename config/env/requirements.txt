@@ -1,0 +1,7 @@
+anthropic
+ipython
+markdown-to-json
+numpy
+pandas
+requests
+scipy
