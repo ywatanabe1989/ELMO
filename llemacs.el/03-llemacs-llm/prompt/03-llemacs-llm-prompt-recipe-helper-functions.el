@@ -74,7 +74,7 @@
                            (file-attribute-modification-time (file-attributes md-file)))))
         (when (or (not md-exists)
                   (time-less-p md-time json-time))
-          (llemacs-json-to-markdown json-file))))))
+          (llemacs--cvt-json-to-markdown json-file))))))
 
 (defun llemacs--llm-prompt-get-template (prompt-template-name)
   "Get content of PROMPT-TEMPLATE-NAME markdown file."
