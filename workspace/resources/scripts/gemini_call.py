@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2024-12-27 14:14:42 (ywatanabe)"
-# File: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/scripts/gemini_call.py
+# Time-stamp: "2024-12-31 19:10:21 (ywatanabe)"
+# File: ./scripts/gemini_call.py
 
-__file__ = "/home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/scripts/gemini_call.py"
+__file__ = "./scripts/gemini_call.py"
 
 import argparse
 import google.generativeai as genai
