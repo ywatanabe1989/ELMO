@@ -1,12 +1,9 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 20:13:51
-;;; Time-stamp: <2024-12-31 20:13:51 (ywatanabe)>
+;;; Author: 2024-12-31 22:35:18
+;;; Time-stamp: <2024-12-31 22:35:18 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-config/01-llemacs-config-groups.el
 
-;; ----------------------------------------
-;; Groups
-;; ----------------------------------------
-;; Core
+;; Global
 (defgroup llemacs nil
   "LLM Agents on Emacs"
   :group 'applications)
@@ -49,6 +46,5 @@
 (defgroup llemacs-task nil
   "Task management."
   :group 'llemacs-project)
-
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

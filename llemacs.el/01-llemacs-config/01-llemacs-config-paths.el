@@ -1,11 +1,8 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 20:14:25
-;;; Time-stamp: <2024-12-31 20:14:25 (ywatanabe)>
+;;; Author: 2024-12-31 22:32:54
+;;; Time-stamp: <2024-12-31 22:32:54 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-config/01-llemacs-config-paths.el
 
-;; ----------------------------------------
-;; Path
-;; ----------------------------------------
 ;; Global
 (defcustom llemacs-path-workspace
   "/home/ywatanabe/.emacs.d/lisp/llemacs/workspace"
@@ -89,5 +86,22 @@
   :type 'string
   :group 'llemacs)
 
+(defcustom llemacs-prompt-template-dir
+  (expand-file-name "resources/prompt-templates" llemacs-path-workspace)
+  "Directory for prompt templates."
+  :type 'file
+  :group 'llemacs)
+
+(defcustom llemacs--path-prompt-compiled
+  (expand-file-name "resources/prompt-templates/compiled" llemacs-path-workspace)
+  "Directory for prompt templates."
+  :type 'file
+  :group 'llemacs)
+
+(defcustom llemacs-prompt-components-dir
+  (expand-file-name "resources/prompt-templates/components" llemacs-path-workspace)
+  "Directory for prompt components."
+  :type 'file
+  :group 'llemacs)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
