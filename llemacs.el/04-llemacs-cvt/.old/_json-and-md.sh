@@ -1,7 +1,6 @@
 #!/bin/bash
-# Time-stamp: "2024-12-27 08:58:09 (ywatanabe)"
+# Time-stamp: "2025-01-01 16:14:20 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/scripts/json2md.sh
-
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -22,6 +21,7 @@ def json2md(obj, level=1):
                 output.append(json2md(value, level + 1))
             else:
                 output.append(str(value) + "\n")
+                output.append("")  # Add blank line between sections
     elif isinstance(obj, list):
         for item in obj:
             if isinstance(item, (dict, list)):
@@ -87,49 +87,115 @@ json2md() {
     python "$JSON2MD_PYTHON" "$input" > "$output"
 }
 
-md_to_json() {
-    local input=$1
-    python -c "
-import sys
-import json
+# md_to_json() {
+#     local input=$1
+#     python -c "
+# import sys
+# import json
 
-def md_to_json(md_content):
-    lines = md_content.split('\n')
-    result = {}
-    current_section = None
-    current_content = []
-    
-    for line in lines:
-        if line.startswith('#'):
-            if current_section:
-                result[current_section] = '\n'.join(current_content).strip()
-                current_content = []
-            current_section = line.lstrip('#').strip()
-        elif line.strip():
-            current_content.append(line)
-    
-    if current_section:
-        result[current_section] = '\n'.join(current_content).strip()
-    
-    return result
+# def md_to_json(md_content):
+#     lines = md_content.split('\n')
+#     result = {}
+#     current_section = None
+#     current_content = []
 
-with open('$input', 'r') as f:
-    content = f.read()
-print(json.dumps(md_to_json(content), indent=2))
-"
-}
+#     for line in lines:
+#         if line.startswith('#'):
+#             if current_section:
+#                 result[current_section] = '\n'.join(current_content).strip()
+#                 current_content = []
+#             current_section = line.lstrip('#').strip()
+#         elif line.strip():
+#             current_content.append(line)
 
+#     if current_section:
+#         result[current_section] = '\n'.join(current_content).strip()
+
+#     return result
+
+# with open('$input', 'r') as f:
+#     content = f.read()
+# print(json.dumps(md_to_json(content), indent=2))
+# "
+# }
+
+
+# md_to_json() {
+#     local input=$1
+#     python -c "
+# import sys
+# import json
+
+# def md_to_json(md_content):
+#     lines = md_content.split('\n')
+#     result = {}
+#     stack = [result]
+#     current_level = 0
+
+#     for line in lines:
+#         if line.startswith('#'):
+#             # Count heading level
+#             level = len(line.split()[0])
+#             key = line.lstrip('#').strip()
+
+#             # Adjust stack based on heading level
+#             while len(stack) > level:
+#                 stack.pop()
+#             while len(stack) < level:
+#                 new_dict = {}
+#                 stack[-1][prev_key] = new_dict
+#                 stack.append(new_dict)
+
+#             stack[-1][key] = []
+#             prev_key = key
+#         elif line.strip().startswith('*'):
+#             # Handle list items
+#             item = line.strip()[2:].strip()
+#             if isinstance(stack[-1][prev_key], list):
+#                 stack[-1][prev_key].append(item)
+#             else:
+#                 stack[-1][prev_key] = [item]
+#         elif line.strip():
+#             # Handle normal text
+#             if isinstance(stack[-1][prev_key], list):
+#                 stack[-1][prev_key] = line.strip()
+#             else:
+#                 stack[-1][prev_key] += '\\n' + line.strip()
+
+#     return result
+
+# with open('$input', 'r') as f:
+#     content = f.read()
+# print(json.dumps(md_to_json(content), indent=2))
+# "
+# }
+
+
+
+# md2json() {
+#     local input=$1
+#     local output=$2
+
+#     # Remove comment lines
+#     local input_cleaned=$(mktemp)
+#     sed -e '/<!--/,/-->/d' -e '/^;/d' "$input" > "$input_cleaned"
+
+#     # Apply md_to_json
+#     md_to_json "$input_cleaned" > "$output"
+#     rm "$input_cleaned"
+# }
 
 md2json() {
     local input=$1
     local output=$2
-   
+    
     # Remove comment lines
     local input_cleaned=$(mktemp)
     sed -e '/<!--/,/-->/d' -e '/^;/d' "$input" > "$input_cleaned"
 
     # Apply md_to_json
-    md_to_json "$input_cleaned" > "$output"
+    /home/ywatanabe/.env/bin/python -m md_to_json -i "$input_cleaned" -o "$output"
+    # md_to_json "$input_cleaned" > "$output"
     rm "$input_cleaned"
 }
 

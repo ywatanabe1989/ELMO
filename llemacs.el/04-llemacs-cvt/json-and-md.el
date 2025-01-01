@@ -1,9 +1,9 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:32:07
-;;; Time-stamp: <2024-12-31 23:32:07 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-conversion/04-llemacs-cvt-json-and-md.el
+;;; Author: 2025-01-02 03:12:08
+;;; Time-stamp: <2025-01-02 03:12:08 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-cvt/json-and-md.el
 
-(require '02-llemacs-logging)
+;; (require '02-llemacs-logging)
 
 (defcustom llemacs--cvt-format-script
   (expand-file-name "04-llemacs-cvt-json-and-md.sh" (file-name-directory (or load-file-name buffer-file-name)))
@@ -16,23 +16,33 @@
 ;; ----------------------------------------
 (defun llemacs--cvt-json-to-markdown (json-path)
   "Convert JSON file at JSON-PATH to markdown using external script."
-  (llemacs-check-json json-path)
+  (interactive
+   (list (let ((default (and buffer-file-name
+                             (string= (file-name-extension buffer-file-name) "json")
+                             buffer-file-name)))
+           (read-file-name "JSON file: " nil default t default))))
+  (llemacs-check-json (expand-file-name json-path))
   (condition-case err
-      (call-process llemacs--cvt-format-script nil nil nil json-path)
+      (call-process llemacs--cvt-format-script nil nil nil (expand-file-name json-path))
     (error
-     (llemacs--logging-error (format "JSON to Markdown conversion failed: %s" err))
+     (llemacs--logging-log-error (format "JSON to Markdown conversion failed: %s" err))
      nil)))
 
-(defun llemacs--cvt-markdown-to-json (filepath-md)
+(defun llemacs--cvt-markdown-to-json (md-path)
   "Convert JSON file at FILEPATH to markdown using external script."
-  (if (not (string= (file-name-extension filepath-md) "md"))
+  (interactive
+   (list (let ((default (and buffer-file-name
+                             (string= (file-name-extension buffer-file-name) "md")
+                             buffer-file-name)))
+           (read-file-name "Markdown file: " nil default t default))))
+  (if (not (string= (file-name-extension md-path) "md"))
       (progn
-        (llemacs--logging-error (format "Invalid file extension: %s" filepath-md))
+        (llemacs--logging-log-error (format "Invalid file extension: %s" md-path))
         nil)
     (condition-case err
-        (call-process llemacs--cvt-format-script nil nil nil (expand-file-name filepath-md))
+        (call-process llemacs--cvt-format-script nil nil nil (expand-file-name md-path))
       (error
-       (llemacs--logging-error (format "Markdown to JSON to conversion failed: %s" err))
+       (llemacs--logging-log-error (format "Markdown to JSON conversion failed: %s" err))
        nil))))
 
 ;; ----------------------------------------
@@ -41,7 +51,7 @@
 (defun llemacs-load-markdown-file (file-path)
   "Load contents of markdown FILE-PATH as string, skipping metadata comments."
   (unless (file-exists-p file-path)
-    (llemacs--logging-error "File does not exist: %s" file-path))
+    (llemacs--logging-log-error "File does not exist: %s" file-path))
   (condition-case err
       (let ((content (with-temp-buffer
                        (insert-file-contents file-path)
@@ -51,10 +61,10 @@
                          (forward-line))
                        (buffer-substring-no-properties (point) (point-max)))))
         (if (string-empty-p content)
-            (llemacs--logging-error (format "File is empty:\n%s" file-path))
+            (llemacs--logging-log-warn (format "File is empty:\n%s" file-path))
           content))
     (error
-     (llemacs--logging-error (format "Failed to load markdown file\n%s\n%s" file-path err))
+     (llemacs--logging-log-error (format "Failed to load markdown file\n%s\n%s" file-path err))
      nil)))
 
 (defun llemacs-load-json-file (json-path)
@@ -76,7 +86,7 @@
   "Validate JSON file at JSON-PATH using Python's json module."
   (if (not (file-exists-p json-path))
       (progn
-        (llemacs--logging-error (format "JSON file does not exist: %s" json-path))
+        (llemacs--logging-log-error (format "JSON file does not exist: %s" json-path))
         nil)
     (let* ((temp-buffer (generate-new-buffer "*json-check*"))
            (exit-code
@@ -89,7 +99,7 @@ except json.JSONDecodeError as e:
     print(f'Error at line {e.lineno}, column {e.colno}: {e.msg}')"
                           json-path)))
       (unless (= exit-code 0)
-        (llemacs--logging-error
+        (llemacs--logging-log-error
          (format "Invalid JSON file %s:\n%s"
                  json-path
                  (with-current-buffer temp-buffer

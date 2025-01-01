@@ -1,23 +1,23 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:31:41
-;;; Time-stamp: <2024-12-31 23:31:41 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-conversion/04-llemacs-cvt-lang2elisp.el
+;;; Author: 2025-01-02 03:28:52
+;;; Time-stamp: <2025-01-02 03:28:52 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-cvt/lang2elisp.el
 
 ;; ----------------------------------------
 ;; Converters
 ;; ----------------------------------------
-(defun llemacs-lang2elisp (prompt &optional template)
+(defun llemacs--cvt-prompt2elisp (prompt &optional recipe-id)
   (let ((elisp-including-response nil)
         (elisp-blocks nil)
         (commands nil))
     (condition-case err
         (progn
-          (setq elisp-including-response (llemacs-llm prompt template))
+          (setq elisp-including-response (llemacs--llm-run-prompt prompt recipe-id))
           (unless elisp-including-response
             (signal 'llemacs-api-error "No response received from API")))
       (error
        (llemacs--logging-prompt prompt)
-       (llemacs--logging-error
+       (llemacs--logging-log-error
         (format "API request failed.\n%s"
                 (error-message-string err)))
        (signal 'llemacs-api-error err)))
@@ -28,7 +28,7 @@
             (unless elisp-blocks
               (signal 'llemacs-elisp-cleanup-error "No elisp blocks found in response")))
         (error
-         (llemacs--logging-error
+         (llemacs--logging-log-error
           (format "Elisp extraction failed.\n%s\n%s"
                   (error-message-string err) elisp-including-response))
          (signal 'llemacs-elisp-cleanup-error err)))
@@ -41,7 +41,7 @@
             (unless commands
               (signal 'llemacs-elisp-parse-error "No valid elisp code generated")))
         (error
-         (llemacs--logging-error
+         (llemacs--logging-log-error
           (format "Elisp parsing failed.\nError: %s\nBlocks: %s"
                   (error-message-string err) elisp-blocks))
          (signal 'llemacs-elisp-parse-error err))))

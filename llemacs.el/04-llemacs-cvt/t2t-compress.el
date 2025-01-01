@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:27:40
-;;; Time-stamp: <2024-12-31 23:27:40 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-conversion/04-llemacs-cvt-compress.el
+;;; Author: 2025-01-01 14:37:14
+;;; Time-stamp: <2025-01-01 14:37:14 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-cvt/04-llemacs-cvt-compress.el
 
 (defvar llemacs--cvt-compress-max-length 1024
   "Maximum length for compressed text output.")
@@ -46,7 +46,5 @@
 ;;   (mapcar (lambda (text)
 ;;             (llemacs--cvt-compress-text text max-len))
 ;;           texts))
-
-(provide '06-llemacs--cvt-compress)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
