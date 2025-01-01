@@ -1,5 +1,5 @@
 #!/bin/bash
-# Time-stamp: "2025-01-02 03:11:45 (ywatanabe)"
+# Time-stamp: "2025-01-02 04:04:16 (ywatanabe)"
 # File: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/scripts/json2md.sh
 
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -40,21 +40,21 @@ main() {
 
     # Process each input file
     for input in "$@"; do
-        local input_extension="${input##*.}"
-        local output
+        source /home/ywatanabe/.env/bin/activate
+        mdjson "$input"
+        # local input_extension="${input##*.}"
+        # local output
 
-        if [[ "$input_extension" == "json" ]]; then
-            output="${input%.json}.md"
-            mdjson "$input" -o "$output"            
-            # json2md "$input" "$output"
-        elif [[ "$input_extension" == "md" ]]; then
-            output="${input%.md}.json"
-            mdjson "$input" -o "$output"                        
-            # md2json "$input" "$output"
-        else
-            echo "Error: Unsupported file extension: $input_extension" >&2
-            continue
-        fi
+        # if [[ "$input_extension" == "json" ]]; then
+        #     output="${input%.json}.md"
+        #     mdjson "$input" # -o "$output"            
+        # elif [[ "$input_extension" == "md" ]]; then
+        #     output="${input%.md}.json"
+        #     mdjson "$input" # -o "$output"                        
+        # else
+        #     echo "Error: Unsupported file extension: $input_extension" >&2
+        #     continue
+        # fi
     done
 }
 
