@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:23:59
-;;; Time-stamp: <2024-12-31 23:23:59 (ywatanabe)>
+;;; Author: 2025-01-01 04:50:22
+;;; Time-stamp: <2025-01-01 04:50:22 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/05-llemacs-run/05-llemacs-run.el
 
 (require '01-llemacs-config)
@@ -10,24 +10,6 @@
 
 (defvar llemacs-tab-counter 0
   "Counter for LLEMACS tab numbering.")
-
-(defun llemacs-before-run-hook (prompt)
-  "Prepare environment before running LLEMACS operations."
-  (condition-case err
-      (llemacs-exec-local
-       `(progn
-          (llemacs--logging-note "
-================================================================================
-Llemacs-run called.
-================================================================================")
-          (llemacs-get-main-buffer)
-          (setq llemacs-original-directory default-directory)
-          (setq shell-file-name "/bin/bash")
-          (setq python-shell-virtualenv-root "/workspace/.env")
-          (setq python-shell-interpreter "/workspace/.env/bin/python3")))
-    (error
-     (llemacs--logging-error (format "Failed in before-run hook: %s" err))
-     nil)))
 
 (defun llemacs-run (prompt)
   "Main entry point for LLEMACS execution."
@@ -47,16 +29,36 @@ Llemacs-run called.
        (llemacs--logging-error (format "Run failed: %s" err))
        nil))))
 
-(defun llemacs-after-run-hook-success (elisp-code prompt-text)
+(defun llemacs--run-before-run-hook (prompt)
+  "Prepare environment before running LLEMACS operations."
+  (condition-case err
+      (llemacs-exec-local
+       `(progn
+          (llemacs--logging-note "
+================================================================================
+Llemacs-run called.
+================================================================================")
+          (llemacs-get-main-buffer)
+          (setq llemacs-original-directory default-directory)
+          (setq shell-file-name "/bin/bash")
+          (setq python-shell-virtualenv-root "/workspace/.env")
+          (setq python-shell-interpreter "/workspace/.env/bin/python3")))
+    (error
+     (llemacs--logging-error (format "Failed in before-run hook: %s" err))
+     nil)))
+
+(defun llemacs--run-after-run-hook-success (elisp-code prompt-text)
   "Hook for successful LLEMACS operation."
   (llemacs--logging-prompt prompt-text)
   (llemacs--logging-success (format "Successfully executed:\n%s" elisp-code)))
 
-(defun llemacs-after-run-hook-error (error prompt-text)
+(defun llemacs--run-after-run-hook-error (error prompt-text)
   "Hook for failed LLEMACS operation."
   (llemacs--logging-prompt prompt-text)
   (llemacs--logging-error (format "Llemacs-run failed.\n%s" error))
   (llemacs--logging-open))
+
+
 
 (provide '06-llemacs-run)
 
