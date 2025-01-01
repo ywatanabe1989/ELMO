@@ -3,7 +3,7 @@
 ;;; Time-stamp: <2024-12-31 17:23:40 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file/maintainers.el
 
-(require '02-llemacs-logging-core-file)
+;; (require '02-llemacs-logging-core-file)
 
 (defun llemacs--logging-rotate-logs ()
   "Rotate log files by appending timestamp to old files."
@@ -11,10 +11,10 @@
     (dolist (level '(debug info warn error))
       (let* ((log-file (expand-file-name
                         (format "%s.log" (symbol-name level))
-                        llemacs--path-logging-logs))
+                        llemacs--path-logging-system-logs))
              (archived-file (expand-file-name
                              (format "%s-%s.log" (symbol-name level) timestamp)
-                             llemacs--path-logging-logs)))
+                             llemacs--path-logging-system-logs)))
         (when (file-exists-p log-file)
           (rename-file log-file archived-file)
           (with-temp-file log-file
@@ -24,7 +24,7 @@
   "Remove log files older than DAYS."
   (let* ((current-time (current-time))
          (cutoff-time (time-subtract current-time (days-to-time days))))
-    (dolist (file (directory-files llemacs--path-logging-logs t "\\.log"))
+    (dolist (file (directory-files llemacs--path-logging-system-logs t "\\.log"))
       (when (time-less-p
              (nth 5 (file-attributes file))
              cutoff-time)
@@ -34,7 +34,7 @@
   "Compress log files older than DAYS."
   (let* ((current-time (current-time))
          (cutoff-time (time-subtract current-time (days-to-time days))))
-    (dolist (file (directory-files llemacs--path-logging-logs t "\\.log$"))
+    (dolist (file (directory-files llemacs--path-logging-system-logs t "\\.log$"))
       (when (and (time-less-p
                   (nth 5 (file-attributes file))
                   cutoff-time)

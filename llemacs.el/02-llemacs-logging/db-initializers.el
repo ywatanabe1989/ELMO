@@ -1,14 +1,12 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:51:31
-;;; Time-stamp: <2024-12-31 22:51:31 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/02-llemacs-logging-db-initializers.el
+;;; Author: 2025-01-02 03:00:07
+;;; Time-stamp: <2025-01-02 03:00:07 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db-initializers.el
 
-(require '01-llemacs-config)
-(require '02-llemacs-logging-core-db)
 (require 'emacsql)
 (require 'emacsql-sqlite)
 
-(defun llemacs--logging-init-db ()
+(defun llemacs--logging-db-init-if ()
   "Initialize database for structured logging."
   (unless (file-exists-p (file-name-directory llemacs--path-logging-db))
     (make-directory (file-name-directory llemacs--path-logging-db) t))
@@ -24,8 +22,5 @@
                                           (intern (format ":%s" (cadr col)))))
                                 columns)))))
   (message "Log database initialized at %s" llemacs--path-logging-db))
-
-
-(provide '02-llemacs-logging-db-initializers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

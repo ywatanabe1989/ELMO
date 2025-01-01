@@ -1,12 +1,12 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:26:34
-;;; Time-stamp: <2024-12-31 17:26:34 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/core/file.el
+;;; Author: 2025-01-02 03:40:29
+;;; Time-stamp: <2025-01-02 03:40:29 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file-variables.el
 
-(require '01-llemacs-config)
-
-(defvar llemacs--logging-level-threshold 'info
-  "Minimum log level to record.")
+(defcustom llemacs--logging-level-threshold 'info
+  "Minimum log level to record."
+  :type 'symbol
+  :group 'llemacs-logging)
 
 (defcustom llemacs--logging-max-size 10485760
   "Maximum size of log files in bytes (10MB default)."
@@ -18,6 +18,11 @@
   :type 'integer
   :group 'llemacs-logging)
 
+(defcustom llemacs--logging-splitter "----------------------------------------"
+  "Splitter between logs."
+  :type 'string
+  :group 'llemacs-logging)
+
 (defun llemacs--logging-level-value (level)
   "Convert log LEVEL to numeric value for comparison."
   (pcase level
@@ -26,11 +31,10 @@
     ('search 1)
     ('api 1)
     ('prompt 1)
+    ('elisp 1)
     ('warn 2)
     ('success 3)
     ('error 4)
     (_ 1)))
-
-(provide '02-llemacs-logging-core-file)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

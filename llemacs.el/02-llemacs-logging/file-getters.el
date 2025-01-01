@@ -1,9 +1,9 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:57:13
-;;; Time-stamp: <2024-12-31 17:57:13 (ywatanabe)>
+;;; Author: 2025-01-01 05:03:59
+;;; Time-stamp: <2025-01-01 05:03:59 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file/02-llemacs-logging-file-getters.el
 
-(require '02-llemacs-logging-core-file)
+;; (require '02-llemacs-logging-core-file)
 
 (defun llemacs--logging-get-log-entries (file-path &optional n)
   "Get last N entries from log FILE-PATH."
@@ -24,7 +24,7 @@
   "Get last N log entries of specified LEVEL."
   (let* ((file-path (expand-file-name
                      (format "%s.log" (symbol-name level))
-                     llemacs--path-logging-logs))
+                     llemacs--path-logging-system-logs))
          (entries (llemacs--logging-get-log-entries file-path n)))
     entries))
 

@@ -3,7 +3,7 @@
 ;;; Time-stamp: <2024-12-31 17:07:50 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/getters.el
 
-(require '02-llemacs-logging-core-db)
+;; (require '02-llemacs-logging-core-db)
 
 (defun llemacs--logging-get-project-logs (project-id &optional limit)
   "Get logs for PROJECT-ID with optional LIMIT."

@@ -1,10 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:29:27
-;;; Time-stamp: <2024-12-31 17:29:27 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/core/02-llemacs-logging-core-db.el
-
-(require '01-llemacs-config)
-(require 'emacsql-sqlite)
+;;; Author: 2025-01-02 02:57:58
+;;; Time-stamp: <2025-01-02 02:57:58 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db-variables.el
 
 (defvar llemacs--logging-db-connection nil
   "Database connection for logging.")
@@ -67,7 +64,5 @@
     (tasks ,llemacs--logging-db-schema-tasks)
     (steps ,llemacs--logging-db-schema-steps))
   "Database schema for LLEMACS logging system.")
-
-(provide '02-llemacs-logging-core-db)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

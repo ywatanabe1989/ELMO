@@ -3,11 +3,11 @@
 ;;; Time-stamp: <2024-12-31 17:08:29 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/maintainers.el
 
-(require '02-llemacs-logging-core-db)
+;; (require '02-llemacs-logging-core-db)
 
 (defun llemacs--logging-clear-old-entries (days)
   "Clear log entries older than DAYS from database."
-  (unless llemacs--logging-db-connection (llemacs--logging-init-db))
+  (unless llemacs--logging-db-connection (llemacs--logging-db-init-if))
   (let ((cutoff (format-time-string "%Y-%m-%d %H:%M:%S"
                                     (time-subtract (current-time)
                                                    (days-to-time days)))))
@@ -20,7 +20,7 @@
 
 (defun llemacs--logging-export-table-to-csv (table file)
   "Export TABLE from database to CSV FILE."
-  (unless llemacs--logging-db-connection (llemacs--logging-init-db))
+  (unless llemacs--logging-db-connection (llemacs--logging-db-init-if))
   (let ((data (emacsql llemacs--logging-db-connection
                        [:select * :from $i1]
                        table)))
@@ -31,7 +31,7 @@
 
 (defun llemacs--logging-vacuum-db ()
   "Compact the database by removing unused space."
-  (unless llemacs--logging-db-connection (llemacs--logging-init-db))
+  (unless llemacs--logging-db-connection (llemacs--logging-db-init-if))
   (emacsql llemacs--logging-db-connection [:vacuum]))
 
 (provide '02-llemacs-logging-db-maintainers)

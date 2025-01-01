@@ -3,8 +3,8 @@
 ;;; Time-stamp: <2024-12-31 17:09:07 (ywatanabe)>
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/viewers.el
 
-(require '02-llemacs-logging-core-utils)
-(require '02-llemacs-logging-db-getters)
+;; (require '02-llemacs-logging-core-utils)
+;; (require '02-llemacs-logging-db-getters)
 
 (defun llemacs--logging-view-project-logs (project-id)
   "View logs for PROJECT-ID in buffer."
