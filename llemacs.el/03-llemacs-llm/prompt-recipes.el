@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:57:21
-;;; Time-stamp: <2024-12-31 22:57:21 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/prompt/03-llemacs-llm-prompt-recipe-helper-functions.el
+;;; Author: 2025-01-01 22:50:13
+;;; Time-stamp: <2025-01-01 22:50:13 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/prompt/recipe-helpers.el
 
 (defvar llemacs--llm-prompt-recipes
   '((:id "code-gen"
@@ -41,10 +41,10 @@
   (condition-case err
       (progn
         (unless recipe-id
-          (llemacs--logging-error "Template ID is required")
+          (llemacs--logging-log-error "Template ID is required")
           (error "Template ID is required"))
         (unless llemacs--llm-prompt-recipes
-          (llemacs--logging-error "Templates list is empty")
+          (llemacs--logging-log-error "Templates list is empty")
           (error "Templates list is empty"))
         (unless (member recipe-id llemacs--llm-prompt-available-recipe-ids)
           (error "Invalid template ID: %s. Available templates: %s"
@@ -58,7 +58,7 @@
             (error "Template not found: %s" recipe-id))
           found))
     (error
-     (llemacs--logging-error (format "Failed to find template: %s"
+     (llemacs--logging-log-error (format "Failed to find template: %s"
                                      (error-message-string err)))
      nil)))
 ;; (llemacs--llm-prompt-get-recipe "code-gen")
@@ -82,15 +82,15 @@
       (progn
         (llemacs--llm-prompt-ensure-markdown-files)
         (when (null prompt-template-name)
-          (llemacs--logging-error "Template name required")
+          (llemacs--logging-log-error "Template name required")
           (error "Template name required"))
         (unless (member prompt-template-name llemacs--llm-prompt-available-recipe-ids)
-          (llemacs--logging-error (format "Invalid prompt-template name:\n%s" prompt-template-name))
+          (llemacs--logging-log-error (format "Invalid prompt-template name:\n%s" prompt-template-name))
           (error "Invalid prompt-template name"))
         (llemacs-load-markdown-file
          (expand-file-name (format "%s.md" prompt-template-name) llemacs--path-prompt-compiled)))
     (error
-     (llemacs--logging-error (format "Error getting prompt-template:\n%s" err))
+     (llemacs--logging-log-error (format "Error getting prompt-template:\n%s" err))
      nil)))
 
 (defun llemacs--llm-prompt-get-templates (&rest prompt-template-names)
@@ -107,7 +107,7 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
           (let ((contents ""))
             (dolist (name prompt-template-names)
               (unless (member name llemacs--llm-prompt-available-recipe-ids)
-                (llemacs--logging-error (format "Invalid prompt-template name:\n%s" name))
+                (llemacs--logging-log-error (format "Invalid prompt-template name:\n%s" name))
                 (error "Invalid prompt-template name:\n%s" name))
               (let ((content (llemacs-load-markdown-file
                               (expand-file-name (format "%s.md" name) llemacs--path-prompt-compiled))))
@@ -115,9 +115,7 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
                   (setq contents (concat contents "\n" content)))))
             (string-trim contents))))
     (error
-     (llemacs--logging-error (format "Error getting prompt-templates:\n%s" err))
+     (llemacs--logging-log-error (format "Error getting prompt-templates:\n%s" err))
      nil)))
-
-(provide '03-llemacs--llm-prompt-recipe-helper-functions)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

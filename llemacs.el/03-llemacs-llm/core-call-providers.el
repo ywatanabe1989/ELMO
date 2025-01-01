@@ -44,7 +44,7 @@
                 (buffer-string)))
           (ignore-errors (delete-file temp-file))))
     (error
-     (llemacs--logging-error (format "Gemini API request failed.\n%s"
+     (llemacs--logging-log-error (format "Gemini API request failed.\n%s"
                                      (error-message-string err)))
      nil)))
 
@@ -81,7 +81,7 @@
                   (error "API request failed with status: %s" status-line))))
           (error "Failed to retrieve response")))
     (error
-     (llemacs--logging-error (format "Claude API request failed.\n%s"
+     (llemacs--logging-log-error (format "Claude API request failed.\n%s"
                                      (error-message-string err)))
      nil)))
 
@@ -125,7 +125,7 @@
                   (error "API request failed with status: %s" status-line))))
           (error "Failed to retrieve response")))
     (error
-     (llemacs--logging-error (format "DeepSeek API request failed.\n%s"
+     (llemacs--logging-log-error (format "DeepSeek API request failed.\n%s"
                                      (error-message-string err)))
      nil)))
 

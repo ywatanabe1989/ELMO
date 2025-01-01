@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:55:14
-;;; Time-stamp: <2024-12-31 22:55:14 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/03-llemacs-llm-api-configs.el
+;;; Author: 2025-01-01 22:51:16
+;;; Time-stamp: <2025-01-01 22:51:16 (ywatanabe)>
+;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/configs.el
 
 (defcustom llemacs--llm-api-timeout 30
   "Default timeout for API requests in seconds."
@@ -46,8 +46,5 @@
 ;;                          "Hash table tracking API call timestamps per provider."
 ;;                          :type 'string
 ;;                          :group 'llemacs-llm)
-
-
-(provide '03-llemacs-llm-api)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

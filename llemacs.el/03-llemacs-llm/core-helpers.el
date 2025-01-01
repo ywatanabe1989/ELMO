@@ -18,7 +18,7 @@
 
 (defun llemacs--llm-api-handle-error (err provider)
   "Handle API error ERR from PROVIDER."
-  (llemacs--logging-error
+  (llemacs--logging-log-error
    (pcase (car err)
      ('llemacs--llm-api-rate-limit "LLM API Rate limit exceeded")
      ('llemacs--llm-api-auth-error "LLM API Authentication failed")
