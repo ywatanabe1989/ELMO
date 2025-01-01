@@ -40,7 +40,7 @@ The logging system for Llemacs with both file-based and database storage options
 ## Configuration
 ```elisp
 ;; Customize log directory
-(setq llemacs--path-logging-logs "/custom/path/to/logs")
+(setq llemacs--path-logging-system-logs "/custom/path/to/logs")
 
 ;; Set log retention period (in days)
 (setq llemacs--logging-retention-days 30)
@@ -72,10 +72,10 @@ Examples:
 
 ```elisp
 ;; Log messages at different levels
-(llemacs--logging-debug "Debug message: %s" "test")
-(llemacs--logging-info "Info message: %s" "test")
-(llemacs--logging-warn "Warning message: %s" "test")
-(llemacs--logging-error "Error message: %s" "test")
+(llemacs--logging-log-debug "Debug message: %s" "test")
+(llemacs--logging-log-info "Info message: %s" "test")
+(llemacs--logging-log-warn "Warning message: %s" "test")
+(llemacs--logging-log-error "Error message: %s" "test")
 
 ;; Log with additional context
 (llemacs--logging-log 'info "Custom message" 
@@ -109,14 +109,14 @@ Examples:
 ```elisp
 ;; Testing log rotation
 (progn
-  (llemacs--logging-info "Test message before rotation")
+  (llemacs--logging-log-info "Test message before rotation")
   (llemacs--logging-rotate-logs)
-  (llemacs--logging-info "Test message after rotation"))
+  (llemacs--logging-log-info "Test message after rotation"))
 
 ;; Testing with various formats
-(llemacs--logging-debug "Number: %d, String: %s" 42 "test")
-(llemacs--logging-info "Complex: %S" '(a b c))
-(llemacs--logging-warn "Float: %.2f" 3.14159)
+(llemacs--logging-log-debug "Number: %d, String: %s" 42 "test")
+(llemacs--logging-log-info "Complex: %S" '(a b c))
+(llemacs--logging-log-warn "Float: %.2f" 3.14159)
 
 ;; Testing context information
 (llemacs--logging-log 'error "Critical error"
@@ -131,14 +131,14 @@ Examples:
 
 ;; Testing sequential operations
 (progn
-  (llemacs--logging-info "Step 1")
-  (llemacs--logging-info "Step 2")
+  (llemacs--logging-log-info "Step 1")
+  (llemacs--logging-log-info "Step 2")
   (llemacs--logging-get-logs-by-level 'info 2))
 
 ;; Testing error handling
 (condition-case err
     (llemacs--logging-log 'invalid "Should fail")
-  (error (llemacs--logging-error "Caught error: %S" err)))
+  (error (llemacs--logging-log-error "Caught error: %S" err)))
   
 ;; View all logs
 (llemacs--logging-view-all-logs)
@@ -146,5 +146,5 @@ Examples:
 
 ## Troubleshooting
 - If logs aren't being written, check directory permissions
-- Use `llemacs--logging-init-file-system` to reinitialize log files
+- Use `llemacs--logging-system-files-init-if` to reinitialize log files
 - Use `llemacs--logging-rotate-logs` if log files grow too large
