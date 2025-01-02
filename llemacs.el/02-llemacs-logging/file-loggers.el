@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:55:10
-;;; Time-stamp: <2025-01-02 10:55:10 (ywatanabe)>
+;;; Author: 2025-01-02 18:01:05
+;;; Time-stamp: <2025-01-02 18:01:05 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-loggers.el
 
 (defun llemacs--logging-get-caller-info ()

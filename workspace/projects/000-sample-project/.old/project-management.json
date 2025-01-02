@@ -1,0 +1,207 @@
+{
+    "project_name": "sample-project",
+    "goals": [
+        {
+            "name": "Goal 1",
+            "description": "goal 1 description",
+            "status": "in-progress",
+            "milestones": [
+                {
+                    "name": "Milestone 1",
+                    "description": "milestone 1 description",
+                    "status": "waiting",
+                    "tasks": [
+                        {
+                            "name": "Task 1",
+                            "description": "task description",
+                            "status": "pending",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "completed"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Task 2",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Milestone 2",
+                    "description": "milestone 2 description",
+                    "status": "waiting",
+                    "tasks": [
+                        {
+                            "name": "Task 1",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Task 2",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Milestone 3",
+                    "description": "milestone 3 description",
+                    "status": "waiting",
+                    "tasks": [
+                        {
+                            "name": "Task 1",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Goal 2",
+            "description": "goal 2 description",
+            "status": "waiting",
+            "milestones": [
+                {
+                    "name": "Milestone 1",
+                    "description": "milestone 1 description",
+                    "status": "waiting",
+                    "tasks": [
+                        {
+                            "name": "Task 1",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Task 2",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Milestone 2",
+                    "description": "milestone 2 description",
+                    "status": "waiting",
+                    "tasks": [
+                        {
+                            "name": "Task 1",
+                            "description": "task description",
+                            "status": "waiting",
+                            "steps": [
+                                {
+                                    "name": "Step 1",
+                                    "description": "step 1 description",
+                                    "status": "waiting"
+                                },
+                                {
+                                    "name": "Step 2",
+                                    "description": "step 2 description",
+                                    "status": "waiting"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "workspace": [
+        "workspace item 1",
+        "workspace item 2"
+    ],
+    "resources": [
+        "resource 1",
+        "resource 2"
+    ],
+    "tools": [
+        "tool 1",
+        "tool 2"
+    ],
+    "logging": [
+        "log entry 1",
+        "log entry 2"
+    ],
+    "tree": "project-tree-structure"
+}

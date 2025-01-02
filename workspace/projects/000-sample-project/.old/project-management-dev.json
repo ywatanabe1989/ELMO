@@ -1,0 +1,131 @@
+{
+  "sections": [
+    {
+      "title": "Project  Name",
+      "content": [
+        "sample-project"
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Goals",
+      "content": [
+        [
+          "Write  a  python  script  to  plot  something  interest  and  publish  the  project  as  a  GitHub  repository"
+        ]
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Milestone  1",
+      "content": [],
+      "subsections": [
+        {
+          "title": "Task  1",
+          "content": [
+            [
+              "placeholder1",
+              "placeholder2"
+            ]
+          ]
+        },
+        {
+          "title": "Task  2",
+          "content": [
+            [
+              "placeholder1",
+              "placeholder2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Milestone  2",
+      "content": [],
+      "subsections": [
+        {
+          "title": "Task  1",
+          "content": [
+            [
+              "placeholder1",
+              "placeholder2"
+            ]
+          ]
+        },
+        {
+          "title": "Task  2",
+          "content": [
+            [
+              "placeholder1",
+              "placeholder2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Workspace",
+      "content": [
+        [
+          "/workspace/projects/000-sample-project/config",
+          "/workspace/projects/000-sample-project/data",
+          "/workspace/projects/000-sample-project/scripts",
+          "/workspace/projects/000-sample-project/results",
+          "/workspace/projects/000-sample-project/resources"
+        ]
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Resources",
+      "content": [
+        [
+          "/workspace/projects/000-sample-project/.env/bin/activate",
+          "/workspace/projects/000-sample-project/.env/bin/python",
+          "/workspace/projects/000-sample-project/requirements.txt",
+          "/workspace/projects/000-sample-project/.git",
+          "/workspace/projects/000-sample-project/.gitignore"
+        ]
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Tools",
+      "content": [
+        [
+          "git",
+          "gh"
+        ]
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Logging",
+      "content": [
+        [
+          "/workspace/projects/000-sample-project/log.txt"
+        ]
+      ],
+      "subsections": []
+    },
+    {
+      "title": "Tree",
+        "content": [
+            "
+/workspace/projects/000-sample-project
+├── config
+├── data
+├── project-management.md
+├── README.md
+├── requirements.txt
+├── results
+└── scripts
+
+5 directories, 3 files
+"
+        ],
+        "subsections": []
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["project_name", "goals"],
+    "properties": {
+        "project_name": { "type": "string" },
+        "goals": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "description", "status", "milestones"],
+                "properties": {
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "status": {
+                        "type": "string",
+                        "enum": ["waiting", "in-progress", "pending", "completed"]
+                    },
+                    "milestones": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": ["name", "description", "status", "tasks"],
+                            "properties": {
+                                "name": { "type": "string" },
+                                "description": { "type": "string" },
+                                "status": {
+                                    "type": "string",
+                                    "enum": ["waiting", "in-progress", "pending", "completed"]
+                                },
+                                "tasks": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "required": ["name", "description", "status", "steps"],
+                                        "properties": {
+                                            "name": { "type": "string" },
+                                            "description": { "type": "string" },
+                                            "status": {
+                                                "type": "string",
+                                                "enum": ["waiting", "in-progress", "pending", "completed"]
+                                            },
+                                            "steps": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "required": ["name", "description", "status"],
+                                                    "properties": {
+                                                        "name": { "type": "string" },
+                                                        "description": { "type": "string" },
+                                                        "status": {
+                                                            "type": "string",
+                                                            "enum": ["waiting", "in-progress", "pending", "completed"]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "workspace": {
+            "type": "array",
+            "items": { "type": "string" }
+        },
+        "resources": {
+            "type": "array",
+            "items": { "type": "string" }
+        },
+        "tools": {
+            "type": "array",
+            "items": { "type": "string" }
+        },
+        "logging": {
+            "type": "array",
+            "items": { "type": "string" }
+        },
+        "tree": { "type": "string" }
+    }
+}

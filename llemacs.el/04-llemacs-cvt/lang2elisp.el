@@ -12,11 +12,11 @@
         (commands nil))
     (condition-case err
         (progn
-          (setq elisp-including-response (llemacs--llm-run-prompt prompt recipe-id))
+          (setq elisp-including-response (llemacs--run-prompt prompt recipe-id))
           (unless elisp-including-response
             (signal 'llemacs-api-error "No response received from API")))
       (error
-       (llemacs--logging-prompt prompt)
+       (llemacs--logging-log-prompt prompt)
        (llemacs--logging-log-error
         (format "API request failed.\n%s"
                 (error-message-string err)))

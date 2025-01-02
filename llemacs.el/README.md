@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2025-01-02 03:05:24
+!-- title: 2025-01-02 09:00:07
 !-- author: ywata-note-win
-!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/README.md
+!-- date: /home/ywatanabe/proj/llemacs/llemacs.el/README.md
 !-- --- -->

@@ -1,12 +1,14 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:37:48
-;;; Time-stamp: <2025-01-02 03:37:48 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file-initializers.el
+;;; Author: 2025-01-02 17:54:22
+;;; Time-stamp: <2025-01-02 17:54:22 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-initializers.el
 
 (defun llemacs--logging-system-files-init-if ()
   "Initialize file system for structured logging."
   (unless (file-exists-p llemacs--path-logging-system-logs)
     (make-directory llemacs--path-logging-system-logs t))
+  (unless (file-exists-p llemacs--path-logging-system-logs-by-level)
+    (make-directory llemacs--path-logging-system-logs-by-level t))
   (unless (file-exists-p llemacs--path-logging-system-all)
     (with-temp-file llemacs--path-logging-system-all
       (insert "")

@@ -1,0 +1,52 @@
+%% project-flow.mmd
+graph TD
+    subgraph Project
+    subgraph PC[Project Config]
+        A1[Project Name]
+        A2[Goal]
+    end
+    subgraph PS[Project States]
+        A3[Milestones]
+        A4[Tasks]
+        A5[Workspace]
+    end
+    A[Setup Project]
+    B[Initialize Git Repository]
+    end
+
+    subgraph Main Flow
+    subgraph Step
+        D[Compile Context]
+        E[Generate Elisp]
+        F[Execute Elisp]
+        G{Success?}
+    end
+
+    subgraph "Logging, Version Control, and State Update"
+        H[Log Success]
+        I[Log Error]
+        J{Milestone?}
+        K[Git Commit]
+        L[Log Only]
+        M{Goal Met?}
+        N[Update Project_States]
+    end
+    end
+
+    PC --> A
+    PS --> A
+    A --> B
+    B --> D
+    PS --> D
+    D --> E --> F --> G
+    G -- Yes --> H
+    G -- No --> I
+    H --> J
+    J -- Yes --> K
+    J -- No --> L
+    K --> M
+    I --> L
+    L --> M
+    M -- No --> N
+    N --> PS
+    M -- Yes --> Z[End]

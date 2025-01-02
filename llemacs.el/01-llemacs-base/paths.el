@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:46:21
-;;; Time-stamp: <2025-01-02 10:46:21 (ywatanabe)>
+;;; Author: 2025-01-02 17:54:02
+;;; Time-stamp: <2025-01-02 17:54:02 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/paths.el
 
 ;; Global
@@ -53,63 +53,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Directories
 (defcustom llemacs--path-logging-system-logs
   (expand-file-name "logs" llemacs-path-workspace)
   "Directory for LLEMACS log files."
   :type 'directory
   :group 'llemacs-logging)
 
+(defcustom llemacs--path-logging-system-logs-by-level
+  (expand-file-name "logs/by_level/" llemacs-path-workspace)
+  "Directory for LLEMACS log files."
+  :type 'directory
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-backups
+  (expand-file-name "backups" llemacs--path-logging-system-logs)
+  "Directory for LLEMACS log backups."
+  :type 'directory
+  :group 'llemacs-logging)
+
+;; Global logging files
 (defcustom llemacs--path-logging-system-all
-  (expand-file-name "all.log" llemacs--path-logging-system-logs)
+  (expand-file-name "logging.log" llemacs--path-logging-system-logs)
   "Path to LLEMACS system log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-debug
-  (expand-file-name "debug.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system debug log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-info
-  (expand-file-name "info.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system info log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-prompt
-  (expand-file-name "prompt.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system prompt log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-elisp
-  (expand-file-name "elisp.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system elisp log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-api
-  (expand-file-name "api.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system api log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-search
-  (expand-file-name "search.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system search log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-warn
-  (expand-file-name "warn.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system warn log file."
-  :type 'file
-  :group 'llemacs-logging)
-
-(defcustom llemacs--path-logging-system-error
-  (expand-file-name "error.log" llemacs--path-logging-system-logs)
-  "Path to LLEMACS system error log file."
   :type 'file
   :group 'llemacs-logging)
 
@@ -119,11 +85,55 @@
   :type 'file
   :group 'llemacs-logging)
 
-(defcustom llemacs--path-logging-backups
-  (expand-file-name "backups" llemacs--path-logging-system-logs)
-  "Directory for LLEMACS log backups."
-  :type 'directory
+;; Level-specific logging files
+(defcustom llemacs--path-logging-system-debug
+  (expand-file-name "debug.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system debug log file."
+  :type 'file
   :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-info
+  (expand-file-name "info.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system info log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-prompt
+  (expand-file-name "prompt.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system prompt log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-elisp
+  (expand-file-name "elisp.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system elisp log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-api
+  (expand-file-name "api.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system api log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-search
+  (expand-file-name "search.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system search log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-warn
+  (expand-file-name "warn.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system warn log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-error
+  (expand-file-name "error.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system error log file."
+  :type 'file
+  :group 'llemacs-logging)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Projects

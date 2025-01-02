@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:49:11
-;;; Time-stamp: <2025-01-02 10:49:11 (ywatanabe)>
+;;; Author: 2025-01-02 17:51:17
+;;; Time-stamp: <2025-01-02 17:51:17 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/00-entry.el
 
 (require 'custom)
@@ -14,7 +14,9 @@
     (load (expand-file-name "paths.el" dir))
     (load (expand-file-name "buffers.el" dir))
     (load (expand-file-name "debug.el" dir))
-    (load (expand-file-name "timestamp.el" dir))))
+    (load (expand-file-name "timestamp.el" dir))
+    (load (expand-file-name "loaders.el" dir))))
+
 
 ;; Initialize components
 (llemacs--load-base-components)
