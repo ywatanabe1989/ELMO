@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: 2024-12-27 23:18:26
+!-- title: 2025-01-03 02:44:39
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/code-format-elisp.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/03_rules/code-format-elisp.md
 !-- --- -->
 
 # Rules: code-elisp-format

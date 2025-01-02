@@ -1,7 +1,7 @@
 <!-- ---
-!-- title: 2024-12-27 23:18:27
+!-- title: 2025-01-03 03:04:39
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/org-report-format.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/03_rules/org-report-format.md
 !-- --- -->
 
 # Rule: report-format
@@ -10,7 +10,7 @@
 * All results, including code, media, report, should be linked in the org content.
 * Also, convert the org file to pdf
 * Add links to all the data produced in the org and pdf files.
-* Images should be displayed inline
+* Images should be displayed inline mode
 * IMAGE_WIDTH should be 400
 * GIF images should be displayed with `(org-inline-anim-mode 1)`
 * Insert the directory path of the org file at the top of the contents
