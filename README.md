@@ -1,11 +1,11 @@
 <!-- ---
-!-- title: 2025-01-02 19:00:01
+!-- title: 2025-01-02 19:11:06
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
 
 # Llemacs — LLM Agents on Emacs
-<img src="./docs/llemacs.gif" width="100" alt="Llemacs Logo">
+<img src="./docs/logo/llemacs.gif" width="100" alt="Llemacs Logo">
 Llemacs is a file-based LLM agent system implemented in Elisp
 
 ## Features
