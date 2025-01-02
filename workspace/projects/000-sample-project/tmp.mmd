@@ -1,0 +1,71 @@
+
+graph TD
+    subgraph Project Definition
+        A[Project Name]
+        B[Goals]
+        C[Resources & Tools]
+    end
+
+    subgraph Milestones
+        D[Milestone 1]
+        E[Milestone 2]
+    subgraph Tasks M1
+        F[Task 1.1]
+        G[Task 1.2]
+    end
+    subgraph Tasks M2
+        H[Task 2.1]
+        I[Task 2.2]
+    end
+    end
+
+    subgraph Workspace
+        J[Directory Structure]
+
+    subgraph Project Tree
+        Root[/workspace]
+        Config[config/]
+        Data[data/]
+        Scripts[scripts/]
+        Results[results/]
+
+        Root --> Config
+        Root --> Data
+        Root --> Scripts
+        Root --> Results
+    end
+
+    K[Configuration]
+    L[Version Control]
+    M[Dependencies]
+    N[Logging]
+    end
+
+    A --> D
+    A --> E
+    B --> D
+    B --> E
+    D --> F
+    D --> G
+    E --> H
+    E --> I
+    F --> J
+    G --> J
+    H --> J
+    I --> J
+    J --> K
+    J --> L
+    J --> M
+    J --> N
+
+    classDef definition fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef milestone fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef task fill:#ddd,stroke:#333,stroke-width:2px;
+    classDef workspace fill:#bfb,stroke:#333,stroke-width:2px;
+    classDef tree fill:#efe,stroke:#333,stroke-width:1px;
+
+    class A,B,C definition;
+    class D,E milestone;
+    class F,G,H,I task;
+    class J,K,L,M,N workspace;
+    class Root,Config,Data,Scripts,Results tree;

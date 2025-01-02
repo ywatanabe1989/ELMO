@@ -1,0 +1,168 @@
+
+graph TD
+    subgraph Legend
+        Z1[Todo]:::todo
+        Z2[In Progress]:::inProgress
+        Z3[Done]:::done
+        Z4[Directory]:::directory
+    end
+    subgraph Project
+    subgraph PC[Project Config]
+        A1[Project Name]:::done
+        A2[Goal]:::done
+    end
+    subgraph PS[Project States]
+        A3[Milestones]:::inProgress
+        A4[Tasks]:::inProgress
+        A5[Workspace]:::done
+    end
+    A[Setup Project]:::done
+    B[Initialize Git Repository]:::done
+    end
+    subgraph Project Directory
+        Root["\/workspace\/projects\/000-sample-project"]:::directory
+        Config[config/]:::directory
+        Data[data/]:::directory
+        Scripts[scripts/]:::directory
+        Results[results/]:::directory
+        Resources[resources/]:::directory
+        Env[.env/]:::directory
+        Git[.git/]:::directory
+        Requirements[requirements.txt/]:::directory
+        Log[Log.txt/]:::directory
+        Root --> Config
+        Root --> Data
+        Root --> Scripts
+        Root --> Results
+        Root --> Resources
+        Root --> Env
+        Root --> Git
+        Root --> Requirements
+        Root --> Log
+    end
+    subgraph Main Flow
+    subgraph Step
+        D[Compile Context]:::inProgress
+        E[Generate Elisp]:::todo
+        F[Execute Elisp]:::todo
+        G{Success?}:::todo
+    end
+    subgraph "Logging, Version Control, and State Update"
+        H[Log Success]:::todo
+        I[Log Error]:::todo
+        J{Milestone?}:::todo
+        K[Git Commit]:::todo
+        L[Log Only]:::todo
+        M{Goal Met?}:::todo
+        N[Update Project_States]:::todo
+    end
+    end
+    subgraph Milestones
+        MS1[Milestone 1]:::inProgress
+        MS2[Milestone 2]:::todo
+    subgraph Tasks M1
+        T1[task1]:::done
+        T2[task2]:::todo
+    end
+    subgraph Tasks M2
+        T3[task1]:::todo
+        T4[task2]:::todo
+    end
+    end
+    PC --> A
+    PS --> A
+    A --> B
+    B --> D
+    PS --> D
+    D --> E --> F --> G
+    G -- Yes --> H
+    G -- No --> I
+    H --> J
+    J -- Yes --> K
+    J -- No --> L
+    K --> M
+    I --> L
+    L --> M
+    M -- No --> N
+    N --> PS
+    M -- Yes --> End[End]:::done
+    Root --> MS1
+    Root --> MS2
+    MS1 --> T1
+    MS1 --> T2
+    MS2 --> T3
+    MS2 --> T4
+    T1 --> Root
+    T2 --> Root
+    T3 --> Root
+    T4 --> Root
+    Z1 --> Z2
+    Z2 --> Z3
+    classDef done fill:#9f9,stroke:#333,stroke-width:2px;
+    classDef inProgress fill:#ff9,stroke:#333,stroke-width:2px;
+    classDef todo fill:#fff,stroke:#333,stroke-width:2px;
+    classDef directory fill:#efe,stroke:#333,stroke-width:1px;
+    class Root,Config,Data,Scripts,Results,Resources directory;
+
+    %% %% project-management.mmd
+    %% graph LR
+    %%     subgraph Legend
+        %%         Z1[Todo]:::todo
+        %%         Z2[In Progress]:::inProgress
+        %%         Z3[Done]:::done
+        %%         Z4[Directory]:::directory
+        %%     end
+
+    %%     subgraph Project Directory
+        %%         Root["\/workspace\/projects\/000-sample-project"]:::directory
+        %%         Config[config/]:::directory
+        %%         Data[data/]:::directory
+        %%         Scripts[scripts/]:::directory
+        %%         Results[results/]:::directory
+        %%         Resources[resources/]:::directory
+        %%         Env[.env/]:::directory
+        %%         Git[.git/]:::directory
+        %%         Requirements[requirements.txt/]:::directory
+        %%         Log[Log.txt/]:::directory
+        %%         PM[project_management.mmd/]:::directory
+        %%         Root --> Config
+        %%         Root --> Data
+        %%         Root --> Scripts
+        %%         Root --> Results
+        %%         Root --> Resources
+        %%         Root --> Env
+        %%         Root --> Git
+        %%         Root --> Requirements
+        %%         Root --> Log
+        %%         Root --> PM
+        %%     end
+
+    %%     subgraph Milestones
+        %%         D[Milestone 1]:::inProgress
+        %%         E[Milestone 2]:::todo
+    %%     subgraph Tasks M1
+        %%         F[task1]:::done
+        %%         G[task2]:::todo
+        %%     end
+    %%     subgraph Tasks M2
+        %%         H[task1]:::todo
+        %%         I[task2]:::todo
+        %%     end
+        %%     end
+        %%     Root --> D
+        %%     Root --> E
+        %%     D --> F
+        %%     D --> G
+        %%     E --> H
+        %%     E --> I
+        %%     F --> Root
+        %%     G --> Root
+        %%     H --> Root
+        %%     I --> Root
+        %%     Z1 --> Z2
+        %%     Z2 --> Z3
+        %%     classDef done fill:#9f9,stroke:#333,stroke-width:2px;
+        %%     classDef inProgress fill:#ff9,stroke:#333,stroke-width:2px;
+        %%     classDef todo fill:#fff,stroke:#333,stroke-width:2px;
+        %%     classDef directory fill:#efe,stroke:#333,stroke-width:1px;
+        %%     class Root,Config,Data,Scripts,Results,Resources directory;
