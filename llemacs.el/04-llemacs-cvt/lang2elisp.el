@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:28:52
-;;; Time-stamp: <2025-01-02 03:28:52 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-cvt/lang2elisp.el
+;;; Author: 2025-01-02 21:17:12
+;;; Time-stamp: <2025-01-02 21:17:12 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-cvt/lang2elisp.el
 
 ;; ----------------------------------------
 ;; Converters
@@ -12,7 +12,7 @@
         (commands nil))
     (condition-case err
         (progn
-          (setq elisp-including-response (llemacs--run-prompt prompt recipe-id))
+          (setq elisp-including-response (llemacs-llm prompt recipe-id))
           (unless elisp-including-response
             (signal 'llemacs-api-error "No response received from API")))
       (error

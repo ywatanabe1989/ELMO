@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 17:54:02
-;;; Time-stamp: <2025-01-02 17:54:02 (ywatanabe)>
+;;; Author: 2025-01-03 01:23:08
+;;; Time-stamp: <2025-01-03 01:23:08 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/paths.el
 
 ;; Global
@@ -44,14 +44,8 @@
   :type 'file
   :group 'llemacs)
 
-(defcustom llemacs--path-scripts-python
-  (expand-file-name "resources/scripts/python/" llemacs-path-workspace)
-  "Path to the Python binary used by llemacs.el."
-  :type 'file
-  :group 'llemacs-logging)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Logging
+;; System Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Directories
 (defcustom llemacs--path-logging-system-logs
@@ -79,11 +73,11 @@
   :type 'file
   :group 'llemacs-logging)
 
-(defcustom llemacs--path-logging-db
-  (expand-file-name "logging.db" llemacs--path-logging-system-logs)
-  "Path to SQLite database for structured logging."
-  :type 'file
-  :group 'llemacs-logging)
+;; (defcustom llemacs--path-logging-db
+;;   (expand-file-name "logging.db" llemacs--path-logging-system-logs)
+;;   "Path to SQLite database for structured logging."
+;;   :type 'file
+;;   :group 'llemacs-logging)
 
 ;; Level-specific logging files
 (defcustom llemacs--path-logging-system-debug
@@ -95,6 +89,12 @@
 (defcustom llemacs--path-logging-system-info
   (expand-file-name "info.log" llemacs--path-logging-system-logs-by-level)
   "Path to LLEMACS system info log file."
+  :type 'file
+  :group 'llemacs-logging)
+
+(defcustom llemacs--path-logging-system-success
+  (expand-file-name "success.log" llemacs--path-logging-system-logs-by-level)
+  "Path to LLEMACS system success log file."
   :type 'file
   :group 'llemacs-logging)
 
@@ -136,9 +136,106 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project Logging
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project Logging Directories
+;; (defcustom llemacs--path-project-logs
+;;   (expand-file-name "logs" llemacs--path-projects)
+;;   "Directory for project-specific log files."
+;;   :type 'directory
+;;   :group 'llemacs-logging)
+
+;; (defcustom llemacs--path-project-logs-by-level
+;;   (expand-file-name "logs/by_level" llemacs--path-projects)
+;;   "Directory for project-specific log files by level."
+;;   :type 'directory
+;;   :group 'llemacs-logging)
+
+;; ;; Project logging files
+;; (defcustom llemacs--path-project-all
+;;   (expand-file-name "project.log" llemacs--path-project-logs)
+;;   "Path to project log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; ;; Level-specific project logging files
+;; (defcustom llemacs--path-project-debug
+;;   (expand-file-name "debug.log" llemacs--path-project-logs-by-level)
+;;   "Path to project debug log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; (defcustom llemacs--path-project-info
+;;   (expand-file-name "info.log" llemacs--path-project-logs-by-level)
+;;   "Path to project info log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; (defcustom llemacs--path-project-success
+;;   (expand-file-name "success.log" llemacs--path-project-logs-by-level)
+;;   "Path to project success log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; (defcustom llemacs--path-project-warn
+;;   (expand-file-name "warn.log" llemacs--path-project-logs-by-level)
+;;   "Path to project warn log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; (defcustom llemacs--path-project-error
+;;   (expand-file-name "error.log" llemacs--path-project-logs-by-level)
+;;   "Path to project error log file."
+;;   :type 'file
+;;   :group 'llemacs-logging)
+
+;; Function to get project-specific path
+(defun llemacs--get-project-path (project-id base-path filename)
+  "Get project-specific path for PROJECT-ID using BASE-PATH and FILENAME."
+  (if project-id
+      (expand-file-name
+       filename
+       (expand-file-name "logs" (llemacs--proj-get-dir project-id)))
+    base-path))
+
+;; Update getter/setter for the variables
+(defun llemacs--path-project-logs-get (&optional project-id)
+  "Get project logs directory for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-logs "logs"))
+
+(defun llemacs--path-project-logs-by-level-get (&optional project-id)
+  "Get project logs by level directory for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-logs-by-level "logs/by_level"))
+
+(defun llemacs--path-project-all-get (&optional project-id)
+  "Get project all log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-all "project.log"))
+
+(defun llemacs--path-project-debug-get (&optional project-id)
+  "Get project debug log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-debug "by_level/debug.log"))
+
+(defun llemacs--path-project-info-get (&optional project-id)
+  "Get project info log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-info "by_level/info.log"))
+
+(defun llemacs--path-project-success-get (&optional project-id)
+  "Get project success log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-success "by_level/success.log"))
+
+(defun llemacs--path-project-warn-get (&optional project-id)
+  "Get project warn log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-warn "by_level/warn.log"))
+
+(defun llemacs--path-project-error-get (&optional project-id)
+  "Get project error log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-error "by_level/error.log"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Projects
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom llemacs-path-projects
+(defcustom llemacs--path-projects
   (expand-file-name "projects" llemacs-path-workspace)
   "Base directory for LLEMACS projects."
   :type 'string
@@ -191,5 +288,20 @@
   "Directory for prompt components."
   :type 'file
   :group 'llemacs)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Project
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcustom llemacs--path-projects
+  (expand-file-name "projects" llemacs-path-workspace)
+  "Directory for projects."
+  :type 'file
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-sample-project-zip
+  (expand-file-name "000-sample-project.zip" llemacs--path-projects)
+  "Sample project zip file for initializing project structure."
+  :type 'file
+  :group 'llemacs-project)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

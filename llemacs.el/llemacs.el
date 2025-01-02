@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:51:27
-;;; Time-stamp: <2025-01-02 10:51:27 (ywatanabe)>
+;;; Author: 2025-01-03 00:44:54
+;;; Time-stamp: <2025-01-03 00:44:54 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/llemacs.el
 
 (defun llemacs--load-components ()
@@ -14,6 +14,10 @@
     (dolist (component components)
       ;; (add-to-list 'load-path (expand-file-name component dir))
       (load (expand-file-name (concat component "/00-entry.el") dir)))))
+
+;; Initilize global logging files
+;; (llemacs--logging-db-init-if)
+(llemacs--logging-system-files-init-if)
 
 (llemacs--load-components)
 
