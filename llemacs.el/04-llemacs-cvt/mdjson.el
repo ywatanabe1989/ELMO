@@ -4,7 +4,7 @@
 ;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/04-llemacs-cvt/mdjson.el
 
 (defcustom llemacs--cvt-format-script
-  (expand-file-name "mdjson.sh" (file-name-directory buffer-file-name))
+  (expand-file-name "mdjson.sh" (file-name-directory (or load-file-name buffer-file-name)))
   "Path to JSON/Markdown conversion script."
   :type 'file
   :group 'llemacs)

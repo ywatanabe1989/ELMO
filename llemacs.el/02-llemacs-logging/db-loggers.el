@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:13:22
-;;; Time-stamp: <2024-12-31 17:13:22 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/loggers.el
+;;; Author: 2025-01-02 10:55:07
+;;; Time-stamp: <2025-01-02 10:55:07 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/db-loggers.el
 
 ;; (require '02-llemacs-logging-core-utils)
 ;; (require '02-llemacs-logging-core-db)
@@ -71,7 +71,5 @@
                       ,expected
                       ,result))
      ,@body))
-
-(provide '02-llemacs-logging-db-loggers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:24:38
-;;; Time-stamp: <2025-01-02 03:24:38 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/05-llemacs-run/run-elisp.el
+;;; Author: 2025-01-02 10:24:02
+;;; Time-stamp: <2025-01-02 10:24:02 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-elisp.el
 
 (defvar llemacs--run-start-tag
   "
@@ -23,7 +23,6 @@ Llemacs-run called.
 ;; ----------------------------------------
 (defun llemacs--run-elisp-local (escaped-elisp-code)
   "Run elisp code in local Emacs."
-  (interactive)
   (condition-case err
       (eval escaped-elisp-code)
     (error
@@ -32,7 +31,6 @@ Llemacs-run called.
 
 (defun llemacs--run-elisp-server (escaped-elisp-code &optional emacs-server-file)
   "Run elisp code in remote Emacs server specified by EMACS-SERVER-FILE."
-  (interactive)
   (condition-case err
       (let* ((server-file (or emacs-server-file llemacs-path-emacs-server))
              (escaped-code (prin1-to-string escaped-elisp-code)))

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:42:32
-;;; Time-stamp: <2025-01-02 03:42:32 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file-loggers.el
+;;; Author: 2025-01-02 10:55:10
+;;; Time-stamp: <2025-01-02 10:55:10 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-loggers.el
 
 (defun llemacs--logging-get-caller-info ()
   "Get caller's file and line info."
@@ -9,7 +9,7 @@
          (frame (nth 4 frames)))
     (when frame
       (format "%s: L%s"
-              (or buffer-file-name "unknown")
+              (or load-file-name buffer-file-name "unknown")
               ;; (or load-file-name buffer-file-name "unknown")
               (line-number-at-pos)))))
 
@@ -83,7 +83,5 @@
   (llemacs--logging-log 'error message project-id)
   (llemacs--buffer-display llemacs--buffer-logging llemacs--path-logging-system-all t))
 ;; (llemacs--logging-log-error "ERROR MESSAGE HERE")
-
-(provide '02-llemacs-logging-file-loggers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

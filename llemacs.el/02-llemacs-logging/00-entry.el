@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:00:34
-;;; Time-stamp: <2025-01-02 03:00:34 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/00-entry.el
+;;; Author: 2025-01-02 10:23:07
+;;; Time-stamp: <2025-01-02 10:23:07 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/00-entry.el
 
 (defun llemacs--load-logging-components ()
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))

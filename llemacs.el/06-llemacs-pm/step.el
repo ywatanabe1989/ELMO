@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 14:33:31
-;;; Time-stamp: <2025-01-01 14:33:31 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/06-llemacs-project-management/06-llemacs-step.el
+;;; Author: 2025-01-02 10:55:19
+;;; Time-stamp: <2025-01-02 10:55:19 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-pm/step.el
 
 ;; (require '01-llemacs-config)
 ;; (require '02-llemacs-logging)
@@ -94,7 +94,5 @@
       (when (file-exists-p report)
         (find-file report)))
     log-entry))
-
-(provide '05-llemacs-step)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:07:50
-;;; Time-stamp: <2024-12-31 17:07:50 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/getters.el
+;;; Author: 2025-01-02 10:54:59
+;;; Time-stamp: <2025-01-02 10:54:59 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/db-getters.el
 
 ;; (require '02-llemacs-logging-core-db)
 
@@ -63,7 +63,5 @@
       (milestones . ,milestone-logs)
       (tasks . ,task-logs)
       (steps . ,step-logs))))
-
-(provide '02-llemacs-logging-db-getters)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
