@@ -1,11 +1,9 @@
 <!-- ---
-!-- title: 2024-12-27 23:38:09
+!-- title: 2025-01-03 03:18:23
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/image-format.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/03_rules/data-image-format.md
 !-- --- -->
 
 # Rules: image-format
 * Use JPG format
-* Set appropriate resolution
-* Optimize file size
-* Include alt text
+* Save under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.

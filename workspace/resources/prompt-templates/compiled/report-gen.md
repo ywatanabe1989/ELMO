@@ -5,32 +5,31 @@ PLACEHOLDER
 - Include relevant data and analysis
 - Follow consistent formatting
 
+# Rules: code-fix
+* If log shows errors please analyze the root cause and provide fix version of code.
+
 # Rules: code-elisp-format
 * Return only one Elisp code block, using the progn command
 * Code must be wrapped with this code block marker: ```elisp\n(progn\nYOUR CODE\n)\n```
 * Code must be executable, complete, and evaluatable
 * External tools (shell commands, python, latex, and so on) can be accessible as long as your code is written in Elisp
 
-# Rule: report-format
-* Summarize all the outputs (e.g., code, data, images...) as an org file
-* Append the org file contents to the end of "*LLEMACS*" buffer.
-* All results, including code, media, report, should be linked in the org content.
-* Also, convert the org file to pdf
-* Add links to all the data produced in the org and pdf files.
-* Images should be displayed inline mode
-* IMAGE_WIDTH should be 400
-* GIF images should be displayed with `(org-inline-anim-mode 1)`
-* Insert the directory path of the org file at the top of the contents
+# Rules: code-format-python
+* Return only Python code blocks, using code block marker: ```python\nYOUR CODE\n```
+* Python script files should be saved under `/workspace/projects/<full-project-name>/scripts/`, with appropriate directory structure.
+* Results should be saved under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.
+* Add explicit type hints
+* Follow PEP8 style guide
+* Avoid try-except blocks when possible
+* No trailing comments
+* Format with black
 
-# Rules: image-format
-* Use JPG format
-* Set appropriate resolution
-* Optimize file size
-* Include alt text
-
-# Rules: data-saving
-* Produced data should be saved under the results directory with appropriate directory structures.
-* Refactor the structure of results directory if applicable.
+# Rules: code-format-shell
+* Return only shell script blocks, using ```bash markers
+* Include shebang and script metadata
+* Implement proper argument parsing
+* Include logging functionality
+* Use proper if-fi and for-do-done syntax
 
 # Rules: code-logging
 * Log important points using:
@@ -45,8 +44,45 @@ PLACEHOLDER
   `(defun llemacs--logging-log-error (message &optional project-id-or-full-name))`
 * Provide meaningful error messages
 
-# Rules: code-fix
-* If log shows errors please analyze the root cause and provide fix version of code.
+# Rules: code-refactor
+* Refactor code and directory structures.
+
+# Rules: image-format
+* Use JPG format
+* Save under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.
+
+# Rules: movie-format
+* Use GIF (preferred) or MP4 format
+* Set reasonable quality/size balance
+
+# Rule: report-format
+* Summarize all the outputs (e.g., code, data, images...) into an org file
+* Save the org file under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.
+* Show the org file into the buffer popup-displayed by this code: `(llemacs--buffer-display llemacs--buffer-main)`
+* All results, including code, media, report, should be linked in the org content.
+* Also, convert the org file to pdf
+* Add links to all the data produced in the org and pdf files.
+* Images should be displayed inline mode
+* IMAGE_WIDTH should be 400
+* Insert the directory path of the org file at the top of the contents
+
+# Rules: image-format
+* Use JPG format
+* Save under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.
+
+# Rules: data-saving
+* Produced data should be saved under the results directory with appropriate directory structures.
+* Refactor the structure of results directory if applicable.
+
+# Rule: proj-work-based-on-the-project-management
+* Please generate code for the project proceed.
+
+# Rules: proj-context-interpretation
+* Context above is an information source for you to work for the project proceed.
+
+# Rule: proj-update-context
+* Update the `/workspace/projects/<full-project-name>/pm/pm.mmd` mermaid file.
+* Render the updated mermaid file to png, gif, and svg.
 
 # Example Output: elisp
 ```elisp

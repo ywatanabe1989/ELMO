@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2025-01-02 19:11:06
+!-- title: 2025-01-03 03:42:09
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
@@ -32,6 +32,8 @@ Llemacs is a file-based LLM agent system implemented in Elisp
 (llemacs--llm-prompt-compile "code-gen") ;; Compile prompt template (recipe-id: "code-gen")
 (llemacs--llm-prompt-embed "plot something" "code-gen") ;; Embed the prompt to template (recipe-id: "code-gen")
 (llemacs--run-prompt "plot something" "code-gen") ;; Translate prompt to elisp code and evaluate
+(llemacs--proj-init "dsp-project" "Write digital signal processing code for demo EEG signals, like calculating DMD features") ;; project-name, goals
+(llemacs--run-prompt (llemacs--proj-collect-context "039-dsp-project")  "report-gen") ;; Generate report based on he goals
 ```
 ### 2. Python Environment
 
@@ -42,13 +44,15 @@ python -m pip install -r requirements.txt
 ```
 
 ### 3. Environment Variables
-API keys:
+Details can be seen at [`./config/env/`](./config/env/).
+For example, LLM API keys are expected as follows:
 ```bash
 export LLEMACS_ANTHROPIC_API_KEY="your-key" # Default: $ANTHROPIC_API_KEY
 export LLEMACS_GOOGLE_API_KEY="your-key" # Default: $GOOGLE_API_KEY
 export LLEMACS_DEEPSEEK_API_KEY="your-key" # Default: $DEEPSEEK_API_KEY
 ```
-Details can be seen at [`./config/env/`](./config/env/).
+`(llemacs-llm-switch-provider)` switches the LLM provider to use.
+
 
 ### 4. Mermaid
 Please see [`./docs/installation/mermaid.md`](./docs/installation/mermaid.md).

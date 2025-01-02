@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 03:04:58
-;;; Time-stamp: <2025-01-03 03:04:58 (ywatanabe)>
+;;; Author: 2025-01-03 03:41:50
+;;; Time-stamp: <2025-01-03 03:41:50 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/prompt-recipes.el
 
 (defvar llemacs--llm-prompt-recipes
@@ -8,21 +8,34 @@
     (:id "code-gen"
          :components ("roles/elisp-generator"
                       "tasks/code-generation"
-                      "rules/code-format-elisp"
-                      "rules/code-logging"
                       "rules/code-fix"
+                      "rules/code-format-elisp"
+                      "rules/code-format-python"
+                      "rules/code-format-shell"
+                      "rules/code-logging"
+                      "rules/code-refactor"
+                      "rules/data-image-format"
+                      "rules/data-movie-format"
                       "example-io/elisp"
                       "tools/elisp"
                       "workspace/workspace"))
     (:id "report-gen"
          :components ("roles/report-generator"
                       "tasks/report-creation"
+                      "rules/code-fix"
                       "rules/code-format-elisp"
-                      "rules/org-report-format"
+                      "rules/code-format-python"
+                      "rules/code-format-shell"
+                      "rules/code-logging"
+                      "rules/code-refactor"
+                      "rules/data-image-format"
+                      "rules/data-movie-format"
+                      "rules/results-org-report-format"
                       "rules/data-image-format"
                       "rules/data-saving"
-                      "rules/code-logging"
-                      "rules/code-fix"
+                      "rules/proj-work-based-on-the-project-management"
+                      "rules/proj-context-interpretation"
+                      "rules/proj-update-context"
                       "example-io/elisp"
                       "tools/python"
                       "workspace/workspace"))

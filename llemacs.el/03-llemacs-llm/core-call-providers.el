@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:56:10
-;;; Time-stamp: <2025-01-02 10:56:10 (ywatanabe)>
+;;; Author: 2025-01-03 03:29:53
+;;; Time-stamp: <2025-01-03 03:29:53 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-call-providers.el
 
 (require 'json)

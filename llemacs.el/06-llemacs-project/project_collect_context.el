@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 02:55:28
-;;; Time-stamp: <2025-01-03 02:55:28 (ywatanabe)>
+;;; Author: 2025-01-03 03:38:40
+;;; Time-stamp: <2025-01-03 03:38:40 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-project/project_collect_context.el
 
 (defun llemacs--proj-get-path-pm-mmd (project-id-or-full-project-name)
@@ -75,6 +75,8 @@
          (tree (llemacs--proj-get-tree-contents project-id-or-full-project-name)))
     (concat
      llemacs--project-splitter
+     "##### CONTEXT STARTS #####"
+     llemacs--project-splitter
      (format "\nCurrent Timestamp:\n%s\n\n" (llemacs--logging-get-timestamp))
      llemacs--project-splitter
      (format "\nProject Directory:\n%s\n\n" project-dir)
@@ -90,6 +92,8 @@
                             content)))
                 all-logs
                 "\n")
+     llemacs--project-splitter
+     "##### CONTEXT ENDS #####"
      llemacs--project-splitter
      (format "\nProject Structure:\n%s" tree))))
 

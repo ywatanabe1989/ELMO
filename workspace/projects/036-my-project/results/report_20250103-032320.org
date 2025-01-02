@@ -1,3 +1,24 @@
+#+TITLE: Plot Generation Report
+#+DATE: 20250103-032320
+
+* Report Location
+This report is located at: /home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report_20250103-032320.org
+
+* Generated Plots
+
+** Sine Wave
+#+ATTR_HTML: :width 400
+#+ATTR_LATEX: :width 0.8\linewidth
+[[file:/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/figures/sine.jpg]]
+
+** Sine and Cosine Waves
+#+ATTR_HTML: :width 400
+#+ATTR_LATEX: :width 0.8\linewidth
+[[file:/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/figures/sine_cosine.jpg]]
+
+* Source Code
+** Python Plot Script
+#+begin_src python
 
 import matplotlib
 matplotlib.use('Agg')
@@ -29,3 +50,4 @@ plt.ylabel('y')
 plt.legend()
 plt.savefig('results/figures/sine_cosine.jpg', bbox_inches='tight', dpi=300)
 plt.close()
+#+end_src
