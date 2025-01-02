@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:23:40
-;;; Time-stamp: <2024-12-31 17:23:40 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file/maintainers.el
+;;; Author: 2025-01-02 10:55:16
+;;; Time-stamp: <2025-01-02 10:55:16 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-maintainers.el
 
 ;; (require '02-llemacs-logging-core-file)
 
@@ -43,7 +43,5 @@
           (insert-file-contents file)
           (write-region (point-min) (point-max) (concat file ".gz") nil nil nil 'gzip)
           (delete-file file))))))
-
-(provide '02-llemacs-logging-file-maintainers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

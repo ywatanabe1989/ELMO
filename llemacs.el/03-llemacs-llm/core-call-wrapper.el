@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 22:47:54
-;;; Time-stamp: <2025-01-01 22:47:54 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/03-llemacs-llm-call.el
+;;; Author: 2025-01-02 10:53:52
+;;; Time-stamp: <2025-01-02 10:53:52 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-call-wrapper.el
 
 (defun llemacs-llm (prompt &optional template)
   "Process PROMPT using configured LLM provider."
@@ -32,7 +32,5 @@
 
 ;; M-x llemacs-llm RET hi ;; this does not work
 ;; (llemacs-llm "hello") ;; this returns message
-
-(provide '03-llemacs-llm-call)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

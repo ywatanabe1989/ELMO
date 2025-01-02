@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:06:28
-;;; Time-stamp: <2024-12-31 23:06:28 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/01-llemacs-base-debug.el
+;;; Author: 2025-01-02 10:49:59
+;;; Time-stamp: <2025-01-02 10:49:59 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/debug.el
 
 (defcustom llemacs-debug nil
   "When non-nil, enable debug logging and verbose output."

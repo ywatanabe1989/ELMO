@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:40:47
-;;; Time-stamp: <2025-01-02 03:40:47 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/paths.el
+;;; Author: 2025-01-02 10:46:21
+;;; Time-stamp: <2025-01-02 10:46:21 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/paths.el
 
 ;; Global
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -12,7 +12,7 @@
   :group 'llemacs)
 
 (defcustom llemacs-path-workspace
-  "/home/ywatanabe/.emacs.d/lisp/llemacs/workspace"
+  (expand-file-name "workspace" llemacs-path)
   "Base directory for LLEMACS workspace."
   :type 'string
   :group 'llemacs)
@@ -32,8 +32,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Scripts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcustom llemacs--path-python-env
+  (expand-file-name ".env" llemacs-path-workspace)
+  "Path to the Python environment used by llemacs.el."
+  :type 'file
+  :group 'llemacs)
+
 (defcustom llemacs--path-python
-  (expand-file-name ".env/bin/python" llemacs-path-workspace)
+  (expand-file-name "bin/python" llemacs--path-python-env)
   "Path to the Python binary used by llemacs.el."
   :type 'file
   :group 'llemacs)

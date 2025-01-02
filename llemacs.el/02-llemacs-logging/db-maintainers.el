@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 17:08:29
-;;; Time-stamp: <2024-12-31 17:08:29 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/db/maintainers.el
+;;; Author: 2025-01-02 10:55:13
+;;; Time-stamp: <2025-01-02 10:55:13 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/db-maintainers.el
 
 ;; (require '02-llemacs-logging-core-db)
 
@@ -33,7 +33,5 @@
   "Compact the database by removing unused space."
   (unless llemacs--logging-db-connection (llemacs--logging-db-init-if))
   (emacsql llemacs--logging-db-connection [:vacuum]))
-
-(provide '02-llemacs-logging-db-maintainers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

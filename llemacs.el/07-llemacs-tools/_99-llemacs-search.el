@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 12:49:27
-;;; Time-stamp: <2024-12-31 12:49:27 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/06-llemacs-search.el
+;;; Author: 2025-01-02 10:54:48
+;;; Time-stamp: <2025-01-02 10:54:48 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/07-llemacs-tools/_99-llemacs-search.el
 
 (require 'json)
 (require 'url)
@@ -62,7 +62,6 @@
                     (alist-get 'url result)))
             (alist-get 'results (alist-get 'web results)))))
 
-(provide '06-llemacs-search)
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
 ;; ;;; -*- lexical-binding: t -*-

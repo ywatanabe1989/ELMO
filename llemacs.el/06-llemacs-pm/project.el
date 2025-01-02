@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 23:00:12
-;;; Time-stamp: <2025-01-01 23:00:12 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/06-llemacs-pm/project.el
+;;; Author: 2025-01-02 10:55:22
+;;; Time-stamp: <2025-01-02 10:55:22 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-pm/project.el
 
 (defcustom llemacs-project-default-name "default"
   "Default project name when none specified."
@@ -230,7 +230,7 @@
       (insert llemacs--project-markdown-template))
     (add-hook 'after-save-hook
               (lambda ()
-                (when (string= (buffer-file-name) metadata-md)
+                (when (string= ((or load-file-name buffer-file-name)) metadata-md)
                   (with-temp-file metadata-json
                     (insert (llemacs--project-generate-json (buffer-string))))))
               nil t)
@@ -268,8 +268,6 @@
                                          (llemacs-project-get-dir project-id))))
     (when (file-exists-p metadata-file)
       (json-read-file metadata-file))))
-
-(provide '05-llemacs-project)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
 
@@ -496,7 +494,7 @@
 ;; ;;       (insert llemacs-project-markdown-template))
 ;; ;;     (add-hook 'after-save-hook
 ;; ;;               (lambda ()
-;; ;;                 (when (string= (buffer-file-name) metadata-md)
+;; ;;                 (when (string= ((or load-file-name buffer-file-name)) metadata-md)
 ;; ;;                   (with-temp-file metadata-json
 ;; ;;                     (insert (llemacs-project-generate-json (buffer-string))))))
 ;; ;;               nil t)

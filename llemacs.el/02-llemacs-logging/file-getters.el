@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 05:03:59
-;;; Time-stamp: <2025-01-01 05:03:59 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file/02-llemacs-logging-file-getters.el
+;;; Author: 2025-01-02 10:54:53
+;;; Time-stamp: <2025-01-02 10:54:53 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-getters.el
 
 ;; (require '02-llemacs-logging-core-file)
 
@@ -36,7 +36,5 @@
             (append logs
                     (llemacs--logging-get-logs-by-level level n))))
     (sort logs #'string>)))
-
-(provide '02-llemacs-logging-file-getters)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

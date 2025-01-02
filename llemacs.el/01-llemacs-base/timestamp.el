@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 23:06:38
-;;; Time-stamp: <2024-12-31 23:06:38 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/01-llemacs-base-timestamp.el
+;;; Author: 2025-01-02 10:49:58
+;;; Time-stamp: <2025-01-02 10:49:58 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/timestamp.el
 
 (defcustom llemacs--timestamp
   (format-time-string "%Y-%m-%d-%H:%M:%S")

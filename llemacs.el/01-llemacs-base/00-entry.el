@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 22:54:31
-;;; Time-stamp: <2025-01-01 22:54:31 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-base/00-entry.el
+;;; Author: 2025-01-02 10:49:11
+;;; Time-stamp: <2025-01-02 10:49:11 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/00-entry.el
 
 (require 'custom)
 (require 'json)

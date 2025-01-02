@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:29:01
-;;; Time-stamp: <2024-12-31 22:29:01 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/03-llemacs-llm-call-providers.el
+;;; Author: 2025-01-02 10:56:10
+;;; Time-stamp: <2025-01-02 10:56:10 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-call-providers.el
 
 (require 'json)
 (require 'request)
@@ -126,9 +126,7 @@
           (error "Failed to retrieve response")))
     (error
      (llemacs--logging-log-error (format "DeepSeek API request failed.\n%s"
-                                     (error-message-string err)))
+                                         (error-message-string err)))
      nil)))
-
-(provide '03-llemacs-llm-call-providers)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

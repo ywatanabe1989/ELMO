@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:35:18
-;;; Time-stamp: <2024-12-31 22:35:18 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/01-llemacs-config/01-llemacs-config-groups.el
+;;; Author: 2025-01-02 10:45:46
+;;; Time-stamp: <2025-01-02 10:45:46 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/groups.el
 
 ;; Global
 (defgroup llemacs nil

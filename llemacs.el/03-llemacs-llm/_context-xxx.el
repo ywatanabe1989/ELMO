@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-01 15:06:37
-;;; Time-stamp: <2025-01-01 15:06:37 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/context/03-llemacs--llm-compile-context.el
+;;; Author: 2025-01-02 10:54:04
+;;; Time-stamp: <2025-01-02 10:54:04 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/_context-xxx.el
 
 (defun llemacs--llm-context-compile (project-id))
 (defun llemacs--llm-context-get-goals (project-id))
@@ -38,7 +38,5 @@
 ;;       (with-temp-buffer
 ;;         (insert-file-contents (car (last files)))
 ;;         (json-read-from-string (buffer-string))))))
-
-(provide '05-llemacs-context)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
