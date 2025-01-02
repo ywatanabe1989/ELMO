@@ -48,7 +48,7 @@ export LLEMACS_ANTHROPIC_API_KEY="your-key" # Default: $ANTHROPIC_API_KEY
 export LLEMACS_GOOGLE_API_KEY="your-key" # Default: $GOOGLE_API_KEY
 export LLEMACS_DEEPSEEK_API_KEY="your-key" # Default: $DEEPSEEK_API_KEY
 ```
-Details can be seen at ["./config/env/"](./config/env/).
+Details can be seen at [`./config/env/`](./config/env/).
 
 ### 4. Mermaid
 Please see [`./docs/installatino/mermaid.md`](./docs/installatino/mermaid.md).
