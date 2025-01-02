@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 18:13:19
-;;; Time-stamp: <2025-01-02 18:13:19 (ywatanabe)>
+;;; Author: 2025-01-03 02:54:15
+;;; Time-stamp: <2025-01-03 02:54:15 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el
 
 (defun llemacs--run-prompt (prompt &optional recipe-id)
@@ -18,20 +18,6 @@
     (error
      (llemacs--logging-log-error (format "Run failed: %s" err))
      nil)))
-
-;; (defun llemacs--run-prompt (prompt &optional recipe-id)
-;;   "Main entry point for LLEMACS execution."
-;;   (interactive "sPrompt: ")
-;;   (condition-case err
-;;       (progn
-;;         (let* ((full-prompt (llemacs--llm-prompt-embed prompt recipe-id))
-;;                (llemacs--logging-log-prompt full-prompt)
-;;                (elisp-code (llemacs--cvt-prompt2elisp full-prompt))
-;;                (llemacs--logging-log-elisp elisp-code)
-;;                (result (llemacs--run-elisp elisp-code)))
-;;           (error
-;;            (llemacs--logging-log-error (format "Run failed: %s" err))
-;;            nil)))))
 
 ;; (llemacs--run-prompt "hi")
 ;; (llemacs--run-prompt "plot something" "code-gen")

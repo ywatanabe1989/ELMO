@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 00:55:34
-;;; Time-stamp: <2025-01-03 00:55:34 (ywatanabe)>
+;;; Author: 2025-01-03 02:09:00
+;;; Time-stamp: <2025-01-03 02:09:00 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-variables.el
 
 (defcustom llemacs--logging-level-threshold 'info
