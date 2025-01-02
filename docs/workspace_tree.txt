@@ -1,170 +1,46 @@
-workspace/
-├── elmo-logs.db
-├── elmos
-│   ├── elmo-000
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-001
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-002
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-003
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-004
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-005
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-006
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   ├── elmo-007
-│   │   ├── memory
-│   │   ├── messages
-│   │   │   ├── inbox
-│   │   │   └── outbox
-│   │   ├── profile.json
-│   │   ├── projects
-│   │   │   └── messages
-│   │   │       ├── inbox
-│   │   │       └── outbox
-│   │   └── status.json
-│   └── elmo-008
-│       ├── memory
-│       ├── messages
-│       │   ├── inbox
-│       │   └── outbox
-│       ├── profile.json
-│       ├── projects
-│       │   └── messages
-│       │       ├── inbox
-│       │       └── outbox
+workspace
+├── agents
+│   └── agent-000
 │       └── status.json
 ├── logs
-│   ├── backup
-│   │   ├── global-20241225-110047.log
-│   │   ├── system.log.20241229-090559
-│   │   └── system.log.20241229-090615
-│   ├── elmo.log
-│   ├── elmo-logs.db
-│   ├── global.log
-│   └── system.log
+│   ├── all.log
+│   ├── by_level
+│   │   ├── debug.log
+│   │   ├── elisp.log
+│   │   ├── error.log
+│   │   ├── info.log
+│   │   ├── prompt.log
+│   │   ├── search.log
+│   │   └── warn.log
+│   ├── debug.log
+│   ├── error.log
+│   ├── info.log
+│   ├── logging.db
+│   ├── logging.log
+│   ├── prompt.log
+│   ├── search.log
+│   └── warn.log
 ├── projects
-│   ├── 000-PROJECTNAME
+│   ├── 000-PROJECT-NAME
+│   │   └── project-management.md
+│   ├── 000-sample-project
+│   │   ├── config
 │   │   ├── data
-│   │   ├── docs
-│   │   │   ├── project-dynamic.json
-│   │   │   └── project-static.json
-│   │   ├── forum.json
+│   │   ├── dev.mmd
+│   │   ├── project-management_v01.gif
+│   │   ├── project-management_v01.mmd
+│   │   ├── project-management_v01.png
+│   │   ├── project-management_v01.svg
+│   │   ├── project-management_v02.gif
+│   │   ├── project-management_v02.mmd
+│   │   ├── project-management_v02.png
+│   │   ├── project-management_v02.svg
 │   │   ├── README.md
 │   │   ├── requirements.txt
 │   │   ├── results
-│   │   └── scripts
-│   ├── 004
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── 005
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── 006
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── 007-my
-│   │   └── first-project
-│   │       ├── context
-│   │       ├── memory
-│   │       ├── metadata.json
-│   │       ├── metadata.md
-│   │       └── steps
-│   ├── 007-New Project
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
+│   │   ├── scripts
+│   │   └── tmp.mmd
 │   ├── 008-my-first-project
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── 009-my
-│   │   └── first-project
-│   │       ├── context
-│   │       ├── memory
-│   │       ├── metadata.json
-│   │       ├── metadata.md
-│   │       └── steps
-│   ├── 009-New Project
 │   │   ├── context
 │   │   ├── memory
 │   │   ├── metadata.json
@@ -182,48 +58,12 @@ workspace/
 │   │   ├── metadata.json
 │   │   ├── metadata.md
 │   │   └── steps
-│   ├── 011-my-first-project-new-project
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── ELMO-0001
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── ELMO-0002
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── ELMO-0003
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── my-project
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   ├── metadata.md
-│   │   └── steps
-│   ├── project-001
-│   │   ├── context
-│   │   ├── memory
-│   │   ├── metadata.json
-│   │   └── steps
-│   │       ├── step-20241227-151748.log
-│   │       └── step-20241227-151811.log
-│   └── project001
+│   └── 011-my-first-project-new-project
 │       ├── context
 │       ├── memory
+│       ├── metadata.json
+│       ├── metadata.md
 │       └── steps
-│           └── step-20241227-151722.log
 └── resources
     ├── agents
     ├── prompt-templates
@@ -240,7 +80,10 @@ workspace/
     │   │   ├── 01_roles
     │   │   │   ├── elisp-generator.md
     │   │   │   ├── email-writer.md
+    │   │   │   ├── nil.md
     │   │   │   ├── README.md
+    │   │   │   ├── _report-generator.json
+    │   │   │   ├── report-generator.json
     │   │   │   ├── report-generator.md
     │   │   │   ├── researcher.md
     │   │   │   ├── scientific-writer.md
@@ -289,10 +132,10 @@ workspace/
     │   │   │   ├── README.md
     │   │   │   ├── scientific-writing.md
     │   │   │   └── translation.md
-    │   │   ├── 04_example_input_output
+    │   │   ├── 04_example_io
     │   │   │   ├── elisp.md
     │   │   │   └── README.md
-    │   │   ├── 05_expected_input_output
+    │   │   ├── 05_expected_io
     │   │   │   └── README.md
     │   │   ├── 06_workspace
     │   │   │   ├── README.md
@@ -312,8 +155,8 @@ workspace/
     │   │   │   └── ssh.md
     │   │   ├── 08_resources
     │   │   │   └── README.md
-    │   │   ├── example_input_output -> 04_example_input_output
-    │   │   ├── expected_input_output -> 05_expected_input_output
+    │   │   ├── example-io -> 04_example_io
+    │   │   ├── expected-io -> 05_expected_io
     │   │   ├── resources -> 08_resources
     │   │   ├── roles -> 01_roles
     │   │   ├── rules -> 03_rules
@@ -346,4 +189,4 @@ workspace/
         ├── 004-github.json
         └── 005-tree.json
 
-195 directories, 152 files
+53 directories, 137 files
