@@ -1,0 +1,112 @@
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 17:55:05]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L18
+API request failed.
+Symbol’s function definition is void: llemacs--llm-run-prompt
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 17:56:38]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L18
+API request failed.
+Lisp nesting exceeds ‘max-lisp-eval-depth’
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 17:59:31]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L18
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! How can I help you today?
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 17:59:49]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L19
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! I'm ready to help you generate Emacs Lisp code. Please let me know what specific functionality or problem you'd like me to help with, and I'll provide a well-documented, maintainable solution following Emacs Lisp best practices.
+
+For example, I can help with:
+1. Custom functions and commands
+2. Minor modes
+3. Text manipulation utilities
+4. File handling operations
+5. Buffer management
+6. User interface enhancements
+
+What would you like me to help you create?
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:00:06]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L19
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! I'm ready to help you generate Emacs Lisp code. Please let me know what specific functionality you'd like me to implement, and I'll create well-documented, maintainable Elisp code following the specified format and best practices.
+
+For example, I can help with:
+1. Custom functions and commands
+2. Minor modes
+3. Major modes
+4. Configuration utilities
+5. Text manipulation tools
+6. File handling operations
+7. Buffer management functions
+
+What would you like me to help you with?
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:01:26]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L21
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! I can help you generate Emacs Lisp code following best practices. To get started, please let me know what specific functionality you'd like to implement and I'll help create clean, well-documented Elisp code for it.
+
+For example, I can help with:
+- Custom functions and commands
+- Mode definitions
+- Utility functions
+- Configuration code
+- Integration with external tools
+- Text manipulation
+- Buffer/window management
+
+What would you like to create?
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:03:39]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L21
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! I'm here to help you generate Emacs Lisp code. I understand you want code that follows best practices, is well-documented, and handles errors properly. 
+
+To get started, could you let me know what specific functionality you'd like me to help you implement in Elisp? For example:
+- A utility function
+- A minor mode
+- Text manipulation
+- File operations
+- Custom commands
+- Or any other Emacs functionality
+
+This will help me generate the most appropriate and useful code for your needs.
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:06:33]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L22
+Elisp extraction failed.
+No ELISP blocks found in response
+Hello! How can I help you today?
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:07:10]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L23
+Local code runution failed: Wrong number of arguments: (4 . 4), 5
+----------------------------------------
+[ERROR LOG]
+[2025-01-02 18:13:24]
+=> /home/ywatanabe/proj/llemacs/.README.md: L11
+Claude API request failed.
+API request failed with status: 
+----------------------------------------
+[ERROR LOG]
+[2025-01-03 00:54:30]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-pm/project.el: L38
+Project template not found

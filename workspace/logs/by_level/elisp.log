@@ -1,0 +1,39 @@
+----------------------------------------
+[ELISP LOG]
+[2025-01-02 18:04:27]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L21
+(progn (progn (progn (defun plot-simple-wave nil Draw a simple sine wave pattern using artist-mode characters in a new buffer. (interactive) (let* ((buffer-name *Plot-Demo*) (width 60) (height 20) (mid-height (/ height 2)) (wave-data (make-vector width 0))) (dotimes (x width) (let ((y (round (* mid-height (sin (* x (/ float-pi 10))))))) (aset wave-data x (+ mid-height y)))) (get-buffer-create buffer-name) (switch-to-buffer buffer-name) (erase-buffer) (dotimes (y height) (dotimes (x width) (insert (if (= y (aref wave-data x)) *  ))) (insert 
+)) (read-only-mode 1) (message Wave plot created in buffer %s buffer-name))) (global-set-key (kbd C-c p) 'plot-simple-wave))))
+----------------------------------------
+[ELISP LOG]
+[2025-01-02 18:05:30]
+=> /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el: L21
+(progn (progn (progn (require 'artist) (defun plot-simple-wave nil Draw a simple sine-wave like pattern using artist-mode.
+Creates a new buffer and draws the pattern using ASCII characters. (interactive) (let ((buf (get-buffer-create *Simple Plot*))) (with-current-buffer buf (erase-buffer) (artist-mode) (let ((x 0) (y 10) (prev-y 10)) (dotimes (i 40) (setq x (+ x 1)) (setq y (+ 10 (* 5 (sin (/ (* float-pi x) 10.0))))) (artist-draw-line (1- x) (round prev-y) x (round y) 42) (setq prev-y y))) (artist-mode-off) (read-only-mode)) (switch-to-buffer buf) (message Simple wave plot created!))) (provide 'plot-simple-wave))))
+----------------------------------------
+[ELISP LOG]
+[2025-01-02 18:13:48]
+=> /home/ywatanabe/proj/llemacs/.README.md: L12
+(progn (progn (progn (defun create-simple-plot nil Generate a simple sine wave plot using Python and matplotlib. (interactive) (let* ((plot-buffer *Plot Output*) (python-script 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create data
+x = np.linspace(-10, 10, 200)
+y = np.sin(x)
+
+# Create plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, 'b-', label='sin(x)')
+plt.grid(True)
+plt.title('Sine Wave Plot')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+
+# Save plot
+plt.savefig('/tmp/plot.png')
+plt.close()
+)) (with-temp-file /tmp/plot_script.py (insert python-script)) (shell-command python3 /tmp/plot_script.py) (with-current-buffer (get-buffer-create plot-buffer) (erase-buffer) (insert-image (create-image /tmp/plot.png)) (goto-char (point-min))) (switch-to-buffer plot-buffer) (image-mode) (delete-file /tmp/plot_script.py) (message Plot generated successfully!))) (when (executable-find python3) (create-simple-plot)) Plot generated successfully!)))
