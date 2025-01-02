@@ -55,7 +55,7 @@ Please see [`./docs/installation/mermaid.md`](./docs/installation/mermaid.md).
 
 
 ## Architecture
-<a href="./docs/project_flow/project_flow.png">
+<a href="./docs/project_flow/project_flow.svg">
     <img src="./docs/project_flow/project_flow.gif" alt="Project Flow" width="800">
 </a>
 
