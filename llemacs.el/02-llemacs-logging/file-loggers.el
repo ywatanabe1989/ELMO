@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 18:01:05
-;;; Time-stamp: <2025-01-02 18:01:05 (ywatanabe)>
+;;; Author: 2025-01-03 01:27:20
+;;; Time-stamp: <2025-01-03 01:27:20 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-loggers.el
 
 (defun llemacs--logging-get-caller-info ()
@@ -10,7 +10,6 @@
     (when frame
       (format "%s: L%s"
               (or load-file-name buffer-file-name "unknown")
-              ;; (or load-file-name buffer-file-name "unknown")
               (line-number-at-pos)))))
 
 (defun llemacs--logging-format-message (level message &optional project-id)
@@ -27,31 +26,51 @@
               (format "%s" message)
             message)))
 
+
+
 (defun llemacs--logging-log (level message &optional project-id)
   "Log MESSAGE at LEVEL with optional PROJECT-ID."
   (let* ((log-entry (llemacs--logging-format-message level message project-id))
-         (log-file (cond
-                    ((eq level 'error) llemacs--path-logging-system-error)
-                    ((eq level 'warn) llemacs--path-logging-system-warn)
-                    ((eq level 'info) llemacs--path-logging-system-info)
-                    ((eq level 'prompt) llemacs--path-logging-system-prompt)
-                    ((eq level 'elisp) llemacs--path-logging-system-elisp)
-                    ((eq level 'api) llemacs--path-logging-system-api)
-                    ((eq level 'search) llemacs--path-logging-system-search)
-                    ((eq level 'debug) llemacs--path-logging-system-debug))))
+         (log-file
+          (if project-id
+              (pcase level
+                ('error (llemacs--path-project-error-get project-id))
+                ('warn (llemacs--path-project-warn-get project-id))
+                ('info (llemacs--path-project-info-get project-id))
+                ('success (llemacs--path-project-success-get project-id))
+                ('debug (llemacs--path-project-debug-get project-id)))
+            (pcase level
+              ('error llemacs--path-logging-system-error)
+              ('warn llemacs--path-logging-system-warn)
+              ('info llemacs--path-logging-system-info)
+              ('success llemacs--path-logging-system-success)
+              ('prompt llemacs--path-logging-system-prompt)
+              ('elisp llemacs--path-logging-system-elisp)
+              ('api llemacs--path-logging-system-api)
+              ('search llemacs--path-logging-system-search)
+              ('debug llemacs--path-logging-system-debug))))
+         (all-log-file (if project-id
+                           (llemacs--path-project-all-get project-id)
+                         llemacs--path-logging-system-all)))
     (llemacs--logging-system-files-init-if)
-    (append-to-file (concat log-entry "\n") nil llemacs--path-logging-system-all)
+    (append-to-file (concat log-entry "\n") nil all-log-file)
     (append-to-file (concat log-entry "\n") nil log-file)))
 
 (defun llemacs--logging-log-debug (message &optional project-id)
   "Log debug MESSAGE with optional PROJECT-ID."
   (llemacs--logging-log 'debug message project-id))
 ;; (llemacs--logging-log-debug "DEBUG MESSAGE HERE")
+;; (llemacs--logging-log-debug "DEBUG MESSAGE HERE" "026-my-first-project")
 
 (defun llemacs--logging-log-info (message &optional project-id)
   "Log info MESSAGE with optional PROJECT-ID."
   (llemacs--logging-log 'info message project-id))
 ;; (llemacs--logging-log-info "INFO MESSAGE HERE")
+
+(defun llemacs--logging-log-success (message &optional project-id)
+  "Log success MESSAGE with optional PROJECT-ID."
+  (llemacs--logging-log 'success message project-id))
+;; (llemacs--logging-log-success "SUCCESS MESSAGE HERE")
 
 (defun llemacs--logging-log-search (message &optional project-id)
   "Log search MESSAGE with optional PROJECT-ID."

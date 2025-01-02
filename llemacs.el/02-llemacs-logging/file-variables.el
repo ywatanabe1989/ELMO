@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 03:40:29
-;;; Time-stamp: <2025-01-02 03:40:29 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/02-llemacs-logging/file-variables.el
+;;; Author: 2025-01-03 00:55:34
+;;; Time-stamp: <2025-01-03 00:55:34 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-variables.el
 
 (defcustom llemacs--logging-level-threshold 'info
   "Minimum log level to record."
@@ -28,6 +28,7 @@
   (pcase level
     ('debug 0)
     ('info 1)
+    ('success 1)
     ('search 1)
     ('api 1)
     ('prompt 1)
