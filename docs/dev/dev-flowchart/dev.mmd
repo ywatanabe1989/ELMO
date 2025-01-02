@@ -1,0 +1,71 @@
+graph TD
+    subgraph Project Setup
+        A[Initialize Git Repository]:::done
+        B[Create Project Structure]:::done
+        C[Setup Virtual Environment]:::inProgress
+        D[Install Dependencies]:::todo
+    end
+
+    subgraph Core Development
+    subgraph Engine
+        E[Setup Pygame]:::todo
+        F[Create Game Loop]:::todo
+        G[Implement Physics Engine]:::todo
+    end
+
+    subgraph Assets
+        H[Create Sprite Sheets]:::todo
+        I[Design Level Maps]:::todo
+        J[Add Sound Effects]:::todo
+    end
+
+    subgraph Characters
+        K[Implement Mario]:::todo
+        L[Add Enemies]:::todo
+        M[Create NPCs]:::todo
+    end
+
+    subgraph Mechanics
+        N[Movement System]:::todo
+        O[Collision Detection]:::todo
+        P[Power-ups]:::todo
+        Q[Scoring System]:::todo
+    end
+
+    subgraph Levels
+        R[Level Design]:::todo
+        S[Background Elements]:::todo
+        T[Checkpoints]:::todo
+    end
+    end
+
+    subgraph Testing & Deployment
+        U[Unit Testing]:::todo
+        V[Gameplay Testing]:::todo
+        W[Bug Fixes]:::todo
+        X[Release Version]:::todo
+    end
+
+    %% Relationships remain same
+    A --> B --> C --> D
+    D --> E
+    E --> F --> G
+    G --> |Enable|N
+    G --> |Enable|O
+    H --> K
+    H --> L
+    I --> R
+    J --> |Add to|K
+    J --> |Add to|L
+    N --> K
+    O --> K
+    P --> K
+    K --> V
+    L --> V
+    R --> V
+    V --> W
+    W --> X
+
+    classDef done fill:#9f9,stroke:#333,stroke-width:2px;
+    classDef inProgress fill:#ff9,stroke:#333,stroke-width:2px;
+    classDef todo fill:#fff,stroke:#333,stroke-width:2px;
