@@ -25,7 +25,7 @@
     (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
             llemacs--logging-splitter
             (upcase (symbol-name level))
-            (llemacs--loggin-get-timestamp)
+            (llemacs--logging-get-timestamp)
             (if project-id
                 (format "[Project: %s]" project-id)
               "")
@@ -39,7 +39,7 @@
 ;;   (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
 ;;           llemacs--logging-splitter
 ;;           (upcase (symbol-name level))
-;;           (llemacs--loggin-get-timestamp)
+;;           (llemacs--logging-get-timestamp)
 ;;           (if project-id
 ;;               (format "[Project: %s]" project-id)
 ;;             "")

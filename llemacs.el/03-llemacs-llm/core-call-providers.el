@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 03:29:53
-;;; Time-stamp: <2025-01-03 03:29:53 (ywatanabe)>
+;;; Author: 2025-01-03 04:02:09
+;;; Time-stamp: <2025-01-03 04:02:09 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-call-providers.el
 
 (require 'json)
@@ -11,7 +11,13 @@
   :type 'string
   :group 'llemacs-llm)
 
-(defun llemacs-llm-switch-provider (provider)
+(defcustom llemacs--llm-gemini-script
+  (expand-file-name "core-gemini_call.py" (file-name-directory (or load-file-name buffer-file-name)))
+  "Python script for calling Gemini"
+  :type 'string
+  :group 'llemacs-llm)
+
+(defun llemacs--llm-switch-provider (provider)
   "Switch the LLM provider."
   (interactive
    (list (completing-read "Select LLM provider: "
@@ -19,13 +25,6 @@
                           nil t)))
   (setq llemacs-llm-provider provider)
   (message "Switched LLM provider to: %s" provider))
-
-(defcustom llemacs-llm-gemini-script
-  (expand-file-name "gemini_call.py"
-                    (file-name-directory (or load-file-name buffer-file-name)))
-  "Path to Python script for Gemini API calls."
-  :type 'string
-  :group 'llemacs-llm)
 
 (defun llemacs--llm-gemini (text)
   "Simple text to text processing using Gemini API."
@@ -38,15 +37,17 @@
                                     llemacs--llm-gemini-script
                                     (replace-regexp-in-string "\"" "\\\\\"" text)
                                     temp-file)))
-                (error "Python script execution failed"))
+                (error
+                 (llemacs--logging-log-error "Python script execution failed")))
               (with-temp-buffer
                 (insert-file-contents temp-file)
                 (buffer-string)))
           (ignore-errors (delete-file temp-file))))
     (error
      (llemacs--logging-log-error (format "Gemini API request failed.\n%s"
-                                     (error-message-string err)))
+                                         (error-message-string err)))
      nil)))
+;; (llemacs--llm-gemini "Hi")
 
 (defun llemacs--llm-claude (text)
   "Simple text to text processing using Claude API."
@@ -82,7 +83,7 @@
           (error "Failed to retrieve response")))
     (error
      (llemacs--logging-log-error (format "Claude API request failed.\n%s"
-                                     (error-message-string err)))
+                                         (error-message-string err)))
      nil)))
 
 (defun llemacs--llm-deepseek (text)

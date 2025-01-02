@@ -20,7 +20,7 @@
     (llemacs--logging-log-error "Project ID/name cannot be nil")
     (return-from llemacs--proj-get-dir nil))
 
-  (unless (file-exists-p llemacs-path-projects)
+  (unless (file-exists-p llemacs--path-projects)
     (llemacs--logging-log-error "Projects directory does not exist")
     (return-from llemacs--proj-get-dir nil))
 
@@ -30,11 +30,11 @@
                        project-id-or-full-project-name))
          (pattern (format "^%s-.*$" project-id)))
 
-    (if-let ((dirname (car (directory-files llemacs-path-projects nil pattern))))
+    (if-let ((dirname (car (directory-files llemacs--path-projects nil pattern))))
         (progn
           ;; (llemacs--logging-log-success
           ;;  (format "Found project directory: %s" dirname))
-          (expand-file-name dirname llemacs-path-projects))
+          (expand-file-name dirname llemacs--path-projects))
       (llemacs--logging-log-error
        (format "No project found for ID/name: %s" project-id-or-full-project-name))
       nil)))
@@ -65,14 +65,14 @@
   (interactive "sProject Name: ")
   (let* ((project-id (llemacs--project-get-next-id))
          (project-full-name (format "%s-%s" project-id project-name))
-         (project-path (expand-file-name project-full-name llemacs-path-projects))
+         (project-path (expand-file-name project-full-name llemacs--path-projects))
          (project-goals (or goals (read-string "Project Goals: "))))
     (when (file-exists-p project-path)
       (llemacs--logging-log-error "Project directory already exists")
       (return-from llemacs--proj-init nil))
     (if (file-exists-p llemacs--path-sample-project-zip)
         (progn
-          (let ((default-directory llemacs-path-projects))
+          (let ((default-directory llemacs--path-projects))
             (call-process "unzip" nil nil nil llemacs--path-sample-project-zip)
             (rename-file "000-sample-project" project-full-name)
             (llemacs--logging-log-success

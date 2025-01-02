@@ -1,14 +1,13 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 03:38:40
-;;; Time-stamp: <2025-01-03 03:38:40 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-project/project_collect_context.el
+;;; Author: 2025-01-03 04:52:59
+;;; Time-stamp: <2025-01-03 04:52:59 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-proj/proj-collect-context.el
 
 (defun llemacs--proj-get-path-pm-mmd (project-id-or-full-project-name)
   "Get path to project's pm.mmd file."
   (let ((project-dir (llemacs--proj-get-dir project-id-or-full-project-name)))
     (expand-file-name "pm/pm.mmd" project-dir)))
 ;; (llemacs--proj-get-path-pm-mmd "026-my-first-project")
-
 
 (defun llemacs--proj-get-path-log (project-id-or-full-project-name &optional log-level)
   "Get path to project's log file. If LOG-LEVEL is nil, return the main log file."
@@ -30,8 +29,6 @@
      project-dir)))
 ;; (llemacs--proj-get-path-log "026-my-first-project" "warn")
 ;; (llemacs--proj-get-path-log "026-my-first-project" 'warn)
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Contents Readers
@@ -61,7 +58,9 @@
      (format "tree -a --charset ascii --gitignore %s" project-dir))))
 ;; (llemacs--proj-get-tree-contents "026-my-first-project")
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Main
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun llemacs--proj-collect-context (project-id-or-full-project-name &optional log-level)
   "Collect all relevant context information for the project."
   (let* ((project-dir (llemacs--proj-get-dir project-id-or-full-project-name))
@@ -96,7 +95,6 @@
      "##### CONTEXT ENDS #####"
      llemacs--project-splitter
      (format "\nProject Structure:\n%s" tree))))
-
 
 ;; (llemacs--proj-collect-context "036-my-project")
 ;; (llemacs--cvt-prompt2elisp (llemacs--proj-collect-context "036-my-project"))
