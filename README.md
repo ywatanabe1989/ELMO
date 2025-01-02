@@ -51,7 +51,7 @@ export LLEMACS_DEEPSEEK_API_KEY="your-key" # Default: $DEEPSEEK_API_KEY
 Details can be seen at [`./config/env/`](./config/env/).
 
 ### 4. Mermaid
-Please see [`./docs/installatino/mermaid.md`](./docs/installatino/mermaid.md).
+Please see [`./docs/installation/mermaid.md`](./docs/installation/mermaid.md).
 
 
 ## Architecture
