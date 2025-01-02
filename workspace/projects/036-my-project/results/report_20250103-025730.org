@@ -1,0 +1,54 @@
+# #+TITLE: 2025-01-03 02:57:30
+# #+AUTHOR: Yusuke Watanabe
+# #+DATE: /home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report_20250103-025730.org
+
+#+TITLE: Project Report (20250103-025730)
+#+DATE: 2025-01-03
+#+OPTIONS: toc:2 num:t
+#+STARTUP: showeverything
+
+Report Directory: /home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/
+
+* Project Overview
+** Project Goals
+- Plot Something And Summarize All The Code And Results
+- Create org file report with inline images
+- Open report in buffer
+
+* Project Structure
+#+begin_src shell
+/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project
+├── config
+├── data
+├── logs
+│   ├── by_level
+│   │   ├── debug.log
+│   │   ├── elisp.log
+│   │   ├── error.log
+│   │   ├── info.log
+│   │   ├── prompt.log
+│   │   ├── search.log
+│   │   ├── success.log
+│   │   └── warn.log
+│   └── logging.log
+├── pm
+│   └── pm.mmd
+├── README.md
+├── requirements.txt
+├── results
+│   ├── report_20250103-023419.org
+│   ├── report_20250103-023706.org
+│   └── report_20250103-025607.org
+└── scripts
+    └── plot.py
+
+8 directories, 16 files
+#+end_src
+
+* Results
+** Generated Reports
+- [[file:/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report_20250103-023419.org][report_20250103-023419.org]]
+- [[file:/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report_20250103-023706.org][report_20250103-023706.org]]
+- [[file:/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report_20250103-025607.org][report_20250103-025607.org]]
+
+#+ATTR_ORG: :width 400

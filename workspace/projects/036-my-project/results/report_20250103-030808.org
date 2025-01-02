@@ -1,0 +1,52 @@
+#+TITLE: Data Visualization Report
+#+DATE: 20250103-030808
+
+* Report Directory
+/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results
+
+* Python Script
+#+begin_src python
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create sine plot
+plt.figure(figsize=(10, 6))
+x = np.linspace(0, 4*np.pi, 200)
+y = np.sin(x)
+plt.plot(x, y, 'b-', label='sin(x)')
+plt.grid(True)
+plt.title('Sine Wave')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.savefig('results/figures/sine.jpg', bbox_inches='tight', dpi=300)
+plt.close()
+
+# Create sine and cosine plot
+plt.figure(figsize=(10, 6))
+y2 = np.cos(x)
+plt.plot(x, y, 'b-', label='sin(x)')
+plt.plot(x, y2, 'r--', label='cos(x)')
+plt.grid(True)
+plt.title('Sine and Cosine Waves')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.savefig('results/figures/sine_cosine.jpg', bbox_inches='tight', dpi=300)
+plt.close()
+#+end_src
+
+* Generated Figures
+** Sine Wave
+#+ATTR_HTML: :width 400
+#+ATTR_LATEX: :float t :placement [H]
+[[file:figures/sine.jpg]]
+
+** Sine and Cosine Waves
+#+ATTR_HTML: :width 400
+#+ATTR_LATEX: :float t :placement [H]
+[[file:figures/sine_cosine.jpg]]
+

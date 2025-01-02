@@ -1,0 +1,90 @@
+% Created 2025-01-03 Fri 03:05
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{float}
+\author{Yusuke Watanabe}
+\date{2025-01-03 03:05:36}
+\title{Data Analysis Report}
+\hypersetup{
+ pdfauthor={Yusuke Watanabe},
+ pdftitle={Data Analysis Report},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.4 (Org mode 9.6.15)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+
+\section{Report Location}
+\label{sec:orgd972262}
+This report is located at: /home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/report\textsubscript{20250103}-030534.org
+
+\section{Python Script}
+\label{sec:orgf31199b}
+\begin{verbatim}
+
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+
+# Create figure directory if it doesn't exist
+fig_dir = 'results/figures'
+os.makedirs(fig_dir, exist_ok=True)
+
+# Generate sample data
+x = np.linspace(0, 10, 100)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+# Plot 1: Simple sine wave
+plt.figure(figsize=(10, 6))
+plt.plot(x, y1, 'b-', label='sin(x)')
+plt.grid(True)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Sine Wave')
+plt.legend()
+plt.savefig(os.path.join(fig_dir, 'sine.jpg'), dpi=300, bbox_inches='tight')
+plt.close()
+
+# Plot 2: Sine and cosine comparison
+plt.figure(figsize=(10, 6))
+plt.plot(x, y1, 'b-', label='sin(x)')
+plt.plot(x, y2, 'r--', label='cos(x)')
+plt.grid(True)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Sine and Cosine Waves')
+plt.legend()
+plt.savefig(os.path.join(fig_dir, 'sine_cosine.jpg'), dpi=300, bbox_inches='tight')
+plt.close()
+\end{verbatim}
+
+\section{Generated Figures}
+\label{sec:orgbdf0521}
+\subsection{Sine Wave}
+\label{sec:org6a3606c}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/figures/sine.jpg}
+\end{figure}
+
+\subsection{Sine and Cosine Waves}
+\label{sec:org4324a54}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/figures/sine_cosine.jpg}
+\end{figure}
+\end{document}
