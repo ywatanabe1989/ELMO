@@ -5,5 +5,5 @@
 !-- --- -->
 
 # Rule: proj-update-context
-* Update the `/workspace/projects/<full-project-name>/pm/pm.mmd` mermaid file.
+* Update the `/workspace/projects/<project-id>-<project-name>/pm/pm.mmd` mermaid file.
 * Render the updated mermaid file to png, gif, and svg.

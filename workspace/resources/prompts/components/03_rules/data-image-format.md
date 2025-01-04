@@ -6,4 +6,4 @@
 
 # Rules: image-format
 * Use JPG format
-* Save under `/workspace/projects/<full-project-name>/results/`, with appropriate directory structure.
+* Save under `/workspace/projects/<project-id>-<project-name>/results/`, with appropriate directory structure.
