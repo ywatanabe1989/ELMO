@@ -29,7 +29,7 @@
   :type '(repeat string)
   :group 'llemacs)
 
-(defcustom llemacs--path-project-id
+(defcustom llemacs--path-latest-project-id
   (expand-file-name ".project-id" llemacs--path-projects)
   "File to store the latest project ID."
   :type 'string

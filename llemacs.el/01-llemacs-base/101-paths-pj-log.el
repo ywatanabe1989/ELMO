@@ -119,7 +119,7 @@ Signals error if no project is selected."
 (defun llemacs--path-pj-ensure-all ()
   "Ensure all project directories and log files exist."
   (when (and llemacs--cur-pj llemacs--path-pj)
-    (let ((pj-id (llemacs--cur-pj-get)))
+    (let ((pj-id (llemacs--pj-get-cur-pj)))
       ;; Ensure directories
       (dolist (dir (list llemacs--path-pj
                          llemacs--path-pj-config

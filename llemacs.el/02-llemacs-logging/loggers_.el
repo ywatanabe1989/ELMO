@@ -1,23 +1,46 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-05 00:15:07
-;;; Time-stamp: <2025-01-05 00:15:07 (ywatanabe)>
+;;; Author: 2025-01-05 00:10:28
+;;; Time-stamp: <2025-01-05 00:10:28 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
-
-(defun llemacs--sanitize-filepath (path)
-  "Sanitize file path while preserving directory structure."
-  (when path
-    (replace-regexp-in-string "[\\<>\"';`$]" "_" path)))
-
-(defun llemacs--sanitize-content (content)
-  "Sanitize content for LLM compatibility while preserving special chars."
-  (when content
-    (replace-regexp-in-string "\r\n" "\n" (format "%s" content))))
 
 (defun llemacs--logging-get-caller-info ()
   "Get caller's file and line info."
   (let ((caller-file (or (or load-file-name buffer-file-name) "unknown"))
         (caller-line (or (line-number-at-pos) 0)))
     (format "%s: L%d" caller-file caller-line)))
+
+;; (defun llemacs--sanitize-text (text)
+;;   "Sanitize TEXT to ensure safe file writing."
+;;   (when text
+;;     (replace-regexp-in-string
+;;      "\r\n" "\n"
+;;      (replace-regexp-in-string
+;;       "[^[:ascii:]]\\|[\\<>\"';`$]"
+;;       "_"
+;;       (format "%s" text)))))
+
+(defun llemacs--sanitize-text (text)
+  "Sanitize TEXT to ensure safe file writing."
+  (when text
+    (replace-regexp-in-string
+     "\r\n" "\n"
+     (replace-regexp-in-string
+      "[^[:ascii:]]\\|[\\<>\"';`$]"
+      "_"
+      (format "%s" text)))))
+
+;; (defun llemacs--logging-format-message (level message &optional project-id)
+;;   "Format log MESSAGE with LEVEL and optional PROJECT-ID."
+;;   (let ((project-id (if (and project-id (string-match "^\\([0-9]+\\)-" project-id))
+;;                         (match-string 1 project-id)
+;;                       project-id)))
+;;     (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
+;;             llemacs--logging-splitter
+;;             (upcase (symbol-name level))
+;;             (llemacs-timestamp)
+;;             (if project-id (format "[Project: %s]" (llemacs--sanitize-text project-id)) "")
+;;             (llemacs--logging-get-caller-info)
+;;             (llemacs--sanitize-text (or message "No message")))))
 
 (defun llemacs--logging-format-message (level message &optional project-id)
   "Format log MESSAGE with LEVEL and optional PROJECT-ID."
@@ -32,6 +55,19 @@
             (llemacs--logging-get-caller-info)
             (or message "No message"))))
 
+;; (defun llemacs--logging-format-message (level message &optional project-id)
+;;   "Format log MESSAGE with LEVEL and optional PROJECT-ID."
+;;   (let ((project-id (if (and project-id (string-match "^\\([0-9]+\\)-" project-id))
+;;                         (match-string 1 project-id)
+;;                       project-id)))
+;;     (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
+;;             llemacs--logging-splitter
+;;             (upcase (symbol-name level))
+;;             (llemacs-timestamp)
+;;             (if project-id (format "[Project: %s]" project-id) "")
+;;             (llemacs--logging-get-caller-info)
+;;             (format "%s" (or message "No message")))))
+
 (defcustom llemacs--logging-enable-display-threshold 'error
   "Threshold level for displaying log messages. Logs at this level and above will be displayed."
   :type 'symbol)
@@ -42,9 +78,16 @@
       (cadr (assq llemacs--logging-enable-display-threshold
                   llemacs--log-levels-sys))))
 
+;; (defun llemacs--logging-ensure-log-file (file-path)
+;;   "Ensure log file and its directory exist."
+;;   (let ((dir (file-name-directory file-path)))
+;;     (unless (file-exists-p dir)
+;;       (make-directory dir t))
+;;     (unless (file-exists-p file-path)
+;;       (write-region "" nil file-path))))
 (defun llemacs--logging-ensure-log-file (file-path)
   "Ensure log file and its directory exist."
-  (let ((dir (file-name-directory (expand-file-name (llemacs--sanitize-filepath file-path)))))
+  (let ((dir (file-name-directory (expand-file-name file-path))))
     (unless (file-exists-p dir)
       (make-directory dir t))
     (unless (file-exists-p file-path)
@@ -54,10 +97,14 @@
   "Write CONTENT to FILE-PATH quietly, with optional APPEND."
   (with-temp-buffer
     (set-buffer-file-coding-system 'utf-8-unix)
-    (insert (llemacs--sanitize-content content))
-    (write-region (point-min) (point-max)
-                  (llemacs--sanitize-filepath file-path)
-                  append 'quiet)))
+    (insert (llemacs--sanitize-text content))
+    (write-region (point-min) (point-max) file-path append 'quiet)))
+
+;; (defun llemacs--logging-write-quiet (content file-path &optional append)
+;;   "Write CONTENT to FILE-PATH quietly, with optional APPEND."
+;;   (with-temp-buffer
+;;     (insert content)
+;;     (write-region (point-min) (point-max) file-path append 'quiet)))
 
 (defun llemacs--logging-write (level message &optional project-id enable-display)
   "Log MESSAGE at LEVEL with optional PROJECT-ID."

@@ -47,9 +47,9 @@
 (ert-deftest test-llemacs-paths ()
   "Test project path management."
   (let ((test-id "001-test"))
-    (should-error (llemacs--cur-pj-set "invalid-id"))
-    (llemacs--cur-pj-set test-id t)
-    (should (string= test-id (llemacs--cur-pj-get)))
+    (should-error (llemacs--pj-set-cur-pj "invalid-id"))
+    (llemacs--pj-set-cur-pj test-id t)
+    (should (string= test-id (llemacs--pj-get-cur-pj)))
     (should (file-exists-p llemacs--path-pj))
     (should (file-exists-p llemacs--path-pj-logs))))
 
@@ -59,7 +59,7 @@
 (ert-deftest test-llemacs-project-locks ()
   "Test project locking mechanism."
   (let ((test-id "002-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
     (should (llemacs--pj-lock-acquire test-id))
     (should (llemacs--pj-lock-check test-id))
     (llemacs--pj-lock-release test-id)
@@ -71,7 +71,7 @@
 (ert-deftest test-llemacs-log-paths ()
   "Test log path creation and validation."
   (let ((test-id "003-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
     (should (file-exists-p llemacs--path-pj-logs-info))
     (should (file-exists-p llemacs--path-pj-logs-error))
     (should (file-exists-p llemacs--path-pj-logs-debug))))

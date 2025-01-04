@@ -14,8 +14,8 @@
 (load-file (expand-file-name "../../../llemacs.el" (or load-file-name buffer-file-name)))
 
 ;; Setup test environment
-;; (llemacs--pj-lock-force-release (llemacs--cur-pj-get))
-(llemacs--cur-pj-set "000-test" t)
+;; (llemacs--pj-lock-force-release (llemacs--pj-get-cur-pj))
+(llemacs--pj-set-cur-pj "000-test" t)
 
 
 (let ((test-dir (file-name-directory (or load-file-name buffer-file-name))))

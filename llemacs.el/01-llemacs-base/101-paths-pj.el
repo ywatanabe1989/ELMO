@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 17:42:19
-;;; Time-stamp: <2025-01-04 17:42:19 (ywatanabe)>
+;;; Author: 2025-01-05 00:38:12
+;;; Time-stamp: <2025-01-05 00:38:12 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj.el
 
 ;; Projects
@@ -28,6 +28,14 @@
   :group 'llemacs-project)
 
 (defcustom llemacs--path-pj
+  (expand-file-name llemacs--cur-pj llemacs--path-projects)
+  "Directory for current project."
+  :type 'directory
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
+;; Duplicated but since LLM often use this variable
+(defcustom llemacs--path-pj-root
   (expand-file-name llemacs--cur-pj llemacs--path-projects)
   "Directory for current project."
   :type 'directory
@@ -69,7 +77,7 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
-(defcustom llemacs--path-pj-project-management
+(defcustom llemacs--path-pj-pm-mmd
   (expand-file-name "project_management/project_management.mmd" llemacs--path-pj)
   "Directory for current project management."
   :type 'file

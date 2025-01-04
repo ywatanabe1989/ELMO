@@ -10,7 +10,7 @@
 
 ;; Setup test environment
 (llemacs--pj-lock-force-release "000-test")
-(llemacs--cur-pj-set "000-test")
+(llemacs--pj-set-cur-pj "000-test")
 
 ;; Load test files
 (dolist (file '("test-llemacs-logging.el"

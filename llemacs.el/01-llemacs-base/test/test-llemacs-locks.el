@@ -114,11 +114,11 @@
 ;;         (test-id-2 "008-test-2"))
 
 ;;     ;; Switch to first project
-;;     (llemacs--cur-pj-set test-id-1)
+;;     (llemacs--pj-set-cur-pj test-id-1)
 ;;     (should (llemacs--pj-lock-check test-id-1))
 
 ;;     ;; Switch to second project should release first lock
-;;     (llemacs--cur-pj-set test-id-2)
+;;     (llemacs--pj-set-cur-pj test-id-2)
 ;;     (should-not (llemacs--pj-lock-check test-id-1))
 ;;     (should (llemacs--pj-lock-check test-id-2))))
 

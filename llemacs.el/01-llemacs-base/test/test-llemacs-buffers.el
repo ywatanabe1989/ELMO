@@ -15,7 +15,7 @@
 (ert-deftest test-llemacs-buffer-naming ()
   "Test buffer naming conventions."
   (let ((test-id "010-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; System buffers
     (should (string= "*LLEMACS-MAIN*" llemacs--buf-main-sys))
@@ -61,11 +61,11 @@
         (test-id-2 "011-test-2"))
 
     ;; Switch projects and verify buffer name updates
-    (llemacs--cur-pj-set test-id-1 t)
+    (llemacs--pj-set-cur-pj test-id-1 t)
     (let ((main-1 llemacs--buf-main-pj)
           (log-1 llemacs--buf-logging-pj))
 
-      (llemacs--cur-pj-set test-id-2 t)
+      (llemacs--pj-set-cur-pj test-id-2 t)
       (should-not (string= main-1 llemacs--buf-main-pj))
       (should-not (string= log-1 llemacs--buf-logging-pj))
 
@@ -75,7 +75,7 @@
 (ert-deftest test-llemacs-buffer-display-handlers ()
   "Test specialized buffer display handlers."
   (let ((test-id "012-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; System buffers
     (llemacs--buf-disp-main-sys)

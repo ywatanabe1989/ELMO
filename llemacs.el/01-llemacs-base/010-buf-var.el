@@ -92,7 +92,7 @@
 
 (defun llemacs--buf-update-pj ()
   "Update project-specific buffer names."
-  (let ((pj-id (llemacs--cur-pj-get)))
+  (let ((pj-id (llemacs--pj-get-cur-pj)))
     (set 'llemacs--buf-main-pj (format "*LLEMACS-MAIN (%s)*" pj-id))
     (set 'llemacs--buf-logging-pj (format "*LLEMACS-LOGGING (%s)*" pj-id))
     (set 'llemacs--buf-debug-pj (format "*LLEMACS-DEBUG (%s)*" pj-id))

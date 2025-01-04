@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 17:17:50
-;;; Time-stamp: <2025-01-04 17:17:50 (ywatanabe)>
+;;; Author: 2025-01-04 22:09:59
+;;; Time-stamp: <2025-01-04 22:09:59 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/103-paths-pj-handlers.el
 
 (defun llemacs--path-pj-update ()
@@ -18,13 +18,13 @@
   (set 'llemacs--path-pj-logs (expand-file-name "logs" llemacs--path-pj))
   (set 'llemacs--path-pj-logs-all (expand-file-name "all.log" llemacs--path-pj-logs))
   (set 'llemacs--path-pj-logs-by-level (expand-file-name "by_level" llemacs--path-pj-logs))
-  (set 'llemacs--path-pj-project-management (expand-file-name "project_management/project-management.mmd" llemacs--path-pj))
+  (set 'llemacs--path-pj-pm-mmd (expand-file-name "project_management/project_management.mmd" llemacs--path-pj))
   (set 'llemacs--path-python-env-pj (expand-file-name ".env" llemacs--path-pj))
   (set 'llemacs--path-python (expand-file-name "bin/python" llemacs--path-python-env-pj))
   (llemacs--path-create-or-update-log-paths-pj)
 
-  ;; Then ensure directories exist
-  (llemacs--path-pj-ensure-all)
+  ;; ;; Then ensure directories exist
+  ;; (llemacs--path-pj-ensure-all) ;; fixme
 
   ;; Update buffer names
   (llemacs--pj-buf-update))
@@ -39,7 +39,7 @@ Returns error message if format is invalid, nil otherwise."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Getter & Setter (= Updater)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun llemacs--cur-pj-set (pj-id &optional force)
+(defun llemacs--pj-set-cur-pj (pj-id &optional force)
   "Set PJ-ID as the current active project."
   (llemacs--pj-lock-force-release pj-id force)
   (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
@@ -50,20 +50,12 @@ Returns error message if format is invalid, nil otherwise."
     (llemacs--path-pj-update)
     (llemacs--pj-lock-acquire pj-id)))
 
-(defalias 'llemacs--switch-pj
-  'llemacs--cur-pj-set
+(defalias 'llemacs--pj-switch
+  'llemacs--pj-set-cur-pj
   "Set PJ-ID as the current active project.")
 
-(defun llemacs--cur-pj-get ()
+(defun llemacs--pj-get-cur-pj ()
   "Get currently active project ID."
   llemacs--cur-pj)
-
-;; (message llemacs--path-pj-logs-info)
-;; (llemacs--switch-pj "002-sample-project")
-;; (message llemacs--path-pj-logs-info)
-;; (message llemacs--buf-debug-pj)
-;; (llemacs--switch-pj "003-sample-project")
-;; (message llemacs--path-pj-logs-info)
-;; (message llemacs--buf-debug-pj)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

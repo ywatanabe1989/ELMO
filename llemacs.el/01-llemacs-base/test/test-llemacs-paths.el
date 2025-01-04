@@ -32,11 +32,11 @@
         (test-id-2 "005-test-2"))
 
     ;; Switch to first project
-    (llemacs--cur-pj-set test-id-1 t)
+    (llemacs--pj-set-cur-pj test-id-1 t)
     (let ((path-1 llemacs--path-pj))
 
       ;; Switch to second project
-      (llemacs--cur-pj-set test-id-2 t)
+      (llemacs--pj-set-cur-pj test-id-2 t)
       (should-not (equal path-1 llemacs--path-pj))
 
       ;; Verify paths updated
@@ -63,7 +63,7 @@
 (ert-deftest test-llemacs-project-paths ()
   "Test project-specific paths."
   (let ((test-id "016-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; Project root
     (should (file-directory-p llemacs--path-pj))
@@ -96,7 +96,7 @@
 (ert-deftest test-llemacs-path-cleanup ()
   "Test path cleanup operations."
   (let ((test-id "018-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; Create test files
     (write-region "test" nil
@@ -106,7 +106,7 @@
     (llemacs--path-cleanup-pj test-id)
 
     ;; Verify cleanup
-    (should-not (file-exists-p llemacs--path-pj-root))))
+    (should-not (file-exists-p llemacs--path-pj))))
 
 (provide 'test-llemacs-paths)
 

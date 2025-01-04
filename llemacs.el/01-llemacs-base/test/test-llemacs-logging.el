@@ -1,14 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 14:23:46
-;;; Time-stamp: <2025-01-04 14:23:46 (ywatanabe)>
+;;; Author: 2025-01-04 22:08:56
+;;; Time-stamp: <2025-01-04 22:08:56 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/test/test-llemacs-logging.el
-
-;; test-llemacs-logging.el:
-;; (ert 'test-llemacs-log-basics)
-;; (ert 'test-llemacs-log-system)
-;; (ert 'test-llemacs-log-formatting)
-;; (ert 'test-llemacs-log-rotation)
-
 
 (require 'ert)
 (require 'llemacs)
@@ -16,7 +9,7 @@
 (ert-deftest test-llemacs-log-basics ()
   "Test basic logging functionality."
   (let ((test-id "013-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; Test different log levels
     (llemacs--log-debug "Debug message")
@@ -46,7 +39,7 @@
 (ert-deftest test-llemacs-log-formatting ()
   "Test log message formatting."
   (let ((test-id "014-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; Basic format
     (let ((msg (llemacs--log-format "test" "DEBUG")))
@@ -61,7 +54,7 @@
 (ert-deftest test-llemacs-log-rotation ()
   "Test log file rotation."
   (let ((test-id "015-test"))
-    (llemacs--cur-pj-set test-id t)
+    (llemacs--pj-set-cur-pj test-id t)
 
     ;; Generate large log
     (dotimes (i 1000)
