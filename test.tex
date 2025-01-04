@@ -1,0 +1,78 @@
+% Created 2025-01-03 Fri 12:49
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Yusuke Watanabe}
+\date{2025-01-03 12:49:42}
+\title{Project Report: Trigonometric Functions Plot}
+\hypersetup{
+ pdfauthor={Yusuke Watanabe},
+ pdftitle={Project Report: Trigonometric Functions Plot},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.4 (Org mode 9.6.15)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Directory}
+\label{sec:org8a71917}
+/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results
+
+\section{Python Script}
+\label{sec:orgd53ae16}
+\begin{verbatim}
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create sample data
+x = np.linspace(0, 10, 1000)
+y1 = np.sin(x)
+y2 = np.cos(x)
+
+# Create plot
+plt.figure(figsize=(10, 6))
+plt.plot(x, y1, label='sin(x)', color='blue')
+plt.plot(x, y2, label='cos(x)', color='red')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Trigonometric Functions')
+plt.grid(True)
+plt.legend()
+
+# Save plot
+plt.savefig('results/figures/plot.jpg', bbox_inches='tight', dpi=300)
+plt.close()
+\end{verbatim}
+
+\section{Generated Plot}
+\label{sec:orge88dcc2}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{/home/ywatanabe/proj/llemacs/workspace/projects/036-my-project/results/figures/plot.jpg}
+\end{figure}
+
+\section{Description}
+\label{sec:org7195282}
+This plot shows the sine and cosine functions over the interval [0, 10].
+\begin{itemize}
+\item Blue line represents sin(x)
+\item Red line represents cos(x)
+\end{itemize}
+\end{document}
