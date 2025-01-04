@@ -15,7 +15,7 @@ Llemacs-run called.
   (condition-case err
       (prin1-to-string code)
     (error
-     (llemacs--logging-log-error (format "Code escaping failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Code escaping failed: %s" (error-message-string err)))
      nil)))
 
 ;; ----------------------------------------
@@ -26,13 +26,13 @@ Llemacs-run called.
   (condition-case err
       (eval escaped-elisp-code)
     (error
-     (llemacs--logging-log-error (format "Local code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Local code runution failed: %s" (error-message-string err)))
      nil)))
 
 (defun llemacs--run-elisp-server (escaped-elisp-code &optional emacs-server-file)
   "Run elisp code in remote Emacs server specified by EMACS-SERVER-FILE."
   (condition-case err
-      (let* ((server-file (or emacs-server-file llemacs-path-emacs-server))
+      (let* ((server-file (or emacs-server-file llemacs--path-agent-emacs-server))
              (escaped-code (prin1-to-string escaped-elisp-code)))
         ;; Check if server exists and is running
         (unless (file-exists-p server-file)
@@ -45,14 +45,14 @@ Llemacs-run called.
                            (shell-quote-argument escaped-code))))
           (shell-command cmd)))
     (error
-     (llemacs--logging-log-error (format "Server code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Server code runution failed: %s" (error-message-string err)))
      nil)))
 
 (defun llemacs--run-elisp (escaped-elisp-code)
   "Run elisp code, trying server first then falling back to local."
   (interactive)
   (condition-case err
-      (let* ((server-file (or llemacs-path-emacs-server nil)))
+      (let* ((server-file (or llemacs--path-agent-emacs-server nil)))
         (if (and server-file
                  (file-exists-p server-file)
                  (file-readable-p server-file))
@@ -61,7 +61,7 @@ Llemacs-run called.
           ;; Fall back to local if server unavailable
           (llemacs--run-elisp-local escaped-elisp-code)))
     (error
-     (llemacs--logging-log-error (format "Code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Code runution failed: %s" (error-message-string err)))
      nil)))
 ;; (llemacs--run-elisp '(message "hi"))
 

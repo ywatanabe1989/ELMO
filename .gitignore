@@ -3,8 +3,9 @@
 # Please add files here
 .apptainer_builders
 README.md
-workspace/resources/private/from_host/*
-workspace/resources/shared/from_host/*
+**/*.log
+workspace/projects/*
+!workspace/projects/.project-id
 
 
 
@@ -634,4 +635,19 @@ src/sea-setup-sea.log
 **/*.log
 **/*.sandbox/*
 **/*.sif.README.md
-.README.md
+.README.md*.logworkspace/projects/030-my-3rd-project
+workspace/projects/031-my-3rd-project
+workspace/projects/032-my-4th-project
+workspace/projects/033-my-4th-project
+workspace/projects/034-my-4th-project
+workspace/projects/036-my-project
+workspace/projects/038-dsp-project
+workspace/projects/039-dsp-project
+workspace/projects/030-my-3rd-project
+workspace/projects/031-my-3rd-project
+workspace/projects/032-my-4th-project
+workspace/projects/033-my-4th-project
+workspace/projects/034-my-4th-project
+workspace/projects/036-my-project
+workspace/projects/038-dsp-project
+workspace/projects/039-dsp-project
