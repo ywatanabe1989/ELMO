@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2025-01-03 03:42:09
+!-- title: 2025-01-03 05:31:35
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
@@ -21,19 +21,15 @@ Llemacs is a file-based LLM agent system implemented in Elisp
 - The system is not yet fully functional yet
 - Although Apptainer restricts agent access to the [`./workspace`](./workspace) directory, we assume no responsibility for any unintended file modifications.
 
+## Usage
+
+`./examples/report-generation.md`
+
 ## Installation
 ### 1. Elisp Setup
 ``` elisp
 (load-file (expand-file-name "/path/to/llemacs/llemacs.el/llemacs.el"))
 (require 'llemacs)
-
-;; Basic Usage
-(llemacs--run-elisp `(message "hi")) ;; Run Elisp code with logging
-(llemacs--llm-prompt-compile "code-gen") ;; Compile prompt template (recipe-id: "code-gen")
-(llemacs--llm-prompt-embed "plot something" "code-gen") ;; Embed the prompt to template (recipe-id: "code-gen")
-(llemacs--run-prompt "plot something" "code-gen") ;; Translate prompt to elisp code and evaluate
-(llemacs--proj-init "dsp-project" "Write digital signal processing code for demo EEG signals, like calculating DMD features") ;; project-name, goals
-(llemacs--run-prompt (llemacs--proj-collect-context "039-dsp-project")  "report-gen") ;; Generate report based on he goals
 ```
 ### 2. Python Environment
 
@@ -52,7 +48,6 @@ export LLEMACS_GOOGLE_API_KEY="your-key" # Default: $GOOGLE_API_KEY
 export LLEMACS_DEEPSEEK_API_KEY="your-key" # Default: $DEEPSEEK_API_KEY
 ```
 `(llemacs-llm-switch-provider)` switches the LLM provider to use.
-
 
 ### 4. Mermaid
 Please see [`./docs/installation/mermaid.md`](./docs/installation/mermaid.md).
