@@ -1,47 +1,31 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 05:17:54
-;;; Time-stamp: <2025-01-03 05:17:54 (ywatanabe)>
+;;; Author: 2025-01-03 13:58:10
+;;; Time-stamp: <2025-01-03 13:58:10 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/prompt-recipes.el
 
-(defvar llemacs--llm-prompt-recipes
-  '(
-    (:id "code-gen"
-         :components ("roles/elisp-generator"
-                      "tasks/code-generation"
-                      "rules/code-fix"
-                      "rules/code-format-elisp"
-                      ;; "rules/code-format-python"
-                      "rules/code-format-shell"
-                      "rules/code-logging"
-                      "rules/code-refactor"
-                      "rules/data-image-format"
-                      "rules/data-movie-format"
-                      "example-io/elisp"
-                      "tools/elisp"
-                      "workspace/workspace"))
-    (:id "report-gen"
-         :components ("roles/report-generator"
-                      "tasks/code-generation"
-                      ;; "rules/code-fix"
-                      "rules/code-format-elisp"
-                      ;; "rules/code-format-python"
-                      ;; "rules/code-format-shell"
-                      ;; "rules/code-logging"
-                      ;; "rules/code-refactor"
-                      "rules/data-image-format"
-                      "rules/data-movie-format"
-                      "rules/results-org-report-format"
-                      "rules/data-image-format"
-                      "rules/data-saving"
-                      "rules/proj-work-based-on-the-project-management"
-                      "rules/proj-context-interpretation"
-                      "rules/proj-update-context"
-                      "example-io/elisp"
-                      ;; "tools/python"
-                      "workspace/workspace"))
-    (:id nil
-         :components ("roles/nil"))
-    ))
+(require 'cl-lib)
+
+
+(defvar llemacs--llm-prompt-recipes nil
+  "List of prompt recipe definitions loaded from recipe files.")
+
+(defun llemacs--load-recipe-file (file)
+  "Load a recipe FILE from the recipes directory."
+  (load (expand-file-name file) t t))
+
+(defun llemacs--load-all-recipes ()
+  "Load all recipe files and combine them."
+  (let ((recipe-dir (concat llemacs--path-prompt-templates "/recipes")))
+    (dolist (file (directory-files recipe-dir t "\\.el$"))
+      (llemacs--load-recipe-file file))
+    ;; Return the loaded recipes
+    (let ((recipes (mapcar #'symbol-value
+                           (apropos-internal "^llemacs--recipe-.*"))))
+      (setq llemacs--llm-prompt-recipes recipes)
+      recipes)))
+
+;; (llemacs--load-all-recipes)
+;; (llemacs--llm-prompt-get-recipe "code-gen")
 
 (defun llemacs--llm-prompt-get-available-recipe-ids ()
   "Return a list of prompt recipe IDs from `llemacs--llm-prompt-recipes'."
