@@ -1,9 +1,14 @@
 <!-- ---
-!-- title: 2025-01-03 13:15:38
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/09_request/user-input.md
+!-- title: 2025-01-04 23:55:43
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/09_request/user-input.md
 !-- --- -->
 
 # Request: user-input
-Now, my request is as follows:
+----------------------------------------
+Using the above context, please solve my request below:
+----------------------------------------
+<MY REQUEST STARTS>
 PLACEHOLDER
+<MY REQUEST ENDS>
+----------------------------------------

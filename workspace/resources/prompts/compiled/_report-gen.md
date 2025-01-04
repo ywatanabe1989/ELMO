@@ -1,3 +1,9 @@
+<!-- ---
+!-- title: 2025-01-04 19:48:23
+!-- author: Yusuke Watanabe
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/compiled/report-gen.md
+!-- --- -->
+
 PLACEHOLDER
 # Role: report-generator
 - Create structured and organized reports
@@ -50,7 +56,7 @@ PLACEHOLDER
 * Context above is an information source for you to work for the project proceed.
 
 # Rule: proj-update-context
-* Update the `/workspace/projects/<project-id>-<project-name>/pm/pm.mmd` mermaid file.
+* Update the `llemacs--path-pj-pm-mmd` mermaid file (.mmd).
 * Render the updated mermaid file to png, gif, and svg.
 
 # Example Output: elisp
@@ -116,4 +122,3 @@ plt.savefig('plot.jpg', bbox_inches='tight')
               (save-buffer))
           (revert-buffer t t)))
       (pop-to-buffer buf))))
-

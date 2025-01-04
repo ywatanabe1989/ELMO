@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2025-01-04 17:59:25
+!-- title: 2025-01-04 19:18:01
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/proj-project-management-using-mermaid.md
 !-- --- -->
@@ -12,7 +12,7 @@
   * Tasks will be performed by agents, including yourself in the future, with feedback loop enabled.
   * Each task must be manageable with ONE ELISP CODE, often connected with the `progn` command. 
   * Thus, split the tasks when interaction is necessary. For example, when `ls <directory>`, a task should be stopped.
-* Organize project progress/plans into this mermaid file: `llemacs--path-pj-project-management` (this file has the `.mmd` extension).
+* Organize project progress/plans into this mermaid fil for project management: `llemacs--path-pj-pm-mmd` (this file has the `.mmd` extension).
   * In the mermaid file, use state tracking tags (i.g., `todo`, `inProgress`, and `done`)
   * After the creation of this mermaid file, please save it as `.png` and `.svg` files, with changing extensions from `.mmd`
 * This is an example of project is like this:
