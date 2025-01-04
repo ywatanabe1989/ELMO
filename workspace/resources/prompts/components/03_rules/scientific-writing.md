@@ -4,7 +4,7 @@
 !-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/scientific-writing.md
 !-- --- -->
 
-# Rules: scientific-writing
+# Rule: scientific-writing
 * Use scholarly language
 * Avoid unnecessary adjectives
 * Maintain consistent terminology

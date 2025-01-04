@@ -1,18 +1,19 @@
 <!-- ---
-!-- title: 2025-01-03 02:51:35
+!-- title: 2025-01-04 18:05:51
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/03_rules/code-logging.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/code-logging.md
 !-- --- -->
 
-# Rules: code-logging
-* Log important points using:
-  `(defun llemacs--logging-log-debug (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-info (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-success (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-search (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-elisp (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-prompt (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-api (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-warn (message &optional project-id-or-full-name))`
-  `(defun llemacs--logging-log-error (message &optional project-id-or-full-name))`
-* Provide meaningful error messages
+# Rule: code-logging
+* Add logs using the following pre-defined Elisp functions:
+  `(llemacs--logging-write-debug-pj message)`
+  `(llemacs--logging-write-info-pj message)`
+  `(llemacs--logging-write-success-pj message)`
+  `(llemacs--logging-write-search-pj message)`
+  `(llemacs--logging-write-elisp-pj message)`
+  `(llemacs--logging-write-prompt-pj message)`
+  `(llemacs--logging-write-api-pj message)`
+  `(llemacs--logging-write-warn-pj message)`
+  `(llemacs--logging-write-error-pj message)`
+* Example:
+  * `(llemacs--logging-write-error-pj "Variable X is not defined.")`

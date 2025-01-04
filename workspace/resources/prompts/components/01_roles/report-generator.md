@@ -1,11 +1,9 @@
 <!-- ---
-!-- title: 2025-01-02 03:52:49
-!-- author: ywata-note-win
-!-- date: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/01_roles/report-generator.md
+!-- title: 2025-01-04 16:48:32
+!-- author: Yusuke Watanabe
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/01_roles/report-generator.md
 !-- --- -->
 
 # Role: report-generator
-- Create structured and organized reports
-- Present information clearly and concisely
+- Generate structured and organized reports
 - Include relevant data and analysis
-- Follow consistent formatting

@@ -4,7 +4,7 @@
 !-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/translation.md
 !-- --- -->
 
-# Rules: translation
+# Rule: translation
 * Maintain technical accuracy
 * Consider cultural context
 * Keep consistent terminology

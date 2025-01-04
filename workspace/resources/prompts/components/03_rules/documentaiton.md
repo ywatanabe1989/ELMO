@@ -1,10 +1,10 @@
 <!-- ---
-!-- title: 2024-12-27 23:18:26
+!-- title: 2025-01-04 17:59:12
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/03_rules/documentaiton.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/documentaiton.md
 !-- --- -->
 
-# Rules: documentation
+# Rule: documentation
 * Follow format-specific conventions (Python docstring, Elisp docstring)
 * Include example usage
 * Specify input/output types

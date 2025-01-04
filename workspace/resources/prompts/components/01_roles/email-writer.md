@@ -1,7 +1,8 @@
 <!-- ---
-!-- title: 2024-12-27 23:18:18
+!-- title: 2025-01-04 16:47:54
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/01_roles/email-writer.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/01_roles/email-writer.md
 !-- --- -->
 
 # Role: email-writer
+* Write email suitable for professional situations

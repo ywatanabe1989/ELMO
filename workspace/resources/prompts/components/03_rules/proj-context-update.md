@@ -1,9 +1,9 @@
 <!-- ---
-!-- title: 2025-01-03 03:17:39
+!-- title: 2025-01-04 18:01:56
 !-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompt-templates/components/03_rules/proj-update-context.md
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/proj-context-update.md
 !-- --- -->
 
-# Rule: proj-update-context
+# Rule: proj-context-update
 * Update the `/workspace/projects/<project-id>-<project-name>/pm/pm.mmd` mermaid file.
 * Render the updated mermaid file to png, gif, and svg.
