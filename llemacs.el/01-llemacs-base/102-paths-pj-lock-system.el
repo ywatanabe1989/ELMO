@@ -1,9 +1,8 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 11:19:16
-;;; Time-stamp: <2025-01-04 11:20:12 (ywatanabe)>
+;;; Author: 2025-01-04 14:13:47
+;;; Time-stamp: <2025-01-04 14:13:47 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/102-paths-pj-lock-system.el
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lock System; Only one user/process can switch to and work on a project at a time.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun llemacs--pj-lock-path (pj-id)
@@ -43,19 +42,16 @@
             (= (buffer-size) 0))
         (error t)))))
 
-(defun llemacs--pj-lock-cleanup-all ()
-  "Clean up stale locks in projects directory."
-  (dolist (dir (directory-files llemacs--path-projects t "^[0-9]+-"))
-    (let ((pj-id (file-name-nondirectory dir)))
-      (when (llemacs--pj-lock-check-stale pj-id)
-        (llemacs--pj-lock-release pj-id)))))
 
-(defun llemacs--pj-lock-force-release (pj-id)
+(defun llemacs--pj-lock-force-release (pj-id &optional force)
   "Force release lock for PJ-ID. Use with caution."
   (interactive "sProject ID to force unlock: ")
-  (when (yes-or-no-p
-         (format "Really force unlock project %s? This should only be used in emergencies." pj-id))
-    (llemacs--pj-lock-release pj-id)))
+  (when (or force
+            (not (called-interactively-p 'any))
+            (yes-or-no-p (format "Really force unlock project %s? This should only be used in emergencies." pj-id)))
+    (llemacs--pj-lock-release pj-id)
+    (when (equal llemacs--cur-pj pj-id)
+      (setq llemacs--cur-pj nil))))
 
 (defun llemacs--pj-lock-cleanup ()
   "Clean up project lock on Emacs exit or crash."
@@ -63,6 +59,13 @@
       (when llemacs--cur-pj
         (llemacs--pj-lock-release llemacs--cur-pj))
     (error (message "Failed to cleanup lock: %s" err))))
+
+(defun llemacs--pj-lock-cleanup-all ()
+  "Clean up all stale project locks."
+  (dolist (lock-file (directory-files llemacs--path-projects t "\\.lock$"))
+    (let ((pj-id (file-name-nondirectory (directory-file-name (file-name-directory lock-file)))))
+      (when (llemacs--pj-lock-check-stale pj-id)
+        (llemacs--pj-lock-release pj-id)))))
 
 ;; Add cleanup hooks and periodic check
 (add-hook 'kill-emacs-hook #'llemacs--pj-lock-cleanup)

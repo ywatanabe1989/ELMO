@@ -19,7 +19,7 @@
 
 ;; Initilize global logging files
 ;; (llemacs--logging-db-init-if)
-(llemacs--logging-system-files-init-if)
+;; (llemacs--logging-system-files-init-if)
 
 
 (provide 'llemacs)

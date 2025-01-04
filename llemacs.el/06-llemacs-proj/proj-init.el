@@ -17,11 +17,11 @@
 (defun llemacs--proj-get-dir (project-id-or-full-project-name)
   "Get project directory for PROJECT-ID-OR-FULL-PROJECT-NAME."
   (unless project-id-or-full-project-name
-    (llemacs--logging-log-error "Project ID/name cannot be nil")
+    (llemacs--logging-write-error-sys "Project ID/name cannot be nil")
     (return-from llemacs--proj-get-dir nil))
 
   (unless (file-exists-p llemacs--path-projects)
-    (llemacs--logging-log-error "Projects directory does not exist")
+    (llemacs--logging-write-error-sys "Projects directory does not exist")
     (return-from llemacs--proj-get-dir nil))
 
   (let* ((is-full-name (string-match-p "-" project-id-or-full-project-name))
@@ -32,10 +32,10 @@
 
     (if-let ((dirname (car (directory-files llemacs--path-projects nil pattern))))
         (progn
-          ;; (llemacs--logging-log-success
+          ;; (llemacs--logging-write-success-sys
           ;;  (format "Found project directory: %s" dirname))
           (expand-file-name dirname llemacs--path-projects))
-      (llemacs--logging-log-error
+      (llemacs--logging-write-error-sys
        (format "No project found for ID/name: %s" project-id-or-full-project-name))
       nil)))
 ;; (llemacs--proj-get-dir "026-my-first-project")
@@ -68,20 +68,20 @@
          (project-path (expand-file-name project-full-name llemacs--path-projects))
          (project-goals (or goals (read-string "Project Goals: "))))
     (when (file-exists-p project-path)
-      (llemacs--logging-log-error "Project directory already exists")
+      (llemacs--logging-write-error-sys "Project directory already exists")
       (return-from llemacs--proj-init nil))
     (if (file-exists-p llemacs--path-sample-project-zip)
         (progn
           (let ((default-directory llemacs--path-projects))
             (call-process "unzip" nil nil nil llemacs--path-sample-project-zip)
             (rename-file "000-sample-project" project-full-name)
-            (llemacs--logging-log-success
+            (llemacs--logging-write-success-sys
              (format "Project initialized: %s\nProject directory: %s"
                      project-full-name
                      (llemacs--proj-get-dir project-full-name)))
             (llemacs--proj-init-pm project-path project-name project-goals))
           project-id)
-      (llemacs--logging-log-error "Project template not found")
+      (llemacs--logging-write-error-sys "Project template not found")
       nil)))
 
 ;; (llemacs--proj-init "my-project" "plot something and summarize all the all the code and results as a org file, and open it as a buffer, with inline images displayed")

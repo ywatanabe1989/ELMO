@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 11:10:07
-;;; Time-stamp: <2025-01-04 11:10:07 (ywatanabe)>
+;;; Author: 2025-01-04 17:17:50
+;;; Time-stamp: <2025-01-04 17:17:50 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/103-paths-pj-handlers.el
 
 (defun llemacs--path-pj-update ()
@@ -18,10 +18,10 @@
   (set 'llemacs--path-pj-logs (expand-file-name "logs" llemacs--path-pj))
   (set 'llemacs--path-pj-logs-all (expand-file-name "all.log" llemacs--path-pj-logs))
   (set 'llemacs--path-pj-logs-by-level (expand-file-name "by_level" llemacs--path-pj-logs))
-  (set 'llemacs--path-pj-pm (expand-file-name "pm" llemacs--path-pj))
+  (set 'llemacs--path-pj-project-management (expand-file-name "project_management/project-management.mmd" llemacs--path-pj))
   (set 'llemacs--path-python-env-pj (expand-file-name ".env" llemacs--path-pj))
   (set 'llemacs--path-python (expand-file-name "bin/python" llemacs--path-python-env-pj))
-  (llemacs--path-create-log-paths-pj)
+  (llemacs--path-create-or-update-log-paths-pj)
 
   ;; Then ensure directories exist
   (llemacs--path-pj-ensure-all)
@@ -39,8 +39,9 @@ Returns error message if format is invalid, nil otherwise."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Getter & Setter (= Updater)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun llemacs--cur-pj-set (pj-id)
+(defun llemacs--cur-pj-set (pj-id &optional force)
   "Set PJ-ID as the current active project."
+  (llemacs--pj-lock-force-release pj-id force)
   (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
       (error err-msg)
     (when-let ((lock-info (llemacs--pj-lock-check pj-id)))
@@ -48,18 +49,6 @@ Returns error message if format is invalid, nil otherwise."
     (setq llemacs--cur-pj pj-id)
     (llemacs--path-pj-update)
     (llemacs--pj-lock-acquire pj-id)))
-
-;; (defun llemacs--cur-pj-set (pj-id)
-;;   "Set PJ-ID as the current active project."
-;;   (when-let ((lock-info (llemacs--pj-lock-check)))
-;;     (error "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
-;;   (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
-;;       (error err-msg)
-;;     (when-let ((lock-info (llemacs--pj-lock-check)))
-;;       (error "Project is locked by %s" lock-info))
-;;     (setq llemacs--cur-pj pj-id)
-;;     (llemacs--path-pj-update)
-;;     (llemacs--pj-lock-acquire)))
 
 (defalias 'llemacs--switch-pj
   'llemacs--cur-pj-set

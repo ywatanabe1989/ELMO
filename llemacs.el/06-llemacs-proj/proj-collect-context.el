@@ -76,7 +76,7 @@
      llemacs--project-splitter
      "##### CONTEXT STARTS #####"
      llemacs--project-splitter
-     (format "\nCurrent Timestamp:\n%s\n\n" (llemacs--logging-get-timestamp))
+     (format "\nCurrent Timestamp:\n%s\n\n" (llemacs-timestamp))
      llemacs--project-splitter
      (format "\nProject Directory:\n%s\n\n" project-dir)
      llemacs--project-splitter

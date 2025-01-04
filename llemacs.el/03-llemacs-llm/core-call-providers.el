@@ -38,13 +38,13 @@
                                     (replace-regexp-in-string "\"" "\\\\\"" text)
                                     temp-file)))
                 (error
-                 (llemacs--logging-log-error "Python script execution failed")))
+                 (llemacs--logging-write-error-sys "Python script execution failed")))
               (with-temp-buffer
                 (insert-file-contents temp-file)
                 (buffer-string)))
           (ignore-errors (delete-file temp-file))))
     (error
-     (llemacs--logging-log-error (format "Gemini API request failed.\n%s"
+     (llemacs--logging-write-error-sys (format "Gemini API request failed.\n%s"
                                          (error-message-string err)))
      nil)))
 ;; (llemacs--llm-gemini "Hi")
@@ -82,7 +82,7 @@
                   (error "API request failed with status: %s" status-line))))
           (error "Failed to retrieve response")))
     (error
-     (llemacs--logging-log-error (format "Claude API request failed.\n%s"
+     (llemacs--logging-write-error-sys (format "Claude API request failed.\n%s"
                                          (error-message-string err)))
      nil)))
 
@@ -126,7 +126,7 @@
                   (error "API request failed with status: %s" status-line))))
           (error "Failed to retrieve response")))
     (error
-     (llemacs--logging-log-error (format "DeepSeek API request failed.\n%s"
+     (llemacs--logging-write-error-sys (format "DeepSeek API request failed.\n%s"
                                          (error-message-string err)))
      nil)))
 

@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 20:52:32
-;;; Time-stamp: <2025-01-03 20:52:32 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/003-02-buf-func.el
+;;; Author: 2025-01-04 18:12:33
+;;; Time-stamp: <2025-01-04 18:12:33 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/011-buf-func.el
 
 (require 'org)
 

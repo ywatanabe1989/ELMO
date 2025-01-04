@@ -12,7 +12,7 @@
   (>= (llemacs--logging-get-level-value level)
       (llemacs--logging-get-level-value llemacs--logging-level-threshold)))
 
-;; (defun llemacs--logging-log (level message &optional project-id-or-full-name)
+;; (defun llemacs--logging-write (level message &optional project-id-or-full-name)
 ;;   "Log MESSAGE at LEVEL with optional PROJECT-ID-OR-FULL-NAME."
 ;;   (when (llemacs--logging-should-log-p level)
 ;;     (let* ((log-entry (llemacs--logging-format-message level message project-id-or-full-name))

@@ -1,13 +1,13 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:27:23
-;;; Time-stamp: <2024-12-31 22:27:23 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/03-llemacs-llm-api-keys-and-engines.el
+;;; Author: 2025-01-04 12:53:14
+;;; Time-stamp: <2025-01-04 12:53:14 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-api-keys-and-engines.el
 
-(defcustom llemacs--llm-api-keys-file
-  (expand-file-name "api-keys.gpg" llemacs-path-home)
-  "File storing encrypted API keys."
-  :type 'file
-  :group 'llemacs-llm)
+;; (defcustom llemacs--llm-api-keys-file
+;;   (expand-file-name "api-keys.gpg" llemacs-path-home)
+;;   "File storing encrypted API keys."
+;;   :type 'file
+;;   :group 'llemacs-llm)
 
 (defcustom llemacs--llm-anthropic-key (getenv "ANTHROPIC_API_KEY")
   "API key for Anthropic Claude."

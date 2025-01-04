@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 10:52:16
-;;; Time-stamp: <2025-01-04 10:52:16 (ywatanabe)>
+;;; Author: 2025-01-04 17:42:19
+;;; Time-stamp: <2025-01-04 17:42:19 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj.el
 
 ;; Projects
@@ -22,7 +22,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defcustom llemacs--cur-pj nil
+(defcustom llemacs--cur-pj "000-test"
   "Currently active project ID in the form of <id>-<project-name>."
   :type 'string
   :group 'llemacs-project)
@@ -69,10 +69,10 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
-(defcustom llemacs--path-pj-pm
-  (expand-file-name "pm" llemacs--path-pj)
+(defcustom llemacs--path-pj-project-management
+  (expand-file-name "project_management/project_management.mmd" llemacs--path-pj)
   "Directory for current project management."
-  :type 'directory
+  :type 'file
   :group 'llemacs-path
   :group 'llemacs-project)
 
@@ -85,7 +85,7 @@
   :group 'llemacs-sys)
 
 (defcustom llemacs--path-pj-python
-  (expand-file-name "bin/python" llemacs--path-pj)
+  (expand-file-name "bin/python" llemacs--path-pj-python-env)
   "Python path for current project."
   :type 'file
   :group 'llemacs-path

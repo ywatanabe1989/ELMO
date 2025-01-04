@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 10:50:43
-;;; Time-stamp: <2025-01-04 10:50:43 (ywatanabe)>
+;;; Author: 2025-01-04 16:34:23
+;;; Time-stamp: <2025-01-04 16:34:23 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj-log.el
 
 (defcustom llemacs--path-pj-logs
@@ -38,42 +38,79 @@
 
 (defconst llemacs--log-levels-pj llemacs--log-levels-sys)
 
-(defun llemacs--path-create-log-paths-pj ()
-  "Create project-specific log path variables based on `llemacs--log-levels-pj'.
-The following variables and their aliases are created in default:
-Original variables:
-- `llemacs--path-pj-logs-debug'
-- `llemacs--path-pj-logs-info'
-- `llemacs--path-pj-logs-success'
-- `llemacs--path-pj-logs-prompt'
-- `llemacs--path-pj-logs-elisp'
-- `llemacs--path-pj-logs-api'
-- `llemacs--path-pj-logs-search'
-- `llemacs--path-pj-logs-warn'
-- `llemacs--path-pj-logs-error'
 
-Aliased as:
-- `llemacs--path-logs-debug-pj'
-- `llemacs--path-logs-info-pj'
-- `llemacs--path-logs-success-pj'
-- `llemacs--path-logs-prompt-pj'
-- `llemacs--path-logs-elisp-pj'
-- `llemacs--path-logs-api-pj'
-- `llemacs--path-logs-search-pj'
-- `llemacs--path-logs-warn-pj'
-- `llemacs--path-logs-error-pj'"
-  (unless llemacs--cur-pj
-    (error "No project selected"))
+(defun llemacs--path-init-log-paths-pj ()
+  ;; First define all variables
   (dolist (level llemacs--log-levels-pj)
     (let* ((level-name (car level))
-           (var-name (intern (format "llemacs--path-pj-logs-%s" level-name)))
-           (alias-name (intern (format "llemacs--path-logs-%s-pj" level-name)))
+           (level-info (cdr level))
+           (level-desc (cdr level-info))
+           (var-name-1 (intern (format "llemacs--path-pj-logs-%s" level-name)))
+           (var-name-2 (intern (format "llemacs--path-logs-%s-pj" level-name))))
+      (eval `(defvar ,var-name-1 nil
+               ,(format "Path to %s log file for current project. (= `%s')\nSee `llemacs--path-create-or-update-log-paths-pj'."
+                        level-name var-name-2)))
+      (eval `(defvar ,var-name-2 nil
+               ,(format "Path to %s log file for current project (= `%s').\nSee `llemacs--path-create-or-update-log-paths-pj'."
+                        level-name var-name-1)))))
+  )
+
+(defun llemacs--path-create-or-update-log-paths-pj ()
+  "Create and alias project-specific log path variables.
+
+This function creates project-specific log path variables and their corresponding
+aliases based on `llemacs--log-levels-pj' configuration. The variables
+follow a consistent naming pattern:
+
+Original variables are named as:
+\\[llemacs--path-pj-logs-LEVEL] where LEVEL is one of:
+- debug: Debug level logs
+- info: Information level logs
+- success: Success level logs
+- prompt: Prompt operation logs
+- elisp: Elisp execution logs
+- api: API interaction logs
+- search: Search operation logs
+- warn: Warning level logs
+- error: Error level logs
+
+Each original variable has a corresponding alias named:
+\\[llemacs--path-logs-LEVEL-pj]
+
+For example:
+\\[llemacs--path-pj-logs-debug] -> \\[llemacs--path-logs-debug-pj]
+
+The path values use `llemacs--path-pj-logs-by-level' as the base directory.
+
+See also:
+- `llemacs--log-levels-pj'
+- `llemacs--path-pj-logs-by-level'
+- `llemacs--cur-pj'
+
+Signals error if no project is selected."
+
+  (llemacs--path-init-log-paths-pj)
+
+  (unless llemacs--cur-pj
+    (error "No project selected"))
+
+  (dolist (level llemacs--log-levels-pj)
+    (let* ((level-name (car level))
+           (level-info (cdr level))
+           (level-desc (cdr level-info))
+           (var-name-1 (intern (format "llemacs--path-pj-logs-%s" level-name)))
+           (var-name-2 (intern (format "llemacs--path-logs-%s-pj" level-name)))
            (path (expand-file-name (format "%s.log" level-name)
                                    (symbol-value 'llemacs--path-pj-logs-by-level))))
-      (set var-name path)
-      (defalias alias-name var-name))))
+      (set var-name-1 path)
+      (set var-name-2 path)
+      )))
 
-(llemacs--path-create-log-paths-pj)
+(llemacs--path-create-or-update-log-paths-pj)
+
+;; llemacs--path-pj-logs-error
+;; llemacs--path-logs-error-pj
+
 
 ;; (llemacs-list "variable" "^llemacs--path")
 ;; (llemacs-list "variable" "^llemacs--path-logs")

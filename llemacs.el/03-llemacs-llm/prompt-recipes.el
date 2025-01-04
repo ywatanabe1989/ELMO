@@ -15,7 +15,7 @@
 
 (defun llemacs--load-all-recipes ()
   "Load all recipe files and combine them."
-  (let ((recipe-dir (concat llemacs--path-prompt-templates "/recipes")))
+  (let ((recipe-dir (concat llemacs--path-res-prompts "/recipes")))
     (dolist (file (directory-files recipe-dir t "\\.el$"))
       (llemacs--load-recipe-file file))
     ;; Return the loaded recipes
@@ -42,7 +42,7 @@
 (defun llemacs--llm-prompt-open-templates ()
   "Open the prompt template directory in Emacs using find-file."
   (interactive)
-  (find-file llemacs--path-prompt-templates))
+  (find-file llemacs--path-res-prompts))
 ;; (llemacs--llm-prompt-open-templates)
 
 (defun llemacs--llm-prompt-get-recipe (recipe-id)
@@ -51,7 +51,7 @@
       (let ((err-msg nil))
         (unless llemacs--llm-prompt-recipes
           (setq err-msg "Template Recipes list is empty")
-          (llemacs--logging-log-error err-msg)
+          (llemacs--logging-write-error-pj err-msg)
           (error err-msg))
         (let ((found (car (seq-filter (lambda (template)
                                         (equal recipe-id
@@ -59,11 +59,11 @@
                                       llemacs--llm-prompt-recipes))))
           (unless found
             (setq err-msg (format "Template Recipe not found: %s" recipe-id))
-            (llemacs--logging-log-error err-msg)
+            (llemacs--logging-write-error-pj err-msg)
             (error err-msg))
           found))
     (error
-     (llemacs--logging-log-error (format "Failed to find template: %s"
+     (llemacs--logging-write-error-pj (format "Failed to find template: %s"
                                          (error-message-string err)))
      nil)))
 
@@ -72,7 +72,7 @@
 
 (defun llemacs--llm-prompt-ensure-markdown-files ()
   "Convert JSON files to markdown if they are newer than their markdown counterparts."
-  (dolist (json-file (directory-files llemacs--path-prompt-compiled t "\\.json$"))
+  (dolist (json-file (directory-files llemacs--path-res-prompt-compiled t "\\.json$"))
     (unless (string-prefix-p "_" (file-name-nondirectory json-file))
       (let* ((md-file (concat (file-name-sans-extension json-file) ".md"))
              (json-time (file-attribute-modification-time (file-attributes json-file)))
@@ -89,15 +89,15 @@
       (progn
         (llemacs--llm-prompt-ensure-markdown-files)
         (when (null prompt-template-name)
-          (llemacs--logging-log-error "Template name required")
+          (llemacs--logging-write-error-pj "Template name required")
           (error "Template name required"))
         (unless (member prompt-template-name llemacs--llm-prompt-available-recipe-ids)
-          (llemacs--logging-log-error (format "Invalid prompt-template name:\n%s" prompt-template-name))
+          (llemacs--logging-write-error-pj (format "Invalid prompt-template name:\n%s" prompt-template-name))
           (error "Invalid prompt-template name"))
         (llemacs--load-markdown-file
-         (expand-file-name (format "%s.md" prompt-template-name) llemacs--path-prompt-compiled)))
+         (expand-file-name (format "%s.md" prompt-template-name) llemacs--path-res-prompt-compiled)))
     (error
-     (llemacs--logging-log-error (format "Error getting prompt-template:\n%s" err))
+     (llemacs--logging-write-error-pj (format "Error getting prompt-template:\n%s" err))
      nil)))
 
 (defun llemacs--llm-prompt-get-templates (&rest prompt-template-names)
@@ -114,15 +114,15 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
           (let ((contents ""))
             (dolist (name prompt-template-names)
               (unless (member name llemacs--llm-prompt-available-recipe-ids)
-                (llemacs--logging-log-error (format "Invalid prompt-template name:\n%s" name))
+                (llemacs--logging-write-error-pj (format "Invalid prompt-template name:\n%s" name))
                 (error "Invalid prompt-template name:\n%s" name))
               (let ((content (llemacs--load-markdown-file
-                              (expand-file-name (format "%s.md" name) llemacs--path-prompt-compiled))))
+                              (expand-file-name (format "%s.md" name) llemacs--path-res-prompt-compiled))))
                 (when content
                   (setq contents (concat contents "\n" content)))))
             (string-trim contents))))
     (error
-     (llemacs--logging-log-error (format "Error getting prompt-templates:\n%s" err))
+     (llemacs--logging-write-error-pj (format "Error getting prompt-templates:\n%s" err))
      nil)))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

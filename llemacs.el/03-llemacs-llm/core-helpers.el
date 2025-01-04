@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2024-12-31 22:28:13
-;;; Time-stamp: <2024-12-31 22:28:13 (ywatanabe)>
-;;; File: /home/ywatanabe/.dotfiles/.emacs.d/lisp/llemacs/llemacs.el/03-llemacs-llm/core/03-llemacs-llm-helpers.el
+;;; Author: 2025-01-04 16:36:38
+;;; Time-stamp: <2025-01-04 16:36:38 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-helpers.el
 
 (defun llemacs--llm-api-check-rate-limit (provider)
   "Check if enough time has passed since last call to PROVIDER."
@@ -18,7 +18,7 @@
 
 (defun llemacs--llm-api-handle-error (err provider)
   "Handle API error ERR from PROVIDER."
-  (llemacs--logging-log-error
+  (llemacs--logging-write-error-sys
    (pcase (car err)
      ('llemacs--llm-api-rate-limit "LLM API Rate limit exceeded")
      ('llemacs--llm-api-auth-error "LLM API Authentication failed")

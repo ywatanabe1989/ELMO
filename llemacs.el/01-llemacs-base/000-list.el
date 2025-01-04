@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 22:01:12
-;;; Time-stamp: <2025-01-03 22:01:12 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/001-list.el
+;;; Author: 2025-01-04 14:41:10
+;;; Time-stamp: <2025-01-04 14:41:10 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/000-list.el
 
 (defun llemacs-list (type &optional pattern)
   "List llemacs symbols by TYPE with optional PATTERN."
@@ -19,16 +19,14 @@
      ((equal type "group") (llemacs--list-groups pat))
      (t (error "Invalid type: %s" type)))))
 
-(defun llemacs--list-groups ()
-  "List all llemacs custom groups."
-  (interactive)
+(defun llemacs--list-groups (&optional pattern)
+  "List all llemacs custom groups matching PATTERN."
   (let ((groups))
     (mapatoms
      (lambda (symbol)
-       (when (and (string-match "^llemacs-" (symbol-name symbol))
+       (when (and (string-match-p (or pattern "^llemacs-") (symbol-name symbol))
                   (get symbol 'custom-group))
          (push symbol groups))))
-    (dolist (group (sort groups #'string-lessp))
-      (princ (format "%s\n" group)))))
+    (sort groups #'string-lessp)))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

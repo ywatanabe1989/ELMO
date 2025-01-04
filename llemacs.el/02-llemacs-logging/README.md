@@ -29,8 +29,8 @@ Logging system with file-based storage.
 ## Usage Examples
 ```elisp
 ;; Write logs
-(llemacs--logging-log-debug-sys "Debug message")
-(llemacs--logging-log-info-pj "Info message for the current project (= `llemacs--cur-pj`)")
+(llemacs--logging-write-debug-sys "Debug message")
+(llemacs--logging-write-info-pj "Info message for the current project (= `llemacs--cur-pj`)")
 
 ;; View logs
 (llemacs--logging-view-logs-by-level-sys 'info)

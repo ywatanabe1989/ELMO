@@ -1,13 +1,13 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 03:57:09
-;;; Time-stamp: <2025-01-03 03:57:09 (ywatanabe)>
+;;; Author: 2025-01-04 16:39:57
+;;; Time-stamp: <2025-01-04 16:39:57 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/core-call-wrapper.el
 
 (defun llemacs-llm (prompt &optional template)
   "Process PROMPT using configured LLM provider."
   (interactive "sPrompt: ")
   (let* ((text (if template
-                   (llemacs-to-full-prompt template prompt)
+                   (llemacs--llm-embed template prompt)
                  prompt))
          (response (pcase llemacs-llm-provider
                      ("anthropic" (llemacs--llm-claude text))

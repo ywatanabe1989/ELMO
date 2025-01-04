@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 21:17:12
-;;; Time-stamp: <2025-01-02 21:17:12 (ywatanabe)>
+;;; Author: 2025-01-04 16:39:04
+;;; Time-stamp: <2025-01-04 16:39:04 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-cvt/lang2elisp.el
 
 ;; ----------------------------------------
@@ -16,8 +16,8 @@
           (unless elisp-including-response
             (signal 'llemacs-api-error "No response received from API")))
       (error
-       (llemacs--logging-log-prompt prompt)
-       (llemacs--logging-log-error
+       (llemacs--logging-write-prompt-pj prompt)
+       (llemacs--logging-write-error-pj
         (format "API request failed.\n%s"
                 (error-message-string err)))
        (signal 'llemacs-api-error err)))
@@ -28,7 +28,7 @@
             (unless elisp-blocks
               (signal 'llemacs-elisp-cleanup-error "No elisp blocks found in response")))
         (error
-         (llemacs--logging-log-error
+         (llemacs--logging-write-error-pj
           (format "Elisp extraction failed.\n%s\n%s"
                   (error-message-string err) elisp-including-response))
          (signal 'llemacs-elisp-cleanup-error err)))
@@ -41,13 +41,15 @@
             (unless commands
               (signal 'llemacs-elisp-parse-error "No valid elisp code generated")))
         (error
-         (llemacs--logging-log-error
+         (llemacs--logging-write-error-pj
           (format "Elisp parsing failed.\nError: %s\nBlocks: %s"
                   (error-message-string err) elisp-blocks))
          (signal 'llemacs-elisp-parse-error err))))
     (if commands
         (cons 'progn commands)
       (signal 'llemacs-elisp-parse-error "No valid elisp code generated"))))
+
+;; (llemacs--cvt-prompt2elisp "hello" "code-gen")
 
 ;; ----------------------------------------
 ;; Helpers

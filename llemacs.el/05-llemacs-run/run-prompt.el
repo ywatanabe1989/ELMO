@@ -11,12 +11,12 @@
         (let* ((default-recipe "code-gen")
                (recipe-id (or recipe-id default-recipe))
                (full-prompt (llemacs--llm-prompt-embed prompt recipe-id)))
-          (llemacs--logging-log-prompt full-prompt)
+          (llemacs--logging-write-prompt-pj full-prompt)
           (let ((elisp-code (llemacs--cvt-prompt2elisp full-prompt)))
-            (llemacs--logging-log-elisp elisp-code)
+            (llemacs--logging-write-elisp-pj elisp-code)
             (llemacs--run-elisp elisp-code))))
     (error
-     (llemacs--logging-log-error (format "Run failed: %s" err))
+     (llemacs--logging-write-error-pj (format "Run failed: %s" err))
      nil)))
 
 ;; (llemacs--run-prompt "hi")
@@ -34,18 +34,18 @@
           (setq python-shell-virtualenv-root "/workspace/.env")
           (setq python-shell-interpreter "/workspace/.env/bin/python3")))
     (error
-     (llemacs--logging-log-error (format "Failed in before-run hook: %s" err))
+     (llemacs--logging-write-error-pj (format "Failed in before-run hook: %s" err))
      nil)))
 
 (defun llemacs--run-prompt-after-run-hook-success (elisp-code prompt-text)
   "Hook for successful LLEMACS operation."
-  (llemacs--logging-log-prompt prompt-text)
-  (llemacs--logging-log-success (format "Successfully executed:\n%s" elisp-code)))
+  (llemacs--logging-write-prompt-pj prompt-text)
+  (llemacs--logging-write-success-pj (format "Successfully executed:\n%s" elisp-code)))
 
 (defun llemacs--run-prompt-after-run-hook-error (error prompt-text)
   "Hook for failed LLEMACS operation."
-  (llemacs--logging-log-prompt prompt-text)
-  (llemacs--logging-log-error (format "llemacs-run-prompt failed.\n%s" error))
+  (llemacs--logging-write-prompt-pj prompt-text)
+  (llemacs--logging-write-error-pj (format "llemacs-run-prompt failed.\n%s" error))
   (llemacs--logging-open))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

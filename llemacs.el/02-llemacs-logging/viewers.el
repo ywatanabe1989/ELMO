@@ -1,56 +1,38 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 01:49:41
-;;; Time-stamp: <2025-01-04 01:49:41 (ywatanabe)>
+;;; Author: 2025-01-04 12:50:57
+;;; Time-stamp: <2025-01-04 12:50:57 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/viewers.el
 
-;; (require '02-llemacs-logging-core-utils)
-;; (require '02-llemacs-logging-file-getters)
-
-;; (defun llemacs--logging-view-logs-by-level (level)
-;;   "View logs of specified LEVEL in buffer."
-;;   (interactive
-;;    (list (completing-read "Log level: "
-;;                           '("debug" "info" "warn" "error")
-;;                           nil t)))
-;;   (let ((entries (llemacs--logging-get-logs-by-level (intern level))))
-;;     (llemacs--logging-display-buffer llemacs--buffer-logging t)
-;;     (with-current-buffer llemacs--buffer-logging
-;;       ;; (let ((inhibit-read-only t))
-;;       (erase-buffer)
-;;       (dolist (entry entries)
-;;         (insert entry "\n")))))
-
-(defun llemacs--logging-view-logs-by-level (level)
-  "View logs of specified LEVEL in buffer."
+(defun llemacs--logging-view (&optional select-level is-pj)
+  "Display logs in buffer.
+When SELECT-LEVEL is non-nil, prompt for specific log level.
+When IS-PJ is non-nil, show project logs instead of system logs."
   (interactive
-   (list (completing-read "Log level: "
-                          (mapcar #'symbol-name
-                                  (seq-filter
-                                   (lambda (l)
-                                     (>= (llemacs--logging-get-level-value l)
-                                         (llemacs--logging-get-level-value llemacs--logging-level-threshold)))
-                                   (mapcar #'car llemacs--log-levels-sys)))
-                          nil t)))
-  (let ((entries (llemacs--logging-get-logs-by-level (intern level))))
-    (llemacs--logging-display-buffer llemacs--buffer-logging t)
-    (with-current-buffer llemacs--buffer-logging
-      (erase-buffer)
-      (dolist (entry entries)
-        (insert entry "\n")))))
-
-;; (llemacs--logging-view-logs-by-level "error")
-
-(defun llemacs--logging-view-all-logs ()
-  "View all logs in buffer."
-  (interactive)
-  (let ((entries (llemacs--logging-get-all-logs)))
-    (llemacs--logging-display-buffer llemacs--buffer-logging t)
-    (with-current-buffer llemacs--buffer-logging
+   (list (y-or-n-p "Select specific log level? ")
+         (y-or-n-p "View project logs? ")))
+  (let* ((level (when select-level
+                  (completing-read "Log level: "
+                                   (mapcar #'symbol-name
+                                           (seq-filter
+                                            (lambda (l)
+                                              (>= (llemacs--logging-get-level-value l)
+                                                  (llemacs--logging-get-level-value llemacs--logging-level-threshold)))
+                                            (mapcar #'car llemacs--log-levels-sys)))
+                                   nil t)))
+         (entries (cond
+                   ((and level is-pj) (llemacs--logging-get-pj-logs-by-level (intern level)))
+                   (level (llemacs--logging-get-logs-by-level (intern level)))
+                   (is-pj (llemacs--logging-get-all-pj-logs))
+                   (t (llemacs--logging-get-all-logs)))))
+    (if is-pj
+        (llemacs--buf-disp-logging-pj nil t t)
+      (llemacs--buf-disp-logging-sys nil t t))
+    (with-current-buffer (if is-pj llemacs--buf-logging-pj llemacs--buf-logging-sys)
       (let ((inhibit-read-only t))
         (erase-buffer)
         (dolist (entry entries)
           (insert entry "\n"))))))
 
-;; (llemacs--logging-view-all-logs)
+;; (llemacs--logging-view)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,6 +1,6 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 09:29:02
-;;; Time-stamp: <2025-01-04 09:29:02 (ywatanabe)>
+;;; Author: 2025-01-04 16:03:10
+;;; Time-stamp: <2025-01-04 16:03:10 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
 
 (defun llemacs--logging-get-caller-info ()
@@ -51,7 +51,7 @@
     (insert content)
     (write-region (point-min) (point-max) file-path append 'quiet)))
 
-(defun llemacs--logging-log (level message &optional project-id enable-display)
+(defun llemacs--logging-write (level message &optional project-id enable-display)
   "Log MESSAGE at LEVEL with optional PROJECT-ID."
   (let* ((project-id (or project-id llemacs--cur-pj))
          (is-system-log (or (null project-id)
@@ -74,39 +74,15 @@
                (llemacs--logging-meets-threshold-p level))
       (message log-entry))))
 
-;; (defun llemacs--logging-log (level message &optional project-id enable-display)
-;;   "Log MESSAGE at LEVEL with optional PROJECT-ID."
-;;   (let* ((project-id (or project-id llemacs--cur-pj))
-;;          (is-system-log (or (null project-id)
-;;                             (string= project-id "sys")))
-;;          (log-entry (llemacs--logging-format-message level message (unless is-system-log project-id)))
-;;          (log-file-level
-;;           (if is-system-log
-;;               (let ((var-name (intern (format "llemacs--path-logs-%s-sys" level))))
-;;                 (symbol-value var-name))
-;;             (let ((var-name (intern (format "llemacs--path-pj-logs-%s" level))))
-;;               (symbol-value var-name))))
-;;          (log-file-all (if is-system-log
-;;                            llemacs--path-logs-all-sys
-;;                          llemacs--path-pj-logs-all)))
-;;     (llemacs--logging-ensure-log-file log-file-all)
-;;     (llemacs--logging-ensure-log-file log-file-level)
-;;     (append-to-file (concat log-entry "\n") nil log-file-all)
-;;     (append-to-file (concat log-entry "\n") nil log-file-level)
-;;     (when (and enable-display
-;;                (llemacs--logging-meets-threshold-p level))
-;;       (message log-entry))))
-
-
 (defun llemacs--logging-define-loggers-sys ()
   "Define system-level logging functions."
   (dolist (level-config llemacs--log-levels-sys)
     (let ((level (car level-config))
           (priority (cadr level-config)))
       (eval
-       `(defun ,(intern (format "llemacs--logging-log-%s-sys" level)) (message &optional project-id)
+       `(defun ,(intern (format "llemacs--logging-write-%s-sys" level)) (message &optional project-id)
           ,(format "Log %s MESSAGE" level)
-          (llemacs--logging-log ',level message project-id ,(= priority 3)))))))
+          (llemacs--logging-write ',level message project-id ,(= priority 3)))))))
 
 (defun llemacs--logging-define-loggers-pj ()
   "Define project-level logging functions."
@@ -114,25 +90,12 @@
     (let ((level (car level-config))
           (priority (cadr level-config)))
       (eval
-       `(defun ,(intern (format "llemacs--logging-log-%s-pj" level)) (message &optional project-id)
+       `(defun ,(intern (format "llemacs--logging-write-%s-pj" level)) (message &optional project-id)
           ,(format "Log %s MESSAGE with PROJECT-ID." level)
-          (llemacs--logging-log ',level message project-id ,(= priority 3))
-          (funcall (intern (format "llemacs--logging-log-%s-sys" ',level)) message))))))
+          (llemacs--logging-write ',level message project-id ,(= priority 3))
+          (funcall (intern (format "llemacs--logging-write-%s-sys" ',level)) message))))))
 
-;; For interactive testing
-(defun llemacs--loggging-test-loggers ()
-  (interactive)
-  (message "Testing logger...")
-  (message "llemacs--log-levels-sys: %S" llemacs--log-levels-sys)
-  (llemacs--logging-define-loggers-sys)
-  (llemacs--logging-define-loggers-pj)
-
-  ;; Test actual logging
-  (message "Testing error logging...")
-  (llemacs--logging-log-error-sys "Test error message")
-  (message "Testing debug logging...")
-  (llemacs--logging-log-debug-sys "Test debug message"))
-
-;; (llemacs--loggging-test-loggers)
+(llemacs--logging-define-loggers-sys)
+(llemacs--logging-define-loggers-pj)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
