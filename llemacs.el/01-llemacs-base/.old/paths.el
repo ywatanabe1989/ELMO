@@ -1,8 +1,9 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-03 04:49:21
-;;; Time-stamp: <2025-01-03 04:49:21 (ywatanabe)>
+;;; Author: 2025-01-03 14:04:42
+;;; Time-stamp: <2025-01-03 14:07:54 (ywatanabe)>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/paths.el
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Global
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defcustom llemacs-path
@@ -72,13 +73,6 @@
   "Path to LLEMACS system log file."
   :type 'file
   :group 'llemacs-logging)
-
-;; (defcustom llemacs--path-logging-db
-;;   (expand-file-name "logging.db" llemacs--path-logging-system-logs)
-;;   "Path to SQLite database for structured logging."
-;;   :type 'file
-;;   :group 'llemacs-logging)
-
 
 ;; Level-specific logging files
 (defcustom llemacs--path-logging-system-debug
@@ -153,32 +147,6 @@
   :type 'string
   :group 'llemacs-project)
 
-(defcustom llemacs--path-project-debug nil
-  "Base path for project debug logs."
-  :type 'string
-  :group 'llemacs-project)
-
-(defcustom llemacs--path-project-info nil
-  "Base path for project info logs."
-  :type 'string
-  :group 'llemacs-project)
-
-(defcustom llemacs--path-project-success nil
-  "Base path for project success logs."
-  :type 'string
-  :group 'llemacs-project)
-
-(defcustom llemacs--path-project-warn nil
-  "Base path for project warn logs."
-  :type 'string
-  :group 'llemacs-project)
-
-(defcustom llemacs--path-project-error nil
-  "Base path for project error logs."
-  :type 'string
-  :group 'llemacs-project)
-
-
 (defcustom llemacs--path-projects
   (expand-file-name "projects" llemacs-path-workspace)
   "Directory for projects."
@@ -194,6 +162,36 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Project Logging
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcustom llemacs--path-logging-project-debug nil
+  "Base path for project debug logs."
+  :type 'string
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-logging-project-info nil
+  "Base path for project info logs."
+  :type 'string
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-logging-project-prompt nil
+  "Base path for project prompt logs."
+  :type 'string
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-logging-project-success nil
+  "Base path for project success logs."
+  :type 'string
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-logging-project-warn nil
+  "Base path for project warn logs."
+  :type 'string
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-logging-project-error nil
+  "Base path for project error logs."
+  :type 'string
+  :group 'llemacs-project)
+
 ;; Function to get project-specific path
 (defun llemacs--get-project-path (project-id base-path filename)
   "Get project-specific path for PROJECT-ID using BASE-PATH and FILENAME."
@@ -224,6 +222,10 @@
 (defun llemacs--path-project-info-get (&optional project-id)
   "Get project info log path for PROJECT-ID."
   (llemacs--get-project-path project-id llemacs--path-project-info "by_level/info.log"))
+
+(defun llemacs--path-project-prompt-get (&optional project-id)
+  "Get project prompt log path for PROJECT-ID."
+  (llemacs--get-project-path project-id llemacs--path-project-prompt "by_level/prompt.log"))
 
 (defun llemacs--path-project-success-get (&optional project-id)
   "Get project success log path for PROJECT-ID."
@@ -267,6 +269,10 @@
 (defun llemacs--path-project-info-get (&optional project-id-or-full-name)
   "Get project info log path for PROJECT-ID."
   (llemacs--get-project-path project-id-or-full-name llemacs--path-project-info "by_level/info.log"))
+
+(defun llemacs--path-project-prompt-get (&optional project-id-or-full-name)
+  "Get project prompt log path for PROJECT-ID."
+  (llemacs--get-project-path project-id-or-full-name llemacs--path-project-prompt "by_level/prompt.log"))
 
 (defun llemacs--path-project-success-get (&optional project-id-or-full-name)
   "Get project success log path for PROJECT-ID."

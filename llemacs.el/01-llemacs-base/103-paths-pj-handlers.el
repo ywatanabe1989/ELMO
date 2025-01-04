@@ -1,0 +1,80 @@
+;;; -*- lexical-binding: t -*-
+;;; Author: 2025-01-04 11:10:07
+;;; Time-stamp: <2025-01-04 11:10:07 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/103-paths-pj-handlers.el
+
+(defun llemacs--path-pj-update ()
+  "Update all project-related paths when switching projects."
+  (unless llemacs--cur-pj
+    (error "No project selected"))
+
+  ;; Set all path variables first
+  (set 'llemacs--path-pj (expand-file-name llemacs--cur-pj llemacs--path-projects))
+  (set 'llemacs--path-pj-lock (expand-file-name ".lock" llemacs--path-pj))
+  (set 'llemacs--path-pj-config (expand-file-name "config" llemacs--path-pj))
+  (set 'llemacs--path-pj-data (expand-file-name "data" llemacs--path-pj))
+  (set 'llemacs--path-pj-results (expand-file-name "results" llemacs--path-pj))
+  (set 'llemacs--path-pj-scripts (expand-file-name "scripts" llemacs--path-pj))
+  (set 'llemacs--path-pj-logs (expand-file-name "logs" llemacs--path-pj))
+  (set 'llemacs--path-pj-logs-all (expand-file-name "all.log" llemacs--path-pj-logs))
+  (set 'llemacs--path-pj-logs-by-level (expand-file-name "by_level" llemacs--path-pj-logs))
+  (set 'llemacs--path-pj-pm (expand-file-name "pm" llemacs--path-pj))
+  (set 'llemacs--path-python-env-pj (expand-file-name ".env" llemacs--path-pj))
+  (set 'llemacs--path-python (expand-file-name "bin/python" llemacs--path-python-env-pj))
+  (llemacs--path-create-log-paths-pj)
+
+  ;; Then ensure directories exist
+  (llemacs--path-pj-ensure-all)
+
+  ;; Update buffer names
+  (llemacs--pj-buf-update))
+
+(defun llemacs--validate-pj-id (pj-id)
+  "Validate PJ-ID format.
+Returns error message if format is invalid, nil otherwise."
+  (when (and (not (string-empty-p pj-id))
+             (not (string-match-p "^[0-9]+-[a-zA-Z0-9-]+$" pj-id)))
+    (format "Invalid project ID format. Expected '<id>-<project-name>' but got '%s'" pj-id)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Getter & Setter (= Updater)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun llemacs--cur-pj-set (pj-id)
+  "Set PJ-ID as the current active project."
+  (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
+      (error err-msg)
+    (when-let ((lock-info (llemacs--pj-lock-check pj-id)))
+      (error "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
+    (setq llemacs--cur-pj pj-id)
+    (llemacs--path-pj-update)
+    (llemacs--pj-lock-acquire pj-id)))
+
+;; (defun llemacs--cur-pj-set (pj-id)
+;;   "Set PJ-ID as the current active project."
+;;   (when-let ((lock-info (llemacs--pj-lock-check)))
+;;     (error "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
+;;   (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
+;;       (error err-msg)
+;;     (when-let ((lock-info (llemacs--pj-lock-check)))
+;;       (error "Project is locked by %s" lock-info))
+;;     (setq llemacs--cur-pj pj-id)
+;;     (llemacs--path-pj-update)
+;;     (llemacs--pj-lock-acquire)))
+
+(defalias 'llemacs--switch-pj
+  'llemacs--cur-pj-set
+  "Set PJ-ID as the current active project.")
+
+(defun llemacs--cur-pj-get ()
+  "Get currently active project ID."
+  llemacs--cur-pj)
+
+;; (message llemacs--path-pj-logs-info)
+;; (llemacs--switch-pj "002-sample-project")
+;; (message llemacs--path-pj-logs-info)
+;; (message llemacs--buf-debug-pj)
+;; (llemacs--switch-pj "003-sample-project")
+;; (message llemacs--path-pj-logs-info)
+;; (message llemacs--buf-debug-pj)
+
+(message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
