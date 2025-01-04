@@ -1,9 +1,7 @@
 ;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:55:16
-;;; Time-stamp: <2025-01-02 10:55:16 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/file-maintainers.el
-
-;; (require '02-llemacs-logging-core-file)
+;;; Author: 2025-01-04 09:02:19
+;;; Time-stamp: <2025-01-04 09:02:19 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/maintainers.el
 
 (defun llemacs--logging-rotate-logs ()
   "Rotate log files by appending timestamp to old files."
