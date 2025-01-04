@@ -3,8 +3,7 @@
 # Please add files here
 .apptainer_builders
 README.md
-workspace/resources/private/from_host/*
-workspace/resources/shared/from_host/*
+**/*.log
 
 
 
@@ -634,4 +633,4 @@ src/sea-setup-sea.log
 **/*.log
 **/*.sandbox/*
 **/*.sif.README.md
-.README.md
+.README.md*.log
