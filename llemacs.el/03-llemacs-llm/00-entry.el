@@ -1,3 +1,8 @@
+;;; -*- lexical-binding: t -*-
+;;; Author: 2025-01-05 16:24:29
+;;; Time-stamp: <2025-01-05 16:24:29 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-llm/00-entry.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify

@@ -1,3 +1,8 @@
+;;; -*- lexical-binding: t -*-
+;;; Author: 2025-01-05 06:36:17
+;;; Time-stamp: <2025-01-05 06:36:17 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/refreshers.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
@@ -15,11 +20,14 @@
   :type 'integer
   :group 'llemacs-logging)
 
+
+
 (defun llemacs--logging-backup-files ()
   "Backup all log files with timestamp."
   (interactive)
-  (let ((timestamp (format-time-string "%Y%m%d-%H%M%S"))
-        (backup-dir (expand-file-name timestamp llemacs--path-logs-backup-sys)))
+  (message "backup-files called")
+  (let* ((timestamp (format-time-string "%Y-%m-%d %H:%M:%S")) ; Updated timestamp format
+         (backup-dir (expand-file-name timestamp llemacs--path-logs-backup-sys)))
     (unless (file-exists-p backup-dir)
       (make-directory backup-dir t))
     (dolist (level (mapcar #'car llemacs--log-levels-sys))
@@ -33,28 +41,29 @@
 (defun llemacs--logging-refresh-files ()
   "Refresh all log files after backing up."
   (interactive)
+  (message "refresh-files called")
   (llemacs--logging-backup-files)
-  (dolist (level (mapcar #'car llemacs--log-levels-sys))
-    (let ((sys-file (symbol-value (intern (format "llemacs--path-logs-%s-sys" level)))))
+  (dolist (level (mapcar #'car llemacs--log-levels-pj))
+    (let ((sys-file (symbol-value (intern (format "llemacs--path-logs-%s-pj" level)))))
       (when (file-exists-p sys-file)
         (write-region "" nil sys-file)))))
 
 (defun llemacs--logging-refresh-buffer ()
   "Refresh the current log buffer."
   (interactive)
-  (when (string= (buffer-name) llemacs--buffer-logging)
-    (let ((current-point (point)))
-      (if (eq major-mode 'llemacs-log-mode)
-          (let ((level (get-text-property (point-min) 'log-level)))
-            (if level
-                (llemacs--logging-view-logs-by-level (symbol-name level))
-              (llemacs--logging-view-all-logs)))
-        (llemacs--logging-view-all-logs))
-      (goto-char current-point))))
+  (message "llemacs--logging-refresh-buffer fixme"))
+;; (when (string= (buffer-name) llemacs--buf-logging-main-pj)
+;;   (let ((current-point (point)))
+;;     (if level
+;;         (llemacs--logging-view-logs-by-level (symbol-name level))
+;;       (llemacs--logging-view-all-logs)))
+;;   (llemacs--logging-view-all-logs))
+;; (goto-char current-point))))
 
 (defun llemacs--logging-refresh ()
   "Refresh both log files and buffer."
   (interactive)
+  (message "refresh called")
   (llemacs--logging-refresh-files)
   (llemacs--logging-refresh-buffer))
 

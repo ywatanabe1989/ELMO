@@ -1,3 +1,8 @@
+;;; -*- lexical-binding: t -*-
+;;; Author: 2025-01-05 06:22:03
+;;; Time-stamp: <2025-01-05 06:22:03 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/00-entry.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
@@ -20,6 +25,7 @@
     ;; (load (expand-file-name "initializers.el" dir))
     (load (expand-file-name "level.el" dir))
     (load (expand-file-name "loggers.el" dir))
+    (load (expand-file-name "refreshers.el" dir))
     ;; (load (expand-file-name "maintainers.el" dir))
     (load (expand-file-name "viewers.el" dir))))
 

@@ -1,3 +1,8 @@
+;;; -*- lexical-binding: t -*-
+;;; Author: 2025-01-05 04:04:13
+;;; Time-stamp: <2025-01-05 04:04:13 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
@@ -25,33 +30,6 @@
     (error
      (llemacs--logging-write-error-pj (format "Run failed: %s" err))
      nil)))
-
-;; (llemacs--llm-prompt-embed "aaa" "code-gen")
-;; (llemacs--run-prompt "hi")
-
-;; (defun llemacs--run-prompt (prompt &optional recipe-id)
-;;   "Main entry point for LLEMACS execution."
-;;   (interactive "sPrompt: ")
-;;   (condition-case err
-;;       (progn
-;;         (let* ((default-recipe "code-gen")
-;;                (recipe-id (or recipe-id default-recipe))
-;;                (message recipe-id)
-;;                (full-prompt (llemacs--llm-prompt-embed prompt recipe-id)))
-;;           (message recipe-id)
-;;           (message full-prompt)
-;;           (llemacs--logging-write-prompt-pj full-prompt)
-;;           (let ((elisp-code (llemacs--cvt-prompt2elisp full-prompt)))
-;;             (llemacs--logging-write-elisp-pj elisp-code)
-;;             (llemacs--run-elisp elisp-code))))
-;;     (error
-;;      (llemacs--logging-write-error-pj (format "Run failed: %s" err))
-;;      nil)))
-
-;; (llemacs--run-prompt "hi")
-;; (llemacs--run-prompt "plot something" "code-gen")
-
-;; (llemacs--llm-prompt-embed "aaa" "code-gen")
 
 (defun llemacs--run-before-run-hook (prompt)
   "Prepare environment before running LLEMACS operations."

@@ -22,17 +22,17 @@
     (format "%03d" id)))
 ;; (llemacs--project-get-next-id)
 
-(defun llemacs--proj-get-dir (full-pj-name)
+(defun llemacs--pj-get-dir (full-pj-name)
   "Get project directory for FULL-PJ-NAME."
   (unless full-pj-name
     (llemacs--logging-write-error-sys "Project ID/name cannot be nil")
-    (return-from llemacs--proj-get-dir nil))
+    (return-from llemacs--pj-get-dir nil))
   (unless (file-exists-p llemacs--path-projects)
     (llemacs--logging-write-error-sys "Projects directory does not exist")
-    (return-from llemacs--proj-get-dir nil))
+    (return-from llemacs--pj-get-dir nil))
   (unless (string-match-p "-" full-pj-name)
     (llemacs--logging-write-error-sys "Project ID must be in format <ID>-<name>")
-    (return-from llemacs--proj-get-dir nil))
+    (return-from llemacs--pj-get-dir nil))
   (let ((pattern (format "^%s$" full-pj-name)))
     (if-let ((dirname (car (directory-files llemacs--path-projects nil pattern))))
         (progn
@@ -41,7 +41,7 @@
        (format "No project found for <ID>-<name>: %s" full-pj-name))
       nil)))
 
-;; (llemacs--proj-get-dir "044-dsp-project")
+;; (llemacs--pj-get-dir "044-dsp-project")
 
 ;; ;; Preparation for the template project
 ;; cd ./workspace/projects/
@@ -64,7 +64,7 @@
     (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd)))
 ;; llemacs--path-pj-pm-mmd
 
-(defun llemacs--proj-init (pj-name &optional goals)
+(defun llemacs--pj-init (pj-name &optional goals)
   "Create new project with basic structure."
   (interactive "sProject Name: ")
   (let* ((project-id (llemacs--project-get-next-id))
