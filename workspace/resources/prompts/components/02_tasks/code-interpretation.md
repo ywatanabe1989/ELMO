@@ -1,13 +1,10 @@
 <!-- ---
-!-- title: 2024-12-27 23:16:45
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-interpretation.md
+!-- title: 2025-01-06 08:22:10
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/02_tasks/code-interpretation.md
 !-- --- -->
 
 # Task: code-interpretation
-* Explain code functionality
-* Identify key components
-* Document variable usage
-* Describe control flow
-* Analyze dependencies
-* Highlight critical sections
+* Understand the given code, repository, or directory structure
+* Identify key functionalities, files, functions, documentation
+* Summarize code with bullet points
