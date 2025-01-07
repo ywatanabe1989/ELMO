@@ -1,14 +1,15 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-06 17:23:23
+;;; Time-stamp: <2025-01-06 17:23:23 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/getters.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 12:33:50
-;;; Time-stamp: <2025-01-04 12:33:50 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/getters.el
+
 
 (defun llemacs--logging-get-log-entries (file-path)
   "Get log entries from FILE-PATH."

@@ -1,0 +1,15 @@
+# Time-stamp: "2025-01-06 16:08:44 (ywatanabe)"
+# File: report-gen.yaml
+
+- roles/report-generator
+- tasks/code-generation-elisp
+- rules/code-format-elisp
+- rules/results-formatting-image
+- rules/results-formatting-movie
+- rules/results-formatting-org-report
+- rules/data-saving
+- rules/proj-work-based-on-the-project-management
+- rules/proj-context-interpretation
+- rules/proj-update-context
+- examples/elisp
+- requests/user-input

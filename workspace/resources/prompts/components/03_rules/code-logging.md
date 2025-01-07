@@ -1,11 +1,11 @@
 <!-- ---
-!-- title: 2025-01-04 18:05:51
-!-- author: Yusuke Watanabe
+!-- title: 2025-01-06 09:38:09
+!-- author: ywata-note-win
 !-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/code-logging.md
 !-- --- -->
 
 # Rule: code-logging
-* Add logs using the following pre-defined Elisp functions:
+* Add logs using the following custom Elisp functions:
   `(llemacs--logging-write-debug-pj message)`
   `(llemacs--logging-write-info-pj message)`
   `(llemacs--logging-write-success-pj message)`

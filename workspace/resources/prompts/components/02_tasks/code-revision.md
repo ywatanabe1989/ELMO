@@ -1,12 +1,11 @@
 <!-- ---
-!-- title: 2024-12-27 23:17:02
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-revision.md
+!-- title: 2025-01-06 07:47:02
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/02_tasks/code-revision.md
 !-- --- -->
 
 # Task: code-revision
-* Improve code structure and readability
-* Optimize performance where possible
 * Ensure type safety
 * Follow language-specific best practices
 * Maintain original functionality
+* Original code should not be removed but commented out just in case

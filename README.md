@@ -1,5 +1,5 @@
 <!-- ---
-!-- title: 2025-01-03 05:31:35
+!-- title: 2025-01-05 15:50:36
 !-- author: Yusuke Watanabe
 !-- date: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
@@ -23,7 +23,7 @@ Llemacs is a file-based LLM agent system implemented in Elisp
 
 ## Usage
 
-`./examples/report-generation.md`
+[`./examples/automatic-project-development.md`](./examples/automatic-project-development.md)
 
 ## Installation
 ### 1. Elisp Setup

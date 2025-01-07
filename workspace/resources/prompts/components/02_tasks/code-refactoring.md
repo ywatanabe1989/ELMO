@@ -1,13 +1,13 @@
 <!-- ---
-!-- title: 2024-12-27 23:17:01
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/02_tasks/code-refactoring.md
+!-- title: 2025-01-06 07:45:45
+!-- author: ywata-note-win
+!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/02_tasks/code-refactoring.md
 !-- --- -->
 
 # Task: code-refactoring
-* Improve code structure
-* Remove redundancy
-* Enhance readability
-* Optimize performance
-* Update documentation
-* Maintain functionality
+* Apply refactoring
+  * Improve code structure and readability
+  * Remove redundancy
+  * Optimize performance
+  * Update documentation
+  * Maintain functionality

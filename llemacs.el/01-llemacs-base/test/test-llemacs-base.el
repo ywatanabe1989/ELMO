@@ -88,7 +88,7 @@
 ;; Test timestamp
 (ert-deftest test-llemacs-timestamp ()
   "Test timestamp functions."
-  (let ((ts (llemacs-timestamp-get)))
+  (let ((ts (llemacs--timestamp-get)))
     (should (string-match-p "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}-[0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}$" ts))))
 
 ;; (ert 'test-llemacs-timestamp)

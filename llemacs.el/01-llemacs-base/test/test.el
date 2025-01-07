@@ -1,14 +1,13 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-08 05:22:21
+;;; Timestamp: <2025-01-08 05:22:21>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/test/test.el
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 14:42:03
-;;; Time-stamp: <2025-01-04 14:42:03 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/test/test.el
 
 (require 'ert)
 
@@ -16,7 +15,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 (package-refresh-contents)
-(package-install 'emacsql)
+(package-install 'emacrsql)
 
 (load-file (expand-file-name "../../../llemacs.el" (or load-file-name buffer-file-name)))
 

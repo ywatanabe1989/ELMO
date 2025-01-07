@@ -1,14 +1,14 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-06 17:29:27
+;;; Time-stamp: <2025-01-06 17:29:27 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-05 00:15:07
-;;; Time-stamp: <2025-01-05 00:15:07 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
 
 (defun llemacs--sanitize-filepath (path)
   "Sanitize file path while preserving directory structure."
@@ -22,9 +22,20 @@
 
 (defun llemacs--logging-get-caller-info ()
   "Get caller's file and line info."
-  (let ((caller-file (or (or load-file-name buffer-file-name) "unknown"))
-        (caller-line (or (line-number-at-pos) 0)))
-    (format "%s: L%d" caller-file caller-line)))
+  (let* ((frames (backtrace-frames))
+         (caller-info (catch 'found
+                        (dolist (frame frames)
+                          (let ((func-name (and (car frame)
+                                                (symbolp (cadr frame))
+                                                (symbol-name (cadr frame)))))
+                            (when (and func-name
+                                       (not (string-match "llemacs--logging" func-name)))
+                              (throw 'found frame)))))))
+    (if caller-info
+        (format "%s: L%d"
+                (or (nth 1 (car (last caller-info))) "unknown")
+                (or (nth 2 (car (last caller-info))) 0))
+      "unknown: L0")))
 
 (defun llemacs--logging-format-message (level message &optional project-id)
   "Format log MESSAGE with LEVEL and optional PROJECT-ID."

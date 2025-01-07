@@ -1,14 +1,15 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-06 17:25:20
+;;; Time-stamp: <2025-01-06 17:25:20 (ywatanabe)>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/viewers.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 12:50:57
-;;; Time-stamp: <2025-01-04 12:50:57 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/viewers.el
+
 
 (defun llemacs--logging-view (&optional select-level is-pj)
   "Display logs in buffer.
@@ -39,7 +40,5 @@ When IS-PJ is non-nil, show project logs instead of system logs."
         (erase-buffer)
         (dolist (entry entries)
           (insert entry "\n"))))))
-
-;; (llemacs--logging-view)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))
