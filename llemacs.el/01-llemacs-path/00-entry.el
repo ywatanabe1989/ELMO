@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 05:21:37
-;;; Timestamp: <2025-01-08 05:21:37>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/00-entry.el
+;;; Author: 2025-01-08 05:22:15
+;;; Timestamp: <2025-01-08 05:22:15>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -15,13 +15,14 @@
 
 (defun llemacs--load-base-components ()
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-    (load (expand-file-name "00-list.el" dir))
-    (load (expand-file-name "01-groups.el" dir))
-    (load (expand-file-name "02-buf-var.el" dir))
-    (load (expand-file-name "03-buf-func.el" dir))
-    (load (expand-file-name "04-timestamp.el" dir))
-    (load (expand-file-name "05-script-header.el" dir))
-    (load (expand-file-name "06-md-json-loaders.el" dir))))
+    (load (expand-file-name "00-sys-var.el" dir))
+    (load (expand-file-name "01-sys-log.el" dir))
+    (load (expand-file-name "02-pj-var.el" dir))
+    (load (expand-file-name "03-pj-log.el" dir))
+    (load (expand-file-name "04-pj-lock-system.el" dir))
+    (load (expand-file-name "05-pj-switch.el" dir))
+    (load (expand-file-name "06-pj-updater.el" dir))
+    ))
 
 ;; Initialize components
 (llemacs--load-base-components)
