@@ -1,69 +1,75 @@
 <!-- ---
-!-- title: 2024-12-27 23:18:35
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/04_example_input_output/elisp.md
+!-- Timestamp: 2025-01-08 19:06:45
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_examples/code-elisp-progn-block.md
 !-- --- -->
 
-# Example Output: elisp
-```elisp
-(progn
-  (let* ((title "sample-plot")
-         (timestamp (format-time-string (concat "%Y%m%d-%H%M%S-" title)))
-         (user-dir (expand-file-name (user-login-name) "/workspace"))
-         (work-dir (expand-file-name timestamp user-dir))
-         (script-path (expand-file-name "plot.py" work-dir))
-         (image-path (expand-file-name "plot.jpg" work-dir))
-         (org-file (expand-file-name "report.org" work-dir))
-         (pdf-file (expand-file-name "report.pdf" work-dir))
-         (width 400)
-         (py-code "
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import numpy as np
-plt.figure(figsize=(12, 8), dpi=100)
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
-plt.plot(x, y)
-plt.xlabel('x')
-plt.ylabel('sin(x)')
-plt.title('Simple Plot')
-plt.grid(True)
-plt.savefig('plot.jpg', bbox_inches='tight')
-"))
-    (make-directory work-dir t)
-    (cd work-dir)
-    (with-temp-file script-path
-      (insert py-code))
-    (shell-command (format "cd %s && source /workspace/.env/bin/activate && python3 %s"
-                          work-dir script-path))
-    (sleep-for 1)
-    (with-temp-file org-file
 
-      (insert (format "#+TITLE: LLEMACS Report\n"))
-      (insert (format "#+DATE: %s\n\n" timestamp))
-      (insert (format "* Working Directory\n%s\n\n" work-dir))
-      (insert "* Scripts\n")
-      (insert (format "[[file:%s]]\n\n" script-path))
-      (insert "* Figures\n")
-      (insert (format "#+ATTR_HTML: :width %d\n" width))
-      (insert "#+ATTR_LATEX: :float t :placement [H]\n")
-      (insert (format "[[file:%s]]\n\n" image-path)))
-    (let ((buf (find-file-noselect org-file)))
-      (with-current-buffer buf
-        (let ((org-latex-pdf-process '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-                                     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-              (org-latex-image-default-width "0.8\\linewidth"))
-          (org-latex-export-to-pdf))
-        (when (file-exists-p pdf-file)
-          (goto-char (point-max))
-          (insert "\n* PDF\n")
-          (insert (format "[[file:%s]]\n\n" pdf-file))
-          (save-buffer)
-          (revert-buffer t t)
-          (org-inline-anim-mode 1)
-          (org-display-inline-images)
-          (let ((buffer-save-without-query t))
-              (save-buffer))
-          (revert-buffer t t)))
-      (pop-to-buffer buf))))
+# Example Output: code-elisp-progn-block
+``` elisp
+(progn
+  (let* ((title "data-analysis-example")
+         (script-path (llemacs--path-pj-get-or-create-script-python "analyze_data.py"))
+         (data-path (llemacs--path-pj-get-or-create-data "raw/sample_data.csv"))
+         (dist-plot-path (llemacs--path-pj-get-or-create-figure "distribution.png" title))
+         (time-plot-path (llemacs--path-pj-get-or-create-figure "time_series.png" title))
+         (corre-plot-path (llemacs--path-pj-get-or-create-figure "correlation.png" title))
+         (stats-table (llemacs--path-pj-get-or-create-table "summary_stats.csv" title))
+         (results-table (llemacs--path-pj-get-or-create-table "analysis_results.csv" title))
+         (org-file (llemacs--path-pj-get-or-create-report-org title))
+         (pdf-file (llemacs--path-pj-get-or-create-report-pdf title))
+         (width 600)
+         (script-args (format (concat "--data %s "
+                                    "--dist-plot-path %s "
+                                    "--time-plot-path %s "
+                                    "--corre-plot-path %s "
+                                    "--stats-out %s "
+                                    "--results-out %s "
+                                    )
+                             data-path
+                             dist-plot-path 
+                             time-plot-path 
+                             corre-plot-path
+                             stats-table 
+                             results-table
+                             )))
+    
+    ;; Validate paths
+    (when (llemacs--validate-paths 
+           (list data-path script-path))
+      
+      ;; Dry run
+      (llemacs--run-with-validation 
+       title script-path script-args t)
+      
+      ;; Actual execution
+      (when (llemacs--run-with-validation 
+             title script-path script-args)
+        
+        (with-temp-file org-file
+          (llemacs--org-write-standard-headers title)
+          (insert "* Data Analysis Report\n\n")
+          (insert "** Input Data\n")
+          (insert (format "Data source: [[file:%s]]\n\n" data-path))
+          (insert "** Distribution Analysis\n")
+          (insert "Distribution of key variables:\n")
+          (llemacs--org-write-figure dist-plot-path width)
+          (insert "** Time Series Analysis\n")
+          (insert "Temporal patterns in the data:\n")
+          (llemacs--org-write-figure time-plot-path width)
+          (insert "** Correlation Analysis\n")
+          (insert "Relationships between variables:\n")
+          (llemacs--org-write-figure corre-plot-path width)
+          (insert "** Statistical Summary\n")
+          (insert "#+begin_src R :results table :exports results\n")
+          (insert (format "read.csv('%s')\n" stats-table))
+          (insert "#+end_src\n\n")
+          (insert "** Analysis Results\n")
+          (insert "#+begin_src R :results table :exports results\n")
+          (insert (format "read.csv('%s')\n" results-table))
+          (insert "#+end_src\n\n"))
+        
+        (let ((buf (llemacs--org-export-to-pdf org-file pdf-file)))
+          (llemacs--org-setup-visualization buf pdf-file)
+          (pop-to-buffer buf))))))
+```
