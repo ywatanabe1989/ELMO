@@ -19,6 +19,129 @@ RULES
   * Be self-contained, complete, and independently executable
   * Allow integration with external tools such as shell commands, Python, LaTeX, and other utilities
 --------------------
+# Rule: code-script-eilsp
+* Elisp files (with `.el` extension) must:
+  * Be executable through loading
+  * Follow the general structure: variable setup, function definitions, and function calls
+  * Allow integration with external tools such as shell commands, Python, LaTeX, and other utilities
+--------------------
+# Rule: code-script-python
+* Use Python binary at `llemacs--path-python-sys` (= `(exapand-file-name "bin/python" llemacs--path-python-env-sys`)
+* Ensure to use `argparse` to run Python scripts from Elisp.
+* Save data to `llemacs--path-pj-data` with appropriate directory structure.
+* Save Python script files under `(expand-file-name "python" llemacs--path-pj-scripts)`.
+* Produced results from python script should be saved under `llemacs--path-pj-results`.
+* GPU may not be available
+* For ML tasks, please use sklearn, pytorch, and huggingface
+* The following packages are installed in the environment:
+GitPython
+Pillow
+PyYAML
+Pyarrow
+accelerate
+aiohttp
+ansi-escapes
+anthropic
+black
+bs4
+catboost
+chardet
+einops
+epc
+flake8
+flask
+geom_median
+google-genai
+googlesearch-python
+h5py
+html2text
+icecream
+ipdb
+ipython<8.0.0
+isort
+jedi
+joblib
+joypy
+julius
+lxml
+lxml_html_clean
+markdown
+markdown2
+matplotlib
+mne
+more-itertools
+natsort
+numpy
+obspy
+openai
+openpyxl
+optuna
+pandas
+pandas
+plotly
+plyer
+psutil
+pybids
+pyedflib
+pyls
+pymatreader
+pyperclip
+pyright
+pytest
+pytest-cov
+pytest-env
+pytest-xdist
+python-docx
+python-lsp-server
+pytorch_pretrained_vit
+readability
+readability-lxml
+readchar
+reportlab
+requests
+ripple_detection
+ruamel.yaml
+ruff-lsp
+scikit-image
+scikit-learn
+scipy
+seaborn
+semgrep
+setuptools
+six
+sktime
+sounddevice
+statsmodels
+sympy
+tabulate
+tensorpac
+termplotlib
+tk
+tldr
+transformers
+twine
+umap-learn
+wheel
+xarray
+xlrd
+xmltodict
+torchsummary
+torch
+torchvision
+torchaudio
+psycopg2-binary>=2.9.9  # Changed from psycopg2
+sqlalchemy>=2.0.0
+groq
+--------------------
+# Rule: code-script-shell
+* Save data to `llemacs--path-pj-data` with appropriate directory structure.
+* Save shell script files under `(expand-file-name "scripts" llemacs--path-pj-scripts_` with appropriate directory structure.
+* Results should be saved under `llemacs--path-pj-results` with appropriate directory structure.
+* Include shebang and script metadata
+* Implement proper argument parsing
+* Include logging functionality
+* Use proper if-fi and for-do-done syntax
+--------------------
 # Rule: code-logging
 * For logging, use the following custom Elisp functions:
   `(llemacs--logging-write-debug-pj message)`
@@ -54,6 +177,7 @@ EXAMPLES
 ``` elisp
 (progn
   (let* ((title "data-analysis-example")
+         (python-path llemacs--path-pj-python)
          (script-path (llemacs--path-pj-get-or-create-script-python "analyze_data.py"))
          (data-path (llemacs--path-pj-get-or-create-data "raw/sample_data.csv"))
          (dist-plot-path (llemacs--path-pj-get-or-create-figure "distribution.png" title))
@@ -82,14 +206,8 @@ EXAMPLES
     ;; Validate paths
     (when (llemacs--validate-paths 
            (list data-path script-path))
-      
-      ;; Dry run
-      (llemacs--run-with-validation 
-       title script-path script-args t)
-      
-      ;; Actual execution
-      (when (llemacs--run-with-validation 
-             title script-path script-args)
+
+        (llemacs--run-shell-command (format "%s %s %s" python-path script-path script-args))
         
         (with-temp-file org-file
           (llemacs--org-write-standard-headers title)
@@ -284,21 +402,17 @@ TOOLS
   "Validate existence of all PATHS. Return t if all exist, nil otherwise."
   ...)
 
-(defun llemacs--validate-script (script-path)
-  "Validate script existence and contents at SCRIPT-PATH."
-  ...)
-
-(defun llemacs--script-supports-dry-run (script-path)
-  "Check if script at SCRIPT-PATH supports dry-run option."
-  ...)
-
-(defun llemacs--run-with-validation (title script-path script-args &optional dry-run)
-  "Run script with validation and optional DRY-RUN."
-  ...)
-
-
 (defun llemacs--org-write-figure (figure-path width)
   "Insert org-mode figure with FIGURE-PATH and WIDTH."
+  ...)
+  
+(defun llemacs--logging-write-error-pj (message &optional project-id)
+  "Log ERROR MESSAGE with PROJECT-ID."
+  ...)
+
+(defun llemacs--path-find-bin (name &rest alternatives)
+  "Find executable NAME or its ALTERNATIVES and return path.
+If none found, signal an error."
   ...)
 ```
 --------------------

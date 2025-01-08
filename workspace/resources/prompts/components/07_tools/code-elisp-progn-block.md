@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-01-08 21:17:13
+!-- Timestamp: 2025-01-09 05:42:08
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/07_tools/code-elisp-progn-block.md
 !-- --- -->
@@ -72,21 +72,17 @@
   "Validate existence of all PATHS. Return t if all exist, nil otherwise."
   ...)
 
-(defun llemacs--validate-script (script-path)
-  "Validate script existence and contents at SCRIPT-PATH."
-  ...)
-
-(defun llemacs--script-supports-dry-run (script-path)
-  "Check if script at SCRIPT-PATH supports dry-run option."
-  ...)
-
-(defun llemacs--run-with-validation (title script-path script-args &optional dry-run)
-  "Run script with validation and optional DRY-RUN."
-  ...)
-
-
 (defun llemacs--org-write-figure (figure-path width)
   "Insert org-mode figure with FIGURE-PATH and WIDTH."
+  ...)
+  
+(defun llemacs--logging-write-error-pj (message &optional project-id)
+  "Log ERROR MESSAGE with PROJECT-ID."
+  ...)
+
+(defun llemacs--path-find-bin (name &rest alternatives)
+  "Find executable NAME or its ALTERNATIVES and return path.
+If none found, signal an error."
   ...)
 ```
 

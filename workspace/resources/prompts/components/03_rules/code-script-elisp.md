@@ -1,7 +1,10 @@
-<!-- Time-stamp: "2025-01-06 17:42:05 (ywatanabe)" -->
-<!-- File: code-script-elisp.md -->
+<!-- ---
+!-- Timestamp: 2025-01-09 03:59:43
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/code-script-elisp.md
+!-- --- -->
 
-# Rule: code-elisp-file
+# Rule: code-script-eilsp
 * Elisp files (with `.el` extension) must:
   * Be executable through loading
   * Follow the general structure: variable setup, function definitions, and function calls

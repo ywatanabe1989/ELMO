@@ -1,6 +1,6 @@
-# Timestamp: "2025-01-08 21:11:22 (ywatanabe)"
+# Timestamp: "2025-01-09 04:00:07 (ywatanabe)"
 # File: code-elisp-progn.yaml
-# Time-stamp: "2025-01-08 21:11:22 (ywatanabe)"
+# Time-stamp: "2025-01-09 04:00:07 (ywatanabe)"
 # File: code-elisp-progn.yaml
 
 roles:
@@ -11,16 +11,19 @@ tasks:
 
 rules:
   - code-elisp-progn-block
+  - code-script-elisp
+  - code-script-python
+  - code-script-shell
   - code-logging
   - project-structure
 
 tools:
   - code-elisp-progn-block
-  
+
 examples:
   - code-elisp-progn-block
   - project-structure
 
 requests:
-  - code-elisp-progn-block  
+  - code-elisp-progn-block
   - user-input

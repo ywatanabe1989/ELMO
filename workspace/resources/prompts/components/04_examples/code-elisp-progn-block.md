@@ -1,5 +1,5 @@
 <!-- ---
-!-- Timestamp: 2025-01-08 19:06:45
+!-- Timestamp: 2025-01-09 05:39:23
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_examples/code-elisp-progn-block.md
 !-- --- -->
@@ -9,6 +9,7 @@
 ``` elisp
 (progn
   (let* ((title "data-analysis-example")
+         (python-path llemacs--path-pj-python)
          (script-path (llemacs--path-pj-get-or-create-script-python "analyze_data.py"))
          (data-path (llemacs--path-pj-get-or-create-data "raw/sample_data.csv"))
          (dist-plot-path (llemacs--path-pj-get-or-create-figure "distribution.png" title))
@@ -37,14 +38,8 @@
     ;; Validate paths
     (when (llemacs--validate-paths 
            (list data-path script-path))
-      
-      ;; Dry run
-      (llemacs--run-with-validation 
-       title script-path script-args t)
-      
-      ;; Actual execution
-      (when (llemacs--run-with-validation 
-             title script-path script-args)
+
+        (llemacs--run-shell-command (format "%s %s %s" python-path script-path script-args))
         
         (with-temp-file org-file
           (llemacs--org-write-standard-headers title)
