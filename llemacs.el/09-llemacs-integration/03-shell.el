@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 20:07:49
-;;; Time-stamp: <2025-01-06 20:07:49 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/01-shell.el
+;;; Author: 2025-01-09 05:29:15
+;;; Timestamp: <2025-01-09 05:29:15>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/03-shell.el
 
 ;; Shell integration
 (defun llemacs--run-shell-command (command)
@@ -13,5 +13,5 @@
         (llemacs--logging-write-success-pj
          (format "Shell command completed: %s" command)))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Shell command failed: %s - %s" command err)))))

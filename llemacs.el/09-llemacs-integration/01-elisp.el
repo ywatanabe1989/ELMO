@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 20:07:27
-;;; Time-stamp: <2025-01-06 20:07:27 (ywatanabe)>
+;;; Author: 2025-01-09 04:14:30
+;;; Timestamp: <2025-01-09 04:14:30>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/01-elisp.el
 
 ;; Elisp integration
@@ -16,5 +16,5 @@
         (llemacs--logging-write-success-pj
          (format "Elisp script completed: %s" script)))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Elisp script failed: %s - %s" script err)))))

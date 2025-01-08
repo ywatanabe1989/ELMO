@@ -38,5 +38,5 @@
         (llemacs--git-commit git-bin message)
         (llemacs--git-push git-bin branch))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Git operations failed: %s" err)))))

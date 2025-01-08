@@ -38,9 +38,9 @@
     (llemacs--logging-write-debug-pj
      (format "Setting up git config for recipe: %s" recipe-name))
     (unless agent-email
-      (llemacs--logging-write-error-pj "LLEMACS_AGENT_EMAIL_ADDRESS is not set"))
+      (error "LLEMACS_AGENT_EMAIL_ADDRESS is not set"))
     (unless agent-password
-      (llemacs--logging-write-error-pj "LLEMACS_AGENT_EMAIL_PASSWORD is not set"))
+      (error "LLEMACS_AGENT_EMAIL_PASSWORD is not set"))
     (let* ((process-environment
             (cons* "GIT_AUTHOR_EMAIL" agent-email
                    "GIT_AUTHOR_PASSWORD" agent-password
@@ -53,7 +53,7 @@
              (format "Executing git command in directory: %s" dir))
             (apply func (append git-args args)))
         (error
-         (llemacs--logging-write-error-pj
+         (error
           (format "Git operation failed: %s" (error-message-string err)))
          nil)))))
 

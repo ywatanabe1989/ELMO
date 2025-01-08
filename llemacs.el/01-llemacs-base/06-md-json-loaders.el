@@ -15,7 +15,7 @@
 (defun llemacs--load-markdown-file (file-path)
   "Load contents of markdown FILE-PATH as string, skipping metadata comments."
   (unless (file-exists-p file-path)
-    (llemacs--logging-write-error-pj "File does not exist: %s" file-path))
+    (error "File does not exist: %s" file-path))
   (condition-case err
       (let ((content (with-temp-buffer
                        (insert-file-contents file-path)
@@ -29,7 +29,7 @@
               "")
           content))
     (error
-     (llemacs--logging-write-error-pj (format "Failed to load markdown file\n%s\n%s" file-path err))
+     (error (format "Failed to load markdown file\n%s\n%s" file-path err))
      nil)))
 
 (defun llemacs--load-json-file (json-path)
@@ -58,7 +58,7 @@
   "Validate JSON file at JSON-PATH using Python's json module."
   (if (not (file-exists-p json-path))
       (progn
-        (llemacs--logging-write-error-pj (format "JSON file does not exist: %s" json-path))
+        (error (format "JSON file does not exist: %s" json-path))
         nil)
     (let* ((temp-buffer (generate-new-buffer "*json-check*"))
            (exit-code
@@ -71,7 +71,7 @@ except json.JSONDecodeError as e:
     print(f'Error at line {e.lineno}, column {e.colno}: {e.msg}')"
                           json-path)))
       (unless (= exit-code 0)
-        (llemacs--logging-write-error-pj
+        (error
          (format "Invalid JSON file %s:\n%s"
                  json-path
                  (with-current-buffer temp-buffer

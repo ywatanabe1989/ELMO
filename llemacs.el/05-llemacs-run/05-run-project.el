@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 22:33:09
-;;; Timestamp: <2025-01-08 22:33:09>
+;;; Author: 2025-01-09 04:32:43
+;;; Timestamp: <2025-01-09 04:32:43>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/05-run-project.el
 
 (defun llemacs-run-project (prompt &optional recipe-id log-level)
@@ -15,8 +15,6 @@ LOG-LEVEL defaults to error."
              (embedded-prompt (llemacs--llm-prompt-embed prompt recipe-id))
              (full-prompt (concat context embedded-prompt)))
         (llemacs--run-prompt full-prompt))
-    (error
-     (llemacs--logging-write-error-pj (format "Run failed: %S" err))
-     nil)))
+    (error"Run failed: %S" err)))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

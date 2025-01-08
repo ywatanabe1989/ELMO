@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:34:54
-;;; Time-stamp: <2025-01-06 17:34:54 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-proj/02-init.el
+;;; Author: 2025-01-09 04:33:31
+;;; Timestamp: <2025-01-09 04:33:31>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/02-init.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -24,19 +24,19 @@
 (defun llemacs--pj-get-dir (full-pj-name)
   "Get project directory for FULL-PJ-NAME."
   (unless full-pj-name
-    (llemacs--logging-write-error-sys "Project ID/name cannot be nil")
+    (error "Project ID/name cannot be nil")
     (return-from llemacs--pj-get-dir nil))
   (unless (file-exists-p llemacs--path-projects)
-    (llemacs--logging-write-error-sys "Projects directory does not exist")
+    (error "Projects directory does not exist")
     (return-from llemacs--pj-get-dir nil))
   (unless (string-match-p "-" full-pj-name)
-    (llemacs--logging-write-error-sys "Project ID must be in format <ID>-<name>")
+    (error "Project ID must be in format <ID>-<name>")
     (return-from llemacs--pj-get-dir nil))
   (let ((pattern (format "^%s$" full-pj-name)))
     (if-let ((dirname (car (directory-files llemacs--path-projects nil pattern))))
         (progn
           (expand-file-name dirname llemacs--path-projects))
-      (llemacs--logging-write-error-sys
+      (error
        (format "No project found for <ID>-<name>: %s" full-pj-name))
       nil)))
 
@@ -76,7 +76,7 @@
                      llemacs--path-pj))
             (llemacs--pj-init-pm-mmd full-pj-name pj-goals))
           project-id)
-      (llemacs--logging-write-error-sys "Project template not found")
+      (error "Project template not found")
       nil)))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 20:19:31
-;;; Timestamp: <2025-01-08 20:19:31>
+;;; Author: 2025-01-09 07:37:11
+;;; Timestamp: <2025-01-09 07:37:11>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/llemacs.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -21,7 +21,7 @@
                        "04-llemacs-llm"
                        "05-llemacs-run"
                        "07-llemacs-tools"
-                       "08-llemacs-git"
+                       ;; "08-llemacs-git"
                        "09-llemacs-integration"
                        )))
     (dolist (component components)

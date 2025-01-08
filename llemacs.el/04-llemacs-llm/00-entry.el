@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 20:16:32
-;;; Timestamp: <2025-01-08 20:16:32>
+;;; Author: 2025-01-09 03:00:13
+;;; Timestamp: <2025-01-09 03:00:13>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -24,7 +24,6 @@
     (load (expand-file-name "06-prompt-recipe.el" dir))
     (load (expand-file-name "07-prompt-compile.el" dir))
     (load (expand-file-name "08-prompt-to-elisp.el" dir))
-    (load (expand-file-name "09-prompt-to-progn.el" dir))
     ))
 
 ;; Initialize LLM components

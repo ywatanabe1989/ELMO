@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 22:57:59
-;;; Timestamp: <2025-01-08 22:57:59>
+;;; Author: 2025-01-09 05:45:21
+;;; Timestamp: <2025-01-09 05:45:21>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/02-pj-var.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -109,6 +109,13 @@
 
 (defcustom llemacs--path-pj-results-figures
   (expand-file-name "figures" llemacs--path-pj-results)
+  "Resutls directory for the current project results."
+  :type 'directory
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-pj-results-tables
+  (expand-file-name "tables" llemacs--path-pj-results)
   "Resutls directory for the current project results."
   :type 'directory
   :group 'llemacs-path
