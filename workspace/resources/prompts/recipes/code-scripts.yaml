@@ -1,0 +1,31 @@
+# Timestamp: "2025-01-09 06:46:58 (ywatanabe)"
+# File: code-scripts.yaml
+# Time-stamp: "2025-01-09 06:46:58 (ywatanabe)"
+# File: code-elisp-progn.yaml
+
+roles:
+  - coder
+
+tasks:
+  - code-script-elisp
+  - code-script-python
+  - code-script-shell
+  
+rules:
+  - code-script-elisp
+  - code-script-python
+  - code-script-shell
+  - code-logging
+  - project-structure
+
+examples:
+  - code-script-elisp
+  - code-script-python
+  - code-script-shell
+
+tools:
+  - lang-python-packages
+  
+requests:
+  - code-elisp-progn-block
+  - user-input

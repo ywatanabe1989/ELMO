@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:29:27
-;;; Time-stamp: <2025-01-06 17:29:27 (ywatanabe)>
+;;; Author: 2025-01-09 04:34:36
+;;; Timestamp: <2025-01-09 04:34:36>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -20,35 +20,54 @@
   (when content
     (replace-regexp-in-string "\r\n" "\n" (format "%s" content))))
 
+;; L0 but working
 (defun llemacs--logging-get-caller-info ()
-  "Get caller's file and line info."
-  (let* ((frames (backtrace-frames))
-         (caller-info (catch 'found
-                        (dolist (frame frames)
-                          (let ((func-name (and (car frame)
-                                                (symbolp (cadr frame))
-                                                (symbol-name (cadr frame)))))
-                            (when (and func-name
-                                       (not (string-match "llemacs--logging" func-name)))
-                              (throw 'found frame)))))))
-    (if caller-info
-        (format "%s: L%d"
-                (or (nth 1 (car (last caller-info))) "unknown")
-                (or (nth 2 (car (last caller-info))) 0))
-      "unknown: L0")))
+  "Get caller's location info (file and line number where logger was called)."
+  (let ((i 4)
+        (found nil))
+    (while (and (not found) (< i 20))
+      (let* ((frame (backtrace-frame i))
+             (func (and frame (cadr frame))))
+        (when (and func
+                   (symbolp func)
+                   (not (string-prefix-p "llemacs--logging" (symbol-name func))))
+          (setq found func))
+        (setq i (1+ i))))
+    (format "%s: L%d"
+            (if found (symbol-name found) "unknown")
+            0)))
 
-(defun llemacs--logging-format-message (level message &optional project-id)
-  "Format log MESSAGE with LEVEL and optional PROJECT-ID."
-  (let ((project-id (if (and project-id (string-match "^\\([0-9]+\\)-" project-id))
-                        (match-string 1 project-id)
-                      project-id)))
-    (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
-            llemacs--logging-splitter
-            (upcase (symbol-name level))
-            (llemacs-timestamp)
-            (if project-id (format "[Project: %s]" project-id) "")
-            (llemacs--logging-get-caller-info)
-            (or message "No message"))))
+
+;; (defun llemacs--logging-get-caller-info ()
+;;   "Get caller's location info (file and line number where logger was called)."
+;;   (let ((i 4)
+;;         (found nil)
+;;         (line-num nil))
+;;     (while (and (not found) (< i 20))
+;;       (let* ((frame (backtrace-frame i))
+;;              (func (and frame (cadr frame)))
+;;              (data (and frame (cddr frame)))
+;;              (pos-data (and data (car data))))
+;;         (when (and func
+;;                    (symbolp func)
+;;                    (not (string-prefix-p "llemacs--logging" (symbol-name func))))
+;;           (setq found func)
+;;           (when (markerp pos-data)
+;;             (setq line-num (line-number-at-pos (marker-position pos-data)))))
+;;         (setq i (1+ i))))
+;;     (format "%s: L%d"
+;;             (if found (symbol-name found) "unknown")
+;;             (or line-num 0))))
+
+(defun llemacs--logging-format-message (level message &optional full-project-name)
+  "Format log MESSAGE with LEVEL and optional FULL-PROJECT-NAME."
+  (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
+          llemacs--logging-splitter
+          (upcase (symbol-name level))
+          (llemacs-timestamp)
+          (format "[Project: %s]" full-project-name)
+          (llemacs--logging-get-caller-info)
+          (or message "No message")))
 
 (defcustom llemacs--logging-enable-display-threshold 'error
   "Threshold level for displaying log messages. Logs at this level and above will be displayed."
@@ -100,6 +119,41 @@
                (llemacs--logging-meets-threshold-p level))
       (message log-entry))))
 
+
+;; (defun llemacs--logging-write (level message &optional project-id enable-display)
+;;   "Log MESSAGE at LEVEL with optional PROJECT-ID."
+;;   (message "Debug: Entry - level=%S message=%S project-id=%S enable-display=%S"
+;;            level message project-id enable-display)
+;;   (let* ((project-id (or project-id llemacs--cur-pj))
+;;          (_ (message "Debug: Resolved project-id=%S" project-id))
+;;          (is-system-log (or (null project-id)
+;;                             (string= project-id "sys")))
+;;          (_ (message "Debug: is-system-log=%S" is-system-log))
+;;          (log-entry (llemacs--logging-format-message level message
+;;                                                      (unless is-system-log project-id)))
+;;          (_ (message "Debug: log-entry=%S" log-entry))
+;;          (log-file-level
+;;           (if is-system-log
+;;               (let ((var-name (intern (format "llemacs--path-logs-%s-sys" level))))
+;;                 (message "Debug: sys var-name=%S" var-name)
+;;                 (symbol-value var-name))
+;;             (let ((var-name (intern (format "llemacs--path-logs-%s-pj" level))))
+;;               (message "Debug: pj var-name=%S" var-name)
+;;               (symbol-value var-name))))
+;;          (_ (message "Debug: log-file-level=%S" log-file-level))
+;;          (log-file-all (if is-system-log
+;;                            llemacs--path-logs-all-sys
+;;                          llemacs--path-pj-logs-all))
+;;          (_ (message "Debug: log-file-all=%S" log-file-all)))
+;;     (llemacs--logging-ensure-log-file log-file-all)
+;;     (llemacs--logging-ensure-log-file log-file-level)
+;;     (llemacs--logging-write-quiet (concat log-entry "\n") log-file-all t)
+;;     (llemacs--logging-write-quiet (concat log-entry "\n") log-file-level t)
+;;     (when (and enable-display
+;;                (llemacs--logging-meets-threshold-p level))
+;;       (message "Debug: Displaying message due to threshold")
+;;       (message log-entry))))
+
 (defun llemacs--logging-define-loggers-sys ()
   "Define system-level logging functions."
   (dolist (level-config llemacs--log-levels-sys)
@@ -110,18 +164,60 @@
           ,(format "Log %s MESSAGE" level)
           (llemacs--logging-write ',level message project-id ,(= priority 3)))))))
 
-(defun llemacs--logging-define-loggers-pj ()
-  "Define project-level logging functions."
-  (dolist (level-config llemacs--log-levels-pj)
-    (let ((level (car level-config))
-          (priority (cadr level-config)))
-      (eval
-       `(defun ,(intern (format "llemacs--logging-write-%s-pj" level)) (message &optional project-id)
-          ,(format "Log %s MESSAGE with PROJECT-ID." level)
-          (llemacs--logging-write ',level message project-id ,(= priority 3))
-          (funcall (intern (format "llemacs--logging-write-%s-sys" ',level)) message))))))
+(defun llemacs--logging-write-error-pj (message &optional project-id)
+  "Log ERROR MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'error message project-id t))
 
-(llemacs--logging-define-loggers-sys)
-(llemacs--logging-define-loggers-pj)
+(defun llemacs--logging-write-warn-pj (message &optional project-id)
+  "Log WARN MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'warn message project-id nil))
+
+(defun llemacs--logging-write-info-pj (message &optional project-id)
+  "Log INFO MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'info message project-id nil))
+
+(defun llemacs--logging-write-success-pj (message &optional project-id)
+  "Log SUCCESS MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'success message project-id nil))
+
+(defun llemacs--logging-write-prompt-pj (message &optional project-id)
+  "Log PROMPT MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'prompt message project-id nil))
+
+(defun llemacs--logging-write-elisp-pj (message &optional project-id)
+  "Log ELISP MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'elisp message project-id nil))
+
+(defun llemacs--logging-write-api-pj (message &optional project-id)
+  "Log API MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'api message project-id nil))
+
+(defun llemacs--logging-write-search-pj (message &optional project-id)
+  "Log SEARCH MESSAGE with PROJECT-ID."
+  (llemacs--logging-write 'search message project-id nil))
+
+(defun llemacs--logging-write-debug-pj (message &optional project-id)
+"Log DEBUG MESSAGE with PROJECT-ID."
+(llemacs--logging-write 'debug message project-id nil))
+
+;; (error "aaa")
+;; (message "from here")
+;; (error "085-Epilepsy-prediction-project")
+
+;; (defun llemacs--logging-define-loggers-pj ()
+;;   "Define project-level logging functions."
+;;   (dolist (level-config llemacs--log-levels-pj)
+;;     (let ((level (car level-config))
+;;           (priority (cadr level-config)))
+;;       (eval
+;;        `(defun ,(intern (format "llemacs--logging-write-%s-pj" level)) (message &optional project-id)
+;;           ,(format "Log %s MESSAGE with PROJECT-ID." level)
+;;           (llemacs--logging-write ',level message project-id ,(= priority 3))
+;;           (funcall (intern (format "llemacs--logging-write-%s-sys" ',level)) message))))))
+
+;; (llemacs--logging-define-loggers-sys)
+;; (llemacs--logging-define-loggers-pj)
+
+
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

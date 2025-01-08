@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 20:07:55
-;;; Time-stamp: <2025-01-06 20:07:55 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/01-find-bin.el
+;;; Author: 2025-01-09 05:36:18
+;;; Timestamp: <2025-01-09 05:36:18>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/02-find-bin.el
 
 (defun llemacs--path-find-bin (name &rest alternatives)
   "Find executable NAME or its ALTERNATIVES and return path.
@@ -18,5 +18,6 @@ If none found, signal an error."
           path)
       (let ((err-msg (format "Executable not found: %s or %s"
                              name alternatives)))
-        (llemacs--logging-write-error-pj err-msg)
         (error err-msg)))))
+
+;; (llemacs--path-find-bin "python")

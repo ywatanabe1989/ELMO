@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:37:54
-;;; Time-stamp: <2025-01-06 09:37:54 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj.el
+;;; Author: 2025-01-09 05:45:21
+;;; Timestamp: <2025-01-09 05:45:21>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/02-pj-var.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -41,8 +41,17 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
+;; (defcustom llemacs--path-pj
+;;   (expand-file-name llemacs--cur-pj llemacs--path-projects)
+;;   "Root directory for the current project."
+;;   :type 'directory
+;;   :group 'llemacs-path
+;;   :group 'llemacs-project)
+
+
 (defcustom llemacs--path-pj
-  (expand-file-name llemacs--cur-pj llemacs--path-projects)
+  (when llemacs--cur-pj
+    (expand-file-name llemacs--cur-pj llemacs--path-projects))
   "Root directory for the current project."
   :type 'directory
   :group 'llemacs-path
@@ -93,6 +102,20 @@
 
 (defcustom llemacs--path-pj-results
   (expand-file-name "results" llemacs--path-pj)
+  "Resutls directory for the current project results."
+  :type 'directory
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-pj-results-figures
+  (expand-file-name "figures" llemacs--path-pj-results)
+  "Resutls directory for the current project results."
+  :type 'directory
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-pj-results-tables
+  (expand-file-name "tables" llemacs--path-pj-results)
   "Resutls directory for the current project results."
   :type 'directory
   :group 'llemacs-path

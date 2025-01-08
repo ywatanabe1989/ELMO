@@ -18,7 +18,7 @@
         (llemacs--run-git-command git-bin "commit" "-m" message)
         (llemacs--run-git-command git-bin "push" "origin" branch))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Git operations failed: %s" err)))))
 
 (defun llemacs--create-ticket (title body)
@@ -29,7 +29,7 @@
                                  "--title" title
                                  "--body" body))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Failed to create ticket: %s" err)))))
 
 ;; GitHub CLI wrapper
@@ -66,5 +66,5 @@
         (llemacs--ensure-gh-auth)
         (llemacs--gh-create-issue gh-bin title body))
     (error
-     (llemacs--logging-write-error-pj
+     (error
       (format "Failed to create ticket: %s" err)))))

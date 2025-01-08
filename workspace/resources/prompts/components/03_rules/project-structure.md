@@ -1,8 +1,10 @@
-<!-- Time-stamp: "2025-01-06 19:36:12 (ywatanabe)" -->
-<!-- File: project-structure.md -->
+<!-- ---
+!-- Timestamp: 2025-01-08 19:26:03
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/project-structure.md
+!-- --- -->
 
 # Rule: project-structure
-
 * Every project has a unique identifier in `<ID>-<name>` format
 * Project paths are defined as Elisp variables with `llemacs--path-` prefix
 * Project must include core directories:

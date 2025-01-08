@@ -1,6 +1,8 @@
+<!-- Time-stamp: "2025-01-07 09:48:16 (ywatanabe)" -->
+<!-- File: README.md -->
 <!-- ---
-!-- title: 2025-01-05 15:50:36
-!-- author: Yusuke Watanabe
+!-- title: 2025-01-06 12:14:35
+!-- author: ywata-note-win
 !-- date: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
 
@@ -15,7 +17,76 @@ Llemacs is a file-based LLM agent system implemented in Elisp
 - [x] Mermaid-based project visualization
 - [x] Containerized execution via Apptainer
 - [ ] Version control integration
- 
+- [ ] Capture user corrections
+- [ ] Learning Mechanism
+  - Store successful patterns
+  - PR feedback as metrics
+    ```python
+    class PRMetrics:
+        def __init__(self):
+            self.attempts = 0
+            self.accepted = 0
+            self.reviews = []
+
+        def record_attempt(self, pr_data):
+            self.attempts += 1
+            if pr_data['accepted']:
+                self.accepted += 1
+            self.reviews.append(pr_data['comments'])
+
+        def get_success_rate(self):
+            return self.accepted / self.attempts if self.attempts > 0 else 0
+    ```
+
+    A prompt hub with voting could work like this:
+
+    1. Structure
+    ```python
+    class PromptComponent:
+        def __init__(self, content, category):
+            self.content = content
+            self.category = category
+            self.votes = 0
+            self.usages = 0
+            self.success_rate = 0.0
+            self.versions = []
+
+    class PromptHub:
+        def __init__(self):
+            self.components = {}
+            self.ranking = {}
+
+        def submit(self, component):
+            self.components[component.id] = component
+
+        def vote(self, component_id, score):
+            self.components[component_id].votes += score
+            self.update_ranking()
+
+        def get_top_prompts(self, category):
+            return sorted(
+                [c for c in self.components.values() if c.category == category],
+                key=lambda x: (x.votes, x.success_rate),
+                reverse=True
+            )
+    ```
+
+    2. Benefits
+    - Community-driven evolution
+    - Real-world validation
+    - Automatic quality filtering
+    - Version competition
+
+    3. Integration Points
+    - GitHub API for PR stats
+    - User feedback collection
+    - Automated testing results
+    - Usage statistics
+
+- Link components dynamically
+
+
+
 ## Disclaimer
 - This repository is under active development
 - The system is not yet fully functional yet
@@ -43,9 +114,15 @@ python -m pip install -r requirements.txt
 Details can be seen at [`./config/env/`](./config/env/).
 For example, LLM API keys are expected as follows:
 ```bash
+# LLM
 export LLEMACS_ANTHROPIC_API_KEY="your-key" # Default: $ANTHROPIC_API_KEY
 export LLEMACS_GOOGLE_API_KEY="your-key" # Default: $GOOGLE_API_KEY
 export LLEMACS_DEEPSEEK_API_KEY="your-key" # Default: $DEEPSEEK_API_KEY
+
+# Git
+export LLEMACS_GIT_EMAIL="your-agent-email-address"
+export LLEMACS_GIT_USER_NAME="your-agent-name"
+export LLEMACS_GIT_GITIGNORE_PATH="dot-gitignore-path"
 ```
 `(llemacs-llm-switch-provider)` switches the LLM provider to use.
 
@@ -71,17 +148,6 @@ main -m build  # Create sandbox
 main -m shell  # Enter sandbox
 main -m run    # Launch Emacs as an agent
 ```
-
-<!-- ## Project Structure
- !-- - `llemacs.el/` - Main Elisp implementation
- !--   - `01-llemacs-base/` - Core functionality
- !--   - `02-llemacs-logging/` - Logging system
- !--   - `03-llemacs-llm/` - LLM integration
- !--   - `04-llemacs-cvt/` - Format converters
- !--   - `05-llemacs-run/` - Execution system
- !-- 
- !-- See full structure: [./docs/workspace_tree.txt](./docs/workspace_tree.txt)
- !-- <\!-- tree workspace > ./docs/workspace_tree.txt -\-> -->
 
 ## Contact
 - support@llemacs.com

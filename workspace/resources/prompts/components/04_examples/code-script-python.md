@@ -1,4 +1,9 @@
-<!-- Time-stamp: "2025-01-06 17:17:41 (ywatanabe)" -->
+<!-- ---
+!-- Timestamp: 2025-01-09 06:27:27
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_examples/code-script-python.md
+!-- --- -->
+<!-- Time-stamp: "2025-01-09 06:27:27 (ywatanabe)" -->
 <!-- File: code-python-script.md -->
 
 ``` python
@@ -70,6 +75,8 @@ def run_main() -> None:
     global CONFIG, CC, sys, plt
 
     import sys
+    import matplotlib
+    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import mngs
 

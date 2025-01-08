@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:20:27
-;;; Time-stamp: <2025-01-06 17:20:27 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/002-mermaid-save-hook.el
+;;; Author: 2025-01-08 06:01:56
+;;; Timestamp: <2025-01-08 06:01:56>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/05-mermaid-save-hook.el
 
 (defun llemacs--mermaid-compile ()
   "Generate PNG, SVG, and GIF after saving Mermaid files."
@@ -40,5 +40,7 @@
   (ob-mermaid-cli-path "/usr/local/bin/mmdc")
   (ob-mermaid-extra-args "--backgroundColor transparent -f svg"))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages)
+
+(message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

@@ -1,12 +1,19 @@
 <!-- ---
-!-- title: 2024-12-27 23:19:05
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/.emacs.d/lisp/llemacs/workspace/resources/prompt-templates/components/07_tools/python.md
+!-- Timestamp: 2025-01-09 06:47:59
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/07_tools/lang-python-packages.md
 !-- --- -->
 
 # Tool
 * Use this environment: `/workspace/.env/bin/activate` and `/workspace/.env/bin/python`
+* Use 'morl' instead of 'morlet'. In PyWavelets (pywt), the Morlet wavelet is abbreviated as 'morl':
+
+```python
+coef, freqs = pywt.cwt(sig, scales, 'morl')
+```
+
 * Pip-installed packages:
+  ```plaintext
   accelerate==0.34.2
   aiohappyeyeballs==2.4.3
   aiohttp==3.10.10
@@ -209,6 +216,7 @@
   pyasn1==0.6.0
   pyasn1_modules==0.4.0
   PyAudio==0.2.14
+  PyWavelets==1.8.0
   pybids==0.17.1
   pycairo==1.20.1
   pycodestyle==2.12.1
@@ -328,3 +336,4 @@
   XlsxWriter==3.2.0
   xmltodict==0.13.0
   yarl==1.17.1
+  ```

@@ -1,12 +1,12 @@
 <!-- ---
-!-- title: 2025-01-05 20:10:52
-!-- author: ywata-note-win
-!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/code-formatting-python.md
+!-- Timestamp: 2025-01-09 06:31:59
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/code-script-python.md
 !-- --- -->
 
-# Rule: code-formatting-python
+# Rule: code-script-python
 * Use Python binary at `llemacs--path-python-sys` (= `(exapand-file-name "bin/python" llemacs--path-python-env-sys`)
-* Use `argparse` for later use.
+* Ensure to use `argparse` to run Python scripts from Elisp.
 * Save data to `llemacs--path-pj-data` with appropriate directory structure.
 * Save Python script files under `(expand-file-name "python" llemacs--path-pj-scripts)`.
 * Produced results from python script should be saved under `llemacs--path-pj-results`.

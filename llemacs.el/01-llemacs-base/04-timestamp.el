@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 18:46:58
-;;; Time-stamp: <2025-01-06 18:46:58 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/99-timestamp.el
+;;; Author: 2025-01-09 06:52:37
+;;; Timestamp: <2025-01-09 06:52:37>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/04-timestamp.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -24,7 +24,8 @@
 
 (defun llemacs--timestamp-get ()
   "Get current timestamp without updating the reference."
-  (format-time-string llemacs--timestamp-format))
+  llemacs--timestamp)
+;; (format-time-string llemacs--timestamp-format))
 
 (defalias 'llemacs-timestamp 'llemacs--timestamp-get)
 

@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 20:22:36
-;;; Time-stamp: <2025-01-06 20:22:36 (ywatanabe)>
+;;; Author: 2025-01-08 05:56:40
+;;; Timestamp: <2025-01-08 05:56:40>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/00-sys-var.el
 
 
@@ -10,11 +10,6 @@
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-04 10:44:21
-;;; Time-stamp: <2025-01-04 10:44:21 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/100-paths-sys.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Root
@@ -85,7 +80,7 @@
   :group 'llemacs-path
   :group 'llemacs-sys)
 
-(defvar llemacs--path-res-secrets
+(defcustom llemacs--path-res-secrets
   (expand-file-name ".secrets" llemacs--path-res)
   "Directory for storing sensitive information."
   :type 'directory
