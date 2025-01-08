@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 19:49:12
-;;; Time-stamp: <2025-01-06 19:49:12 (ywatanabe)>
+;;; Author: 2025-01-08 21:50:58
+;;; Timestamp: <2025-01-08 21:50:58>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/09-llemacs-integration/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -12,7 +12,12 @@
 
 (defun llemacs--load-integration-components ()
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-    (load (expand-file-name "00-integration.el" dir))
+    ;; (load (expand-file-name "00-integration.el" dir))
+    (load (expand-file-name "01-elisp.el" dir))
+    (load (expand-file-name "02-find-bin.el" dir))
+    (load (expand-file-name "03-shell.el" dir))
+    (load (expand-file-name "04-git.el" dir))
+    (load (expand-file-name "05-github.el" dir))
     ))
 
 ;; Initialize components

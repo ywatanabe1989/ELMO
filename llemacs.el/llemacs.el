@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 05:29:02
-;;; Timestamp: <2025-01-08 05:29:02>
+;;; Author: 2025-01-08 20:19:31
+;;; Timestamp: <2025-01-08 20:19:31>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/llemacs.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -15,9 +15,9 @@
          (components '(
                        "01-llemacs-base"
                        "01-llemacs-path"
-                       "02-llemacs-secrets"
+                       ;; "02-llemacs-secrets"
                        "02-llemacs-logging"
-                       "06-llemacs-projetct"
+                       "03-llemacs-project"
                        "04-llemacs-llm"
                        "05-llemacs-run"
                        "07-llemacs-tools"

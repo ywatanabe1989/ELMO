@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-05 18:54:20
-;;; Time-stamp: <2025-01-05 18:54:20 (ywatanabe)>
+;;; Author: 2025-01-08 21:43:51
+;;; Timestamp: <2025-01-08 21:43:51>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -18,10 +18,12 @@
 (defun llemacs--load-run-components ()
   "Load run component files."
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-    (load (expand-file-name "run-elisp.el" dir))
-    (load (expand-file-name "run-prompt.el" dir))
-    (load (expand-file-name "run-project.el" dir))
-    (load (expand-file-name "run-auto.el" dir))
+    (load (expand-file-name "01-run-elisp.el" dir))
+    (load (expand-file-name "02-run-prompt.el" dir))
+    (load (expand-file-name "03-run-prompt-to-elisp-progn-helpers.el" dir))
+    (load (expand-file-name "04-run-prompt-to-elisp-progn.el" dir))
+    (load (expand-file-name "05-run-project.el" dir))
+    (load (expand-file-name "06-run-auto.el" dir))
     ;; (load (expand-file-name "helpers.el" dir))
     ))
 

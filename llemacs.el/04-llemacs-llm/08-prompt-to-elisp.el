@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:38:36
-;;; Time-stamp: <2025-01-06 17:38:36 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-cvt/prompt2elisp.el
+;;; Author: 2025-01-08 22:35:45
+;;; Timestamp: <2025-01-08 22:35:45>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/08-prompt-to-elisp.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -12,7 +12,7 @@
 
 (defvar elisp-including-response "" "")
 
-(defun llemacs--cvt-prompt2elisp (prompt &optional recipe-id)
+(defun llemacs--llm-prompt2elisp (prompt &optional recipe-id)
   "Convert PROMPT to Elisp code using LLM."
   (let ((elisp-including-response nil)
         (elisp-blocks nil)
@@ -22,6 +22,7 @@
           (setq elisp-including-response (llemacs-llm prompt recipe-id))
           (unless elisp-including-response
             (error "No response received from API"))
+          (llemacs--logging-write-elisp-pj elisp-including-response)
           (setq elisp-blocks (llemacs-extract-elisp-blocks elisp-including-response))
           (unless elisp-blocks
             (error "No elisp blocks found in response"))
@@ -31,6 +32,7 @@
                         elisp-blocks))
           (unless commands
             (error "No valid elisp code generated"))
+          (llemacs--logging-write-info-pj commands)
           (cons 'progn commands))
       (error
        (llemacs--logging-write-error-pj

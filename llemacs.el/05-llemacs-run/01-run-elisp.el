@@ -1,14 +1,14 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-08 22:28:27
+;;; Timestamp: <2025-01-08 22:28:27>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/01-run-elisp.el
+
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-02 10:24:02
-;;; Time-stamp: <2025-01-02 10:24:02 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-elisp.el
 
 (defvar llemacs--run-start-tag
   "
@@ -30,11 +30,20 @@ Llemacs-run called.
 ;; ----------------------------------------
 (defun llemacs--run-elisp-local (escaped-elisp-code)
   "Run elisp code in local Emacs."
+  (message (format "%s" escaped-elisp-code))
   (condition-case err
       (eval escaped-elisp-code)
     (error
-     (llemacs--logging-write-error-pj (format "Local code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "llemacs--run-elisp-local failed: %s" (error-message-string err)))
      nil)))
+
+;; (defun llemacs--run-elisp-local (escaped-elisp-code)
+;;   "Run elisp code in local Emacs."
+;;   (condition-case err
+;;       (eval (read escaped-elisp-code) t)
+;;     (error
+;;      (llemacs--logging-write-error-pj (format "Local code execution failed: %s" (error-message-string err)))
+;;      nil)))
 
 (defun llemacs--run-elisp-server (escaped-elisp-code &optional emacs-server-file)
   "Run elisp code in remote Emacs server specified by EMACS-SERVER-FILE."
@@ -52,7 +61,7 @@ Llemacs-run called.
                            (shell-quote-argument escaped-code))))
           (shell-command cmd)))
     (error
-     (llemacs--logging-write-error-pj (format "Server code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Server code execution failed: %s" (error-message-string err)))
      nil)))
 
 (defun llemacs--run-elisp (escaped-elisp-code)
@@ -68,8 +77,9 @@ Llemacs-run called.
           ;; Fall back to local if server unavailable
           (llemacs--run-elisp-local escaped-elisp-code)))
     (error
-     (llemacs--logging-write-error-pj (format "Code runution failed: %s" (error-message-string err)))
+     (llemacs--logging-write-error-pj (format "Code execution failed: %s" (error-message-string err)))
      nil)))
 ;; (llemacs--run-elisp '(message "hi"))
+
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

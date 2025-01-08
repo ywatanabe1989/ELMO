@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:29:27
-;;; Time-stamp: <2025-01-06 17:29:27 (ywatanabe)>
+;;; Author: 2025-01-09 02:34:56
+;;; Timestamp: <2025-01-09 02:34:56>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -21,32 +21,34 @@
     (replace-regexp-in-string "\r\n" "\n" (format "%s" content))))
 
 (defun llemacs--logging-get-caller-info ()
-  "Get caller's file and line info."
+  "Get caller's location info (file and line number where logger was called)."
   (let* ((frames (backtrace-frames))
-         (caller-info (catch 'found
-                        (dolist (frame frames)
-                          (let ((func-name (and (car frame)
-                                                (symbolp (cadr frame))
-                                                (symbol-name (cadr frame)))))
-                            (when (and func-name
-                                       (not (string-match "llemacs--logging" func-name)))
-                              (throw 'found frame)))))))
-    (if caller-info
-        (format "%s: L%d"
-                (or (nth 1 (car (last caller-info))) "unknown")
-                (or (nth 2 (car (last caller-info))) 0))
-      "unknown: L0")))
+         (target-frame (cl-find-if
+                        (lambda (frame)
+                          (and (car frame)
+                               (cadr frame)
+                               (not (string-match "^llemacs--logging"
+                                                  (symbol-name (cadr frame))))))
+                        frames))
+         (func-name (if (and target-frame (symbolp (cadr target-frame)))
+                        (symbol-name (cadr target-frame))
+                      "unknown"))
+         (frame-data (and target-frame (cdr target-frame)))
+         (line-number (if (and frame-data (integerp (car frame-data)))
+                          (number-to-string (car frame-data))
+                        "0")))
+    (format "%s: L%s" func-name line-number)))
 
-(defun llemacs--logging-format-message (level message &optional project-id)
-  "Format log MESSAGE with LEVEL and optional PROJECT-ID."
-  (let ((project-id (if (and project-id (string-match "^\\([0-9]+\\)-" project-id))
-                        (match-string 1 project-id)
-                      project-id)))
+(defun llemacs--logging-format-message (level message &optional full-project-name)
+  "Format log MESSAGE with LEVEL and optional FULL-PROJECT-NAME."
+  (let ((full-project-name (if (and full-project-name (string-match "^\\([0-9]+\\)-" full-project-name))
+                               (match-string 1 full-project-name)
+                             full-project-name)))
     (format "%s\n[%s LOG]\n[%s]%s\n=> %s\n%s"
             llemacs--logging-splitter
             (upcase (symbol-name level))
             (llemacs-timestamp)
-            (if project-id (format "[Project: %s]" project-id) "")
+            (if full-project-name (format "[Project: %s]" full-project-name) "")
             (llemacs--logging-get-caller-info)
             (or message "No message"))))
 

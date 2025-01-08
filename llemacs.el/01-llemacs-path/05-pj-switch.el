@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:07:04
-;;; Time-stamp: <2025-01-06 09:07:04 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/103-paths-pj-switch.el
+;;; Author: 2025-01-09 02:16:36
+;;; Timestamp: <2025-01-09 02:16:36>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/05-pj-switch.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -22,6 +22,7 @@
       (error "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
     (setq llemacs--cur-pj pj-id)
     (llemacs--path-pj-update)
+    (llemacs--pj-set-last-pj)
     (llemacs--pj-lock-acquire pj-id)))
 
 (defun llemacs--pj-set-last-pj ()
@@ -55,6 +56,14 @@ Returns error message if format is invalid, nil otherwise."
 
 ;; Add to startup hook
 (add-hook 'after-init-hook #'llemacs--pj-auto-set)
+
+(defun llemacs--pj-init-default ()
+  "Initialize default project at startup."
+  (when (or (not llemacs--cur-pj) (string-empty-p llemacs--cur-pj))
+    (when-let ((default-pj (llemacs--pj-get-default-pj)))
+      (llemacs--pj-switch default-pj))))
+
+(add-hook 'after-init-hook #'llemacs--pj-init-default)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Getter
@@ -90,7 +99,6 @@ Returns error message if format is invalid, nil otherwise."
   "Get default project (last used or latest)."
   (or (llemacs--pj-get-last-pj)
       (llemacs--pj-get-latest-pj)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Switcher

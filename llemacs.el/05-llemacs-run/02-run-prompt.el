@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-05 19:27:33
-;;; Time-stamp: <2025-01-05 19:27:33 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/run-prompt.el
+;;; Author: 2025-01-08 22:31:14
+;;; Timestamp: <2025-01-08 22:31:14>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/02-run-prompt.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -19,7 +19,8 @@
                (recipe-id (or recipe-id default-recipe))
                (full-prompt (llemacs--llm-prompt-embed prompt recipe-id)))
           (llemacs--logging-write-prompt-pj full-prompt)
-          (let ((elisp-code (llemacs--cvt-prompt2elisp full-prompt)))
+          (llemacs--timestamp-set)
+          (let ((elisp-code (llemacs--llm-prompt2elisp full-prompt)))
             (llemacs--logging-write-elisp-pj elisp-code)
             (llemacs--run-elisp elisp-code))))
     (error
