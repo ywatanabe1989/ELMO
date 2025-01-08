@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 08:31:26
-;;; Timestamp: <2025-01-09 08:31:26>
+;;; Author: 2025-01-09 08:55:24
+;;; Timestamp: <2025-01-09 08:55:24>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/01-run-elisp.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -73,7 +73,9 @@ Llemacs-run called.
   (llemacs--timestamp-set)
   (let ((gc-cons-threshold (* 100 1024 1024)))
     (condition-case err
-        (eval elisp-code t)
+        ;; (sleep-for 0.3)
+      (eval elisp-code t)
+      ;; (sleep-for 0.3)
       (error
        (error "llemacs--run-elisp-local failed: %s" (error-message-string err))))))
 
