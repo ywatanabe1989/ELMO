@@ -1,5 +1,8 @@
-<!-- Time-stamp: "2025-01-06 17:19:14 (ywatanabe)" -->
-<!-- File: code-shell-script.md -->
+<!-- ---
+!-- Timestamp: 2025-01-09 18:08:30
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/examples/code-script-shell.md
+!-- --- -->
 
 # Example: code-shell-script
 ``` bash

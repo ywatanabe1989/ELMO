@@ -1,5 +1,8 @@
-<!-- Time-stamp: "2025-01-06 20:04:30 (ywatanabe)" -->
-<!-- File: code-script-elisp.md -->
+<!-- ---
+!-- Timestamp: 2025-01-09 18:08:19
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/examples/code-script-elisp.md
+!-- --- -->
 
 # Exmple: code-script-elisp
 

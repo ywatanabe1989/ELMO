@@ -1,15 +1,13 @@
 <!-- ---
-!-- Timestamp: 2025-01-09 06:27:27
+!-- Timestamp: 2025-01-09 18:08:22
 !-- Author: ywatanabe
-!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_examples/code-script-python.md
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/examples/code-script-python.md
 !-- --- -->
-<!-- Time-stamp: "2025-01-09 06:27:27 (ywatanabe)" -->
-<!-- File: code-python-script.md -->
 
 ``` python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Time-stamp: "2025-01-06 17:16:48 (ywatanabe)"
+# Time-stamp: "2025-01-09 18:08:22 (ywatanabe)"
 # File: test.py
 
 __file__ = "/home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_examples/test.py"

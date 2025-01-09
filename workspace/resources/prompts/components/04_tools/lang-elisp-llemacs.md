@@ -1,4 +1,9 @@
 <!-- ---
+!-- Timestamp: 2025-01-09 18:06:46
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/04_tools/lang-elisp-llemacs.md
+!-- --- -->
+<!-- ---
 !-- title: 2025-01-06 11:24:08
 !-- author: ywata-note-win
 !-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/07_tools/elisp-llemacs.md
