@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
 ;;; Author: 2025-01-09 05:55:41
 ;;; Timestamp: <2025-01-09 05:55:41>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/03-run-prompt-to-elisp-progn-helpers.el
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/03-run-prompt-via-progn-helpers.el
 
 (require 'f)
 

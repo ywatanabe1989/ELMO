@@ -1,18 +1,14 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 19:45:28
-;;; Timestamp: <2025-01-09 19:45:28>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/05-mermaid-save-hook.el
-
-;;; -*- coding: utf-8; lexical-binding: t -*-
 ;;; Author: 2025-01-09 19:33:23
 ;;; Timestamp: <2025-01-09 19:33:23>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/05-mermaid-save-hook.el
 
-(cl-defun llemacs--mermaid-compile (&optional filename buffer)
+
+(defun llemacs--mermaid-compile (&optional filename buffer)
   "Generate PNG, SVG, and GIF from Mermaid content."
   (interactive)
   (when (and (not filename) (not (bound-and-true-p mermaid-mode)))
-    ;; (message "Not in mermaid-mode. Skipping compilation.")
+    (message "Not in mermaid-mode. Skipping compilation.")
     (cl-return-from llemacs--mermaid-compile nil))
   (let ((mmdc-path (llemacs--path-find-bin "mmdc" "mermaid-cli"))
         (convert-path (llemacs--path-find-bin "convert" "magick")))
@@ -69,26 +65,31 @@
 
 (defun llemacs--pj-mermaid-compile ()
   "Compiles project management mermaid diagram into image files.
-Processes /project_management/project_management.mmd in current project
-('llemacs--path-pj-pm-mmd'), generating corresponding
-PNG, SVG, and GIF files."
+  Processes /project_management/project_management.mmd in current project
+  (‘llemacs--path-pj-pm-mmd’), generating corresponding
+  PNG, SVG, and GIF files."
   (llemacs--mermaid-compile llemacs--path-pj-pm-mmd))
 
-;; (defun llemacs--mermaid-after-save-hook ()
-;;   (llemacs--mermaid-compile))
+;; (llemacs--pj-mermaid-compile)
+
+
+(defun llemacs--mermaid-after-save-hook ()
+  (llemacs--mermaid-compile))
 
 (use-package mermaid-mode
   :ensure t
   :custom
   (setq mermaid-output-format ".png")
   :hook
-  ;; (after-save . llemacs--mermaid-after-save-hook)
-  )
+  (after-save . llemacs--mermaid-after-save-hook))
 
 (use-package ob-mermaid
   :ensure t
   :custom
   (ob-mermaid-cli-path "/usr/local/bin/mmdc")
   (ob-mermaid-extra-args "--backgroundColor transparent -f svg"))
+
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

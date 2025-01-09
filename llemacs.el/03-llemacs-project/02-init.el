@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 04:33:31
-;;; Timestamp: <2025-01-09 04:33:31>
+;;; Author: 2025-01-09 18:41:59
+;;; Timestamp: <2025-01-09 18:41:59>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/02-init.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -40,6 +40,7 @@
        (format "No project found for <ID>-<name>: %s" full-pj-name))
       nil)))
 
+
 (defun llemacs--pj-init-pm-mmd (full-pj-name pj-goals)
   "Initialize a mermaid file for project management."
   (with-temp-buffer
@@ -49,11 +50,26 @@
       (replace-match (format "PJNAME[%s]" full-pj-name)))
     (goto-char (point-min))
     (while (search-forward "PJGOALS[Goals]" nil t)
-      (replace-match (format "PJGOALS[%s]" pj-goals)))
+      (replace-match (format "PJGOALS[\"%s\"]" pj-goals)))
     (goto-char (point-min))
     (while (search-forward "\\/workspace\\/projects\\/000-sample-project" nil t)
       (replace-match llemacs--path-pj))
     (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd)))
+
+;; (defun llemacs--pj-init-pm-mmd (full-pj-name pj-goals)
+;;   "Initialize a mermaid file for project management."
+;;   (with-temp-buffer
+;;     (insert-file-contents llemacs--path-pj-pm-mmd)
+;;     (goto-char (point-min))
+;;     (while (search-forward "PJNAME[Project Name]" nil t)
+;;       (replace-match (format "PJNAME[%s]" full-pj-name)))
+;;     (goto-char (point-min))
+;;     (while (search-forward "PJGOALS[Goals]" nil t)
+;;       (replace-match (format "PJGOALS[%s]" pj-goals)))
+;;     (goto-char (point-min))
+;;     (while (search-forward "\\/workspace\\/projects\\/000-sample-project" nil t)
+;;       (replace-match llemacs--path-pj))
+;;     (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd)))
 
 (defun llemacs--pj-init (pj-name &optional goals)
   "Create new project with basic structure."
