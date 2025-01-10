@@ -1,6 +1,6 @@
-# Timestamp: "2025-01-09 17:55:02 (ywatanabe)"
+# Timestamp: "2025-01-10 12:59:23 (ywatanabe)"
 # File: code-elisp-progn.yaml
-# Time-stamp: "2025-01-09 17:55:02 (ywatanabe)"
+# Time-stamp: "2025-01-10 12:59:23 (ywatanabe)"
 # File: code-elisp-progn.yaml
 
 roles:
@@ -19,6 +19,8 @@ rules:
 
 tools:
   - code-elisp-progn-block
+  - llemacs-functions
+  - llemacs-variables  
 
 examples:
   - code-elisp-progn-block

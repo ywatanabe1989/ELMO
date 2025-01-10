@@ -56,12 +56,12 @@
       (let* ((url-request-method "POST")
              (url-request-extra-headers
               `(("Content-Type" . "application/json")
-                ("x-api-key" . ,llemacs--llm-anthropic-key)
+                ("x-api-key" . ,llemacs--llm-api-key-anthropic)
                 ("anthropic-version" . "2023-06-01")))
              (url-request-data
               (encode-coding-string
                (json-encode
-                `(("model" . ,llemacs--llm-anthropic-engine)
+                `(("model" . ,llemacs--llm-engine-anthropic)
                   ("max_tokens" . 8192)
                   ("messages" . [,(list (cons "role" "user")
                                         (cons "content" text))])))
@@ -97,11 +97,11 @@
       (let* ((url-request-method "POST")
              (url-request-extra-headers
               `(("Content-Type" . "application/json")
-                ("Authorization" . ,(concat "Bearer " llemacs--llm-deepseek-key))))
+                ("Authorization" . ,(concat "Bearer " llemacs--llm-api-key-deepseek))))
              (url-request-data
               (encode-coding-string
                (json-encode
-                `(("model" . ,llemacs--llm-deepseek-engine)
+                `(("model" . ,llemacs--llm-engine-deepseek)
                   ("messages" . [,(list (cons "role" "system")
                                         (cons "content" "You are a helpful assistant."))
                                  ,(list (cons "role" "user")
@@ -165,12 +165,12 @@
 ;;       (let* ((url-request-method "POST")
 ;;              (url-request-extra-headers
 ;;               `(("Content-Type" . "application/json")
-;;                 ("x-api-key" . ,llemacs--llm-anthropic-key)
+;;                 ("x-api-key" . ,llemacs--llm-api-key-anthropic)
 ;;                 ("anthropic-version" . "2023-06-01")))
 ;;              (url-request-data
 ;;               (encode-coding-string
 ;;                (json-encode
-;;                 `(("model" . ,llemacs--llm-anthropic-engine)
+;;                 `(("model" . ,llemacs--llm-engine-anthropic)
 ;;                   ("max_tokens" . 8192)
 ;;                   ("messages" . [,(list (cons "role" "user")
 ;;                                         (cons "content" text))])))
@@ -203,11 +203,11 @@
 ;;       (let* ((url-request-method "POST")
 ;;              (url-request-extra-headers
 ;;               `(("Content-Type" . "application/json")
-;;                 ("Authorization" . ,(concat "Bearer " llemacs--llm-deepseek-key))))
+;;                 ("Authorization" . ,(concat "Bearer " llemacs--llm-api-key-deepseek))))
 ;;              (url-request-data
 ;;               (encode-coding-string
 ;;                (json-encode
-;;                 `(("model" . ,llemacs--llm-deepseek-engine)
+;;                 `(("model" . ,llemacs--llm-engine-deepseek)
 ;;                   ("messages" . [,(list (cons "role" "system")
 ;;                                         (cons "content" "You are a helpful assistant."))
 ;;                                  ,(list (cons "role" "user")

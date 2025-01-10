@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 12:24:46
-;;; Timestamp: <2025-01-10 12:24:46>
+;;; Author: 2025-01-10 22:05:38
+;;; Timestamp: <2025-01-10 22:05:38>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/07-prompt-compile.el
 
 (defun llemacs--llm-prompt-embed (prompt recipe-id)
@@ -82,6 +82,7 @@
 ;;          (llemacs--logging-write-error-pj
 ;;           (format "Template Recipe compilation failed:\n%s" err))
 ;;          nil)))))
+
 (defun llemacs--llm-prompt-compile (recipe-id)
   "Compile a prompt template into a single content string based on `llemacs--llm-prompt-recipes`."
   (llemacs--logging-write-debug-pj
@@ -139,5 +140,6 @@
        (llemacs--logging-write-error-pj "Template Recipe compilation failed: %s" (error-message-string err))))))
 
 ;; (llemacs--llm-prompt-compile "code-elisp-progn")
+;; (llemacs--llm-prompt-compile "project-management")
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

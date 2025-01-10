@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 08:44:15
-;;; Timestamp: <2025-01-10 08:44:15>
+;;; Author: 2025-01-10 21:37:54
+;;; Timestamp: <2025-01-10 21:37:54>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/02-core-api-key-and-engine.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -15,32 +15,32 @@
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-anthropic-key (getenv "ANTHROPIC_API_KEY")
+(defcustom llemacs--llm-api-key-anthropic (getenv "ANTHROPIC_API_KEY")
   "API key for Anthropic Claude."
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-anthropic-engine (getenv "ANTHROPIC_ENGINE")
+(defcustom llemacs--llm-engine-anthropic (getenv "ANTHROPIC_ENGINE")
   "Model for Anthropic Claude."
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-google-key (getenv "GOOGLE_API_KEY")
+(defcustom llemacs--llm-api-key-google (getenv "GOOGLE_API_KEY")
   "API key for Google Claude."
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-google-engine (getenv "GOOGLE_ENGINE")
+(defcustom llemacs--llm-engine-google (getenv "GOOGLE_ENGINE")
   "Model for Google Claude."
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-deepseek-key (getenv "DEEPSEEK_API_KEY")
+(defcustom llemacs--llm-api-key-deepseek (getenv "DEEPSEEK_API_KEY")
   "API key for DeepSeek."
   :type 'string
   :group 'llemacs-llm)
 
-(defcustom llemacs--llm-deepseek-engine (getenv "DEEPSEEK_ENGINE")
+(defcustom llemacs--llm-engine-deepseek (getenv "DEEPSEEK_ENGINE")
   "Model for DeepSeek."
   :type 'string
   :group 'llemacs-llm)

@@ -1,6 +1,6 @@
-# Timestamp: "2025-01-09 19:09:34 (ywatanabe)"
+# Timestamp: "2025-01-10 12:59:08 (ywatanabe)"
 # File: project-management.yaml
-# Time-stamp: "2025-01-09 19:09:34 (ywatanabe)"
+# Time-stamp: "2025-01-10 12:59:08 (ywatanabe)"
 # File: project-management.yaml
 
 roles:
@@ -19,6 +19,8 @@ rules:
 tools:
   - project-management-mermaid
   - code-elisp-progn-block
+  - llemacs-functions
+  - llemacs-variables  
 
 examples:
   - project-management-mermaid
