@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 07:37:12
-;;; Timestamp: <2025-01-09 07:37:12>
+;;; Author: 2025-01-10 08:44:03
+;;; Timestamp: <2025-01-10 08:44:03>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/03-core-call-provider.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -13,11 +13,6 @@
 (require 'json)
 (require 'request)
 (require 'cl)
-
-(defcustom llemacs-llm-provider "anthropic"
-  "Switcher for LLM provider"
-  :type 'string
-  :group 'llemacs-llm)
 
 (defcustom llemacs--llm-gemini-script
   (expand-file-name "03-core-gemini_call.py" (file-name-directory (or load-file-name buffer-file-name)))
@@ -46,13 +41,13 @@
                                     llemacs--llm-gemini-script
                                     (shell-quote-argument text)
                                     (shell-quote-argument temp-file))))
-                (error "Python script execution failed"))
+                (llemacs--logging-write-error-pj "Python script execution failed"))
               (with-temp-buffer
                 (insert-file-contents temp-file)
                 (buffer-string)))
           (ignore-errors (delete-file temp-file))))
-    (error
-     (error "Gemini API request failed: %s" (error-message-string err)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Gemini API request failed: %s" (error-message-string err)))))
 
 
 (defun llemacs--llm-claude (text)
@@ -74,9 +69,9 @@
              (buffer (url-retrieve-synchronously
                       "https://api.anthropic.com/v1/messages" t)))
         (unless buffer
-          (error "No response buffer received"))
+          (llemacs--logging-write-error-pj "No response buffer received"))
         (unless (buffer-live-p buffer)
-          (error "Response buffer not alive"))
+          (llemacs--logging-write-error-pj "Response buffer not alive"))
         (with-current-buffer buffer
           (goto-char (point-min))
           (let ((status-line (buffer-substring (point) (line-end-position))))
@@ -87,14 +82,14 @@
                         (json-array-type 'vector))
                     (let ((resp-data (json-read)))
                       (unless resp-data
-                        (error "Empty response data"))
+                        (llemacs--logging-write-error-pj "Empty response data"))
                       (let ((content (alist-get 'content resp-data)))
                         (unless content
-                          (error "No content in response"))
+                          (llemacs--logging-write-error-pj "No content in response"))
                         (alist-get 'text (aref content 0))))))
-              (error "API request failed with status: %s" status-line)))))
-    (error
-     (error "Claude API request failed: %s" (error-message-string err)))))
+              (llemacs--logging-write-error-pj "API request failed with status: %s" status-line)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Claude API request failed: %s" (error-message-string err)))))
 
 (defun llemacs--llm-deepseek (text)
   "Simple text to text processing using DeepSeek API."
@@ -132,11 +127,11 @@
                                    (content (alist-get 'content message)))
                               (if (stringp content)
                                   (decode-coding-string content 'utf-8)
-                                (error "Invalid content in API response")))))))
-                  (error "DeepSeek API request failed with status: %s" status-line))))
-          (error "Failed to retrieve response from DeepSeek API")))
-    (error
-     (error "DeepSeek API request failed: %s" (error-message-string err)))))
+                                (llemacs--logging-write-error-pj "Invalid content in API response")))))))
+                  (llemacs--logging-write-error-pj "DeepSeek API request failed with status: %s" status-line))))
+          (llemacs--logging-write-error-pj "Failed to retrieve response from DeepSeek API")))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "DeepSeek API request failed: %s" (error-message-string err)))))
 
 
 ;; ;; Gemini
@@ -152,13 +147,13 @@
 ;;                                     llemacs--llm-gemini-script
 ;;                                     (shell-quote-argument text)
 ;;                                     (shell-quote-argument temp-file))))
-;;                 (error
+;;                 (llemacs--logging-write-error-pj
 ;;                  (llemacs--logging-write-error-sys "Python script execution failed")))
 ;;               (with-temp-buffer
 ;;                 (insert-file-contents temp-file)
 ;;                 (buffer-string)))
 ;;           (ignore-errors (delete-file temp-file))))
-;;     (error
+;;     (llemacs--logging-write-error-pj
 ;;      (llemacs--logging-write-error-sys (format "Gemini API request failed.\n%s"
 ;;                                                (error-message-string err)))
 ;;      nil)))
@@ -194,9 +189,9 @@
 ;;                         (let ((resp-data (json-read)))
 ;;                           (when resp-data
 ;;                             (alist-get 'text (aref (alist-get 'content resp-data) 0))))))
-;;                   (error "API request failed with status: %s" status-line))))
-;;           (error "Failed to retrieve response")))
-;;     (error
+;;                   (llemacs--logging-write-error-pj "API request failed with status: %s" status-line))))
+;;           (llemacs--logging-write-error-pj "Failed to retrieve response")))
+;;     (llemacs--logging-write-error-pj
 ;;      (llemacs--logging-write-error-sys (format "Claude API request failed.\n%s"
 ;;                                                (error-message-string err)))
 ;;      nil)))
@@ -238,10 +233,10 @@
 ;;                                    (content (alist-get 'content message)))
 ;;                               (if (stringp content)
 ;;                                   (decode-coding-string content 'utf-8)
-;;                                 (error "Invalid content in API response")))))))
-;;                   (error "DeepSeek API request failed with status: %s" status-line))))
-;;           (error "Failed to retrieve response from DeepSeek API")))
-;;     (error
+;;                                 (llemacs--logging-write-error-pj "Invalid content in API response")))))))
+;;                   (llemacs--logging-write-error-pj "DeepSeek API request failed with status: %s" status-line))))
+;;           (llemacs--logging-write-error-pj "Failed to retrieve response from DeepSeek API")))
+;;     (llemacs--logging-write-error-pj
 ;;      (llemacs--logging-write-error-sys (format "DeepSeek API request failed.\n%s"
 ;;                                                (error-message-string err)))
 ;;      nil)))

@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 08:55:24
-;;; Timestamp: <2025-01-09 08:55:24>
+;;; Author: 2025-01-10 11:09:56
+;;; Timestamp: <2025-01-10 11:09:56>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/01-run-elisp.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -30,9 +30,9 @@ Llemacs-run called.
 ;;        ((listp code)
 ;;         code)
 ;;        (t
-;;         (error "Invalid code format")))
-;;     (error
-;;      (error "Code validation failed: %s" (error-message-string err)))))
+;;         (llemacs--logging-write-error-pj "Invalid code format")))
+;;     (llemacs--logging-write-error-pj
+;;      (llemacs--logging-write-error-pj "Code validation failed: %s" (error-message-string err)))))
 
 (defun llemacs--ensure-elisp-code (code)
   "Ensure CODE is in proper format for evaluation."
@@ -43,16 +43,16 @@ Llemacs-run called.
        ((listp code)
         code)
        (t
-        (error "Invalid code format")))
-    (error
-     (error "Code validation failed: %s" (error-message-string err)))))
+        (llemacs--logging-write-error-pj "Invalid code format")))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Code validation failed: %s" (error-message-string err)))))
 
 ;; (defun llemacs--escape-elisp-code (code)
 ;;   "Escape elisp CODE for shell execution."
 ;;   (condition-case err
 ;;       (prin1-to-string code)
-;;     (error
-;;      (error "Code escaping failed: %s" (error-message-string err)))))
+;;     (llemacs--logging-write-error-pj
+;;      (llemacs--logging-write-error-pj "Code escaping failed: %s" (error-message-string err)))))
 
 ;; ----------------------------------------
 ;; Runners
@@ -65,8 +65,8 @@ Llemacs-run called.
 ;;   (let ((gc-cons-threshold (* 100 1024 1024)))
 ;;     (condition-case err
 ;;         (eval (llemacs--ensure-elisp-code elisp-code) t)
-;;       (error
-;;        (error "llemacs--run-elisp-local failed: %s" (error-message-string err))))))
+;;       (llemacs--logging-write-error-pj
+;;        (llemacs--logging-write-error-pj "llemacs--run-elisp-local failed: %s" (error-message-string err))))))
 
 (defun llemacs--run-elisp-local (elisp-code)
   "Run elisp code in local Emacs."
@@ -76,8 +76,8 @@ Llemacs-run called.
         ;; (sleep-for 0.3)
       (eval elisp-code t)
       ;; (sleep-for 0.3)
-      (error
-       (error "llemacs--run-elisp-local failed: %s" (error-message-string err))))))
+      (llemacs--logging-write-error-pj
+       (llemacs--logging-write-error-pj "llemacs--run-elisp-local failed: %s" (error-message-string err))))))
 
 (defun llemacs--run-elisp-server (elisp-code &optional emacs-server-file)
   "Run elisp code in remote Emacs server specified by EMACS-SERVER-FILE."
@@ -86,24 +86,38 @@ Llemacs-run called.
       (let* ((server-file (or emacs-server-file llemacs--path-agent-emacs-server))
              (code-to-send (prin1-to-string (llemacs--ensure-elisp-code elisp-code))))
         (unless (file-exists-p server-file)
-          (error "Emacs server file not found: %s" server-file))
+          (llemacs--logging-write-error-pj "Emacs server file not found: %s" server-file))
         (unless (file-readable-p server-file)
-          (error "No read permission for server file: %s" server-file))
+          (llemacs--logging-write-error-pj "No read permission for server file: %s" server-file))
         (let ((cmd (format "emacsclient -s %s -e %s"
                            (shell-quote-argument server-file)
                            (shell-quote-argument code-to-send))))
           (shell-command cmd)))
-    (error
-     (error "Server code execution failed: %s" (error-message-string err)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Server code execution failed: %s" (error-message-string err)))))
 
 ;; (llemacs--run-elisp-local "(message \"aaa\")") ;; working
 ;; (llemacs--run-elisp-local '(message "aaa")) ;; working
 
+;; (defun llemacs--run-elisp (elisp-code)
+;;   "Run elisp code, trying server first then falling back to local."
+;;   (interactive)
+;;   (llemacs--timestamp-set)
+;;   (condition-case err
+;;       (let ((code (if (stringp elisp-code)
+;;                       (read elisp-code)
+;;                     elisp-code)))
+;;         (if (and llemacs--path-agent-emacs-server
+;;                  (file-exists-p llemacs--path-agent-emacs-server)
+;;                  (file-readable-p llemacs--path-agent-emacs-server))
+;;             (llemacs--run-elisp-server code llemacs--path-agent-emacs-server)
+;;           (llemacs--run-elisp-local code)))
+;;     (llemacs--logging-write-error-pj
+;;      (llemacs--logging-write-error-pj "Code execution failed: %s" (error-message-string err)))))
+
 (defun llemacs--run-elisp (elisp-code)
-  "Run elisp code, trying server first then falling back to local."
-  (interactive)
-  (llemacs--timestamp-set)
-  (condition-case err
+  (llemacs--update-docs)
+  (condition-case-unless-debug err
       (let ((code (if (stringp elisp-code)
                       (read elisp-code)
                     elisp-code)))
@@ -112,8 +126,10 @@ Llemacs-run called.
                  (file-readable-p llemacs--path-agent-emacs-server))
             (llemacs--run-elisp-server code llemacs--path-agent-emacs-server)
           (llemacs--run-elisp-local code)))
-    (error
-     (error "Code execution failed: %s" (error-message-string err)))))
+    ((void-function void-variable error)
+     (llemacs--logging-write-error-pj
+      "Code execution failed: %s"
+      (error-message-string err)))))
 
 ;; (llemacs--run-elisp '(message "hi")) ;; working
 ;; (llemacs--run-elisp "(message \"hi\")") ;; working

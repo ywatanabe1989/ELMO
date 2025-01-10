@@ -18,6 +18,6 @@ If none found, signal an error."
           path)
       (let ((err-msg (format "Executable not found: %s or %s"
                              name alternatives)))
-        (error err-msg)))))
+        (llemacs--logging-write-error-pj err-msg)))))
 
 ;; (llemacs--path-find-bin "python")

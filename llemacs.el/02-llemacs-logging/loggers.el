@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 04:34:36
-;;; Timestamp: <2025-01-09 04:34:36>
+;;; Author: 2025-01-10 12:12:28
+;;; Timestamp: <2025-01-10 12:12:28>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/loggers.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -21,6 +21,7 @@
     (replace-regexp-in-string "\r\n" "\n" (format "%s" content))))
 
 ;; L0 but working
+;; This is not working
 (defun llemacs--logging-get-caller-info ()
   "Get caller's location info (file and line number where logger was called)."
   (let ((i 4)
@@ -36,28 +37,6 @@
     (format "%s: L%d"
             (if found (symbol-name found) "unknown")
             0)))
-
-
-;; (defun llemacs--logging-get-caller-info ()
-;;   "Get caller's location info (file and line number where logger was called)."
-;;   (let ((i 4)
-;;         (found nil)
-;;         (line-num nil))
-;;     (while (and (not found) (< i 20))
-;;       (let* ((frame (backtrace-frame i))
-;;              (func (and frame (cadr frame)))
-;;              (data (and frame (cddr frame)))
-;;              (pos-data (and data (car data))))
-;;         (when (and func
-;;                    (symbolp func)
-;;                    (not (string-prefix-p "llemacs--logging" (symbol-name func))))
-;;           (setq found func)
-;;           (when (markerp pos-data)
-;;             (setq line-num (line-number-at-pos (marker-position pos-data)))))
-;;         (setq i (1+ i))))
-;;     (format "%s: L%d"
-;;             (if found (symbol-name found) "unknown")
-;;             (or line-num 0))))
 
 (defun llemacs--logging-format-message (level message &optional full-project-name)
   "Format log MESSAGE with LEVEL and optional FULL-PROJECT-NAME."
@@ -164,9 +143,20 @@
           ,(format "Log %s MESSAGE" level)
           (llemacs--logging-write ',level message project-id ,(= priority 3)))))))
 
-(defun llemacs--logging-write-error-pj (message &optional project-id)
-  "Log ERROR MESSAGE with PROJECT-ID."
-  (llemacs--logging-write 'error message project-id t))
+
+(defun llemacs--logging-write-error-pj (string &rest args)
+  "Log error message formatted from STRING and ARGS.
+Like built-in error function but logs instead of signaling."
+  (let ((inhibit-quit t))
+    (with-demoted-errors "Logging error: %S"
+      (let ((message (apply #'format string args)))
+        (llemacs--logging-write 'error message nil t)))))
+
+;; ;; Example 1: Simple string
+;; (llemacs--logging-write-error-pj "Something went wrong")
+
+;; ;; Example 2: With format arguments
+;; (llemacs--logging-write-error-pj "Failed to process %s at line %d" "file.txt" 42)
 
 (defun llemacs--logging-write-warn-pj (message &optional project-id)
   "Log WARN MESSAGE with PROJECT-ID."
@@ -200,9 +190,9 @@
 "Log DEBUG MESSAGE with PROJECT-ID."
 (llemacs--logging-write 'debug message project-id nil))
 
-;; (error "aaa")
+;; (llemacs--logging-write-error-pj "aaa")
 ;; (message "from here")
-;; (error "085-Epilepsy-prediction-project")
+;; (llemacs--logging-write-error-pj "085-Epilepsy-prediction-project")
 
 ;; (defun llemacs--logging-define-loggers-pj ()
 ;;   "Define project-level logging functions."

@@ -16,7 +16,7 @@
 ;; (defun llemacs--path-pj-update ()
 ;;   "Update all project-related paths when switching projects."
 ;;   (unless llemacs--cur-pj
-;;     (error "No project selected"))
+;;     (llemacs--logging-write-error-pj "No project selected"))
 
 ;;   ;; Set all path variables first
 ;;   (set 'llemacs--path-pj (expand-file-name llemacs--cur-pj llemacs--path-projects))
@@ -40,7 +40,7 @@
 (defun llemacs--path-pj-update ()
   "Update all project-related paths when switching projects."
   (unless llemacs--cur-pj
-    (error "No project selected"))
+    (llemacs--logging-write-error-pj "No project selected"))
   ;; Set all path variables first
   (setq llemacs--path-pj (expand-file-name llemacs--cur-pj llemacs--path-projects))
   (setq llemacs--path-pj-root llemacs--path-pj)

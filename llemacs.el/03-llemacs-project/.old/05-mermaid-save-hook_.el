@@ -21,7 +21,7 @@
                  (t (current-buffer))))
            (input-file (buffer-file-name buf)))
       (unless input-file
-        (error "Buffer is not visiting a file"))
+        (llemacs--logging-write-error-pj "Buffer is not visiting a file"))
       (let ((output-buffer (get-buffer-create "*mermaid-output*")))
         (with-current-buffer buf
           (llemacs--logging-write-info-pj
@@ -59,9 +59,9 @@
                        (format "Command output:\n%s"
                                (with-current-buffer output-buffer
                                  (buffer-string)))))))
-              (error
+              (llemacs--logging-write-error-pj
                (llemacs--logging-write-error-pj
-                (format "Failed to compile mermaid: %s" (error-message-string err)))))))))))
+                (format "Failed to compile mermaid: %s" (llemacs--logging-write-error-pj-message-string err)))))))))))
 
 (defun llemacs--pj-mermaid-compile ()
   "Compiles project management mermaid diagram into image files.

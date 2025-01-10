@@ -163,7 +163,7 @@
   (let ((valid t))
     (dolist (path paths valid)
       (unless (file-exists-p path)
-        (error "File not found: %s" path)
+        (llemacs--logging-write-error-pj "File not found: %s" path)
         (setq valid nil)))))
 
 (defun llemacs--org-write-figure (figure-path width)

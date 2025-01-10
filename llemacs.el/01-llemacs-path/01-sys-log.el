@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:17:32
-;;; Time-stamp: <2025-01-06 09:17:32 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/100-paths-sys-log.el
+;;; Author: 2025-01-10 12:14:40
+;;; Timestamp: <2025-01-10 12:14:40>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/01-sys-log.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;

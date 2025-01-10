@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 05:32:58
-;;; Timestamp: <2025-01-08 05:32:58>
+;;; Author: 2025-01-10 08:50:07
+;;; Timestamp: <2025-01-10 08:50:07>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/01-groups.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -37,7 +37,7 @@
   :group 'llemacs)
 
 (defgroup llemacs-project nil
-  "Project management for Llemacs."
+  "Project management configurations for Llemacs."
   :group 'llemacs)
 
 (defgroup llemacs-agent nil
@@ -46,6 +46,10 @@
 
 (defgroup llemacs-script nil
   "Agent configurations for Llemacs."
+  :group 'llemacs)
+
+(defgroup llemacs-run nil
+  "Configurations for running the core functions of Llemacs."
   :group 'llemacs)
 
 (defgroup llemacs-secret nil

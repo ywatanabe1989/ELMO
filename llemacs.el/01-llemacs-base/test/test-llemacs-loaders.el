@@ -53,7 +53,7 @@
         (progn
           (json-read-file file)
           t)
-      (error nil))))
+      (llemacs--logging-write-error-pj nil))))
 
 (ert-deftest test-llemacs-json-checker ()
   "Test JSON validation functionality."

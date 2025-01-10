@@ -16,7 +16,7 @@
 (defun llemacs--git-ensure-branch (bin branch)
   (condition-case nil
       (llemacs--run-git-command bin "checkout" branch)
-    (error
+    (llemacs--logging-write-error-pj
      (llemacs--run-git-command bin "checkout" "-b" branch))))
 
 ;; Core Git operations
@@ -37,6 +37,6 @@
         (llemacs--git-add git-bin files)
         (llemacs--git-commit git-bin message)
         (llemacs--git-push git-bin branch))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Git operations failed: %s" err)))))

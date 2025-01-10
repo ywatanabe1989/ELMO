@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 19:59:14
-;;; Timestamp: <2025-01-09 19:59:14>
+;;; Author: 2025-01-10 08:46:55
+;;; Timestamp: <2025-01-10 08:46:55>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -17,9 +17,10 @@
     (load (expand-file-name "02-run-prompt.el" dir))
     (load (expand-file-name "03-run-progn-helpers.el" dir))
     (load (expand-file-name "04-run-progn.el" dir))
+    (load (expand-file-name "04-run-advance-project.el" dir))
     ;; (load (expand-file-name "05-run-project.el" dir))
     (load (expand-file-name "05-run-update-project-management.el" dir))
-    (load (expand-file-name "06-run-step.el" dir))
+    (load (expand-file-name "06-run-steps.el" dir))
     (load (expand-file-name "06-run-auto.el" dir))
     ;; (load (expand-file-name "helpers.el" dir))
     ))

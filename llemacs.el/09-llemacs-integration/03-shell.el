@@ -12,6 +12,6 @@
         (shell-command command)
         (llemacs--logging-write-success-pj
          (format "Shell command completed: %s" command)))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Shell command failed: %s - %s" command err)))))

@@ -29,7 +29,7 @@
      ((equal type "variable") (apropos-variable pat))
      ((equal type "function") (apropos-function pat))
      ((equal type "group") (llemacs--list-groups pat))
-     (t (error "Invalid type: %s" type)))))
+     (t (llemacs--logging-write-error-pj "Invalid type: %s" type)))))
 
 (defun llemacs--list-groups (&optional pattern)
   "List all llemacs custom groups matching PATTERN."

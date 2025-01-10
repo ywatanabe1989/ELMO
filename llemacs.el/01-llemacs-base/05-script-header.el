@@ -51,12 +51,12 @@
 (defun llemacs--script-get-template (type)
   "Get header template for TYPE."
   (or (alist-get type llemacs--script-header-templates)
-      (error "Unsupported script type: %s" type)))
+      (llemacs--logging-write-error-pj "Unsupported script type: %s" type)))
 
 (defun llemacs--script-get-pattern (type)
   "Get header pattern for TYPE."
   (or (alist-get type llemacs--script-header-patterns)
-      (error "Unsupported script type: %s" type)))
+      (llemacs--logging-write-error-pj "Unsupported script type: %s" type)))
 
 (defun llemacs--script-format-header (type file-path)
   "Format header for TYPE and FILE-PATH."

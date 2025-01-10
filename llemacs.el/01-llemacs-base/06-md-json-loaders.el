@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 06:57:40
-;;; Timestamp: <2025-01-08 06:57:40>
+;;; Author: 2025-01-09 20:28:53
+;;; Timestamp: <2025-01-09 20:28:53>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/06-md-json-loaders.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)

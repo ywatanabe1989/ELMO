@@ -43,7 +43,7 @@
       (with-temp-buffer
         (insert-file-contents-literally path)
         (replace-regexp-in-string "\r\n" "\n" (buffer-string)))
-    (error "")))
+    (llemacs--logging-write-error-pj "")))
 
 (defun llemacs--pj-get-contents (path)
   "Read contents of FILE safely."
@@ -66,7 +66,7 @@
         (replace-regexp-in-string "\r\n" "\n"
                                   (shell-command-to-string
                                    (format "tree -a --charset ascii --gitignore -L 3 %s" project-dir)))
-      (error ""))))
+      (llemacs--logging-write-error-pj ""))))
 
 (defvar llemacs--log-entry-limit 7
   "Maximum number of log entries to include in the context.")

@@ -17,9 +17,9 @@
   "Set PJ-ID as the current active project."
   (llemacs--pj-lock-force-release pj-id force)
   (if-let ((err-msg (llemacs--validate-pj-id pj-id)))
-      (error err-msg)
+      (llemacs--logging-write-error-pj err-msg)
     (when-let ((lock-info (llemacs--pj-lock-check pj-id)))
-      (error "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
+      (llemacs--logging-write-error-pj "Project is locked by %s. Only one user/process can switch to and work on a project at a time." lock-info))
     (setq llemacs--cur-pj pj-id)
     (llemacs--path-pj-update)
     (llemacs--pj-set-last-pj)

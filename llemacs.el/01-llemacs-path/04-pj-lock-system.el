@@ -48,7 +48,7 @@
           (with-temp-buffer
             (call-process "ssh" nil t nil host "pgrep" "-u" user "emacs")
             (= (buffer-size) 0))
-        (error t)))))
+        (llemacs--logging-write-error-pj t)))))
 
 (defun llemacs--pj-lock-force-release (pj-id &optional force)
   "Force release lock for PJ-ID. Use with caution."
@@ -65,7 +65,7 @@
   (condition-case err
       (when llemacs--cur-pj
         (llemacs--pj-lock-release llemacs--cur-pj))
-    (error (message "Failed to cleanup lock: %s" err))))
+    (llemacs--logging-write-error-pj (message "Failed to cleanup lock: %s" err))))
 
 (defun llemacs--pj-lock-cleanup-all ()
   "Clean up all stale project locks."

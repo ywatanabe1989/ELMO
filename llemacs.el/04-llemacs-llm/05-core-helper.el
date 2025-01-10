@@ -37,7 +37,7 @@
   (llemacs--logging-api-call provider (symbol-name func))
   (condition-case err
       (apply func args)
-    (error
+    (llemacs--logging-write-error-pj
      (llemacs--llm-api-handle-error err provider)
      (signal 'llemacs--llm-api-error (list provider err)))))
 

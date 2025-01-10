@@ -24,19 +24,19 @@
 (defun llemacs--pj-get-dir (full-pj-name)
   "Get project directory for FULL-PJ-NAME."
   (unless full-pj-name
-    (error "Project ID/name cannot be nil")
+    (llemacs--logging-write-error-pj "Project ID/name cannot be nil")
     (return-from llemacs--pj-get-dir nil))
   (unless (file-exists-p llemacs--path-projects)
-    (error "Projects directory does not exist")
+    (llemacs--logging-write-error-pj "Projects directory does not exist")
     (return-from llemacs--pj-get-dir nil))
   (unless (string-match-p "-" full-pj-name)
-    (error "Project ID must be in format <ID>-<name>")
+    (llemacs--logging-write-error-pj "Project ID must be in format <ID>-<name>")
     (return-from llemacs--pj-get-dir nil))
   (let ((pattern (format "^%s$" full-pj-name)))
     (if-let ((dirname (car (directory-files llemacs--path-projects nil pattern))))
         (progn
           (expand-file-name dirname llemacs--path-projects))
-      (error
+      (llemacs--logging-write-error-pj
        (format "No project found for <ID>-<name>: %s" full-pj-name))
       nil)))
 
@@ -92,7 +92,7 @@
                      llemacs--path-pj))
             (llemacs--pj-init-pm-mmd full-pj-name pj-goals))
           project-id)
-      (error "Project template not found")
+      (llemacs--logging-write-error-pj "Project template not found")
       nil)))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

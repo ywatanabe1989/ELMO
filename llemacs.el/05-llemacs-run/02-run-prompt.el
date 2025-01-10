@@ -23,8 +23,8 @@
 ;;           (llemacs--timestamp-set)
 ;;           (setq elisp-code (llemacs--llm-prompt2elisp full-prompt))
 ;;           (llemacs--run-elisp elisp-code))  ; Remove read here
-;;       (error
-;;        (error "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
+;;       (llemacs--logging-write-error-pj
+;;        (llemacs--logging-write-error-pj "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
 
 ;; ;; org is produced but pdf is not
 ;; (defun llemacs--run-prompt (prompt &optional recipe-id)
@@ -42,8 +42,8 @@
 ;;           (if (stringp elisp-code)
 ;;               (llemacs--run-elisp (read elisp-code))
 ;;             (llemacs--run-elisp elisp-code)))
-;;       (error
-;;        (error "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
+;;       (llemacs--logging-write-error-pj
+;;        (llemacs--logging-write-error-pj "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
 
 ;; (llemacs--run-prompt "plot something" "code-elisp-progn")
 
@@ -57,8 +57,8 @@
           (llemacs--timestamp-set)
           (setq elisp-code (llemacs--llm-prompt2elisp prompt recipe-id))
           (llemacs--run-elisp elisp-code))
-      (error
-       (error "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
+      (llemacs--logging-write-error-pj
+       (llemacs--logging-write-error-pj "Run failed: %s\nCode: %S" (error-message-string err) elisp-code)))))
 
 
 
@@ -67,10 +67,10 @@
   (llemacs--logging-write-prompt-pj prompt-text)
   (llemacs--logging-write-success-pj (format "Successfully executed:\n%s" elisp-code)))
 
-(defun llemacs--run-prompt-after-run-hook-error (error prompt-text)
+(defun llemacs--run-prompt-after-run-hook-error (llemacs--logging-write-error-pj prompt-text)
   "Hook for failed LLEMACS operation."
   (llemacs--logging-write-prompt-pj prompt-text)
   (llemacs--logging-open)
-  (error "llemacs-run-prompt failed.\n%s" error))
+  (llemacs--logging-write-error-pj "llemacs-run-prompt failed.\n%s" error))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

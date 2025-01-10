@@ -1,3 +1,7 @@
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-10 11:40:44
+;;; Timestamp: <2025-01-10 11:40:44>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/03-buf-func.el
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify

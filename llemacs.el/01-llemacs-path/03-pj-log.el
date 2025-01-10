@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:21:48
-;;; Time-stamp: <2025-01-06 09:21:48 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj-log.el
+;;; Author: 2025-01-10 12:10:58
+;;; Timestamp: <2025-01-10 12:10:58>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/03-pj-log.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -47,21 +47,6 @@
 (defalias 'llemacs--path-logs-all-pj 'llemacs--path-pj-logs-all)
 (defalias 'llemacs--path-logs-by-level-pj 'llemacs--path-pj-logs-by-level)
 
-;; (defun llemacs--path-define-log-paths-pj ()
-;;   (dolist (level llemacs--log-levels-pj)
-;;     (let* ((level-name (car level))
-;;            (level-info (cdr level))
-;;            (level-desc (cdr level-info))
-;;            (var-name-1 (intern (format "llemacs--path-pj-logs-%s" level-name)))
-;;            (var-name-2 (intern (format "llemacs--path-logs-%s-pj" level-name))))
-;;       (eval `(defvar ,var-name-1 nil
-;;                ,(format "Path to %s log file for current project. (= `%s')\nSee `llemacs--path-logs-update-pj'."
-;;                         level-name var-name-2)))
-;;       (eval `(defvar ,var-name-2 nil
-;;                ,(format "Path to %s log file for current project (= `%s').\nSee `llemacs--path-logs-update-pj'."
-;;                         level-name var-name-1)))))
-;;   )
-
 (defun llemacs--path-define-log-paths-pj ()
   (let ((msg-base "Log file paths for %s for current project. (= `%s')\nSee `llemacs--path-logs-update-pj'."))
     (dolist (level llemacs--log-levels-pj)
@@ -98,7 +83,7 @@ See also:
 Signals error if no project is selected."
   (llemacs--path-define-log-paths-pj)
   (unless llemacs--cur-pj
-    (error "No project selected"))
+    (llemacs--logging-write-error-pj "No project selected"))
   (dolist (level llemacs--log-levels-pj)
     (let* ((level-name (car level))
            (level-info (cdr level))
@@ -111,6 +96,10 @@ Signals error if no project is selected."
       (set var-name-2 path))))
 
 (llemacs--path-logs-update-pj)
+
+
+;; (my/list "variable" "llemacs--path")
+;; Logging error: (void-variable llemacs--path-logs-error-pj)
 
 ;; (defun llemacs--path-pj-ensure-all ()
 ;;   "Ensure all project directories and log files exist."
