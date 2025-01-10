@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 12:10:58
-;;; Timestamp: <2025-01-10 12:10:58>
+;;; Author: 2025-01-11 08:24:23
+;;; Timestamp: <2025-01-11 08:24:23>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/03-pj-log.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -26,6 +26,13 @@
 
 (defcustom llemacs--path-pj-logs-all
   (expand-file-name "all.log" llemacs--path-pj-logs)
+  "File for current project logs."
+  :type 'file
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
+(defcustom llemacs--path-pj-logs-main
+  (expand-file-name "main.log" llemacs--path-pj-logs)
   "File for current project logs."
   :type 'file
   :group 'llemacs-path
@@ -95,35 +102,6 @@ Signals error if no project is selected."
       (set var-name-1 path)
       (set var-name-2 path))))
 
-(llemacs--path-logs-update-pj)
-
-
-;; (my/list "variable" "llemacs--path")
-;; Logging error: (void-variable llemacs--path-logs-error-pj)
-
-;; (defun llemacs--path-pj-ensure-all ()
-;;   "Ensure all project directories and log files exist."
-;;   (when (and llemacs--cur-pj llemacs--path-pj)
-;;     (let ((pj-id (llemacs--pj-get-cur-pj)))
-;;       ;; Ensure directories
-;;       (dolist (dir (list llemacs--path-pj
-;;                          llemacs--path-pj-config
-;;                          llemacs--path-pj-logs
-;;                          llemacs--path-pj-logs-by-level))
-;;         (unless (file-exists-p dir)
-;;           (make-directory dir t)))
-
-;;       ;; Create log files
-;;       (dolist (level-config llemacs--log-levels-pj)
-;;         (let* ((level (car level-config))
-;;                (log-file (symbol-value (intern (format "llemacs--path-pj-logs-%s" level)))))
-;;           (unless (file-exists-p log-file)
-;;             (with-temp-buffer
-;;               (write-file log-file)))))
-
-;;       ;; Create all.log
-;;       (unless (file-exists-p llemacs--path-pj-logs-all)
-;;         (with-temp-buffer
-;;           (write-file llemacs--path-pj-logs-all))))))
+;; (llemacs--path-logs-update-pj)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

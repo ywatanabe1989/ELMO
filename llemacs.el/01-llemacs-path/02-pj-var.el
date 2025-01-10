@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 05:45:21
-;;; Timestamp: <2025-01-09 05:45:21>
+;;; Author: 2025-01-11 08:44:53
+;;; Timestamp: <2025-01-11 08:44:53>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/02-pj-var.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -41,14 +41,6 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
-;; (defcustom llemacs--path-pj
-;;   (expand-file-name llemacs--cur-pj llemacs--path-projects)
-;;   "Root directory for the current project."
-;;   :type 'directory
-;;   :group 'llemacs-path
-;;   :group 'llemacs-project)
-
-
 (defcustom llemacs--path-pj
   (when llemacs--cur-pj
     (expand-file-name llemacs--cur-pj llemacs--path-projects))
@@ -65,12 +57,23 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
+(defvar llemacs--path-pj-win-shortcut "C:\\Users\\wyusu\\Documents\\current-project-win"
+  "Path for Windows symbolic link creation.")
+
 (defcustom llemacs--path-pj-lock
   (expand-file-name ".lock" llemacs--path-pj)
   "Lock file for the current project."
   :type 'file
   :group 'llemacs-path
   :group 'llemacs-project)
+
+;; (defcustom llemacs--path-pj-lock
+;;   (expand-file-name ".lock" llemacs--path-pj)
+;;   "Lock file path for the current project."
+;;   :type 'file
+;;   :group 'llemacs-path
+;;   :group 'llemacs-project)
+
 
 (defcustom llemacs--path-pj-pm-mmd
   (expand-file-name "project_management/project_management.mmd" llemacs--path-pj)
@@ -141,5 +144,6 @@
   :type 'file
   :group 'llemacs-path
   :group 'llemacs-project)
+
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

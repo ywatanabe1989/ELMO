@@ -33,8 +33,8 @@ LLM integration with multiple provider support.
 (llemacs-llm "Plot sine wave" "code-gen")
 
 ;; Provider switching
-(llemacs--llm-switch-provider "anthropic")
-(llemacs--llm-switch-provider "google")
+(llemacs-llm-switch-provider "anthropic")
+(llemacs-llm-switch-provider "google")
 
 ;; Template usage
 (llemacs--llm-prompt-compile "code-gen")

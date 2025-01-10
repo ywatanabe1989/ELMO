@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:36:42
-;;; Time-stamp: <2025-01-06 17:36:42 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-proj/00-entry.el
+;;; Author: 2025-01-11 08:27:15
+;;; Timestamp: <2025-01-11 08:27:15>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/00-entry.el
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
 ;; This program is free software: you can redistribute it and/or modify
@@ -14,6 +14,7 @@
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
     (load (expand-file-name "01-variables.el" dir))
     (load (expand-file-name "02-init.el" dir))
+    (load (expand-file-name "03-switch.el" dir))
     (load (expand-file-name "03-lock.el" dir))
     (load (expand-file-name "04-collect-context.el" dir))
     (load (expand-file-name "05-mermaid-save-hook.el" dir))))

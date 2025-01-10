@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 05:22:15
-;;; Timestamp: <2025-01-08 05:22:15>
+;;; Author: 2025-01-11 08:46:45
+;;; Timestamp: <2025-01-11 08:46:45>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -19,9 +19,8 @@
     (load (expand-file-name "01-sys-log.el" dir))
     (load (expand-file-name "02-pj-var.el" dir))
     (load (expand-file-name "03-pj-log.el" dir))
-    (load (expand-file-name "04-pj-lock-system.el" dir))
-    (load (expand-file-name "05-pj-switch.el" dir))
-    (load (expand-file-name "06-pj-updater.el" dir))
+    (load (expand-file-name "04-pj-updater.el" dir))
+    (load (expand-file-name "05-pj-symlink.el" dir))
     ))
 
 ;; Initialize components

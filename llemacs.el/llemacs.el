@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 07:37:11
-;;; Timestamp: <2025-01-09 07:37:11>
+;;; Author: 2025-01-10 22:40:33
+;;; Timestamp: <2025-01-10 22:40:33>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/llemacs.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -32,7 +32,6 @@
 ;; Initilize global logging files
 ;; (llemacs--logging-db-init-if)
 ;; (llemacs--logging-system-files-init-if)
-
 
 (provide 'llemacs)
 

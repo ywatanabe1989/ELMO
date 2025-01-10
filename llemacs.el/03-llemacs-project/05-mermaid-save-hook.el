@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 12:36:59
-;;; Timestamp: <2025-01-10 12:36:59>
+;;; Author: 2025-01-11 07:36:04
+;;; Timestamp: <2025-01-11 07:36:04>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/05-mermaid-save-hook.el
 
 ;;; -*- coding: utf-8; lexical-binding: t -*-
@@ -85,6 +85,7 @@
 Processes /project_management/project_management.mmd in current project
 ('llemacs--path-pj-pm-mmd'), generating corresponding
 PNG, SVG, and GIF files."
+  (llemacs--ensure-original-goals)
   (llemacs--mermaid-compile llemacs--path-pj-pm-mmd))
 
 (use-package mermaid-mode

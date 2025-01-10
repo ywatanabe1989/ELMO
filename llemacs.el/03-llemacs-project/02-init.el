@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 18:41:59
-;;; Timestamp: <2025-01-09 18:41:59>
+;;; Author: 2025-01-11 07:39:04
+;;; Timestamp: <2025-01-11 07:39:04>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/02-init.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -40,7 +40,6 @@
        (format "No project found for <ID>-<name>: %s" full-pj-name))
       nil)))
 
-
 (defun llemacs--pj-init-pm-mmd (full-pj-name pj-goals)
   "Initialize a mermaid file for project management."
   (with-temp-buffer
@@ -55,21 +54,6 @@
     (while (search-forward "\\/workspace\\/projects\\/000-sample-project" nil t)
       (replace-match llemacs--path-pj))
     (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd)))
-
-;; (defun llemacs--pj-init-pm-mmd (full-pj-name pj-goals)
-;;   "Initialize a mermaid file for project management."
-;;   (with-temp-buffer
-;;     (insert-file-contents llemacs--path-pj-pm-mmd)
-;;     (goto-char (point-min))
-;;     (while (search-forward "PJNAME[Project Name]" nil t)
-;;       (replace-match (format "PJNAME[%s]" full-pj-name)))
-;;     (goto-char (point-min))
-;;     (while (search-forward "PJGOALS[Goals]" nil t)
-;;       (replace-match (format "PJGOALS[%s]" pj-goals)))
-;;     (goto-char (point-min))
-;;     (while (search-forward "\\/workspace\\/projects\\/000-sample-project" nil t)
-;;       (replace-match llemacs--path-pj))
-;;     (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd)))
 
 (defun llemacs--pj-init (pj-name &optional goals)
   "Create new project with basic structure."
@@ -94,5 +78,58 @@
           project-id)
       (llemacs--logging-write-error-pj "Project template not found")
       nil)))
+
+
+(defun llemacs--pj-init (pj-name goals)
+  "Create new project with basic structure.
+Goals must be provided to set project direction."
+  (interactive
+   (list (read-string "Project Name: ")
+         (read-string "Project Goals (required): ")))
+  (unless goals
+    (user-error "Goals must be provided"))
+  (let* ((project-id (llemacs--pj-get-next-id))
+         (full-pj-name (format "%s-%s" project-id pj-name)))
+    (llemacs--pj-set-cur-pj full-pj-name)
+    (if (file-exists-p llemacs--path-sample-project-zip)
+        (progn
+          (let ((default-directory llemacs--path-projects))
+            (call-process "unzip" nil nil nil llemacs--path-sample-project-zip)
+            (if (file-exists-p full-pj-name)
+                (call-process "rsync" nil nil nil "-av" "--delete"
+                              "000-sample-project/" (concat full-pj-name "/"))
+              (rename-file "000-sample-project" full-pj-name))
+            ;; Write goals to hidden file
+            (let ((goals-file (expand-file-name ".goals.txt"
+                                                (expand-file-name "project_management"
+                                                                  (expand-file-name full-pj-name llemacs--path-projects)))))
+              (make-directory (file-name-directory goals-file) t)
+              (with-temp-file goals-file
+                (insert goals)))
+            (llemacs--logging-write-success-pj
+             (format "Project initialized: %s\nProject directory: %s"
+                     full-pj-name
+                     llemacs--path-pj))
+            (llemacs--pj-init-pm-mmd full-pj-name goals))
+          project-id)
+      (llemacs--logging-write-error-pj "Project template not found")
+      nil)))
+
+
+(defun llemacs--ensure-original-goals ()
+  "Ensure project goals in mermaid file match original goals."
+  (let* ((goals-file (expand-file-name ".goals.txt"
+                                       (expand-file-name "project_management" llemacs--path-pj)))
+         (original-goals (when (file-exists-p goals-file)
+                           (with-temp-buffer
+                             (insert-file-contents goals-file)
+                             (buffer-string)))))
+    (when original-goals
+      (with-temp-buffer
+        (insert-file-contents llemacs--path-pj-pm-mmd)
+        (goto-char (point-min))
+        (when (re-search-forward "PJGOALS\\[\\\"\\(.*?\\)\\\"\\]" nil t)
+          (replace-match (format "PJGOALS[\"%s\"]" original-goals))
+          (write-region (point-min) (point-max) llemacs--path-pj-pm-mmd))))))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

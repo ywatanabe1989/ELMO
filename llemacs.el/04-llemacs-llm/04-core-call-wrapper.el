@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 21:38:56
-;;; Timestamp: <2025-01-10 21:38:56>
+;;; Author: 2025-01-11 09:08:46
+;;; Timestamp: <2025-01-11 09:08:46>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/04-core-call-wrapper.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -16,11 +16,12 @@
   (let* ((text (if recipe-id
                    (llemacs--llm-prompt-embed prompt recipe-id)
                  prompt))
-         (raw-response (pcase llemacs-llm-provider
+         (raw-response (pcase llemacs--llm-provider
                          ("anthropic" (llemacs--llm-claude text))
                          ("google" (llemacs--llm-gemini text))
                          ("deepseek" (llemacs--llm-deepseek text))
-                         (_ (llemacs--logging-write-error-pj "Unknown LLM provider: %s" llemacs-llm-provider))))
+                         ("groq" (llemacs--llm-groq text))
+                         (_ (llemacs--logging-write-error-pj "Unknown LLM provider: %s" llemacs--llm-provider))))
          (response (replace-regexp-in-string "[^[:ascii:]]" "" raw-response)))
     (when (called-interactively-p 'any)
       (message "%s" response))
@@ -28,5 +29,6 @@
 
 ;; (llemacs--llm-prompt-embed "plot something" "code-elisp-progn")
 ;; (llemacs-llm "plot something" "code-elisp-progn")
+;; (llemacs-llm "hello")
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

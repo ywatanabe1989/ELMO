@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:23:43
-;;; Time-stamp: <2025-01-06 17:23:43 (ywatanabe)>
+;;; Author: 2025-01-11 08:22:22
+;;; Timestamp: <2025-01-11 08:22:22>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/level.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -18,5 +18,12 @@
   "Check if LEVEL should be logged based on threshold."
   (>= (llemacs--logging-get-level-value level)
       (llemacs--logging-get-level-value llemacs--logging-level-threshold)))
+
+(defun llemacs--logging-meets-main-log-threshold-p (level)
+  "Check if LEVEL meets or exceeds the main.log threshold."
+  (>= (cadr (assq level llemacs--log-levels-sys))
+      (cadr (assq llemacs--logging-main-log-threshold
+                  llemacs--log-levels-sys))))
+
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

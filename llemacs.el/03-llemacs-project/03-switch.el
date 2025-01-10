@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 02:16:36
-;;; Timestamp: <2025-01-09 02:16:36>
+;;; Author: 2025-01-11 08:26:20
+;;; Timestamp: <2025-01-11 08:26:20>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/05-pj-switch.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -23,7 +23,10 @@
     (setq llemacs--cur-pj pj-id)
     (llemacs--path-pj-update)
     (llemacs--pj-set-last-pj)
-    (llemacs--pj-lock-acquire pj-id)))
+    (llemacs--pj-lock-acquire pj-id)
+    ))
+
+;; (llemacs--pj-update-symlink "103-epilepsty-seizure-detection")
 
 (defun llemacs--pj-set-last-pj ()
   "Save current project ID to file."

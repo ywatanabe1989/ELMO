@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-10 08:44:03
-;;; Timestamp: <2025-01-10 08:44:03>
+;;; Author: 2025-01-11 08:33:12
+;;; Timestamp: <2025-01-11 08:33:12>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/03-core-call-provider.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -20,14 +20,26 @@
   :type 'string
   :group 'llemacs-llm)
 
-(defun llemacs--llm-switch-provider (provider)
+(defun llemacs-llm-switch-provider (provider)
   "Switch the LLM provider."
   (interactive
    (list (completing-read "Select LLM provider: "
-                          '("deepseek" "openai" "anthropic" "google")
+                          '("deepseek" "openai" "anthropic" "google" "groq")
                           nil t)))
-  (setq llemacs-llm-provider provider)
+  (setq llemacs--llm-provider provider)
   (message "Switched LLM provider to: %s" provider))
+
+(defun llemacs--escape-input-text (text)
+  "Escape special characters in TEXT, preserving backticks."
+  (condition-case err
+      (let ((escaped-text (replace-regexp-in-string
+                           "[\\\"]" "\\\\\\&"
+                           (replace-regexp-in-string "`" "\\\\`" text))))
+        escaped-text)
+    (error
+     (llemacs--logging-write-error-pj
+      (format "Text escaping failed: %s" (error-message-string err)))
+     text)))
 
 (defun llemacs--llm-gemini (text)
   "Simple text to text processing using Gemini API."
@@ -39,7 +51,8 @@
                             (format "%s %s %s %s"
                                     llemacs--path-python-sys
                                     llemacs--llm-gemini-script
-                                    (shell-quote-argument text)
+                                    ;; (shell-quote-argument text)
+                                    (shell-quote-argument (llemacs--escape-input-text text))
                                     (shell-quote-argument temp-file))))
                 (llemacs--logging-write-error-pj "Python script execution failed"))
               (with-temp-buffer
@@ -64,7 +77,7 @@
                 `(("model" . ,llemacs--llm-engine-anthropic)
                   ("max_tokens" . 8192)
                   ("messages" . [,(list (cons "role" "user")
-                                        (cons "content" text))])))
+                                        (cons "content" (llemacs--escape-input-text text)))])))
                'utf-8))
              (buffer (url-retrieve-synchronously
                       "https://api.anthropic.com/v1/messages" t)))
@@ -105,7 +118,8 @@
                   ("messages" . [,(list (cons "role" "system")
                                         (cons "content" "You are a helpful assistant."))
                                  ,(list (cons "role" "user")
-                                        (cons "content" text))])
+                                        ;; (cons "content" (llemacs--escape-input-text text)))])))
+                                        (cons "content" (llemacs--escape-input-text text)))])
                   ("stream" . :json-false)))
                'utf-8))
              (buffer (url-retrieve-synchronously
@@ -133,6 +147,48 @@
     (llemacs--logging-write-error-pj
      (llemacs--logging-write-error-pj "DeepSeek API request failed: %s" (error-message-string err)))))
 
+;; Groq
+(defun llemacs--llm-groq (text)
+  "Simple text to text processing using Groq API."
+  (condition-case err
+      (let* ((url-request-method "POST")
+             (url-request-extra-headers
+              `(("Content-Type" . "application/json")
+                ("Authorization" . ,(concat "Bearer " llemacs--llm-api-key-groq))))
+             (url-request-data
+              (encode-coding-string
+               (json-encode
+                `(("model" . ,llemacs--llm-engine-groq)
+                  ("messages" . [,(list (cons "role" "user")
+                                        (cons "content" (llemacs--escape-input-text text)))])))
+               'utf-8))
+             (buffer (url-retrieve-synchronously
+                      "https://api.groq.com/openai/v1/chat/completions" t)))
+        (if buffer
+            (with-current-buffer buffer
+              (goto-char (point-min))
+              (let ((status-line (buffer-substring (point) (line-end-position))))
+                (if (string-match "200 OK" status-line)
+                    (progn
+                      (re-search-forward "^$")
+                      (let* ((json-object-type 'alist)
+                             (json-array-type 'vector)
+                             (resp-data (json-read)))
+                        (when resp-data
+                          (let* ((choices (alist-get 'choices resp-data))
+                                 (first-choice (aref choices 0))
+                                 (message (alist-get 'message first-choice))
+                                 (content (alist-get 'content message)))
+                            (if (stringp content)
+                                (decode-coding-string content 'utf-8)
+                              (llemacs--logging-write-error-pj "Invalid content in API response"))))))
+                  (llemacs--logging-write-error-pj "Groq API request failed with status: %s" status-line))))
+          (llemacs--logging-write-error-pj "Failed to retrieve response from Groq API")))
+    (error
+     (llemacs--logging-write-error-pj
+      (format "Groq API request failed: %s" (error-message-string err))))))
+
+;; (llemacs--llm-groq "hi")
 
 ;; ;; Gemini
 ;; (defun llemacs--llm-gemini (text)

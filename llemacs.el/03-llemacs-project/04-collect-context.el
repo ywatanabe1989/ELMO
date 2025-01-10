@@ -1,7 +1,7 @@
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-05 15:54:16
-;;; Time-stamp: <2025-01-05 15:54:16 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-proj/proj-collect-context.el
+;;; -*- coding: utf-8; lexical-binding: t -*-
+;;; Author: 2025-01-11 08:29:42
+;;; Timestamp: <2025-01-11 08:29:42>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/03-llemacs-project/04-collect-context.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -9,11 +9,6 @@
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-;;
-;;; -*- lexical-binding: t -*-
-;;; Author: 2025-01-05 01:29:18
-;;; Time-stamp: <2025-01-05 01:29:18 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/06-llemacs-proj/proj-collect-context.el
 
 (defun llemacs--pj-get-path-log (full-pj-name &optional log-level)
   "Get path to project's log file. If LOG-LEVEL is nil, return the main log file."
@@ -31,7 +26,7 @@
            ('prompt "logs/by_level/prompt.log")
            ('search "logs/by_level/search.log")
            ('warn "logs/by_level/warn.log"))
-       "logs/logging.log")
+       "logs/all.log")
      project-dir)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -67,9 +62,6 @@
                                   (shell-command-to-string
                                    (format "tree -a --charset ascii --gitignore -L 3 %s" project-dir)))
       (llemacs--logging-write-error-pj ""))))
-
-(defvar llemacs--log-entry-limit 7
-  "Maximum number of log entries to include in the context.")
 
 ;; Main
 (defun llemacs--format-log-entry (log-entry)

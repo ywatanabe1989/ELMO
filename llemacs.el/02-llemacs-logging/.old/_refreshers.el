@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:24:42
-;;; Time-stamp: <2025-01-06 17:24:42 (ywatanabe)>
+;;; Author: 2025-01-11 08:34:55
+;;; Timestamp: <2025-01-11 08:34:55>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/refreshers.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -9,11 +9,6 @@
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
-
-(defcustom llemacs--logging-refresh-interval 5
-  "Interval in seconds for auto-refreshing log buffer."
-  :type 'integer
-  :group 'llemacs-logging)
 
 (defun llemacs--logging-backup-files ()
   "Backup all log files with timestamp."
