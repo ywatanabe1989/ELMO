@@ -53,16 +53,16 @@
   (condition-case err
       (progn
         (unless llemacs--llm-prompt-recipes
-          (error "Template Recipes list is empty"))
+          (llemacs--logging-write-error-pj "Template Recipes list is empty"))
         (let ((found (car (seq-filter (lambda (template)
                                         (equal recipe-id
                                                (plist-get template :id)))
                                       llemacs--llm-prompt-recipes))))
           (unless found
-            (error "Template Recipe not found: %s" recipe-id))
+            (llemacs--logging-write-error-pj "Template Recipe not found: %s" recipe-id))
           found))
-    (error
-     (error "Failed to find template: %s" (error-message-string err)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Failed to find template: %s" (error-message-string err)))))
 
 (defun llemacs--llm-prompt-ensure-markdown-files ()
   "Convert JSON files to markdown if they are newer than their markdown counterparts."
@@ -83,13 +83,13 @@
       (progn
         (llemacs--llm-prompt-ensure-markdown-files)
         (when (null prompt-template-name)
-          (error "Template name required"))
+          (llemacs--logging-write-error-pj "Template name required"))
         (unless (member prompt-template-name llemacs--llm-prompt-available-recipe-ids)
-          (error "Invalid prompt-template name: %s" prompt-template-name))
+          (llemacs--logging-write-error-pj "Invalid prompt-template name: %s" prompt-template-name))
         (llemacs--load-markdown-file
          (expand-file-name (format "%s.md" prompt-template-name) llemacs--path-res-prompt-compiled)))
-    (error
-     (error "Error getting prompt-template: %s" (error-message-string err)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Error getting prompt-template: %s" (error-message-string err)))))
 
 
 (defun llemacs--llm-prompt-get-templates (&rest prompt-template-names)
@@ -106,13 +106,13 @@ If no PROMPT-TEMPLATE-NAMES provided, prompt-template user to select from availa
           (let ((contents ""))
             (dolist (name prompt-template-names)
               (unless (member name llemacs--llm-prompt-available-recipe-ids)
-                (error "Invalid prompt-template name: %s" name))
+                (llemacs--logging-write-error-pj "Invalid prompt-template name: %s" name))
               (let ((content (llemacs--load-markdown-file
                               (expand-file-name (format "%s.md" name) llemacs--path-res-prompt-compiled))))
                 (when content
                   (setq contents (concat contents "\n" content)))))
             (string-trim contents))))
-    (error
-     (error "Error getting prompt-templates: %s" (error-message-string err)))))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj "Error getting prompt-templates: %s" (error-message-string err)))))
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

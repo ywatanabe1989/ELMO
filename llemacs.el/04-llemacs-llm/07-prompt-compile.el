@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-09 04:46:16
-;;; Timestamp: <2025-01-09 04:46:16>
+;;; Author: 2025-01-10 22:05:38
+;;; Timestamp: <2025-01-10 22:05:38>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/04-llemacs-llm/07-prompt-compile.el
 
 (defun llemacs--llm-prompt-embed (prompt recipe-id)
@@ -9,8 +9,8 @@
       (let ((template (llemacs--llm-prompt-compile recipe-id)))
         (when template
           (replace-regexp-in-string "PLACEHOLDER" prompt template t t)))
-    (error
-     (error (format "Failed to embed prompt:\n%s" err))
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj (format "Failed to embed prompt:\n%s" err))
      nil)))
 
 (defun llemacs--llm-prompt-write-compiled (recipe-id content)
@@ -34,7 +34,7 @@
 ;;          )
 ;;     (if (not (file-exists-p recipe-path))
 ;;         (progn
-;;           (error
+;;           (llemacs--logging-write-error-pj
 ;;            (format "Recipe file not found: %s" recipe-path))
 ;;           nil)
 ;;       (condition-case err
@@ -66,7 +66,7 @@
 ;;                                          (concat component ".md")
 ;;                                          (expand-file-name section-type llemacs--path-res-prompt-components))))
 ;;                     (if (not (file-exists-p component-file))
-;;                         (error
+;;                         (llemacs--logging-write-error-pj
 ;;                          (format "Component file not found: %s" component-file))
 ;;                       (setq content
 ;;                             (concat content
@@ -78,10 +78,11 @@
 ;;                   (setq content (concat content splitter-1)))))
 ;;             (llemacs--llm-prompt-write-compiled recipe-id content)
 ;;             (concat start-header content end-header))
-;;         (error
-;;          (error
+;;         (llemacs--logging-write-error-pj
+;;          (llemacs--logging-write-error-pj
 ;;           (format "Template Recipe compilation failed:\n%s" err))
 ;;          nil)))))
+
 (defun llemacs--llm-prompt-compile (recipe-id)
   "Compile a prompt template into a single content string based on `llemacs--llm-prompt-recipes`."
   (llemacs--logging-write-debug-pj
@@ -94,7 +95,7 @@
          (content ""))
 
     (unless (file-exists-p recipe-path)
-      (error "Recipe file not found: %s" recipe-path))
+      (llemacs--logging-write-error-pj "Recipe file not found: %s" recipe-path))
 
     (condition-case err
         (let* ((yaml-data (llemacs--load-yaml-file recipe-path))
@@ -124,7 +125,7 @@
                                        (concat component ".md")
                                        (expand-file-name section-type llemacs--path-res-prompt-components))))
                   (unless (file-exists-p component-file)
-                    (error "Component file not found: %s" component-file))
+                    (llemacs--logging-write-error-pj "Component file not found: %s" component-file))
                   (setq content
                         (concat content
                                 (string-trim
@@ -135,9 +136,10 @@
 
           (llemacs--llm-prompt-write-compiled recipe-id content)
           (concat start-header content end-header))
-      (error
-       (error "Template Recipe compilation failed: %s" (error-message-string err))))))
+      (llemacs--logging-write-error-pj
+       (llemacs--logging-write-error-pj "Template Recipe compilation failed: %s" (error-message-string err))))))
 
 ;; (llemacs--llm-prompt-compile "code-elisp-progn")
+;; (llemacs--llm-prompt-compile "project-management")
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

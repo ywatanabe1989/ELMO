@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 17:24:25
-;;; Time-stamp: <2025-01-06 17:24:25 (ywatanabe)>
+;;; Author: 2025-01-11 08:37:30
+;;; Timestamp: <2025-01-11 08:37:30>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/02-llemacs-logging/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -12,15 +12,11 @@
 
 (defun llemacs--load-logging-components ()
   (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-    ;; Core components
-    (load (expand-file-name "variables.el" dir))
-
-    ;; File components
-    (load (expand-file-name "getters.el" dir))
-    (load (expand-file-name "level.el" dir))
-    (load (expand-file-name "loggers.el" dir))
-    (load (expand-file-name "refreshers.el" dir))
-    (load (expand-file-name "viewers.el" dir))))
+    (load (expand-file-name "01-variables.el" dir))
+    (load (expand-file-name "02-get.el" dir))
+    (load (expand-file-name "03-level.el" dir))
+    (load (expand-file-name "04-write.el" dir))
+    (load (expand-file-name "05-view.el" dir))))
 
 ;; Initialize components
 (llemacs--load-logging-components)

@@ -1,15 +1,30 @@
-# Time-stamp: "2025-01-06 16:08:48 (ywatanabe)"
+# Timestamp: "2025-01-11 02:00:26 (ywatanabe)"
 # File: project-management.yaml
 
-- roles/project-manager
-- roles/elisp-generator
-- tasks/project-management
-- tasks/code-generation-elisp
-- rules/code-formatting-elisp
-- rules/proj-structure
-- rules/code-logging
-- rules/results-formatting-org-report
-- rules/proj-project-management-using-mermaid
-- rules/proj-context-update
-- examples/elisp
-- requests/user-input
+roles:
+  - project-manager
+
+tasks:
+  - project-management-understanding
+  - project-management-review
+  - project-management-revision
+
+rules:
+  - code-elisp-progn-block
+  - code-logging
+  - project-management-mermaid # development
+  # - llemacs  
+
+tools:
+  - project-management-mermaid
+  - code-elisp-progn-block
+  # - llemacs-functions
+  # - llemacs-variables  
+
+examples:
+  - project-management-mermaid
+  - project-structure  
+
+requests:  
+  - code-elisp-progn-block
+  - project-management-mermaid

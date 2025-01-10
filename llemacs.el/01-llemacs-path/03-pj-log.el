@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:21:48
-;;; Time-stamp: <2025-01-06 09:21:48 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/101-paths-pj-log.el
+;;; Author: 2025-01-11 08:24:23
+;;; Timestamp: <2025-01-11 08:24:23>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-path/03-pj-log.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;
@@ -31,6 +31,13 @@
   :group 'llemacs-path
   :group 'llemacs-project)
 
+(defcustom llemacs--path-pj-logs-main
+  (expand-file-name "main.log" llemacs--path-pj-logs)
+  "File for current project logs."
+  :type 'file
+  :group 'llemacs-path
+  :group 'llemacs-project)
+
 (defcustom llemacs--path-pj-logs-by-level
   (expand-file-name "by_level" llemacs--path-pj-logs)
   "Directory for current project logs."
@@ -46,21 +53,6 @@
 (defalias 'llemacs--path-logs-backup-pj 'llemacs--path-pj-logs-backup)
 (defalias 'llemacs--path-logs-all-pj 'llemacs--path-pj-logs-all)
 (defalias 'llemacs--path-logs-by-level-pj 'llemacs--path-pj-logs-by-level)
-
-;; (defun llemacs--path-define-log-paths-pj ()
-;;   (dolist (level llemacs--log-levels-pj)
-;;     (let* ((level-name (car level))
-;;            (level-info (cdr level))
-;;            (level-desc (cdr level-info))
-;;            (var-name-1 (intern (format "llemacs--path-pj-logs-%s" level-name)))
-;;            (var-name-2 (intern (format "llemacs--path-logs-%s-pj" level-name))))
-;;       (eval `(defvar ,var-name-1 nil
-;;                ,(format "Path to %s log file for current project. (= `%s')\nSee `llemacs--path-logs-update-pj'."
-;;                         level-name var-name-2)))
-;;       (eval `(defvar ,var-name-2 nil
-;;                ,(format "Path to %s log file for current project (= `%s').\nSee `llemacs--path-logs-update-pj'."
-;;                         level-name var-name-1)))))
-;;   )
 
 (defun llemacs--path-define-log-paths-pj ()
   (let ((msg-base "Log file paths for %s for current project. (= `%s')\nSee `llemacs--path-logs-update-pj'."))
@@ -98,7 +90,7 @@ See also:
 Signals error if no project is selected."
   (llemacs--path-define-log-paths-pj)
   (unless llemacs--cur-pj
-    (error "No project selected"))
+    (llemacs--logging-write-error-pj "No project selected"))
   (dolist (level llemacs--log-levels-pj)
     (let* ((level-name (car level))
            (level-info (cdr level))
@@ -110,31 +102,6 @@ Signals error if no project is selected."
       (set var-name-1 path)
       (set var-name-2 path))))
 
-(llemacs--path-logs-update-pj)
-
-;; (defun llemacs--path-pj-ensure-all ()
-;;   "Ensure all project directories and log files exist."
-;;   (when (and llemacs--cur-pj llemacs--path-pj)
-;;     (let ((pj-id (llemacs--pj-get-cur-pj)))
-;;       ;; Ensure directories
-;;       (dolist (dir (list llemacs--path-pj
-;;                          llemacs--path-pj-config
-;;                          llemacs--path-pj-logs
-;;                          llemacs--path-pj-logs-by-level))
-;;         (unless (file-exists-p dir)
-;;           (make-directory dir t)))
-
-;;       ;; Create log files
-;;       (dolist (level-config llemacs--log-levels-pj)
-;;         (let* ((level (car level-config))
-;;                (log-file (symbol-value (intern (format "llemacs--path-pj-logs-%s" level)))))
-;;           (unless (file-exists-p log-file)
-;;             (with-temp-buffer
-;;               (write-file log-file)))))
-
-;;       ;; Create all.log
-;;       (unless (file-exists-p llemacs--path-pj-logs-all)
-;;         (with-temp-buffer
-;;           (write-file llemacs--path-pj-logs-all))))))
+;; (llemacs--path-logs-update-pj)
 
 (message "%s was loaded." (file-name-nondirectory (or load-file-name buffer-file-name)))

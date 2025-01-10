@@ -1,6 +1,6 @@
-# Timestamp: "2025-01-09 04:00:07 (ywatanabe)"
+# Timestamp: "2025-01-11 02:00:34 (ywatanabe)"
 # File: code-elisp-progn.yaml
-# Time-stamp: "2025-01-09 04:00:07 (ywatanabe)"
+# Time-stamp: "2025-01-11 02:00:34 (ywatanabe)"
 # File: code-elisp-progn.yaml
 
 roles:
@@ -16,9 +16,12 @@ rules:
   - code-script-shell
   - code-logging
   - project-structure
+  # - llemacs
 
 tools:
   - code-elisp-progn-block
+  # - llemacs-functions
+  # - llemacs-variables  
 
 examples:
   - code-elisp-progn-block

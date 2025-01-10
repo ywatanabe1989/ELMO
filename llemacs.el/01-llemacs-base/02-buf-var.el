@@ -1,7 +1,7 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-06 09:35:24
-;;; Time-stamp: <2025-01-06 09:35:24 (ywatanabe)>
-;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/010-buf-var.el
+;;; Author: 2025-01-10 08:50:16
+;;; Timestamp: <2025-01-10 08:50:16>
+;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/02-buf-var.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
 ;;

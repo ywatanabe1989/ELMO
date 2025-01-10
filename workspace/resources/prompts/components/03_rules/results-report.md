@@ -1,19 +1,30 @@
-<!-- Time-stamp: "2025-01-06 16:28:42 (ywatanabe)" -->
-<!-- File: results-report.md -->
 <!-- ---
-!-- title: 2025-01-05 09:06:17
-!-- author: Yusuke Watanabe
-!-- date: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/results-formatting-org-report.md
+!-- Timestamp: 2025-01-10 11:44:41
+!-- Author: ywatanabe
+!-- File: /home/ywatanabe/proj/llemacs/workspace/resources/prompts/components/03_rules/results-report.md
 !-- --- -->
 
 # Rule: results-report
-* Summarize all the outputs (e.g., code, data, images...) into an org file
-* Insert the PNG version of the Mermaid project management diagram (`llemacs--path-pj-pm-mmd`) at the beginning of the org file
-* Save the org file under `(expand-file-name (llemacs--timestamp) llemacs--path-pj-results)` directory
-* Show the org file into the buffer popuped by the following Elisp function: 
+* Reports should be saved as this org file: 
+  * '(expand-file-name "report.org" (expand-file-name (llemacs-timestamp) llemacs--path-pj-results))'
+* After the creation, the org report file should be rendered as PDF
+  * '(expand-file-name "report.pdf" (expand-file-name (llemacs-timestamp) llemacs--path-pj-results))'
+* Reports should include the followings in this order:
+  * LINKS TO FILE PATH OR DIRECTORY (when the number of files is large) of:
+    * The project home directory
+    * The mermaid SVG file for project management (with rendering the PNG image inline)
+    * Scripts produced in the step
+    * Figures produced in the step (with rendering the images inline)
+    * Tables produced in the step
+    * Data produced in the step
+    * Reports produced in the step
+* Results should not include:
+  * Logs
+  * scripts them selves
+* Show the org file in the 'llemacs--buf-main-pj' buffer using the following Elisp function: 
 ```elisp
 (defun llemacs--buf-disp-main-pj (&optional file-path enable-q enable-readonly enable-org)
-  "Display BUFFER with specified parameters.
+  "Display 'llemacs--buf-main-pj' BUFFER with specified parameters.
 
 Example:
 (llemacs--buf-disp-main-pj \"~/test.txt\" t t t)
@@ -25,11 +36,9 @@ ENABLE-READONLY - Make buffer read-only
 ENABLE-ORG - Enable org-mode"
 ...)
 ```
-* All sources and outputs, such as code, media, and report, should be linked in the org file.
-* Convert the org file to PDF after completion and save to `(expand-file-name "pdf" llemacs--path-pj-results)`
 * Images should be displayed inline mode, using `(org-display-inline-images)` and `(org-redisplay-inline-images)`
-* `IMAGE_WIDTH` should be 400
-* Insert the directory path of the org file at the top of the contents
+  * `IMAGE_WIDTH` should be 400
+
 * Expected report is like this:
 ``` org
 #+TITLE: EEG Feature Extraction Report
@@ -50,4 +59,4 @@ ENABLE-ORG - Enable org-mode"
 #+ATTR_HTML: :width 400
 #+ATTR_LATEX: :float t :placement [H]
 [[file:/home/ywatanabe/proj/llemacs/workspace/projects/077-dsp-project/results/figures/eeg_features_20250105-064405.jpg]]
-```
+    ```

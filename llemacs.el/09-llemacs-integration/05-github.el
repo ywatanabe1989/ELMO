@@ -6,7 +6,7 @@
 (defun llemacs--ensure-gh-auth ()
   (condition-case err
       (llemacs--run-gh-command "auth" "status")
-    (error
+    (llemacs--logging-write-error-pj
      (llemacs--logging-write-info-pj "Authenticating with GitHub...")
      (llemacs--run-gh-command "auth" "login"))))
 
@@ -17,8 +17,8 @@
           (llemacs--run-git-command git-bin "add" file))
         (llemacs--run-git-command git-bin "commit" "-m" message)
         (llemacs--run-git-command git-bin "push" "origin" branch))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Git operations failed: %s" err)))))
 
 (defun llemacs--create-ticket (title body)
@@ -28,8 +28,8 @@
         (llemacs--run-gh-command gh-bin "issue" "create"
                                  "--title" title
                                  "--body" body))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Failed to create ticket: %s" err)))))
 
 ;; GitHub CLI wrapper
@@ -44,7 +44,7 @@
   (condition-case err
       (let ((gh-bin (llemacs--path-find-bin "gh")))
         (llemacs--run-gh-command gh-bin "auth" "status"))
-    (error
+    (llemacs--logging-write-error-pj
      (llemacs--logging-write-info-pj "Authenticating with GitHub...")
      (llemacs--run-gh-command gh-bin "auth" "login"))))
 
@@ -65,6 +65,6 @@
       (let ((gh-bin (llemacs--path-find-bin "gh")))
         (llemacs--ensure-gh-auth)
         (llemacs--gh-create-issue gh-bin title body))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Failed to create ticket: %s" err)))))

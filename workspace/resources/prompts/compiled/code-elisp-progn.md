@@ -420,7 +420,7 @@ If none found, signal an error."
 REQUESTS
 ====================
 # Request: code-elisp-progn-block
-* Using the context above, return only ONE ELISP PROGN CODE BLOCK, using the `progn` command
+* Based on the context above, return ONE ELISP PROGN CODE BLOCK using the `progn` command
 --------------------
 # Request: user-input
 * Using the above context, please solve my request below:

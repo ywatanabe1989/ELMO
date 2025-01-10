@@ -15,6 +15,6 @@
           (eval `(funcall ',(intern (file-name-base script)) ,@args)))
         (llemacs--logging-write-success-pj
          (format "Elisp script completed: %s" script)))
-    (error
-     (error
+    (llemacs--logging-write-error-pj
+     (llemacs--logging-write-error-pj
       (format "Elisp script failed: %s - %s" script err)))))

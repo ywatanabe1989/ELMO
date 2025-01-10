@@ -14,5 +14,5 @@
 
 (let ((llemacs--cur-pj "085-Epilepsy-prediction-project"))
   (defun llemacs--test-logging ()
-    (error "Test error message"))
+    (llemacs--logging-write-error-pj "Test error message"))
   (llemacs--test-logging))

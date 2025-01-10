@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-08 05:21:37
-;;; Timestamp: <2025-01-08 05:21:37>
+;;; Author: 2025-01-10 21:31:34
+;;; Timestamp: <2025-01-10 21:31:34>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/01-llemacs-base/00-entry.el
 
 ;; Copyright (C) 2024-2025 Yusuke Watanabe (ywatanabe@alumni.u-tokyo.ac.jp)
@@ -21,7 +21,9 @@
     (load (expand-file-name "03-buf-func.el" dir))
     (load (expand-file-name "04-timestamp.el" dir))
     (load (expand-file-name "05-script-header.el" dir))
-    (load (expand-file-name "06-md-json-loaders.el" dir))))
+    (load (expand-file-name "06-md-json-loaders.el" dir))
+    (load (expand-file-name "07-doc-generation.el" dir))
+    ))
 
 ;; Initialize components
 (llemacs--load-base-components)
