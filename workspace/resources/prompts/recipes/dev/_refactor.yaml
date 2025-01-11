@@ -1,0 +1,33 @@
+# Timestamp: "2025-01-11 19:14:23 (ywatanabe)"
+# File: _refactor.yaml
+roles:
+  - refactorer
+
+tasks:
+  - analyze-code-quality
+  - suggest-improvements
+  - implement-changes
+
+rules:
+  - code-script-elisp
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+  
+# (defvar llemacs--prompts-refactor
+#   '(:user "Refactor the following code:
+# Code to refactor: {code}
+
+# Please provide:
+# 1. Improved code structure
+# 2. Enhanced readability
+# 3. Performance optimizations
+# 4. Updated documentation"))

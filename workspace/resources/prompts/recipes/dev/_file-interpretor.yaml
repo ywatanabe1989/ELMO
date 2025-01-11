@@ -1,0 +1,45 @@
+# Timestamp: "2025-01-11 19:14:51 (ywatanabe)"
+# File: _file-interpretor.yaml
+roles:
+  - file-handler
+
+tasks:
+  - read-files
+  - concatenate-content
+  - display-output
+
+rules:
+  - file-operations
+  - content-handling
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+#   (defvar llemacs--prompts-cat-file
+#   '(:user "Process file operations:
+# Files to process: {files}
+# Operation type: {operation}
+# Output format: {format}
+
+# Required:
+# 1. Combined content
+# 2. Processing status
+# 3. Error handling"))
+
+
+# (defvar llemacs--prompts-cat-file
+#   '(:user "Process file operations:
+# Files: {files}
+# Operation: {operation}
+# Format: {format}
+
+# Please provide:
+# 1. Combined content
+# 2. Processing status
+# 3. Error reports"))

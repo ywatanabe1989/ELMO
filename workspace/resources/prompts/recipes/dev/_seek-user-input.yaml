@@ -1,0 +1,34 @@
+# Timestamp: "2025-01-11 19:10:50 (ywatanabe)"
+# File: _seek-user-input.yaml
+roles:
+  - user-interface
+
+tasks:
+  - prompt-user
+  - process-input
+  - validate-response
+
+rules:
+  - user-interaction
+  - input-validation
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+# (defvar llemacs--prompts-seek-user-input
+#   '(:user "Request user input:
+# Query type: {type}
+# Options: {options}
+# Validation rules: {rules}
+
+# Provide:
+# 1. Formatted prompt
+# 2. Input validation
+# 3. Response handling"))
+  

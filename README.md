@@ -1,81 +1,199 @@
 <!-- ---
-!-- Timestamp: 2025-01-11 09:54:45
+!-- Timestamp: 2025-01-11 18:13:16
 !-- Author: ywatanabe
 !-- File: /home/ywatanabe/proj/llemacs/README.md
 !-- --- -->
-<!-- Time-stamp: "2025-01-11 09:54:45 (ywatanabe)" -->
-<!-- File: README.md -->
-<!-- ---
-!-- title: 2025-01-06 12:14:35
-!-- author: ywata-note-win
-!-- date: /home/ywatanabe/proj/llemacs/README.md
-!-- --- -->
 
 # Llemacs — LLM Agents on Emacs
-<img src="./docs/logo/llemacs.gif" width="100" alt="Llemacs Logo">
-Llemacs is a file-based LLM agent system implemented in Elisp
 
+<img src="./docs/logo/llemacs.gif" width="100" alt="Llemacs Logo" />
+
+Llemacs is a file-based LLM agent system implemented in Emacs Lisp. It aims to automate or assist project tasks by integrating text generation, structured logging, project management, and container sandboxing (via Apptainer).
+
+--------------------------------------------------------------------------------
 ## Features
-- [x] Multiple LLM provider support (Anthropic/Google/DeepSeek)
-- [x] Structured logging with SQLite and file-based systems
-- [x] Template-based prompt management
-- [x] Mermaid-based project visualization
-- [x] Containerized execution via Apptainer
-- [ ] Version control integration
-- [ ] Capture user corrections
-- [ ] Learning Mechanism
-  - Store successful patterns
-  - PR feedback as metrics
+--------------------------------------------------------------------------------
 
+- [x] Multiple LLM provider support (Anthropic / Google / DeepSeek)  
+- [x] Structured logging with SQLite and file-based systems  
+- [x] Template-based prompt management  
+- [x] Mermaid-based project visualization  
+- [x] Containerized execution via Apptainer  
+- [ ] Version control integration (planned)  
+- [ ] Capture user corrections  
+- [ ] Learning Mechanism (planned)  
+  - Store successful patterns  
+  - Use PR feedback as metrics  
+
+--------------------------------------------------------------------------------
 ## Disclaimer
-- This repository is under active development
-- The system is not yet fully functional yet
+--------------------------------------------------------------------------------
+
+- This repository is under active development, so APIs may change without notice.  
+- The system is not yet fully functional in all areas.  
 - Although Apptainer restricts agent access to the [`./workspace`](./workspace) directory, we assume no responsibility for any unintended file modifications.
 
-## Automatic project development
+--------------------------------------------------------------------------------
+## Quick Start
+--------------------------------------------------------------------------------
 
-``` elisp
+1. Clone this repository and install dependencies (see [Installation](#installation) below).  
+2. Load Llemacs in Emacs by adding something like:  
+   ```elisp
+   (load-file "/path/to/llemacs/llemacs.el")
+   (require 'llemacs)
+   ```
+3. Prepare environment variables for at least one LLM provider (e.g. Google).  
+4. (Optional) If you plan to run inside an Apptainer container, see “Permission control via Apptainer” below.  
+5. Try running a simple example:  
+
+   ```elisp
+   ;; Switch to a provider and attempt a prompt:
+   (llemacs-llm-switch-provider "google")
+   (llemacs--run-prompt "Hello from Llemacs!" "code-elisp-progn")
+   ```
+
+--------------------------------------------------------------------------------
+## Automatic Project Development
+--------------------------------------------------------------------------------
+
+The snippet below demonstrates how you might initialize a project, link it (on WSL), perform multiple “steps,” and then monitor progress—all from Emacs Lisp:
+
+```elisp
 (llemacs-llm-switch-provider "google")
 
 (progn
-  ;; Initialize a project: setting project-name and goals
+  ;; 1. Initialize a project with a given name and goals
   (llemacs--pj-init 
       "epilepsy-prediction-project" 
       "- Create demo ECoG signals sampled at 400 Hz with 16 channels
        - Create a demo script to classify preictal vs. interictal states using machine learning
-       - Evaluate the performances using balanced accuracy, with plotting confusion matrix")
-       
-  ;; On WSL: Symlink to file:///C:/Users/wyusu/Documents/current-project-win
+       - Evaluate performances using balanced accuracy and plot a confusion matrix")
+
+  ;; 2. On WSL, create a symlink to file:///C:/Users/wyusu/Documents/current-project-win
   (llemacs--path-pj-update-symlink) 
 
-  ;; Single thread version for debugging: (llemacs-run--steps 7)
+  ;; 3. Automated multi-step development
+  ;;    Single-thread version for debugging might be (llemacs-run--steps 7)
   (llemacs-run-steps 7)
   
-  ;; Monitoring automatic development
+  ;; 4. Open a monitoring layout
   (llemacs-monitor)
 )
 ```
 
+--------------------------------------------------------------------------------
 ## Installation
-[`./docs/installation.md`](./docs/installation.md)
+--------------------------------------------------------------------------------
 
+See [`./docs/installation.md`](./docs/installation.md) for detailed instructions on:
+
+- Setting up Emacs Lisp  
+- Installing Python dependencies  
+- Configuring environment variables (LLM API keys, Git info, etc.)  
+- Enabling Mermaid for diagram generation  
+
+--------------------------------------------------------------------------------
 ## Architecture
-<a href="./docs/project_flow/project_flow.svg">
-    <img src="./docs/project_flow/project_flow.gif" alt="Project Flow" width="800">
+--------------------------------------------------------------------------------
+
+<a href="./docs/project_flow/project_flow.png">
+  <img src="./docs/project_flow/project_flow.gif" alt="Project Flow" width="800">
 </a>
 
-Generated by mermaid ([source](./docs/project_flow/project_flow.mmd)), which will be helpful for both users and agents.
+The image above (generated by Mermaid from [this source](./docs/project_flow/project_flow.mmd)) illustrates how Llemacs components interact to manage projects, handle prompts, log outputs, and more.
 
-## Permission control via Apptainer
+--------------------------------------------------------------------------------
+## Permission Control via Apptainer
+--------------------------------------------------------------------------------
 
-Apptainer provides permission control by restricting agent access to the workspace directory only.
+Apptainer provides a sandboxed environment by restricting agent access to the `./workspace` directory only:
 
-``` bash
+```bash
 main -m build  # Create sandbox
 main -m shell  # Enter sandbox
 main -m run    # Launch Emacs as an agent
 ```
 
+--------------------------------------------------------------------------------
 ## Contact
-- support@llemacs.com
-- Yusuke.Watanabe@unimelb.edu.au
+--------------------------------------------------------------------------------
+
+- support@llemacs.com  
+- Yusuke.Watanabe@unimelb.edu.au  
+
+Feel free to reach out with ideas, bug reports, or pull requests!
+<!-- <\!-- ---
+ !-- !-- Timestamp: 2025-01-11 17:44:43
+ !-- !-- Author: ywatanabe
+ !-- !-- File: /home/ywatanabe/proj/llemacs/README.md
+ !-- !-- --- -\->
+ !-- 
+ !-- # Llemacs — LLM Agents on Emacs
+ !-- <img src="./docs/logo/llemacs.gif" width="100" alt="Llemacs Logo">
+ !-- Llemacs is a file-based LLM agent system implemented in Elisp
+ !-- 
+ !-- ## Features
+ !-- - [x] Multiple LLM provider support (Anthropic/Google/DeepSeek)
+ !-- - [x] Structured logging with SQLite and file-based systems
+ !-- - [x] Template-based prompt management
+ !-- - [x] Mermaid-based project visualization
+ !-- - [x] Containerized execution via Apptainer
+ !-- - [ ] Version control integration
+ !-- - [ ] Capture user corrections
+ !-- - [ ] Learning Mechanism
+ !--   - Store successful patterns
+ !--   - PR feedback as metrics
+ !-- 
+ !-- ## Disclaimer
+ !-- - This repository is under active development
+ !-- - The system is not yet fully functional yet
+ !-- - Although Apptainer restricts agent access to the [`./workspace`](./workspace) directory, we assume no responsibility for any unintended file modifications.
+ !-- 
+ !-- ## Automatic project development
+ !-- 
+ !-- ``` elisp
+ !-- (llemacs-llm-switch-provider "google")
+ !-- 
+ !-- (progn
+ !--   ;; Initialize a project: setting project-name and goals
+ !--   (llemacs--pj-init 
+ !--       "epilepsy-prediction-project" 
+ !--       "- Create demo ECoG signals sampled at 400 Hz with 16 channels
+ !--        - Create a demo script to classify preictal vs. interictal states using machine learning
+ !--        - Evaluate the performances using balanced accuracy, with plotting confusion matrix")
+ !--        
+ !--   ;; On WSL: Symlink to file:///C:/Users/wyusu/Documents/current-project-win
+ !--   (llemacs--path-pj-update-symlink) 
+ !-- 
+ !--   ;; Single thread version for debugging: (llemacs-run--steps 7)
+ !--   (llemacs-run-steps 7)
+ !--   
+ !--   ;; Monitoring automatic development
+ !--   (llemacs-monitor)
+ !-- )
+ !-- ```
+ !-- 
+ !-- ## Installation
+ !-- [`./docs/installation.md`](./docs/installation.md)
+ !-- 
+ !-- ## Architecture
+ !-- <a href="./docs/project_flow/project_flow.png">
+ !--     <img src="./docs/project_flow/project_flow.gif" alt="Project Flow" width="800">
+ !-- </a>
+ !-- 
+ !-- Generated by mermaid ([source](./docs/project_flow/project_flow.mmd)), which will be helpful for both users and agents.
+ !-- 
+ !-- ## Permission control via Apptainer
+ !-- 
+ !-- Apptainer provides permission control by restricting agent access to the workspace directory only.
+ !-- 
+ !-- ``` bash
+ !-- main -m build  # Create sandbox
+ !-- main -m shell  # Enter sandbox
+ !-- main -m run    # Launch Emacs as an agent
+ !-- ```
+ !-- 
+ !-- ## Contact
+ !-- - support@llemacs.com
+ !-- - Yusuke.Watanabe@unimelb.edu.au -->

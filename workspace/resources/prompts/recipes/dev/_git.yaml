@@ -1,0 +1,46 @@
+# Timestamp: "2025-01-11 19:14:42 (ywatanabe)"
+# File: _git.yaml
+roles:
+  - git-manager
+
+tasks:
+  - version-control
+  - branch-management
+  - commit-handling
+
+rules:
+  - git-workflow
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+#   (defvar llemacs--prompts-git
+#   '(:user "Execute git operation:
+# Command: {command}
+# Branch: {branch}
+# Message: {message}
+
+# Expected outcomes:
+# 1. Command execution status
+# 2. Changes applied
+# 3. Conflict resolution if needed"))
+
+
+
+# (defvar llemacs--prompts-git
+#   '(:user "Execute git operation:
+# Operation: {operation}
+# Files: {files}
+# Message: {message}
+
+# Please provide:
+# 1. Command output
+# 2. Status updates
+# 3. Error handling"))

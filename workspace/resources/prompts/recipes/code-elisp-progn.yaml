@@ -1,7 +1,9 @@
-# Timestamp: "2025-01-11 02:00:34 (ywatanabe)"
+# Timestamp: "2025-01-11 20:37:23 (ywatanabe)"
 # File: code-elisp-progn.yaml
-# Time-stamp: "2025-01-11 02:00:34 (ywatanabe)"
-# File: code-elisp-progn.yaml
+
+engine:
+  - [openai, o1]
+  - [anthropic, claude-3-5-sonnet-20241022]
 
 roles:
   - coder-elisp-progn-block
