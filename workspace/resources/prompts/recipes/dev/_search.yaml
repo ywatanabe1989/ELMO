@@ -1,0 +1,89 @@
+# Timestamp: "2025-01-11 19:14:33 (ywatanabe)"
+# File: _search.yaml
+roles:
+  - searcher
+
+tasks:
+  - search-code
+  - search-documentation
+  - search-resources
+
+rules:
+  - code-script-python
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+;;; ----- /home/ywatanabe/proj/llemacs/workspace/resources/prompts/recipes/visualize.yaml -----
+roles:
+  - visualizer
+
+tasks:
+  - visualize-data
+  - visualize-metrics
+  - visualize-progress
+
+rules:
+  - code-script-python
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+;;; ----- /home/ywatanabe/proj/llemacs/workspace/resources/prompts/recipes/report.yaml -----
+roles:
+  - reporter
+
+tasks:
+  - generate-report
+  - summarize-findings
+  - create-visualization
+
+rules:
+  - code-script-python
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+# Search through project resources with the following parameters:
+# - Context: {context}
+# - Search terms: {terms}
+# - File types: {file-types}
+# - Search depth: {depth}
+
+# Please provide:
+# 1. Search results
+# 2. Relevant file locations
+# 3. Match context
+# 4. Search statistics"))
+
+# (defvar llemacs--prompts-search
+#   '(:user "Search through:
+# Context: {context}
+# Query: {query}
+# Scope: {scope}
+
+# Please provide:
+# 1. Relevant matches
+# 2. Match locations
+# 3. Context snippets"))

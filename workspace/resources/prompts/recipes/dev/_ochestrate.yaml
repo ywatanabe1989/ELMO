@@ -1,0 +1,23 @@
+# Timestamp: "2025-01-11 18:52:41 (ywatanabe)"
+# File: _test.yaml
+roles:
+  - tester
+
+tasks:
+  - write-tests
+  - run-tests
+  - analyze-coverage
+
+rules:
+  - code-script-python
+  - code-script-elisp
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block

@@ -1,0 +1,13 @@
+# Timestamp: "2025-01-11 19:10:25 (ywatanabe)"
+# File: _self-evolve.yaml
+
+# (defvar llemacs--prompts-self-evolve
+#   '(:user "Perform self-evolution:
+# Target area: {area}
+# Current state: {state}
+# Improvement goals: {goals}
+
+# Deliver:
+# 1. Evolution strategy
+# 2. Implementation steps
+# 3. Success metrics"))

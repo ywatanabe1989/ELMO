@@ -1,7 +1,8 @@
-# Timestamp: "2025-01-09 17:52:46 (ywatanabe)"
-# File: nil.yaml
-# Time-stamp: "2025-01-09 17:52:46 (ywatanabe)"
-# File: nil.yaml
+# Timestamp: "2025-01-11 18:34:01 (ywatanabe)"
+# File: fake.yaml
+
+provider: google
+engine: gemini-2.0-flash-exp
 
 requests:
   - user-input

@@ -1,0 +1,35 @@
+# Timestamp: "2025-01-11 19:09:47 (ywatanabe)"
+# File: _debug.yaml
+
+roles:
+  - debugger
+
+tasks:
+  - identify-issues
+  - analyze-errors
+  - suggest-fixes
+
+rules:
+  - code-script-elisp
+  - code-logging
+
+tools:
+  - code-elisp-progn-block
+
+examples:
+  - code-elisp-progn-block
+
+requests:
+  - code-elisp-progn-block
+
+
+#   (defvar llemacs--prompts-debug
+#   '(:user "Debug the following issue:
+# Issue description: {description}
+# Error message: {error}
+# Stack trace: {stack-trace}
+
+# Please provide:
+# 1. Root cause analysis
+# 2. Suggested fixes
+# 3. Prevention measures"))
