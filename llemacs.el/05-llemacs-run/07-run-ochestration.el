@@ -1,6 +1,6 @@
 ;;; -*- coding: utf-8; lexical-binding: t -*-
-;;; Author: 2025-01-11 09:50:09
-;;; Timestamp: <2025-01-11 09:50:09>
+;;; Author: 2025-01-11 17:15:34
+;;; Timestamp: <2025-01-11 17:15:34>
 ;;; File: /home/ywatanabe/proj/llemacs/llemacs.el/05-llemacs-run/07-run-ochestration.el
 
 (defvar llemacs--orchestrator-options
@@ -30,6 +30,11 @@
     ("long-term-memory" . llemacs--run-long-term-memory-dev)
     ("forget-memory" . llemacs--run-forget-memory-dev)
     ("help" . llemacs--run-help-dev)
+    ("monitor" . llemacs--run-monitor-dev)
+    ("init-project" . llemacs--run-init-project-dev)
+    ("update-symlink" . llemacs--run-update-symlink-dev)
+    ("export-metrics" . llemacs--run-export-metrics-dev)
+    ("manage-providers" . llemacs--run-manage-providers-dev)
     ("exit" . (lambda () (setq llemacs--orchestrator-running nil)))))
 
 (defvar llemacs--orchestrator-running nil
@@ -158,3 +163,23 @@
 (defun llemacs--run-forget-memory-dev ()
   "Run memory forgetting operation."
   (llemacs--run-progn-dev "Clearing specified memories and cached data."))
+
+(defun llemacs--run-monitor-dev ()
+  "Run monitoring operation."
+  (llemacs--run-progn-dev "Monitoring project progress and metrics."))
+
+(defun llemacs--run-init-project-dev ()
+  "Run project initialization."
+  (llemacs--run-progn-dev "Initializing new project structure."))
+
+(defun llemacs--run-update-symlink-dev ()
+  "Run symlink update operation."
+  (llemacs--run-progn-dev "Updating project symlinks."))
+
+(defun llemacs--run-export-metrics-dev ()
+  "Run metrics export operation."
+  (llemacs--run-progn-dev "Exporting project metrics and analytics."))
+
+(defun llemacs--run-manage-providers-dev ()
+  "Run LLM provider management."
+  (llemacs--run-progn-dev "Managing LLM provider configurations."))
